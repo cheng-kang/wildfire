@@ -1,12 +1,6 @@
 (() => {
-  var firebaseApp = firebase.initializeApp({
-    apiKey: "AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs",
-    authDomain: "wildfirewebsite-35a4f.firebaseapp.com",
-    databaseURL: "https://wildfirewebsite-35a4f.firebaseio.com",
-    projectId: "wildfirewebsite-35a4f",
-    storageBucket: "",
-    messagingSenderId: "911552849262"
-  })
+  // !!! should handle firebase init failure
+  var firebaseApp = firebase.initializeApp(window._wildfire.config.databaseConfig)
   var db = firebaseApp.database()
 
   Vue.use(VueFire)

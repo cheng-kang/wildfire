@@ -176,8 +176,8 @@
         // 'https://unpkg.com/vue@2.4.2/dist/vue.min.js',
         'https://unpkg.com/vue@2.4.2/dist/vue.js',
         // 'http://127.0.0.1:8080/src/modules/tribute.min.js',
-        // 'http://127.0.0.1:8080/dist/wf-main.js'
-        'http://127.0.0.1:8080/src/wf-main.js'
+        // 'http://127.0.0.1:8080/dist/wf-firebase.js'
+        'http://127.0.0.1:8080/src/wf-firebase.js'
       ].reverse())
   }
 
@@ -188,6 +188,7 @@
   // get global wildfire configuration
   const { 
     database = 'firebase',
+    databaseConfig, // required
     siteId, // required
     pageTitle = document.title, 
     pageURL = window.location.href,
@@ -197,7 +198,12 @@
   window._wildfire = {
     currentUser: null,
     config: {
-      ...wildfireConfig,
+      database,
+      databaseConfig,
+      siteId,
+      pageTitle,
+      pageURL,
+      locale,
       defaultAvatar: './static/firefighter-avatar.png',
       anonymousUserId: 'anonymous'
     }
@@ -209,6 +215,9 @@
     return
   } else if (database !== 'firebase' && database !== 'wilddog') {
     presentErrorMsg('error/notValidServiceProvider')
+    return
+  } else if (!databaseConfig) {
+    presentErrorMsg('error/noDatabaseConfig')
     return
   }
 
@@ -233,7 +242,8 @@
               'text/add_wildfire_to_your_site': 'Add Wildfire to your site',
               'error/noSiteId': 'Please check your config: missing "siteId".',
               'error/notValidSiteId': 'Please set a valid "siteId".',
-              'error/notValidServiceProvider': 'Please check your config: "sercive" should be "firebase" or "wilddog".'
+              'error/notValidServiceProvider': 'Please check your config: "sercive" should be "firebase" or "wilddog".',
+              'error/noDatabaseConfig': 'Please check your config: missing "databaseConfig"'
             }
           },
           'zh': {
@@ -248,7 +258,8 @@
               'text/add_wildfire_to_your_site': '在你的网站使用 Wildfire',
               'error/noSiteId': '请检查你的配置：找不到 "siteId"。',
               'error/notValidSiteId': '请设置一个有效的 "siteId"。',
-              'error/notValidServiceProvider': '请检查你的配置： "sercive" 应该为 "firebase" 或者 "wilddog"。'
+              'error/notValidServiceProvider': '请检查你的配置： "sercive" 应该为 "firebase" 或者 "wilddog"。',
+              'error/noDatabaseConfig': '请检查你的配置： 找不到 "databaseConfig"'
             }
           }
         }
