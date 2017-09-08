@@ -1,7 +1,6 @@
 (() => {
   // load CSS
   const vCloakCSS = `
-    [v-cloak] { display: none; }
     .wf {
       margin: 0 auto;
 
@@ -9,6 +8,15 @@
 
       font-family: "Helvetica Neue",arial,sans-serif;
       font-size: 15px;
+    }
+    .wf-main {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 1.5s ease-in-out;
+    }
+    .wf-main.active {
+      visibility: visible;
+      opacity: 1;
     }
     .wf-loading-modal {
       display: flex;
@@ -72,7 +80,7 @@
         <img src="./static/wildfire-logo.svg" title="Wildfire - Provided by Lahk">
         <span>Powering Wildfire...</span>
     </div>
-    <div id="wild-fire" class="wf wf-main" :class="{ active: isLoaded }" v-cloak>
+    <div id="wild-fire" class="wf wf-main" :class="{ active: isLoaded }">
       <header class="wf-header">
         <nav class="wf-nav">
           <div class="wf-nav-left">
