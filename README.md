@@ -19,6 +19,14 @@ A comment service powered by Wilddog and Firebase. Wilddog is mainly for users f
 
 # Plan
 
+## Current Status
+
+- [x] `Firebase` support
+- [x] sign in/sign out
+- [x] comment
+- [x] reply to comment
+- [x] like/dislike a comment/reply
+
 ## Mind Graph
 
 ![](./resources/mind%20graph.png)
