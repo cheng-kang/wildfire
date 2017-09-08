@@ -1,6 +1,68 @@
 (() => {
   // load CSS
-  document.head.innerHTML += '<link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/src/wf-main.css">'
+  const vCloakCSS = `
+    [v-cloak] { display: none; }
+    .wf {
+      margin: 0 auto;
+
+      max-width: 39rem;
+
+      font-family: "Helvetica Neue",arial,sans-serif;
+      font-size: 15px;
+    }
+    .wf-loading-modal {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      height: 300px;
+      color: #656c7a;
+      font-size: 12px;
+    }
+
+    .wf-loading-modal img {
+      width: 66px;
+      height: 66px;
+    }
+
+    @keyframes flickerAnimation {
+      0%   { opacity:1; }
+      40%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-o-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      40%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-moz-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      40%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-webkit-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      40%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    .animate-flicker {
+       -webkit-animation: flickerAnimation 1.5s infinite;
+       -moz-animation: flickerAnimation 1.5s infinite;
+       -o-animation: flickerAnimation 1.5s infinite;
+        animation: flickerAnimation 1.5s infinite;
+    }
+  `
+  let vCloakStyle = document.createElement('style')
+  vCloakStyle.type = 'text/css'
+  if (vCloakStyle.styleSheet){
+    vCloakStyle.styleSheet.cssText = vCloakCSS;
+  } else {
+    vCloakStyle.appendChild(document.createTextNode(vCloakCSS));
+  }
+  document.head.appendChild(vCloakStyle)
+
+  document.head.innerHTML += '<link rel="stylesheet" type="text/css" href="./src/wf-main.css">'
   // document.head.innerHTML += '<link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/src/modules/tribute.css">'
 
   // insert basic template
@@ -10,7 +72,7 @@
         <img src="./static/wildfire-logo.svg" title="Wildfire - Provided by Lahk">
         <span>Powering Wildfire...</span>
     </div>
-    <div id="wild-fire" class="wf wf-main" :class="{ active: isLoaded }">
+    <div id="wild-fire" class="wf wf-main" :class="{ active: isLoaded }" v-cloak>
       <header class="wf-header">
         <nav class="wf-nav">
           <div class="wf-nav-left">
@@ -177,7 +239,7 @@
         'https://unpkg.com/vue@2.4.2/dist/vue.js',
         // 'http://127.0.0.1:8080/src/modules/tribute.min.js',
         // 'http://127.0.0.1:8080/dist/wf-firebase.js'
-        'http://127.0.0.1:8080/src/wf-firebase.js'
+        './src/wf-firebase.js'
       ].reverse())
   }
 
@@ -223,7 +285,7 @@
 
   // load & init i18next
   loadRemoteJS({
-    url: 'http://127.0.0.1:8080/src/modules/i18next.min.js',
+    url: './src/modules/i18next.min.js',
     loaded: () => {
       const _locale = locale === 'zh-cn' ? 'zh' : locale
       i18next.init({
