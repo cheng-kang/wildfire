@@ -104,7 +104,7 @@
               <wf-comment-card 
                 v-for="(reply, key) in comment.replies" 
                 :key="key" 
-                :comment="{ ...reply, '.key': key}"
+                :comment="Object.assign({'.key': key}, reply)"
                 :parent-comment="comment"></wf-comment-card>
             </ul>
           </template>
