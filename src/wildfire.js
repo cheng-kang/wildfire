@@ -103,7 +103,7 @@
         </ul>
       </section>
       <footer class="wf-footer">
-        <a id="add-to-your-site" href="https://github.com/cheng-kang/Wild-Fire" target="blank"><img src="./static/add-button.svg">{{$i18next.t('text/add_wildfire_to_your_site')}}</a>
+        <a id="add-to-your-site" href="https://github.com/cheng-kang/wildfire" target="blank"><img src="./static/add-button.svg">{{$i18next.t('text/add_wildfire_to_your_site')}}</a>
         <img class="wf-logo" src="./static/wildfire-logo.svg" title="Wildfire - Provided by Lahk">
       </footer>
     </div>
