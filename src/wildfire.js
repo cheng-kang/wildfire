@@ -99,11 +99,13 @@
           <template v-for="comment in comments">
             <wf-comment-card 
               :key="comment['.key']" 
+              :user="userData"
               :comment="comment"></wf-comment-card>
             <ul v-if="comment.replies && comment.replies.length !== 0" class="wf-reply-group">
               <wf-comment-card 
                 v-for="(reply, key) in comment.replies" 
                 :key="key" 
+                :user="userData"
                 :comment="Object.assign({'.key': key}, reply)"
                 :parent-comment="comment"></wf-comment-card>
             </ul>
