@@ -196,6 +196,7 @@
     },
     methods: {
       toogleLikeComment () {
+        console.log(this.user)
         if (!this.user) { return }
         const likes = this.comment.likes || []
         const { siteId, pageURL } = window._wildfire.config

@@ -1,7 +1,6 @@
 (() => {
   // load CSS
   const vCloakCSS = `
-    [v-cloak] { display: none; }
     .wf {
       margin: 0 auto;
 
@@ -9,6 +8,15 @@
 
       font-family: "Helvetica Neue",arial,sans-serif;
       font-size: 15px;
+    }
+    .wf-main {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 1.5s ease-in-out;
+    }
+    .wf-main.active {
+      visibility: visible;
+      opacity: 1;
     }
     .wf-loading-modal {
       display: flex;
@@ -72,7 +80,7 @@
         <img src="./static/wildfire-logo.svg" title="Wildfire - Provided by Lahk">
         <span>Powering Wildfire...</span>
     </div>
-    <div id="wild-fire" class="wf wf-main" :class="{ active: isLoaded }" v-cloak>
+    <div id="wild-fire" class="wf wf-main" :class="{ active: isLoaded }">
       <header class="wf-header">
         <nav class="wf-nav">
           <div class="wf-nav-left">
@@ -91,19 +99,21 @@
           <template v-for="comment in comments">
             <wf-comment-card 
               :key="comment['.key']" 
+              :user="userData"
               :comment="comment"></wf-comment-card>
             <ul v-if="comment.replies && comment.replies.length !== 0" class="wf-reply-group">
               <wf-comment-card 
                 v-for="(reply, key) in comment.replies" 
                 :key="key" 
-                :comment="{ ...reply, '.key': key}"
+                :user="userData"
+                :comment="Object.assign({'.key': key}, reply)"
                 :parent-comment="comment"></wf-comment-card>
             </ul>
           </template>
         </ul>
       </section>
       <footer class="wf-footer">
-        <a id="add-to-your-site" href="https://github.com/cheng-kang/Wild-Fire" target="blank"><img src="./static/add-button.svg">{{$i18next.t('text/add_wildfire_to_your_site')}}</a>
+        <a id="add-to-your-site" href="https://github.com/cheng-kang/wildfire" target="blank"><img src="./static/add-button.svg">{{$i18next.t('text/add_wildfire_to_your_site')}}</a>
         <img class="wf-logo" src="./static/wildfire-logo.svg" title="Wildfire - Provided by Lahk">
       </footer>
     </div>
@@ -177,7 +187,7 @@
       console.log('load firebase')
       // use firebase
       loadRemoteJS({
-        url: 'https://www.gstatic.com/firebasejs/4.3.0/firebase.js',
+        url: './src/modules/firebase.js',
         loaded: () => {
           // Initialize Wildfire User Firebase
           var config = {
@@ -212,7 +222,7 @@
     console.log('start wild fire')
     loadRemoteJSSequentially([
         {
-          url: 'https://momentjs.com/downloads/moment.min.js',
+          url: './src/modules/moment.min.js',
           loaded: () => {
             moment.locale(locale, {
               relativeTime : {
@@ -234,11 +244,11 @@
             })
           }
         },
-        'https://unpkg.com/vuefire/dist/vuefire.js',
+        // 'https://unpkg.com/vuefire/dist/vuefire.js',
         // 'https://unpkg.com/vue@2.4.2/dist/vue.min.js',
-        'https://unpkg.com/vue@2.4.2/dist/vue.js',
-        // 'http://127.0.0.1:8080/src/modules/tribute.min.js',
-        // 'http://127.0.0.1:8080/dist/wf-firebase.js'
+        // 'https://unpkg.com/vue@2.4.2/dist/vue.js',
+        './src/modules/vuefire.js',
+        './src/modules/vue.js',
         './src/wf-firebase.js'
       ].reverse())
   }
