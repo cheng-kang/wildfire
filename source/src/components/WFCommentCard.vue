@@ -11,8 +11,8 @@
           <span class="meta">· {{$moment(comment.date).fromNow()}}</span>
         </div>
         <div class="header-menu">
-          <span class="menu-button" 
-            :class="{ active: isHeaderMenuShowing }" 
+          <span class="menu-button"
+            :class="{ active: isHeaderMenuShowing }"
             @click="isHeaderMenuShowing = !isHeaderMenuShowing"
           >▼</span>
           <ul class="menu-dropdown" :class="{ inactive: !isHeaderMenuShowing }">
@@ -26,43 +26,59 @@
         </div>
       </header>
       <div class="wf-comment-content">{{comment.content}}</div>
-      <footer>
-        <span class="like-count" :class="{ inactive: (comment.likes || []).indexOf('CHENGKANG') === -1}">
-          {{(comment.likes || []).length || ''}}
-        </span>
-        <a href="#" :class="{ inactive: (comment.likes || []).indexOf('CHENGKANG') === -1}">👍</a>
-        <span class="separator"></span>
-        <span class="dislike-count inactive" :class="{ inactive: (comment.dislikes || []).indexOf('CHENGKANG') === -1}">
-          {{(comment.dislikes || []).length || ''}}
-        </span>
-        <a :class="{ inactive: (comment.dislikes || []).indexOf('CHENGKANG') === -1}" href="#">👎</a>
-        <span class="bullet">·</span>
-        <a class="wf-button wf-reply-button" :class="{ active: isReplying }" href="#" @click="isReplying = !isReplying">
-          {{isReplying ? $i18next.t('button/cancel') : $i18next.t('button/reply')}}
-        </a>
-        <template v-if="user && (user.uid === comment.uid)">
-          <span class="bullet">·</span>
-          <a class="wf-button wf-delete-button" href="#">{{$i18next.t('button/delete')}}</a>
-        </template>
-      </footer>
-      <wf-reply-area v-if="!parentComment"
-        v-show="isReplying" 
-        :user="user" 
-        :reply-to-comment="comment">
-      </wf-reply-area>
-      <wf-reply-area v-if="!!parentComment"
-        v-show="isReplying" 
-        :user="user" 
-        :reply-to-comment="comment"
-        :root-comment="parentComment">
-      </wf-reply-area>
+          <footer>
+            <span class="like-count" :class="{ inactive: likeUserIdList.indexOf(currentUserId) === -1}">
+              {{likeUserIdList.length || ''}}
+            </span>
+            <a href="#"
+              :class="{
+                inactive: likeUserIdList.indexOf(currentUserId) === -1,
+                disabled: !user
+              }"
+              :id="'like-'+comment['.key']"
+              @click="toogleLikeComment"
+            > 👍</a>
+            <span class="separator"></span>
+            <span class="dislike-count inactive" :class="{ inactive: dislikeUserIdList.indexOf(currentUserId) === -1}">
+              {{dislikeUserIdList.length || ''}}
+            </span>
+            <a href="#"
+              :class="{
+                inactive: dislikeUserIdList.indexOf(currentUserId) === -1,
+                disabled: !user
+              }"
+              :id="'dislike-'+comment['.key']"
+              @click="toogleDislikeComment"
+            >👎</a>
+            <span class="bullet">·</span>
+            <a class="wf-button wf-reply-button" :class="{ active: isReplying }" href="#" @click="isReplying = !isReplying">
+              {{isReplying ? $i18next.t('button/cancel') : $i18next.t('button/reply')}}
+            </a>
+            <template v-if="user && (user.uid === comment.uid)">
+              <span class="bullet">·</span>
+              <a class="wf-button wf-delete-button" href="#">{{$i18next.t('button/delete')}}</a>
+            </template>
+          </footer>
+          <wf-reply-area v-if="!parentComment"
+            v-show="isReplying"
+            :user="user"
+            :reply-to-comment="comment">
+          </wf-reply-area>
+          <wf-reply-area v-if="parentComment"
+            v-show="isReplying"
+            :user="user"
+            :reply-to-comment="comment"
+            :root-comment="parentComment">
+          </wf-reply-area>
     </div>
   </li>
 </template>
 
 <script>
+import WfReplyArea from './WFReplyArea'
 export default {
   name: 'wf-comment-card',
+  components: {WfReplyArea},
   props: ['comment', 'parentComment', 'user'],
   data () {
     return {
@@ -72,12 +88,22 @@ export default {
       authorUsername: ''
     }
   },
+  computed: {
+    likeUserIdList () {
+      return this.comment.likes === undefined ? [] : Object.keys(this.comment.likes)
+    },
+    dislikeUserIdList () {
+      return this.comment.dislikes === undefined ? [] : Object.keys(this.comment.dislikes)
+    },
+    currentUserId () {
+      return this.user ? this.user.uid : 'null'
+    }
+  },
   created () {
     this.authorUsername = this.$i18next.t('text/anonymousUser')
     const uid = this.comment.authorUid
     if (uid === window._wildfire.config.anonymousUserId) { return }
 
-    const commentId = this.comment['.key']
     const _this = this
     window._wildfire.userApp.database().ref(`users/${uid}`).once('value').then((snapshot) => {
       let author = snapshot.val()
@@ -89,6 +115,56 @@ export default {
         _this.authorUsername = author.displayName
       }
     })
+  },
+  methods: {
+    toogleLikeComment () {
+      console.log(this.user)
+      if (!this.user) { return }
+      const { siteId, pageURL } = window._wildfire.config
+      const commentId = this.comment['.key']
+      const { uid } = this.user
+      if (this.likeUserIdList.indexOf(uid) === -1) {
+        const refURL = this.parentComment
+        ? `/sites/${siteId}/${btoa(pageURL)}/comments/${this.parentComment['.key']}/replies/${commentId}/likes/${uid}`
+        : `/sites/${siteId}/${btoa(pageURL)}/comments/${this.comment['.key']}/likes/${uid}`
+        console.log(refURL)
+        const shouldRemoveDislike = this.dislikeUserIdList.indexOf(uid) !== -1
+        this.$db.ref(refURL).set((new Date()).toISOString()).then(() => {
+          if (shouldRemoveDislike) {
+            document.getElementById(`dislike-${commentId}`).click()
+          }
+        })
+      } else {
+        const refURL = this.parentComment
+        ? `/sites/${siteId}/${btoa(pageURL)}/comments/${this.parentComment['.key']}/replies/${commentId}/likes/${uid}`
+        : `/sites/${siteId}/${btoa(pageURL)}/comments/${this.comment['.key']}/likes/${uid}`
+        console.log(refURL)
+        this.$db.ref(refURL).remove()
+      }
+    },
+    toogleDislikeComment () {
+      if (!this.user) { return }
+      const { siteId, pageURL } = window._wildfire.config
+      const commentId = this.comment['.key']
+      const { uid } = this.user
+      if (this.dislikeUserIdList.indexOf(uid) === -1) {
+        const refURL = this.parentComment
+        ? `/sites/${siteId}/${btoa(pageURL)}/comments/${this.parentComment['.key']}/replies/${commentId}/dislikes/${uid}`
+        : `/sites/${siteId}/${btoa(pageURL)}/comments/${this.comment['.key']}/dislikes/${uid}`
+        const shouldRemoveLike = this.likeUserIdList.indexOf(uid) !== -1
+        this.$db.ref(refURL).set((new Date()).toISOString()).then(() => {
+          if (shouldRemoveLike) {
+            document.getElementById(`like-${commentId}`).click()
+          }
+        })
+      } else {
+        const refURL = this.parentComment
+        ? `/sites/${siteId}/${btoa(pageURL)}/comments/${this.parentComment['.key']}/replies/${commentId}/dislikes`
+        : `/sites/${siteId}/${btoa(pageURL)}/comments/${this.comment['.key']}/dislikes`
+        console.log(refURL)
+        this.$db.ref(refURL).remove()
+      }
+    }
   }
 }
 </script>
