@@ -12,7 +12,10 @@ A comment service powered by Wilddog and Firebase. Wilddog is mainly for users f
 
 # Screenshot
 
-<img src="./resources/screenshot-1.png" height="300">
+<p align="center">
+  <img src="./resources/screenshot-0.png" height="300">
+  <img src="./resources/screenshot-1.png" height="300">
+</p>
 
 # Plan
 
