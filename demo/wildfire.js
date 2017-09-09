@@ -34,56 +34,90 @@
     document.head.appendChild(newCSS)
   }
 
-  function loadRemoteJS(item) {
+  /**
+   * Dynamically load a JS file.
+   * 
+   * @param {string|Object} item
+   * @param {string} item.url The url of the JS file to load
+   * @param {function} item.loaded Callback function when the file is loaded
+   * @param {function} item.shouldLoad Checking function before loading the file. 
+   */
+  function loadJS(item) {
     if (item === undefined || item === null) { return }
 
-    let url = null
-    let loaded = null
+    let newScript = document.createElement('script')
+
+    let url = null, shouldLoad = null, loaded = null
+
     if (typeof item === 'object') {
-      url = item.url
-      loaded = item.loaded
+      ({ url, shouldLoad, loaded } = item)
+      if (!shouldLoad || shouldLoad()) {
+        newScript.onload = () => {
+          console.log('Loaded:', url)
+          console.timeEnd(`\tLoading time of "${url}"\n\t`)
+          if (loaded) {
+            loaded()
+          }
+        }
+      }
     } else if (typeof item === 'string') {
       url = item
     }
-    let newScript = document.createElement('script')
     newScript.src = url
-    newScript.onload = () => {
-      console.log('Loaded:', url)
-      if (loaded) {
-        loaded()
-      }
-    }
     document.head.appendChild(newScript)
+    console.time(`\tLoading time of "${url}"\n\t`)
   }
 
-  // A custom function to load remote JS file sequentially
-  function loadRemoteJSSequentially(aList, finished) {
+  /**
+   * Dynamically load a list JS files sequentially.
+   * 
+   * @param {(string|Object)[]} aList The list of JS files to load
+   * @param {string} aList[].url The url of the JS file to load
+   * @param {function} aList[].loaded Callback function when the file is loaded
+   * @param {function} aList[].shouldLoad Checking function before loading the file. 
+   * 
+   * @param {function} finished Callback when all files loaded
+   */
+  function loadJSSequentially(aList, finished) {
     if (aList.length === 0) { 
-      if (finished !== undefined) {
-        console.log('finished')
+      console.log('Finished loadJSSequentially.')
+      if (finished) {
         finished()
       }
       return
     }
-    let item = aList.pop()
-    let url = null
-    let loaded = null
+    let item = aList.shift()
+
+    let newScript = document.createElement('script')
+
+    let url = null, shouldLoad = null, loaded = null
+
     if (typeof item === 'object') {
-      url = item.url
-      loaded = item.loaded
+      ({ url, shouldLoad, loaded } = item)
+      console.log(url, shouldLoad, loaded )
+      console.log(!shouldLoad || (shouldLoad && shouldLoad()))
+      if (!shouldLoad || (shouldLoad && shouldLoad())) {
+        newScript.onload = () => {
+          console.log('Loaded:', url)
+          if (loaded) {
+            loaded()
+          }
+          loadJSSequentially(aList, finished)
+        }
+      } else {
+        loadJSSequentially(aList, finished)
+      }
     } else if (typeof item === 'string') {
       url = item
-    }
-    let newScript = document.createElement('script')
-    newScript.src = url
-    newScript.onload = () => {
-      console.log('Loaded:', url)
-      if (loaded) {
-        loaded()
+      newScript.onload = () => {
+        console.log('Loaded:', url)
+        console.timeEnd(`\tLoading time of "${url}"\n\t`)
+        loadJSSequentially(aList, finished)
       }
-      loadRemoteJSSequentially(aList, finished)
     }
+    newScript.src = url
     document.head.appendChild(newScript)
+    console.time(`\tLoading time of "${url}"\n\t`)
   }
 
   // load & init database for User service
@@ -91,8 +125,11 @@
     if (database === 'firebase') {
       console.log('load firebase')
       // use firebase
-      loadRemoteJS({
+      loadJS({
         url: './src/modules/firebase.js',
+        shouldLoad: () => {
+          return window.firebase === undefined
+        },
         loaded: () => {
           // Initialize Wildfire User Firebase
           var config = {
@@ -125,11 +162,11 @@
   // load JS
   function startWildfire() {
     console.log('start wild fire')
-    loadRemoteJSSequentially([
+    loadJSSequentially([
         'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/js/temp/1/manifest.dc615b748ead8802ebe0.js',
         'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/js/temp/1/vendor.52336b1d8c4fad8d3275.js',
         'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/js/temp/1/app.980e10eb557eeb6e1610.js'
-      ].reverse())
+      ])
   }
 
   // 
@@ -176,8 +213,11 @@
     url: './static/css/style.css',
     loaded: () => {
       // load & init i18next
-      loadRemoteJS({
+      loadJS({
         url: './src/modules/i18next.min.js',
+        shouldLoad: () => {
+          return window.i18next === undefined
+        },
         loaded: () => {
           const _locale = locale === 'zh-cn' ? 'zh' : locale
           i18next.init({
