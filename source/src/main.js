@@ -52,40 +52,8 @@ Vue.use(VueFire)
 Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment
 
-/**
- * Notes for iview:
- *  There are several customizations:
- *    1. Name all components as 'i-[component name]'
- *        e.g. i-button, i-icon
- *    2. Spin
- *      In order to modify the CSS style of the spinner content,
- *      property 'defaultSlotStyle' is added to the original component.
- */
-import 'iview/dist/styles/iview.css'
-import Dropdown from 'iview/src/components/dropdown'
-import Menu from 'iview/src/components/menu'
-import Button from 'iview/src/components/button'
-import Input from 'iview/src/components/input'
-import Icon from 'iview/src/components/icon'
-import Form from 'iview/src/components/form'
-import Spin from 'iview/src/components/spin'
-import Message from 'iview/src/components/message'
-import Tooltip from 'iview/src/components/tooltip'
-import Poptip from 'iview/src/components/poptip'
-Vue.component('i-dropdown', Dropdown)
-Vue.component('i-dropdown-item', Dropdown.Item)
-Vue.component('i-dropdown-menu', Dropdown.Menu)
-Vue.component('i-menu', Menu)
-Vue.component('i-menu-item', Menu.Item)
-Vue.component('i-form', Form)
-Vue.component('i-form-item', Form.Item)
-Vue.component('i-button', Button)
-Vue.component('i-input', Input)
-Vue.component('i-icon', Icon)
-Vue.component('i-spin', Spin)
-Vue.component('i-tooltip', Tooltip)
-Vue.component('i-poptip', Poptip)
-Vue.prototype.$Message = Message
+import { iView } from './loadiView'
+Vue.use(iView)
 
 const userAppConfig = {
   apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
