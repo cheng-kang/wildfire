@@ -1,73 +1,118 @@
 <template>
-  <div class="wf-form" :class="{ 'wf-reply': isReply }">
-    <img class="wf-avatar" :src="!user ? 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png' : user.photoURL">
-    <div class="wf-textarea-wrapper">
-      <span class="wf-textarea-placeholder" :class="{ inactive: !shouldShowPlaceholder }" @click="startEditing">
-        {{$i18next.t('textarea/placeholder')}}
-      </span>
-      <div class="wf-textarea" :class="{ hasContent: !shouldShowPlaceholder || isReply }" :id="'wf-textarea-'+_uid" @blur="didEndEditing" contenteditable></div>
-      <div class="wf-post-button-wrapper" :class="{ inactive: shouldShowPlaceholder && !isReply }">
-        <button class="wf-post-button" @click="postComment">{{$i18next.t('button/post')}}</button>
-      </div>
-    </div>
-  </div>
+  <i-form :model="form" :label-width="60" :class="{ 'wf-reply': isReply }">
+    <i-form-item class="no-bottom-margin">
+      <img :src="avatarURL" slot="label">
+      <i-input
+        v-model="form.content" 
+        type="textarea"
+        @on-click="postComment"
+        :autosize="textareaAutoresize" 
+        :placeholder="placeholder"
+        :disabled="isPosting || commentsLoadingState === 'loading'"></i-input>
+    </i-form-item>
+    <i-form-item class="float-to-right">
+        <i-button :type="isPosting ? 'ghost' : 'primary'" 
+          @click="postComment" 
+          :disabled="form.content.trim() === '' || isPosting"
+          :loading="isPosting">
+          {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
+        </i-button>
+        <i-button type="ghost" 
+          style="margin-left: 8px" 
+          :disabled="form.content.trim() === '' || isPosting"
+          @click="form.content = ''">
+          {{$i18next.t('button/reset')}}
+        </i-button>
+    </i-form-item>
+  </i-form>
 </template>
 
 <script>
 export default {
   name: 'wf-reply-area',
-  props: ['user', 'replyToComment', 'rootComment'],
+  props: ['user', 'replyToCommentAuthorUsername', 'replyToComment', 'rootComment', 'commentsLoadingState'],
   data () {
     return {
-      shouldShowPlaceholder: true,
-      isReply: false
+      isPosting: false,
+      form: {
+        content: ''
+      },
+      textareaAutoresize: {
+        minRows: 3,
+        maxRows: 10
+      }
     }
   },
   computed: {
-    textarea () {
-      return document.getElementById(`wf-textarea-${this._uid}`)
+    encodedPageURL () {
+      return btoa(this.$config.pageURL)
+    },
+    avatarURL () {
+      return this.user
+        ? this.user.photoURL
+        : this.$config.defaultAvatarURL
+    },
+    username () {
+      return this.user.uid === this.$config.anonymousUserId
+              ? this.$i18next.t('text/anonymousUser')
+              : this.user.displayName
+    },
+    placeholder () {
+      return this.isReply
+      ? this.$i18next.t('textarea/replyToUserComment', { username: this.replyToCommentAuthorUsername })
+      : (this.user
+          ? this.$i18next.t('textarea/joinTheConversation')
+          : this.$i18next.t('textarea/joinTheConversationAnonymously'))
+    },
+    isReply () {
+      return !!this.replyToComment
     }
   },
-  created () {
-    this.isReply = !!this.replyToComment
-  },
   methods: {
-    startEditing () {
-      this.textarea.focus()
-      this.shouldShowPlaceholder = false
-    },
-    didEndEditing () {
-      if (this.textarea.textContent === '') {
-        this.shouldShowPlaceholder = true
-      }
-    },
     postComment () {
-      const content = this.textarea.textContent
-      this.textarea.textContent = ''
-      const { siteId, pageURL } = window._wildfire.config
+      if (this.isPosting) { return }
+
+      this.isPosting = true
+      const { content } = this.form
+      const { user, isReply, encodedPageURL, rootComment, replyToComment } = this
+      const { siteId, anonymousUserId } = this.$config
       if (content.trim() !== '') {
         const aDate = new Date()
-        let author = this.user === null ? this.$i18next.t('text/anonymousUser') : this.user.displayName
-        let authorUid = this.user === null ? 'anonymous' : this.user.uid
-        let date = aDate.toISOString()
-        let order = this.isReply ? null : -1 * aDate.getTime()
-        let replyToId = null
-        let replyToAuthor = null
+        const author = user ? user.displayName : this.$i18next.t('text/anonymousUser')
+        const authorUid = user ? user.uid : anonymousUserId
+        const date = aDate.toISOString()
+        const order = isReply ? null : -1 * aDate.getTime()
+
+        let replyToCommentId = null
         let refURL = ''
-        if (this.isReply) {
-          replyToId = this.replyToComment['.key']
-          replyToAuthor = this.replyToComment.author
+
+        if (isReply) {
+          replyToCommentId = replyToComment['.key']
         }
-        if (this.rootComment) {
-          refURL = `/sites/${siteId}/${btoa(pageURL)}/comments/${this.rootComment['.key']}/replies`
-        } else if (this.isReply) {
-          refURL = `/sites/${siteId}/${btoa(pageURL)}/comments/${this.replyToComment['.key']}/replies`
+
+        if (rootComment) {
+          refURL = `/sites/${siteId}/${encodedPageURL}/replies/${rootComment['.key']}`
+        } else if (isReply) {
+          refURL = `/sites/${siteId}/${encodedPageURL}/replies/${replyToComment['.key']}`
         } else {
-          refURL = `/sites/${siteId}/${btoa(pageURL)}/comments`
+          refURL = `/sites/${siteId}/${encodedPageURL}/comments`
         }
-        const postData = { author, authorUid, date, order, content, replyToId, replyToAuthor }
-        this.$db.ref(refURL).push().set(postData)
-        return
+
+        const _this = this
+        const postData = { author, authorUid, date, order, content, replyToCommentId }
+        this.$commentDB.ref(refURL).push().set(postData)
+        .then(() => {
+          _this.isPosting = false
+          _this.$emit('finishedReplying') // When successfully post reply, hide the reply area
+          _this.form.content = ''
+          _this.$Message.success(_this.$i18next.t('text/commentPosted'))
+        })
+        .catch((error) => {
+          _this.isPosting = false
+          _this.form.content = ''
+          _this.$Message.error(_this.$i18next.t('error/failedToPostComment'))
+          console.log(error)
+        })
       }
     }
   }
@@ -75,4 +120,50 @@ export default {
 </script>
 
 <style scoped>
+img {
+  width: 48px;
+  height: 48px;
+}
+.wf-reply img {
+  width: 36px;
+  height: 36px;
+}
+.no-bottom-margin {
+  /*margin-bottom: 0;*/
+}
+.float-to-right {
+  text-align: right;
+}
+</style>
+<style>
+.ivu-form .ivu-form-item-label {
+  padding: 0;
+  text-align: left;
+}
+.ivu-form {
+  margin-top: 10px;
+}
+.ivu-form-item {
+  margin-bottom: 12px;
+}
+.ivu-spin {
+  position: unset;
+  background-color: unset;
+}
+.spin-icon {
+  animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+  from { transform: rotate(0deg);}
+  50%  { transform: rotate(180deg);}
+  to   { transform: rotate(360deg);}
+}
+/*.ivu-spin-show-text .ivu-spin-text {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ivu-spin-show-text .ivu-spin-text i {
+  margin-right: 5px;
+}*/
 </style>

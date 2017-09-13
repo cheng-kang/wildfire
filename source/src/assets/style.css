@@ -1,11 +1,3 @@
-.wf {
-  margin: 0 auto;
-
-  max-width: 39rem;
-
-  font-family: "Helvetica Neue",arial,sans-serif;
-  font-size: 15px;
-}
 .wf-main {
   visibility: hidden;
   opacity: 0;
@@ -220,83 +212,7 @@
   color: #2a2e2e;
 }
 
-.wf-comment-item {
-  display: flex;
-  flex-direction: row;
 
-  padding: 8px;
-}
-
-.wf-comment-avatar {
-  margin-right: 12px;
-}
-
-.wf-comment-avatar img {
-  width: 48px;
-  height: 48px;
-  border-radius: 4px;
-}
-
-.wf-comment-body {
-  flex: 1;
-  line-height: 21px;
-  font-size: 
-}
-
-.wf-comment-body header {
-  display: flex;
-  justify-content: space-between;
-  color: #656c7a;
-}
-
-.wf-comment-body header .header-content .username a {
-  font-size: 13px;
-  font-weight: 700;
-
-  color: rgba(40, 140, 228, 0.85);
-  text-decoration: none;
-}
-
-.wf-comment-body header .header-content .username a:hover {
-  color: #288ce4;
-}
-
-.wf-comment-body header .header-content .meta {
-  font-size: 12px;
-}
-
-.wf-comment-body header .header-content .parent-link {
-  font-size: 12px;
-}
-
-.wf-comment-body header .header-content .parent-link:hover {
-  color: black;
-}
-
-.wf-comment-body header .header-menu {
-  position: relative;
-}
-
-.wf-comment-body header .header-menu .menu-button {
-  opacity: 0;
-  line-height: 19px;
-  color: #656c7a;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.wf-comment-body header .header-menu .menu-dropdown {
-  position: absolute;
-  right: 0;
-  padding: 0;
-  margin: 0;
-  border: 1px solid #7f919e;
-  border-radius: 4px;
-  background: white;
-  min-width: 100px;
-
-  list-style: none;
-}
 
 .menu-dropdown li a {
   display: block;
@@ -312,43 +228,7 @@
   background-color: rgba(29,47,58,0.6);
 }
 
-.wf-comment-content {
-  padding-bottom: 3px;
-}
 
-footer {
-  font-size: 13px;
-}
-
-footer .like-count,.dislike-count {
-  color: #ffd456;
-}
-
-footer .separator {
-  border-left: 2px solid #e7e9ee;
-  padding-left: 6px;
-  margin-left: 2px;
-}
-
-footer a {
-  color: rgba(101, 108, 122, 0.80);
-  font-weight: 500;
-
-  text-decoration: none;
-}
-
-footer a:hover {
-  color: #656c7a;
-}
-
-footer .inactive {
-  filter: grayscale(100%);
-  color: #929292;
-}
-
-footer .disabled {
-  cursor: not-allowed;
-}
 
 .wf-comment-subitem {
   margin-left: 60px;
@@ -370,9 +250,6 @@ ul.wf-reply-group {
 .reply .wf-comment-avatar img {
   width: 36px;
   height: 36px;
-}
-.wf-comment-item:hover .wf-comment-body header .header-menu .menu-button {
-  opacity: 1;
 }
 .wf-comment-body header .header-menu .menu-button.active {
   opacity: 1;

@@ -13,6 +13,7 @@
   "dependencies": {
     "firebase": "^4.3.1",
     "i18next": "^9.0.0",
+    "iview": "^2.3.2",
     "moment": "^2.18.1",
     "vue": "^2.4.2",
     "vuefire": "^1.4.3"
