@@ -1,98 +1,446 @@
 <template>
-  <li class="wf-comment-item" :class="{ reply: comment.parentId !== undefined }">
-    <div class="wf-comment-avatar">
-      <img :src="avatarURL">
-    </div>
-    <div class="wf-comment-body">
-      <header>
-        <div class="header-content">
-          <span class="username"><a href="#">{{authorUsername}}</a></span>
-          <span class="parent-link" v-if="comment.replyToAuthor !== undefined">➦ {{comment.replyToAuthor}}</span>
-          <span class="meta">· {{$moment(comment.date).fromNow()}}</span>
-        </div>
-        <div class="header-menu">
-          <span class="menu-button" 
-            :class="{ active: isHeaderMenuShowing }" 
-            @click="isHeaderMenuShowing = !isHeaderMenuShowing"
-          >▼</span>
-          <ul class="menu-dropdown" :class="{ inactive: !isHeaderMenuShowing }">
-            <li>
-              <a href="#">report</a>
-            </li>
-            <li>
-              <a href="#">ban user</a>
-            </li>
-          </ul>
-        </div>
-      </header>
-      <div class="wf-comment-content">{{comment.content}}</div>
-      <footer>
-        <span class="like-count" :class="{ inactive: (comment.likes || []).indexOf('CHENGKANG') === -1}">
-          {{(comment.likes || []).length || ''}}
-        </span>
-        <a href="#" :class="{ inactive: (comment.likes || []).indexOf('CHENGKANG') === -1}">👍</a>
-        <span class="separator"></span>
-        <span class="dislike-count inactive" :class="{ inactive: (comment.dislikes || []).indexOf('CHENGKANG') === -1}">
-          {{(comment.dislikes || []).length || ''}}
-        </span>
-        <a :class="{ inactive: (comment.dislikes || []).indexOf('CHENGKANG') === -1}" href="#">👎</a>
-        <span class="bullet">·</span>
-        <a class="wf-button wf-reply-button" :class="{ active: isReplying }" href="#" @click="isReplying = !isReplying">
-          {{isReplying ? $i18next.t('button/cancel') : $i18next.t('button/reply')}}
-        </a>
-        <template v-if="user && (user.uid === comment.uid)">
-          <span class="bullet">·</span>
-          <a class="wf-button wf-delete-button" href="#">{{$i18next.t('button/delete')}}</a>
-        </template>
-      </footer>
-      <wf-reply-area v-if="!parentComment"
-        v-show="isReplying" 
-        :user="user" 
-        :reply-to-comment="comment">
-      </wf-reply-area>
-      <wf-reply-area v-if="!!parentComment"
-        v-show="isReplying" 
-        :user="user" 
-        :reply-to-comment="comment"
-        :root-comment="parentComment">
-      </wf-reply-area>
-    </div>
+  <li class="wf-comment-item" :class="{'wf-reply-item': comment.replyToCommentId}">
+    <section class="comment">
+      <div class="wf-comment-avatar">
+        <img :src="avatarURL">
+      </div>
+      <div class="wf-comment-body">
+        <header>
+          <div class="header-content">
+            <span class="username"><a href="#">{{authorUsername}}</a></span>
+            <i-poptip
+              v-if="comment.replyToCommentId !== undefined"
+              trigger="hover"
+              placement="top">
+              <span class="parent-link">
+                <i-icon type="forward"></i-icon>
+                {{replyToCommentAuthorUsername}}
+              </span>
+              <div class="reply-poptip" slot="content" v-if="replyToCommentContent && replyToCommentAuthorUsername && replyToCommentAuthorPhotoURL">
+                <img :src="replyToCommentAuthorPhotoURL">
+                <span>
+                  <span><strong>{{replyToCommentAuthorUsername}}</strong></span>
+                  <span>{{this.replyToCommentContent}}</span>
+                </span>
+              </div>
+              <div slot="content" v-else>
+                {{$i18next.t('text/loadingCommentContent...')}}
+              </div>
+            </i-poptip>
+            <span class="meta">
+              <i-poptip 
+                :content="$moment(comment.date).format('YYYY-MM-DD h:mm:ss')"
+                trigger="hover"
+                placement="right">
+              · {{$moment(comment.date).fromNow()}}
+              </i-poptip>
+            </span>
+          </div>
+          <i-dropdown>
+            <a href="javascript:void(0)" class="drowdown-menu-button">
+                <i-icon type="arrow-down-b"></i-icon>
+            </a>
+            <i-dropdown-menu slot="list">
+                <i-dropdown-item>report</i-dropdown-item>
+                <i-dropdown-item>ban</i-dropdown-item>
+            </i-dropdown-menu>
+          </i-dropdown>
+        </header>
+        <div class="wf-comment-content">{{comment.content}}</div>
+        <footer>
+          <a href="javascript:void(0)"
+            :class="{
+              inactive: likeUserIdList.indexOf(currentUserId) === -1,
+              disabled: !user
+            }"
+            @click="toggleVote('like')"
+          >
+            <span>{{likeUserIdList.length || ''}}</span>
+            <i-icon type="heart"></i-icon>
+          </a>
+          <span class="separator">|</span>
+          <a href="javascript:void(0)"
+            :class="{
+              inactive: dislikeUserIdList.indexOf(currentUserId) === -1,
+              disabled: !user
+            }"
+            @click="toggleVote('dislike')"
+          >
+            <span>{{dislikeUserIdList.length || ''}}</span>
+            <i-icon type="heart-broken"></i-icon>
+          </a>
+          <i-button type="text" class="wf-reply-button"
+            @click="isReplying = !isReplying"
+          >
+            {{isReplying ? $i18next.t('button/hide') : $i18next.t('button/reply')}}
+          </i-button>
+          <i-poptip
+            confirm
+            :title="$i18next.t('text/areYouSureToDeleteThisComment')"
+            @on-ok="confirmDelete">
+            <i-button type="text" class="wf-delete-button"
+              v-if="canDelete">
+              {{$i18next.t('button/delete')}}
+            </i-button>
+          </i-poptip>
+        </footer>
+        <wf-reply-area v-if="!parentComment"
+          v-show="isReplying"
+          :user="user"
+          :reply-to-comment-author-username="authorUsername"
+          :reply-to-comment="commentWithDotKey"
+          @finishedReplying="isReplying = false">
+        </wf-reply-area>
+        <wf-reply-area v-if="parentComment"
+          v-show="isReplying"
+          :user="user"
+          :reply-to-comment-author-username="authorUsername"
+          :reply-to-comment="commentWithDotKey"
+          :root-comment="parentCommentWithDotKey"
+          @finishedReplying="isReplying = false">
+        </wf-reply-area>
+      </div>
+    </section>
+    <section class="replies">
+      <ul class="wf-reply-group" v-if="!comment.replyToCommentId">
+        <wf-comment-card 
+          v-for="(reply, idx) in replies"
+          v-show="!isShowingLessReplies || (isShowingLessReplies && idx < numberOfRepliesWhenShowingLess)"
+          :key="reply['.key']"
+          :user="user"
+          :comment="objectWithDotKey(reply, reply['.key'])"
+          :parent-comment="comment"
+          :wow="1"
+          ></wf-comment-card>
+        <i-button type="text" 
+          v-show="replies.length > numberOfRepliesWhenShowingLess"
+          @click="isShowingLessReplies = !isShowingLessReplies"
+          long>
+          <template v-if="isShowingLessReplies">
+            <i-icon type="chevron-down"></i-icon>
+            {{$i18next.t('text/showMoreDiscussion')}}
+          </template>
+          <template v-else>
+            <i-icon type="chevron-up"></i-icon>
+            {{$i18next.t('text/showLessDiscussion')}}
+          </template>
+        </i-button>
+      </ul>
+    </section>
   </li>
 </template>
 
 <script>
+import WfReplyArea from './WFReplyArea'
 export default {
   name: 'wf-comment-card',
-  props: ['comment', 'parentComment', 'user'],
+  components: {
+    WfReplyArea, 'wf-comment-card': this
+  },
+  props: ['user', 'comment', 'parentComment', 'wow'],
   data () {
     return {
       isHeaderMenuShowing: false,
       isReplying: false,
-      avatarURL: window._wildfire.config.defaultAvatar,
-      authorUsername: ''
+      avatarURL: '',
+      authorUsername: '',
+      replyToCommentAuthorUsername: '',
+      replyToCommentAuthorPhotoURL: '',
+      replyToCommentContent: '',
+      replies: [],
+      isShowingLessReplies: true,
+      numberOfRepliesWhenShowingLess: 4
+    }
+  },
+  firebase: function () {
+    if (this.comment.replyToCommentId) { return {} }
+    const { siteId } = this.$config
+    const commentKey = this.comment['.key']
+    return {
+      replies: this.$commentDB.ref(`sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}`)
+    }
+  },
+  computed: {
+    likeUserIdList () {
+      return this.comment.likes === undefined ? [] : Object.keys(this.comment.likes)
+    },
+    dislikeUserIdList () {
+      return this.comment.dislikes === undefined ? [] : Object.keys(this.comment.dislikes)
+    },
+    currentUserId () {
+      return this.user ? this.user.uid : 'null'
+    },
+    anonymousUserId () {
+      return this.$config.anonymousUserId
+    },
+    encodedPageURL () {
+      return btoa(this.$config.pageURL)
+    },
+    commentWithDotKey () {
+      return Object.assign({'.key': this.comment['.key']}, this.comment)
+    },
+    parentCommentWithDotKey () {
+      return this.parentComment
+        ? Object.assign({'.key': this.parentComment['.key']}, this.parentComment)
+        : {}
+    },
+    canDelete () {
+      return this.user &&
+              this.comment.authorUid !== this.$config.anonymousUserId &&
+              this.user.uid === this.comment.authorUid
+    },
+    showingReplies () {
+      return this.isShowingLessReplies ? this.replies.slice(0, 4) : this.replies
     }
   },
   created () {
+    // data initialization
+    this.avatarURL = this.$config.defaultAvatarURL
     this.authorUsername = this.$i18next.t('text/anonymousUser')
-    const uid = this.comment.authorUid
-    if (uid === window._wildfire.config.anonymousUserId) { return }
+    this.replyToAuthorUsername = this.$i18next.t('text/anonymousUser')
 
-    const commentId = this.comment['.key']
     const _this = this
-    window._wildfire.userApp.database().ref(`users/${uid}`).once('value').then((snapshot) => {
-      let author = snapshot.val()
-      if (!author) { return }
-      if (author.photoURL) {
-        _this.avatarURL = author.photoURL
+    const uid = this.comment.authorUid
+    if (uid !== this.anonymousUserId) {
+      // if not anomymous user, get username & avatar
+      this.$userApp.database().ref(`users/${uid}`).once('value').then((snapshot) => {
+        let author = snapshot.val()
+        if (!author) { return }
+        if (author.photoURL) {
+          _this.avatarURL = author.photoURL
+        }
+        if (author.displayName) {
+          _this.authorUsername = author.displayName
+        }
+      })
+    }
+
+    if (this.parentComment) {
+      const replyToCommentAuthorUid = this.parentComment.authorUid
+      if (replyToCommentAuthorUid !== this.anonymousUserId) {
+        this.$userApp.database().ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
+          let author = snapshot.val()
+          if (author && author.displayName) {
+            _this.replyToCommentAuthorUsername = author.displayName
+            _this.replyToCommentAuthorPhotoURL = author.photoURL
+          }
+        })
       }
-      if (author.displayName) {
-        _this.authorUsername = author.displayName
+      const replyToCommentId = this.comment.replyToCommentId
+      const replyToCommentRef = this.parentComment['.key'] === replyToCommentId
+                                  ? `sites/${this.$config.siteId}/${this.encodedPageURL}/comments/${replyToCommentId}`
+                                  : `sites/${this.$config.siteId}/${this.encodedPageURL}/replies/${this.parentComment['.key']}/${replyToCommentId}`
+      this.$commentDB.ref(replyToCommentRef).once('value').then((snapshot) => {
+        let comment = snapshot.val()
+        _this.replyToCommentContent = comment.content
+      })
+    }
+  },
+  methods: {
+    /**
+     * @param  {string='like', 'dislike'} type
+     */
+    toggleVote (type) {
+      if (!this.user) { return }
+      const { uid } = this.user
+
+      const commentId = this.comment['.key']
+      const parentCommentId = this.parentComment ? this.parentComment['.key'] : null
+      const { siteId } = this.$config
+      const baseRef = `/sites/${siteId}/${this.encodedPageURL}`
+
+      const ref = baseRef + (parentCommentId
+        ? `/replies/${parentCommentId}/${commentId}/${type}s/${uid}`
+        : `/comments/${commentId}/${type}s/${uid}`)
+
+      const oppositeType = type === 'like' ? 'dislike' : 'like'
+      const removeOppositeVoteRef = baseRef + (parentCommentId
+        ? `/replies/${parentCommentId}/${commentId}/${oppositeType}s/${uid}`
+        : `/comments/${commentId}/${oppositeType}s/${uid}`)
+
+      let updates = {}
+      if (this[`${type}UserIdList`].indexOf(uid) === -1) {
+        updates[ref] = (new Date()).toISOString()
+        const shouldRemoveOppositeVote = this[`${oppositeType}UserIdList`].indexOf(uid) !== -1
+        if (shouldRemoveOppositeVote) {
+          updates[removeOppositeVoteRef] = null
+        }
+        this.$commentDB.ref().update(updates)
+      } else {
+        this.$commentDB.ref(ref).remove()
       }
-    })
+    },
+    confirmDelete () {
+      const { siteId } = this.$config
+      if (this.parentComment) {
+        const commentKey = this.parentComment['.key']
+        const replyKey = this.comment['.key']
+        const ref = `sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`
+        this.$commentDB.ref(ref).remove()
+      } else {
+        const commentKey = this.comment['.key']
+        let updates = {}
+        updates[`sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}`] = null
+        updates[`sites/${siteId}/${this.encodedPageURL}/comments/${commentKey}`] = null
+        this.$commentDB.ref().update(updates)
+      }
+    },
+    objectWithDotKey (obj, key) {
+      return Object.assign({}, obj, {'.key': key})
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.wf-reply-item .wf-comment-avatar img {
+  width: 36px;
+  height: 36px;
+}
+.wf-comment-item {
+  display: flex;
+  flex-direction: column;
+}
+.wf-comment-item section {
+  display: flex;
+  flex-direction: row;
+}
+.wf-comment-item section.replies {
+  margin-top: 5px;
+  margin-left: 60px;
+}
+.wf-comment-item section.replies ul {
+  width: 100%;
+}
+
+.reply-poptip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.reply-poptip img {
+  width: 30px;
+  height: 30px;
+}
+
+.reply-poptip>span {
+  display: flex;
+  flex-direction: column;
+}
+
+.reply-poptip span span {
+  max-width: 120px;
+  overflow: auto;
+  text-overflow: ellipsis;
+}
+
+.drowdown-menu-button {
+  opacity: 0;
+}
+
+.wf-comment-item section.comment:hover .drowdown-menu-button {
+  opacity: 1;
+}
+
+.wf-comment-avatar {
+  margin-right: 12px;
+}
+
+.wf-comment-avatar img {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+}
+
+.wf-comment-body {
+  flex: 1;
+  line-height: 21px;
+  font-size: 
+}
+
+.wf-comment-body header {
+  display: flex;
+  justify-content: space-between;
+  color: #656c7a;
+}
+
+.wf-comment-body header .header-content .username a {
+  font-size: 13px;
+  font-weight: 700;
+
+  color: rgba(40, 140, 228, 0.85);
+  text-decoration: none;
+}
+
+.wf-comment-body header .header-content .username a:hover {
+  color: #288ce4;
+}
+
+.wf-comment-body header .header-content .meta {
+  font-size: 12px;
+}
+
+.wf-comment-body header .header-content .parent-link {
+  font-size: 12px;
+}
+
+.wf-comment-body header .header-content .parent-link:hover {
+  color: black;
+}
+
+.wf-comment-content {
+  padding-bottom: 3px;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+
+  font-size: 13px;
+}
+
+footer .like-count,.dislike-count {
+  color: rgba(237, 63, 20, 0.8);
+}
+
+footer .separator {
+  font-weight: 500;
+  color: #e7e9ee;
+  margin: 0 6px;
+}
+
+footer a {
+  color: rgba(237, 63, 20, 0.8);
+  font-weight: 500;
+
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #ed3f14;
+}
+
+footer .inactive {
+  filter: grayscale(100%);
+  color: #929292;
+}
+
+footer .disabled {
+  cursor: not-allowed;
+}
+
+.wf-reply-button {
+  margin-left: 12px;
+}
+.wf-delete-button {
+  color: rgba(237, 63, 20, 0.8);
+}
+.wf-delete-button:hover {
+  color: #ed3f14;
+}
+.ivu-btn {
+  padding: 4px;
+}
 </style>
