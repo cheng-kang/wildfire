@@ -71,6 +71,7 @@ import Form from 'iview/src/components/form'
 import Spin from 'iview/src/components/spin'
 import Tooltip from 'iview/src/components/tooltip'
 import Poptip from 'iview/src/components/poptip'
+import Page from 'iview/src/components/page'
 import Message from 'iview/src/components/message'
 import Modal from 'iview/src/components/modal'
 Vue.component('i-dropdown', Dropdown)
@@ -86,6 +87,7 @@ Vue.component('i-icon', Icon)
 Vue.component('i-spin', Spin)
 Vue.component('i-tooltip', Tooltip)
 Vue.component('i-poptip', Poptip)
+Vue.component('i-page', Page)
 Vue.component('i-modal', Modal)
 Vue.prototype.$Message = Message
 Vue.prototype.$Modal = Modal

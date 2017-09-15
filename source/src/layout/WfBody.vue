@@ -4,15 +4,21 @@
       :user="user" 
       :commentsLoadingState="commentsLoadingState"
       :page-comments-count="pageCommentsCount"></wf-reply-area>
-    <ul class="wf-comment-group" v-if="comments.length !== 0">
-      <wf-comment-card 
-        v-for="(comment, idx) in comments"
-        :key="comment['.key']"
-        :user="user"
-        :comment="objectWithDotKey(comment, comment['.key'])"
-        :page-comments-count="pageCommentsCount"
-        ></wf-comment-card>
-    </ul>
+    <template v-if="comments.length !== 0">
+      <ul class="wf-comment-group">
+        <wf-comment-card 
+          v-for="(comment, idx) in currentPageCommentsWithDotKey"
+          :key="comment['.key']"
+          :user="user"
+          :comment="objectWithDotKey(comment, comment['.key'])"
+          :page-comments-count="pageCommentsCount"
+          ></wf-comment-card>
+      </ul>
+      <i-page 
+        :total="pageCommentsCount" 
+        size="small"
+        @on-change="pageChanged"></i-page>
+    </template>
     <p v-else class="no-content-tip">
       <i-spin v-if="commentsLoadingState === 'loading'"
         :defaultSlotStyle="{ 
@@ -40,9 +46,32 @@ export default {
   name: 'wf-body',
   components: { WfReplyArea, WfCommentCard },
   props: ['user', 'comments', 'commentsLoadingState', 'pageCommentsCount'],
+  data () {
+    return {
+      numberOfCommentsPerPage: 10,
+      currentPage: 1
+    }
+  },
+  computed: {
+    currentPageComments () {
+      return this.comments.slice((this.currentPage - 1) * this.numberOfCommentsPerPage, this.currentPage * this.numberOfCommentsPerPage)
+    },
+    currentPageCommentsWithDotKey () {
+      return this.currentPageComments.map((comment) => {
+        return Object.assign({replies: {}},
+          comment,
+          {'.key': comment['.key']}
+        )
+      })
+    }
+  },
   methods: {
     objectWithDotKey (obj, key) {
       return Object.assign({}, obj, {'.key': key})
+    },
+    pageChanged (newPage) {
+      console.log(newPage)
+      this.currentPage = newPage
     }
   }
 }
@@ -59,5 +88,8 @@ ul.wf-reply-group {
 }
 .error {
   color: #ed3f14;
+}
+.ivu-page {
+  text-align: center;
 }
 </style>

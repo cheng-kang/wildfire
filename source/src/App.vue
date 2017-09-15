@@ -29,7 +29,6 @@ export default {
       user: null,
       pageCommentsCount: 0,
       comments: [],
-      currentPage: 0,
       numberOfCommentsPerPage: 10,
       discussionCount: 0
     }
@@ -87,12 +86,12 @@ export default {
 
       this.$bindAsArray('comments',
         this.$commentDB.ref(
-          `sites/${siteId}/${btoa(pageURL)}/comments`).orderByChild('order').limitToFirst(this.numberOfCommentsPerPage),
-          () => {
+          `sites/${siteId}/${btoa(pageURL)}/comments`).orderByChild('order')
+          // .limitToFirst(this.numberOfCommentsPerPage)
+          , () => {
             _this.commentsLoadingState = 'failed'
             window._wildfire.pageCommentsCount = 0
-          },
-          () => {
+          }, () => {
             _this.commentsLoadingState = 'finished'
           })
     }
