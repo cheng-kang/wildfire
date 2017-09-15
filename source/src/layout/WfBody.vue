@@ -70,7 +70,6 @@ export default {
       return Object.assign({}, obj, {'.key': key})
     },
     pageChanged (newPage) {
-      console.log(newPage)
       this.currentPage = newPage
     }
   }
