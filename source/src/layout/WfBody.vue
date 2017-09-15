@@ -1,12 +1,17 @@
 <template>
   <section>
-    <wf-reply-area :user="user" :commentsLoadingState="commentsLoadingState"></wf-reply-area>
+    <wf-reply-area 
+      :user="user" 
+      :commentsLoadingState="commentsLoadingState"
+      :page-comments-count="pageCommentsCount"></wf-reply-area>
     <ul class="wf-comment-group" v-if="comments.length !== 0">
       <wf-comment-card 
         v-for="(comment, idx) in comments"
         :key="comment['.key']"
         :user="user"
-        :comment="objectWithDotKey(comment, comment['.key'])"></wf-comment-card>
+        :comment="objectWithDotKey(comment, comment['.key'])"
+        :page-comments-count="pageCommentsCount"
+        ></wf-comment-card>
     </ul>
     <p v-else class="no-content-tip">
       <i-spin v-if="commentsLoadingState === 'loading'"
@@ -34,7 +39,7 @@ import WfCommentCard from '../components/WFCommentCard'
 export default {
   name: 'wf-body',
   components: { WfReplyArea, WfCommentCard },
-  props: ['user', 'comments', 'commentsLoadingState'],
+  props: ['user', 'comments', 'commentsLoadingState', 'pageCommentsCount'],
   methods: {
     objectWithDotKey (obj, key) {
       return Object.assign({}, obj, {'.key': key})

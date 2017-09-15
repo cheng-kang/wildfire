@@ -9,22 +9,20 @@
             justifyContent: 'center'
             }">
             <i-icon type="load-c" size=18 class="spin-icon" :style="{marginRight: '5px'}"></i-icon>
-            <div>{{$i18next.t('text/loadingComments')}}</div>
+            <div>{{$i18next.t('text/loading')}}</div>
         </i-spin>
-        <span v-else>{{commentCount}} {{$i18next.t('button/comments')}}</span>
+        <span v-else>{{discussionCount}} {{$i18next.t('button/discussions')}}</span>
       </i-menu-item>
       <i-menu-item name="2">
           {{username}}
       </i-menu-item>
       <div class="wf-nav-right">
         <span v-show="!user" >
-          <template v-if="$config.database === 'wilddog'">
-            <a @click="signUpFormModal = true">
-              {{$i18next.t('button/signUp')}}
-            </a>
-            <span>/</span>
-          </template>
-          <a @click="signInWithRedirectGitHub">
+          <a @click="signUpFormModal = true">
+            {{$i18next.t('button/signUp')}}
+          </a>
+          <span>/</span>
+          <a @click="signInFirebaseWithGitHub">
             {{$i18next.t('button/signIn')}}
           </a>
         </span>
@@ -54,7 +52,7 @@
 import firebase from 'firebase'
 export default {
   name: 'wf-header',
-  props: ['user', 'commentCount', 'commentsLoadingState'],
+  props: ['user', 'discussionCount', 'commentsLoadingState'],
   data () {
     return {
       signUpFormModal: false
@@ -75,10 +73,7 @@ export default {
         }
       })
     },
-    signInWithRedirectGitHub () {
-      this.$userApp.auth().signInWithRedirect(new firebase.auth.GithubAuthProvider())
-    },
-    signInFirebaseWithGitHub ({state, commit}) {
+    signInFirebaseWithGitHub () {
       const _this = this
       this.$userApp.auth().signInWithPopup(new firebase.auth.GithubAuthProvider()).then((result) => {
         var user = result.user
@@ -137,5 +132,10 @@ header {
 }
 .wf-nav-right {
   float: right;
+}
+</style>
+<style>
+.ivu-spin-text div {
+  display: inline-block;
 }
 </style>

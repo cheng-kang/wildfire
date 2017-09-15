@@ -84,19 +84,23 @@
             </i-button>
           </i-poptip>
         </footer>
+        <!-- If this is a comment -->
         <wf-reply-area v-if="!parentComment"
           v-show="isReplying"
           :user="user"
           :reply-to-comment-author-username="authorUsername"
           :reply-to-comment="commentWithDotKey"
+          :page-comments-count="pageCommentsCount"
           @finishedReplying="isReplying = false">
         </wf-reply-area>
+        <!-- If this is a reply (to a comment) -->
         <wf-reply-area v-if="parentComment"
           v-show="isReplying"
           :user="user"
           :reply-to-comment-author-username="authorUsername"
           :reply-to-comment="commentWithDotKey"
           :root-comment="parentCommentWithDotKey"
+          :root-comment-replies-count="parentComment.repliesCount || 0"
           @finishedReplying="isReplying = false">
         </wf-reply-area>
       </div>
@@ -110,7 +114,6 @@
           :user="user"
           :comment="objectWithDotKey(reply, reply['.key'])"
           :parent-comment="comment"
-          :wow="1"
           ></wf-comment-card>
         <i-button type="text" 
           v-show="replies.length > numberOfRepliesWhenShowingLess"
@@ -137,7 +140,7 @@ export default {
   components: {
     WfReplyArea, 'wf-comment-card': this
   },
-  props: ['user', 'comment', 'parentComment', 'wow'],
+  props: ['user', 'comment', 'pageCommentsCount', 'parentComment'],
   data () {
     return {
       isHeaderMenuShowing: false,
@@ -191,6 +194,12 @@ export default {
     },
     showingReplies () {
       return this.isShowingLessReplies ? this.replies.slice(0, 4) : this.replies
+    },
+    newCommentsCount () {
+      return (parseInt(this.pageCommentsCount) || 0) - 1
+    },
+    newRepliesCount () {
+      return (parseInt(this.parentComment.repliesCount) || 0) - 1
     }
   },
   created () {
@@ -275,13 +284,16 @@ export default {
       if (this.parentComment) {
         const commentKey = this.parentComment['.key']
         const replyKey = this.comment['.key']
-        const ref = `sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`
-        this.$commentDB.ref(ref).remove()
+        let updates = {}
+        updates[`sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`] = null
+        updates[`sites/${siteId}/${this.encodedPageURL}/comments/${commentKey}/repliesCount`] = this.newRepliesCount
+        this.$commentDB.ref().update(updates)
       } else {
         const commentKey = this.comment['.key']
         let updates = {}
         updates[`sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}`] = null
         updates[`sites/${siteId}/${this.encodedPageURL}/comments/${commentKey}`] = null
+        updates[`sites/${siteId}/${this.encodedPageURL}/commentsCount`] = this.newCommentsCount
         this.$commentDB.ref().update(updates)
       }
     },

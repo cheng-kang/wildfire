@@ -2,12 +2,13 @@
   <div class="wildfire">
     <wf-header
       :user="user" 
-      :comment-count="Object.keys(comments).length"
-      :commentsLoadingState="commentsLoadingState"></wf-header>
+      :discussion-count="discussionCount"
+      :comments-loading-state="commentsLoadingState"></wf-header>
     <wf-body 
       :user="user" 
+      :page-comments-count="pageCommentsCount"
       :comments="commentsWithDotKey" 
-      :commentsLoadingState="commentsLoadingState"></wf-body>
+      :comments-loading-state="commentsLoadingState"></wf-body>
     <wf-footer :user="user"></wf-footer>
   </div>
 </template>
@@ -26,25 +27,13 @@ export default {
       isLoaded: false,
       commentsLoadingState: 'prepare',
       user: null,
-      comments: []
+      pageCommentsCount: 0,
+      comments: [],
+      currentPage: 0,
+      numberOfCommentsPerPage: 10,
+      discussionCount: 0
     }
   },
-  // firebase: function () {
-  //   const { siteId, pageURL } = this.$config
-  //   const _this = this
-  //   return {
-  //     comments: {
-  //       source: this.$commentDB.ref(`sites/${siteId}/${btoa(pageURL)}/comments`).orderByChild('order'),
-  //       cancelCallback: error => {
-  //         console.log(error)
-  //         _this.commentsLoadingState = 'failed'
-  //       },
-  //       readyCallback: () => {
-  //         _this.commentsLoadingState = 'finished'
-  //       }
-  //     }
-  //   }
-  // },
   computed: {
     commentsWithDotKey () {
       // make sure each comment object has (1) '.key', and (2) 'replies'
@@ -56,33 +45,23 @@ export default {
       })
     }
   },
+  watch: {
+    pageCommentsCount (newValue) {
+      this.discussionCount = newValue + this.comments.reduce((sum, { repliesCount }) => {
+        sum += repliesCount || 0
+        return sum
+      }, 0)
+    },
+    comments (newValue) {
+      this.discussionCount = this.pageCommentsCount + newValue.reduce((sum, { repliesCount }) => {
+        sum += repliesCount || 0
+        return sum
+      }, 0)
+    }
+  },
   created () {
     this.listenToUserAuth()
     this.listenToCommentsFromFirebase()
-    this.$userApp.auth().getRedirectResult().then(result => {
-      if (result.credential) {
-        console.log('result')
-        console.log(result)
-        // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-        // var token = result.credential.accessToken;
-        // ...
-      }
-      // The signed-in user info.
-      // var user = result.user;
-      console.log('result1')
-      console.log(result)
-    }).catch(error => {
-      console.log('error')
-      console.log(error)
-      // Handle Errors here.
-      // var errorCode = error.code;
-      // var errorMessage = error.message;
-      // // The email of the user's account used.
-      // var email = error.email;
-      // // The firebase.auth.AuthCredential type that was used.
-      // var credential = error.credential;
-      // ...
-    })
   },
   mounted () {
     // hide lodaing modal
@@ -101,11 +80,17 @@ export default {
       const _this = this
       const { siteId, pageURL } = this.$config
 
+      this.$commentDB.ref(`sites/${siteId}/${btoa(pageURL)}/commentsCount`).on('value', snapshot => {
+        const count = parseInt(snapshot.val()) || 0
+        _this.pageCommentsCount = count
+      })
+
       this.$bindAsArray('comments',
         this.$commentDB.ref(
-          `sites/${siteId}/${btoa(pageURL)}/comments`).orderByChild('order'),
+          `sites/${siteId}/${btoa(pageURL)}/comments`).orderByChild('order').limitToFirst(this.numberOfCommentsPerPage),
           () => {
             _this.commentsLoadingState = 'failed'
+            window._wildfire.pageCommentsCount = 0
           },
           () => {
             _this.commentsLoadingState = 'finished'

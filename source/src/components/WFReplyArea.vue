@@ -30,7 +30,15 @@
 <script>
 export default {
   name: 'wf-reply-area',
-  props: ['user', 'replyToCommentAuthorUsername', 'replyToComment', 'rootComment', 'commentsLoadingState'],
+  props: [
+    'user',
+    'replyToCommentAuthorUsername',
+    'replyToComment',
+    'rootComment',
+    'commentsLoadingState',
+    'pageCommentsCount',
+    'rootCommentRepliesCount'
+  ],
   data () {
     return {
       isPosting: false,
@@ -66,6 +74,12 @@ export default {
     },
     isReply () {
       return !!this.replyToComment
+    },
+    newCommentsCount () {
+      return (parseInt(this.pageCommentsCount) || 0) + 1
+    },
+    newRepliesCount () {
+      return (parseInt(this.rootCommentRepliesCount) || 0) + 1
     }
   },
   methods: {
@@ -84,23 +98,29 @@ export default {
         const order = isReply ? null : -1 * aDate.getTime()
 
         let replyToCommentId = null
-        let refURL = ''
+        let updates = {}
 
         if (isReply) {
           replyToCommentId = replyToComment['.key']
         }
 
-        if (rootComment) {
-          refURL = `/sites/${siteId}/${encodedPageURL}/replies/${rootComment['.key']}`
-        } else if (isReply) {
-          refURL = `/sites/${siteId}/${encodedPageURL}/replies/${replyToComment['.key']}`
-        } else {
-          refURL = `/sites/${siteId}/${encodedPageURL}/comments`
-        }
-
         const _this = this
         const postData = { author, authorUid, date, order, content, replyToCommentId }
-        this.$commentDB.ref(refURL).push().set(postData)
+        const emptyRef = this.$commentDB.ref(`/sites/${siteId}/${encodedPageURL}`).push()
+        const newKey = emptyRef.key
+
+        if (rootComment) {
+          updates[`/sites/${siteId}/${encodedPageURL}/replies/${rootComment['.key']}/${newKey}`] = postData
+          updates[`/sites/${siteId}/${encodedPageURL}/comments/${rootComment['.key']}/repliesCount`] = this.newRepliesCount
+        } else if (isReply) {
+          updates[`/sites/${siteId}/${encodedPageURL}/replies/${replyToComment['.key']}/${newKey}`] = postData
+          updates[`/sites/${siteId}/${encodedPageURL}/comments/${replyToComment['.key']}/repliesCount`] = this.newRepliesCount
+        } else {
+          updates[`/sites/${siteId}/${encodedPageURL}/comments/${newKey}`] = { ...postData, repliesCount: 0 }
+          updates[`/sites/${siteId}/${encodedPageURL}/commentsCount`] = this.newCommentsCount
+        }
+
+        this.$commentDB.ref().update(updates)
         .then(() => {
           _this.isPosting = false
           _this.$emit('finishedReplying') // When successfully post reply, hide the reply area
