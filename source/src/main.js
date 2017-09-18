@@ -59,9 +59,6 @@ Vue.use(iView)
 
 // Have problems with this commit ? see notice in README.md
 
-import WfSignUpForm from './components/WfSignUpForm'
-Vue.component('wf-sign-up-form', WfSignUpForm)
-
 const userAppConfig = {
   apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
   authDomain: 'wild-fire-ee770.firebaseapp.com',
@@ -135,7 +132,9 @@ i18next.init({
         'error/pleaseEnterPassword': 'Please enter your password.',
         'error/pleaseReEnterPassword': 'Please re-enter your password.',
         'error/twoPasswordsDontMatch': 'The two passwords don\'t match.',
-        'error/passwordMin': 'Password should be at least 6 digits.'
+        'error/passwordMin': 'Password should be at least 6 digits.',
+        'message/signupSuccess': 'Signup success!',
+        'message/signupFailed': 'Signup failed, please try again!'
       }
     },
     'zh-CN': {
@@ -181,7 +180,9 @@ i18next.init({
         'error/pleaseEnterPassword': '请输入你的密码。',
         'error/pleaseReEnterPassword': '请再次输入密码。',
         'error/twoPasswordsDontMatch': '两次输入的密码不一致。',
-        'error/passwordMin': '密码长度不能小于6位。'
+        'error/passwordMin': '密码长度不能小于6位。',
+        'message/signupSuccess': '注册成功！',
+        'message/signupFailed': '注册失败，请重试！'
       }
     }
   }

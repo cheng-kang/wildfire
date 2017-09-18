@@ -12,7 +12,7 @@ import 'iview/dist/styles/iview.css'
 /*
  * Select the components blow you want to use globally in Vue
  *
- * if you want to you a component locally, please copy the
+ * if you want to use a component locally, please copy the
  * import code in your local *.vue file, and add the component
  * into the components object:
  *
@@ -31,7 +31,7 @@ import 'iview/dist/styles/iview.css'
 // import Badge from 'iview/src/components/badge'
 // import Breadcrumb from 'iview/src/components/breadcrumb'
 import Button from 'iview/src/components/button'
-// import Card from 'iview/src/components/card'
+import Card from 'iview/src/components/card'
 // import Carousel from 'iview/src/components/carousel'
 // import Cascader from 'iview/src/components/cascader'
 // import Checkbox from 'iview/src/components/checkbox'
@@ -59,7 +59,7 @@ import Spin from 'iview/src/components/spin'
 // import Steps from 'iview/src/components/steps'
 // import Switch from 'iview/src/components/switch'
 // import Table from 'iview/src/components/table'
-// import Tabs from 'iview/src/components/tabs'
+import Tabs from 'iview/src/components/tabs'
 // import Tag from 'iview/src/components/tag'
 // import Timeline from 'iview/src/components/timeline'
 // import TimePicker from 'iview/src/components/time-picker'
@@ -67,7 +67,7 @@ import Tooltip from 'iview/src/components/tooltip'
 // import Transfer from 'iview/src/components/transfer'
 // import Tree from 'iview/src/components/tree'
 // import Upload from 'iview/src/components/upload'
-// import { Row, Col } from 'iview/src/components/grid'
+import { Row, Col } from 'iview/src/components/grid'
 // import { Select, Option, OptionGroup } from 'iview/src/components/select'
 
 const iview = {
@@ -82,14 +82,14 @@ const iview = {
   // iButton: Button,
   Button,
   // ButtonGroup: Button.Group,
-  // Card,
+  Card,
   // Carousel,
   // CarouselItem: Carousel.Item,
   // Cascader,
   // Checkbox,
   // CheckboxGroup: Checkbox.Group,
   // iCircle: Circle,
-  // Col,
+  Col,
   // iCol: Col,
   // Collapse,
   // ColorPicker,
@@ -124,7 +124,7 @@ const iview = {
   // Radio,
   // RadioGroup: Radio.Group,
   // Rate,
-  // Row,
+  Row,
   // Select,
   // iSelect: Select,
   // Slider,
@@ -135,8 +135,8 @@ const iview = {
   // iSwitch: Switch,
   // iTable: Table,
   // Table,
-  // Tabs: Tabs,
-  // TabPane: Tabs.Pane,
+  Tabs: Tabs,
+  TabPane: Tabs.Pane,
   // Tag,
   // Timeline,
   // TimelineItem: Timeline.Item,

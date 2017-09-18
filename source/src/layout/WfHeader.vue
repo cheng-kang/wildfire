@@ -17,42 +17,35 @@
           {{username}}
       </i-menu-item>
       <div class="wf-nav-right">
-        <span v-show="!user" >
-          <a @click="signUpFormModal = true">
-            {{$i18next.t('button/signUp')}}
-          </a>
-          <span>/</span>
-          <a @click="signInFirebaseWithGitHub">
-            {{$i18next.t('button/signIn')}}
-          </a>
-        </span>
-        <a v-show="user" 
+        <a v-if="!user" 
+        	@click="signUpFormModal = true">
+          {{$i18next.t('button/signUp')}} | {{$i18next.t('button/signIn')}}
+        </a>
+
+        <a v-else
           @click="signOut">
           {{$i18next.t('button/signOut')}}
         </a>
       </div>
     </i-menu>
-    <i-modal v-model="signUpFormModal" width="300">
-      <p slot="header" style="color:#1c2438;">
-        <i-icon type="ios-paper-outline"></i-icon>
-        <span>注册账号</span>
-      </p>
+    <i-modal v-model="signUpFormModal" :closable="false">
+
       <div style="text-align:center">
-        <wf-sign-up-form></wf-sign-up-form>
+        <wf-sign-form></wf-sign-form>
       </div>
-      <div slot="footer">
-        <i-button type="primary">注册</i-button>
-        <i-button type="text" @click="signUpFormModal = false">取消</i-button>
-      </div>
+      <div slot="footer"></div>
     </i-modal>
   </header>
 </template>
 
 <script>
 import firebase from 'firebase'
+import WfSignForm from '../components/WfSignForm'
+
 export default {
   name: 'wf-header',
   props: ['user', 'discussionCount', 'commentsLoadingState'],
+  components: { WfSignForm },
   data () {
     return {
       signUpFormModal: false
