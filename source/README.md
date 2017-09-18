@@ -19,3 +19,11 @@ npm run build --report
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Notice
+
+For `mrliao 2017/9/18 commit`, If you have problems with iview in this commit, please:
+
+1. delete the `package-lock.json`
+2. run `npm install`, because I have added 2 dev package to fix the build bug.
+3. run `npm run dev` or `npm run build`.
