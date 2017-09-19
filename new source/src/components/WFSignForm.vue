@@ -112,102 +112,84 @@ export default {
   },
   methods: {
     handleSignIn (name) {
+      const _this = this
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.loadingSignIn = true
+          _this.loadingSignIn = true
           const email = this.signInForm.email
           const password = this.signInForm.password
-          this.$auth.signInWithEmailAndPassword(email, password)
+          _this.$auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
-            this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
-              this.loadingSignIn = false
-              let userInfo = snapshot.val()
-              this.finishSignIn(userInfo)
-              this.closeModel()
-              this.$Message.info(this.$i18next.t('message/signInSuccess'))
+            _this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
+              _this.loadingSignIn = false
+              _this.closeModel()
+              _this.$Message.info(_this.$i18next.t('message/signInSuccess'))
             })
           }).catch((error) => {
-            this.loadingSignIn = false
-            this.$Message.error(this.$i18next.t('message/signInFailed'))
+            _this.loadingSignIn = false
+            _this.$Message.error(_this.$i18next.t('message/signInFailed'))
             console.log(error.code, error.message)
           })
         } else {
-          this.$Message.error(this.$i18next.t('message/invalidForm'))
+          _this.$Message.error(_this.$i18next.t('message/invalidForm'))
         }
       })
     },
     handleSignUp (name) {
+      const _this = this
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.loadingSignUp = true
-          const email = this.signUpForm.email
-          const password = this.signUpForm.password
+          const email = _this.signUpForm.email
+          const password = _this.signUpForm.password
           const displayName = email.split('@')[0]
-          const photoURL = this.$config.defaultAvatarURL
+          const photoURL = _this.$config.defaultAvatarURL
 
-          console.log(email, password)
-
-          this.$auth.createUserWithEmailAndPassword(email, password)
+          _this.$auth.createUserWithEmailAndPassword(email, password)
           .then((user) => {
             let updates = {}
             updates['/displayName'] = displayName
             updates['/email'] = email
             updates['/photoURL'] = photoURL
 
-            this.$database.ref(`/users/${user.uid}`).update(updates)
+            _this.$database.ref(`/users/${user.uid}`).update(updates)
             .then(() => {
-              this.loadingSignUp = false
-              this.finishSignIn({
-                'email': email,
-                'displayName': displayName,
-                'photoURL': photoURL
-              })
-              this.closeModel()
-              this.$Message.info(this.$i18next.t('message/signUpSuccess'))
+              _this.loadingSignUp = false
+              _this.closeModel()
+              _this.$Message.info(_this.$i18next.t('message/signUpSuccess'))
             }).catch((error) => {
-              this.loadingSignUp = false
+              _this.loadingSignUp = false
               console.log(error.code, error.message)
-              this.$Message.error(this.$i18next.t('message/somethingGoesWrong'))
+              _this.$Message.error(_this.$i18next.t('message/somethingGoesWrong'))
             })
           }).catch((error) => {
-            this.loadingSignUp = false
-            var errorCode = error.code
-            var errorMessage = error.message
+            _this.loadingSignUp = false
+            let errorCode = error.code
+            let errorMessage = error.message
             switch (errorCode) {
               case 'auth/email-already-in-use':
-                errorMessage = this.$i18next.t('message/emailAlreadyInUse')
+                errorMessage = _this.$i18next.t('message/emailAlreadyInUse')
                 break
               case 'auth/operation-not-allowed':
-                errorMessage = this.$i18next.t('message/operationNotAllowed')
+                errorMessage = _this.$i18next.t('message/operationNotAllowed')
                 break
               case 'auth/weak-password':
-                errorMessage = this.$i18next.t('message/weakPassword')
+                errorMessage = _this.$i18next.t('message/weakPassword')
                 break
               default:
                 break
             }
-            this.$Message.error(errorMessage)
+            _this.$Message.error(errorMessage)
           })
         } else {
-          this.$Message.error(this.$i18next.t('message/invalidForm'))
+          _this.$Message.error(_this.$i18next.t('message/invalidForm'))
         }
       })
-    },
-    finishSignIn (userInfo) {
-      // this.$emit('finishSignIn', userInfo)
-      console.log('finished signin')
     },
     closeModel () {
       this.$refs['signInForm'].resetFields()
       this.$refs['signUpForm'].resetFields()
       this.$parent.close()
-    },
-    encrypt (password) {
-      var md5 = crypto.createHash('md5')
-      var sha1 = crypto.createHash('sha1')
-      md5.update(password)
-      sha1.update(md5.digest('hex'))
-      return sha1.digest('hex')
     }
   }
 }
