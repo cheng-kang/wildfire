@@ -10,20 +10,36 @@
         :placeholder="placeholder"
         :disabled="isPosting || commentsLoadingState === 'loading'"></i-input>
     </i-form-item>
-    <i-form-item class="float-to-right">
-        <i-button :type="isPosting ? 'ghost' : 'primary'" 
-          @click="postComment" 
-          :disabled="form.content.trim() === '' || isPosting"
-          :loading="isPosting">
-          {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
-        </i-button>
-        <i-button type="ghost" 
-          style="margin-left: 8px" 
-          :disabled="form.content.trim() === '' || isPosting"
-          @click="form.content = ''">
-          {{$i18next.t('button/reset')}}
-        </i-button>
+
+    <i-form-item class="editar-tools">
+      <i-tooltip :content="editarTools.markdown.toolTipContent" placement="bottom" >
+        <a @click="handleMarkdown" class="markdown" :class="{'tool-enabled':editarTools.markdown.isMarkdown }">
+          <i-icon type="social-markdown"></i-icon>
+        </a>
+      </i-tooltip>
+
+      <i-tooltip content="表情包" placement="bottom" >
+        <a type="ghost" @click="handleEmoji" class="emoji">
+          <i-icon type="android-happy"></i-icon>
+        </a>
+      </i-tooltip>
     </i-form-item>
+
+    <i-form-item class="float-to-right">
+      <i-button :type="isPosting ? 'ghost' : 'primary'" 
+        @click="postComment" 
+        :disabled="form.content.trim() === '' || isPosting"
+        :loading="isPosting">
+        {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
+      </i-button>
+      <i-button type="ghost" 
+        style="margin-left: 8px" 
+        :disabled="form.content.trim() === '' || isPosting"
+        @click="form.content = ''">
+        {{$i18next.t('button/reset')}}
+      </i-button>
+    </i-form-item>
+
   </i-form>
 </template>
 
@@ -44,6 +60,12 @@ export default {
       isPosting: false,
       form: {
         content: ''
+      },
+      editarTools: {
+        markdown: {
+          isMarkdown: false,
+          toolTipContent: this.$i18next.t('text/markdownDisabled')
+        }
       },
       textareaAutoresize: {
         minRows: 3,
@@ -134,7 +156,12 @@ export default {
           console.log(error)
         })
       }
-    }
+    },
+    handleMarkdown () {
+      this.editarTools.markdown.isMarkdown = !this.editarTools.markdown.isMarkdown
+      this.editarTools.markdown.toolTipContent = this.editarTools.markdown.isMarkdown ? this.$i18next.t('text/markdownEnabled') : this.$i18next.t('text/markdownDisabled')
+    },
+    handleEmoji () {}
   }
 }
 </script>
@@ -166,6 +193,45 @@ img {
 }
 </style>
 <style>
+.editar-tools{
+  margin: -10px auto -5px auto !important
+}
+.editar-tools .ivu-form-item-content{
+  line-height: 20px !important;
+}
+.editar-tools .ivu-tooltip-rel{
+  height: 20px;
+  width: 20px
+}
+.editar-tools a{
+  display: inline-block;
+  border: 1px solid transparent;
+  width: 20px;
+  height: 16px;
+  padding: 0;
+  border-radius: 1px;
+  line-height: 16px;
+}
+.editar-tools i{
+  font-size: 20px;
+  line-height: 14px !important;
+  height: 13px;
+}
+.editar-tools .markdown{
+  background: #888;
+  color: #eee;
+}
+.editar-tools .emoji{
+  color: #ff5722;
+  background: #eee;
+}
+a.tool-enabled{
+  border-color: #2d8cf0
+}
+a.tool-enabled i{
+  background: #2d8cf0;
+  color: #eee;
+}
 .ivu-spin {
   position: unset;
   background-color: unset;

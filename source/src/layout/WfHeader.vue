@@ -28,11 +28,10 @@
         </a>
       </div>
     </i-menu>
-    <i-modal v-model="signUpFormModal" :closable="false">
+    <i-modal v-model="signUpFormModal" :closable="false" :footer-hide="true">
       <div style="text-align:center">
         <wf-sign-form></wf-sign-form>
       </div>
-      <div slot="footer"></div>
     </i-modal>
   </header>
 </template>
