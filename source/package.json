@@ -13,6 +13,7 @@
   "dependencies": {
     "crypto": "^1.0.1",
     "firebase": "^4.3.1",
+    "highlight.js": "^9.12.0",
     "hyperdown": "^2.3.1",
     "i18next": "^9.0.0",
     "iview": "^2.3.2",

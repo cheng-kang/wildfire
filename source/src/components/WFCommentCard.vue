@@ -47,7 +47,7 @@
           </i-dropdown>
         </header>
         <div class="wf-comment-content">
-          <div v-html="marked(comment.content)"></div>
+          <div v-html="marked(comment.content)" v-highlight></div>
         </div>
         <footer>
           <a href="javascript:void(0)"

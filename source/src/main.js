@@ -57,6 +57,9 @@ Vue.prototype.$moment = moment
 import { iView } from './loadiView'
 Vue.use(iView)
 
+import highlight from './highlight.js'
+Vue.use(highlight)
+
 const userAppConfig = {
   apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
   authDomain: 'wild-fire-ee770.firebaseapp.com',
