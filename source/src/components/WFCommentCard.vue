@@ -24,7 +24,7 @@
                 </span>
               </div>
               <div slot="content" v-else>
-                {{$i18next.t('text/loadingCommentContent...')}}
+                {{$i18next.t('text/loadingCommentContent')}}
               </div>
             </i-poptip>
             <span class="meta">
