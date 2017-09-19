@@ -69,9 +69,15 @@ export default {
   },
   methods: {
     listenToUserAuth () {
-      const _this = this
       this.$userApp.auth().onAuthStateChanged((user) => {
-        _this.user = user || null
+        if (user === null) {
+          this.user = null
+          return
+        }
+        this.$userApp.database().ref(`users/${user.uid}`).once('value').then((snapshot) => {
+          this.user = snapshot.val()
+          this.user['uid'] = user.uid
+        })
       })
     },
     listenToCommentsFromFirebase () {

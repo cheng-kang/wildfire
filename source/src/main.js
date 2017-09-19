@@ -57,8 +57,6 @@ Vue.prototype.$moment = moment
 import { iView } from './loadiView'
 Vue.use(iView)
 
-// Have problems with this commit ? see notice in README.md
-
 const userAppConfig = {
   apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
   authDomain: 'wild-fire-ee770.firebaseapp.com',
@@ -67,6 +65,7 @@ const userAppConfig = {
   storageBucket: 'wild-fire-ee770.appspot.com',
   messagingSenderId: '655484997793'
 }
+
 window._wildfire.userApp = firebase.initializeApp(userAppConfig, 'userApp')
 
 Vue.prototype.$userApp = window._wildfire.userApp
@@ -128,13 +127,18 @@ i18next.init({
         'error/failedToPostComment': 'Failed to post comment.',
         'error/pleaseEnterEmail': 'Please enter your email.',
         'error/invalidEmail': 'Invalid email address.',
-        'error/emailNotAvailable': 'This email is not available.',
         'error/pleaseEnterPassword': 'Please enter your password.',
         'error/pleaseReEnterPassword': 'Please re-enter your password.',
         'error/twoPasswordsDontMatch': 'The two passwords don\'t match.',
         'error/passwordMin': 'Password should be at least 6 digits.',
-        'message/signupSuccess': 'Signup success!',
-        'message/signupFailed': 'Signup failed, please try again!'
+        'message/invalidForm': 'Invalid form! Check it and try again.',
+        'message/signUpSuccess': 'Signup success!',
+        'message/signUpFailed': 'Signup failed, please try again!',
+        'message/signInSuccess': 'Signin success!',
+        'message/signInFailed': 'Signin failed, please try again!',
+        'message/emailAlreadyInUse': 'Email already in use, try to login!',
+        'message/operationNotAllowed': 'Email accounts are not enabled, please contact the admin!',
+        'message/somethingGoesWrong': 'Oops! Something goes wrong!'
       }
     },
     'zh-CN': {
@@ -176,13 +180,18 @@ i18next.init({
         'error/failedToPostComment': '发送评论失败。',
         'error/pleaseEnterEmail': '请输入你的邮箱地址。',
         'error/invalidEmail': '邮箱格式不正确。',
-        'error/emailNotAvailable': '该邮箱地址已被占用。',
         'error/pleaseEnterPassword': '请输入你的密码。',
         'error/pleaseReEnterPassword': '请再次输入密码。',
         'error/twoPasswordsDontMatch': '两次输入的密码不一致。',
         'error/passwordMin': '密码长度不能小于6位。',
-        'message/signupSuccess': '注册成功！',
-        'message/signupFailed': '注册失败，请重试！'
+        'message/invalidForm': '表单验证失败，请按要求填写！',
+        'message/signUpSuccess': '注册成功！',
+        'message/signUpFailed': '注册失败，请重试！',
+        'message/signInSuccess': '登录成功！',
+        'message/signInFailed': '登录失败，请重试！',
+        'message/emailAlreadyInUse': '邮箱已经注册，请直接登录！',
+        'message/operationNotAllowed': '邮箱登录被禁止，请联系站主！',
+        'message/somethingGoesWrong': '发生了未知错误！'
       }
     }
   }

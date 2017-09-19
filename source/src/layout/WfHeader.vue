@@ -29,7 +29,6 @@
       </div>
     </i-menu>
     <i-modal v-model="signUpFormModal" :closable="false">
-
       <div style="text-align:center">
         <wf-sign-form></wf-sign-form>
       </div>
@@ -39,7 +38,6 @@
 </template>
 
 <script>
-import firebase from 'firebase'
 import WfSignForm from '../components/WfSignForm'
 
 export default {
@@ -64,43 +62,6 @@ export default {
         render: (h) => {
           return h('wf-sign-up-form')
         }
-      })
-    },
-    signInFirebaseWithGitHub () {
-      const _this = this
-      this.$userApp.auth().signInWithPopup(new firebase.auth.GithubAuthProvider()).then((result) => {
-        var user = result.user
-
-        const { uid, displayName, email, photoURL } = user
-
-        /**
-         *  Check if there is any change to userinfo,
-         *  and update USER_DB correspondingly.
-         */
-        _this.$userApp.database().ref('users/' + uid).once('value').then((snapshot) => {
-          let oldValue = snapshot.val()
-
-          let updates = {}
-          if (oldValue.displayName !== displayName) {
-            updates['/displayName'] = displayName
-          }
-          if (oldValue.email !== email) {
-            updates['/email'] = email
-          }
-          if (oldValue.photoURL !== photoURL) {
-            updates['/photoURL'] = photoURL
-          }
-
-          _this.$userApp.database().ref('users/' + uid).update(updates)
-        })
-      }).catch((error) => {
-        /**
-         * Handle errors here
-         */
-        var errorMessage = error.message
-        var email = error.email
-        console.log(errorMessage)
-        console.log(email)
       })
     },
     signOut () {
