@@ -69,7 +69,7 @@ export default {
         title: this.$i18next.t('text/signOutTitle'),
         content: `<p> ${this.$i18next.t('text/signOutConfirmText')} </p>`,
         onOk: () => {
-          this.$wilddog.auth().signOut().then(() => {
+          this.$auth.signOut().then(() => {
             console.log('Wilddog User Sign Out.')
           })
         },

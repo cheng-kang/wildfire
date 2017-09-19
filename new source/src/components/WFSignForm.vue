@@ -115,10 +115,10 @@ export default {
         if (valid) {
           this.loadingSignIn = true
           const email = this.signInForm.email
-          const password = this.encrypt(this.signInForm.password)
-          this.$wilddog.auth().signInWithEmailAndPassword(email, password)
+          const password = this.signInForm.password
+          this.$auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
-            this.$wilddog.sync().ref(`users/${user.uid}`).once('value').then((snapshot) => {
+            this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
               this.loadingSignIn = false
               let userInfo = snapshot.val()
               this.finishSignIn(userInfo)
@@ -146,14 +146,14 @@ export default {
 
           console.log(email, password)
 
-          this.$wilddog.auth().createUserWithEmailAndPassword(email, password)
+          this.$auth.createUserWithEmailAndPassword(email, password)
           .then((user) => {
             let updates = {}
             updates['/displayName'] = displayName
             updates['/email'] = email
             updates['/photoURL'] = photoURL
 
-            this.$wilddog.sync().ref(`/users/${user.uid}`).update(updates)
+            this.$database.ref(`/users/${user.uid}`).update(updates)
             .then(() => {
               this.loadingSignUp = false
               this.finishSignIn({

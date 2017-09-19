@@ -1,9 +1,23 @@
+// const wildfireConfig = {
+//   database: 'wilddog',
+//   databaseConfig: {
+//     siteId: 'wd2231595668ouosqu'
+//   },
+//   pageURL: 'http://chengkang.me/wildfire',
+//   pageTitle: 'Wildfire Demo',
+//   locale: 'zh-CN'
+// }
+
 const wildfireConfig = {
-  database: 'wilddog',
+  database: 'firebase',
   databaseConfig: {
-    siteId: 'wd2231595668ouosqu'
+    apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
+    authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
+    databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
+    projectId: 'wildfirewebsite-35a4f',
+    storageBucket: '',
+    messagingSenderId: '911552849262'
   },
-  siteId: 'test',
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
   locale: 'zh-CN'
@@ -31,12 +45,13 @@ Vue.prototype.$config = {
 import Vue from 'vue'
 import wilddog from 'wilddog'
 import WildVue from 'wildvue'
+import firebase from 'firebase'
+import VueFire from 'vuefire'
 import moment from 'moment'
 import i18next from 'i18next'
 import App from './App'
 
 Vue.config.productionTip = true
-Vue.use(WildVue)
 Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment
 
@@ -45,10 +60,20 @@ Vue.prototype.$moment = moment
 import { iView } from './loadiView'
 Vue.use(iView)
 
-Vue.prototype.$wilddog = wilddog.initializeApp({
-  authDomain: `${databaseConfig.siteId}.wilddog.com`,
-  syncURL: `https://${databaseConfig.siteId}.wilddogio.com`
-})
+if (database === 'wilddog') {
+  Vue.use(WildVue)
+  Vue.prototype.$app = wilddog.initializeApp({
+    authDomain: `${databaseConfig.siteId}.wilddog.com`,
+    syncURL: `https://${databaseConfig.siteId}.wilddogio.com`
+  })
+  Vue.prototype.$database = Vue.prototype.$app.sync()
+  Vue.prototype.$auth = Vue.prototype.$app.auth()
+} else if (database === 'firebase') {
+  Vue.use(VueFire)
+  Vue.prototype.$app = firebase.initializeApp(databaseConfig)
+  Vue.prototype.$database = Vue.prototype.$app.database()
+  Vue.prototype.$auth = Vue.prototype.$app.auth()
+}
 
 moment.locale(locale.toLowerCase())
 
@@ -89,10 +114,8 @@ i18next.init({
         'text/reEnterPassword': 'Re-enter password',
         'text/confirm': 'Confirm',
         'text/signOutTitle': 'Sign Out',
-        'text/signOutConfirmText': 'Are you sure you want to sign out?',
-        'error/noSiteId': 'Please check your config: missing "siteId".',
-        'error/notValidSiteId': 'Please set a valid "siteId".',
-        'error/notValidServiceProvider': 'Please check your config: "sercive" should be "firebase" or "wilddo"g.',
+        'text/signOutConfirmText': 'Are you sure to sign out Wildfire?',
+        'error/notValidServiceProvider': 'Please check your config: "sercice" should be "firebase" or "wilddog".',
         'error/noDatabaseConfig': 'Please check your config: missing "databaseConfig"',
         'error/failedToLoadComments': 'Failed to load comments.',
         'error/failedToPostComment': 'Failed to post comment.',
@@ -144,10 +167,8 @@ i18next.init({
         'text/reEnterPassword': '再次输入密码',
         'text/confirm': '确认',
         'text/signOutTitle': '注销登录',
-        'text/signOutConfirmText': '是否注销登录？',
-        'error/noSiteId': '请检查你的配置：找不到 "siteId。"',
-        'error/notValidSiteId': '请设置一个有效的 "siteId。"',
-        'error/notValidServiceProvider': '请检查你的配置： "sercive" 应该为 "firebase" 或者 "wilddog"。',
+        'text/signOutConfirmText': '确定注销当前 Wildfire 账号？',
+        'error/notValidServiceProvider': '请检查你的配置： "sercice" 应该为 "firebase" 或者 "wilddog"。',
         'error/noDatabaseConfig': '请检查你的配置： 找不到 "databaseConfig"',
         'error/failedToLoadComments': '加载评论失败。',
         'error/failedToPostComment': '发送评论失败。',

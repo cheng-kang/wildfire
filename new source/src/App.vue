@@ -72,13 +72,12 @@ export default {
   methods: {
     listenToUserAuth () {
       const _this = this
-      this.$wilddog.auth().onAuthStateChanged((user) => {
-        console.log('test1')
+      this.$auth.onAuthStateChanged((user) => {
         if (user === null) {
           _this.user = null
           return
         }
-        _this.$wilddog.sync().ref(`users/${user.uid}`).once('value').then((snapshot) => {
+        _this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
           _this.user = snapshot.val()
           _this.user['uid'] = user.uid
         })
@@ -89,20 +88,17 @@ export default {
       const _this = this
       const { pageURL } = this.$config
 
-      this.$wilddog.sync().ref(`pages/${btoa(pageURL)}/commentsCount`).on('value', snapshot => {
+      this.$database.ref(`pages/${btoa(pageURL)}/commentsCount`).on('value', snapshot => {
         const count = parseInt(snapshot.val()) || 0
         _this.pageCommentsCount = count
-        console.log('test2')
       })
 
-      this.$bindAsArray('comments', this.$wilddog.sync()
+      this.$bindAsArray('comments', this.$database
       .ref(`pages/${btoa(pageURL)}/comments`).orderByChild('order'), () => {
         _this.commentsLoadingState = 'failed'
         window._wildfire.pageCommentsCount = 0
-        console.log('test3')
       }, () => {
         _this.commentsLoadingState = 'finished'
-        console.log('test4')
       })
     }
   }

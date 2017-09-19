@@ -205,7 +205,7 @@ export default {
     const uid = this.comment.authorUid
     if (uid !== this.anonymousUserId) {
       // if not anomymous user, get username & avatar
-      this.$wilddog.sync().ref(`users/${uid}`).once('value').then((snapshot) => {
+      this.$database.ref(`users/${uid}`).once('value').then((snapshot) => {
         let author = snapshot.val()
         if (!author) { return }
         if (author.photoURL) {
@@ -223,14 +223,14 @@ export default {
                                   ? `/pages/${this.encodedPageURL}/comments/${replyToCommentId}`
                                   : `/pages/${this.encodedPageURL}/replies/${this.parentComment['.key']}/${replyToCommentId}`
       console.log(replyToCommentRef)
-      this.$wilddog.sync().ref(replyToCommentRef).once('value').then((snapshot) => {
+      this.$database.ref(replyToCommentRef).once('value').then((snapshot) => {
         let comment = snapshot.val()
         console.log(comment)
         _this.replyToCommentContent = comment.content
 
         const replyToCommentAuthorUid = comment.authorUid
         if (replyToCommentAuthorUid !== _this.anonymousUserId) {
-          _this.$wilddog.sync().ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
+          _this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
             let author = snapshot.val()
             if (author && author.displayName) {
               _this.replyToCommentAuthorUsername = author.displayName
@@ -241,7 +241,7 @@ export default {
       })
     } else {
       const commentKey = this.comment['.key']
-      this.$bindAsArray('replies', this.$wilddog.sync()
+      this.$bindAsArray('replies', this.$database
       .ref(`pages/${this.encodedPageURL}/replies/${commentKey}`), () => {
         console.log('test33')
       }, () => {
@@ -277,9 +277,9 @@ export default {
         if (shouldRemoveOppositeVote) {
           updates[removeOppositeVoteRef] = null
         }
-        this.$wilddog.sync().ref().update(updates)
+        this.$database.ref().update(updates)
       } else {
-        this.$wilddog.sync().ref(ref).remove()
+        this.$database.ref(ref).remove()
       }
     },
     confirmDelete () {
@@ -289,14 +289,14 @@ export default {
         let updates = {}
         updates[`pages/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`] = null
         updates[`pages/${this.encodedPageURL}/comments/${commentKey}/repliesCount`] = this.newRepliesCount
-        this.$wilddog.sync().ref().update(updates)
+        this.$database.ref().update(updates)
       } else {
         const commentKey = this.comment['.key']
         let updates = {}
         updates[`pages/${this.encodedPageURL}/replies/${commentKey}`] = null
         updates[`pages/${this.encodedPageURL}/comments/${commentKey}`] = null
         updates[`pages/${this.encodedPageURL}/commentsCount`] = this.newCommentsCount
-        this.$wilddog.sync().ref().update(updates)
+        this.$database.ref().update(updates)
       }
     },
     objectWithDotKey (obj, key) {

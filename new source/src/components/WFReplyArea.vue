@@ -107,8 +107,8 @@ export default {
 
         const _this = this
         const postData = { author, authorUid, date, order, content, replyToCommentId }
-        const emptyRef = this.$wilddog.sync().ref(`/pages/${encodedPageURL}`).push()
-        const newKey = emptyRef.key()
+        const emptyRef = this.$database.ref(`/pages/${encodedPageURL}`).push()
+        const newKey = this.$config.database === 'firebase' ? emptyRef.key : emptyRef.key()
 
         if (rootComment) {
           updates[`/pages/${encodedPageURL}/replies/${rootComment['.key']}/${newKey}`] = postData
@@ -123,7 +123,7 @@ export default {
 
         console.log(updates)
 
-        this.$wilddog.sync().ref().update(updates)
+        this.$database.ref().update(updates)
         .then(() => {
           _this.isPosting = false
           _this.$emit('finishedReplying') // When successfully post reply, hide the reply area
