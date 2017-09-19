@@ -1,5 +1,5 @@
 <template> 
-  <i-tabs value="signIn">
+  <i-tabs :value="initTab">
     <i-tab-pane :label="$i18next.t('button/signIn')" name="signIn" :disabled="loadingSignUp">
       <i-card :bordered="false" :padding="40">
         <i-form ref="signInForm" :model="signInForm" :rules="rule" :label-width="80">
@@ -70,6 +70,7 @@
 <script>
 export default {
   name: 'wf-sign-form',
+  props: ['initTab'],
   data () {
     const _this = this
     const validatePasswordCheck = (rule, value, callback) => {
