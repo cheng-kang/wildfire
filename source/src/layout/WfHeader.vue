@@ -18,7 +18,7 @@
       </i-menu-item>
       <div class="wf-nav-right">
         <a v-if="!user" 
-        	@click="signUpFormModal = true">
+          @click="signUpFormModal = true">
           {{$i18next.t('button/signUp')}} | {{$i18next.t('button/signIn')}}
         </a>
 
@@ -65,16 +65,25 @@ export default {
       })
     },
     signOut () {
-      const { database } = this.$config
-      if (database === 'firebase') {
-        this.$userApp.auth().signOut().then(() => {
-          console.log('Firebase User Sign Out.')
-        }).catch((error) => {
-          console.log(error)
-        })
-      } else {
-        // if database === 'wilddog'
-      }
+      this.$Modal.confirm({
+        title: this.$i18next.t('text/signOutTitle'),
+        content: `<p> ${this.$i18next.t('text/signOutConfirmText')} </p>`,
+        onOk: () => {
+          const { database } = this.$config
+          if (database === 'firebase') {
+            this.$userApp.auth().signOut().then(() => {
+              console.log('Firebase User Sign Out.')
+            }).catch((error) => {
+              console.log(error)
+            })
+          } else {
+            // if database === 'wilddog'
+          }
+        },
+        onCancel: () => {
+          console.log('Aborted Sign Out.')
+        }
+      })
     }
   }
 }

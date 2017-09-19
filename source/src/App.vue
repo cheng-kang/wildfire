@@ -90,16 +90,13 @@ export default {
         _this.pageCommentsCount = count
       })
 
-      this.$bindAsArray('comments',
-        this.$commentDB.ref(
-          `sites/${siteId}/${btoa(pageURL)}/comments`).orderByChild('order')
-          // .limitToFirst(this.numberOfCommentsPerPage)
-          , () => {
-            _this.commentsLoadingState = 'failed'
-            window._wildfire.pageCommentsCount = 0
-          }, () => {
-            _this.commentsLoadingState = 'finished'
-          })
+      this.$bindAsArray('comments', this.$commentDB
+      .ref(`sites/${siteId}/${btoa(pageURL)}/comments`).orderByChild('order'), () => {
+        _this.commentsLoadingState = 'failed'
+        window._wildfire.pageCommentsCount = 0
+      }, () => {
+        _this.commentsLoadingState = 'finished'
+      })
     }
   }
 }
