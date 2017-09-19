@@ -222,10 +222,8 @@ export default {
       const replyToCommentRef = this.parentComment['.key'] === replyToCommentId
                                   ? `/pages/${this.encodedPageURL}/comments/${replyToCommentId}`
                                   : `/pages/${this.encodedPageURL}/replies/${this.parentComment['.key']}/${replyToCommentId}`
-      console.log(replyToCommentRef)
       this.$database.ref(replyToCommentRef).once('value').then((snapshot) => {
         let comment = snapshot.val()
-        console.log(comment)
         _this.replyToCommentContent = comment.content
 
         const replyToCommentAuthorUid = comment.authorUid
@@ -241,12 +239,7 @@ export default {
       })
     } else {
       const commentKey = this.comment['.key']
-      this.$bindAsArray('replies', this.$database
-      .ref(`pages/${this.encodedPageURL}/replies/${commentKey}`), () => {
-        console.log('test33')
-      }, () => {
-        console.log('test44')
-      })
+      this.$bindAsArray('replies', this.$database.ref(`pages/${this.encodedPageURL}/replies/${commentKey}`))
     }
   },
   methods: {

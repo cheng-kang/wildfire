@@ -52,8 +52,6 @@ export default {
       }, 0)
     },
     comments (newValue) {
-      console.log(newValue)
-      if (newValue.length !== 0) { this.commentsLoadingState = 'finished' }
       this.discussionCount = this.pageCommentsCount + newValue.reduce((sum, { repliesCount }) => {
         sum += repliesCount || 0
         return sum
