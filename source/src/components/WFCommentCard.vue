@@ -28,7 +28,7 @@
               </div>
             </i-poptip>
             <span class="meta">
-              <i-poptip 
+              <i-poptip
                 :content="$moment(comment.date).format('YYYY-MM-DD h:mm:ss')"
                 trigger="hover"
                 placement="right">
@@ -46,7 +46,9 @@
             </i-dropdown-menu>
           </i-dropdown>
         </header>
-        <div class="wf-comment-content">{{comment.content}}</div>
+        <div class="wf-comment-content">
+          <div v-html="marked(comment.content)"></div>
+        </div>
         <footer>
           <a href="javascript:void(0)"
             :class="{
@@ -107,7 +109,7 @@
     </section>
     <section class="replies">
       <ul class="wf-reply-group" v-if="!comment.replyToCommentId">
-        <wf-comment-card 
+        <wf-comment-card
           v-for="(reply, idx) in replies"
           v-show="!isShowingLessReplies || (isShowingLessReplies && idx < numberOfRepliesWhenShowingLess)"
           :key="reply['.key']"
@@ -115,7 +117,7 @@
           :comment="objectWithDotKey(reply, reply['.key'])"
           :parent-comment="comment"
           ></wf-comment-card>
-        <i-button type="text" 
+        <i-button type="text"
           v-show="replies.length > numberOfRepliesWhenShowingLess"
           @click="isShowingLessReplies = !isShowingLessReplies"
           long>
@@ -135,6 +137,8 @@
 
 <script>
 import WfReplyArea from './WFReplyArea'
+
+import HyperDown from 'hyperdown'
 export default {
   name: 'wf-comment-card',
   components: {
@@ -300,7 +304,14 @@ export default {
     },
     objectWithDotKey (obj, key) {
       return Object.assign({}, obj, {'.key': key})
+    },
+    marked (content) {
+      var hyperdown = new HyperDown()
+
+      return hyperdown.makeHtml(content)
     }
+  },
+  filters: {
   }
 }
 </script>
@@ -370,7 +381,7 @@ export default {
 .wf-comment-body {
   flex: 1;
   line-height: 21px;
-  font-size: 
+  font-size:
 }
 
 .wf-comment-body header {

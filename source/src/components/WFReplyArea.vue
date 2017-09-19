@@ -3,15 +3,15 @@
     <i-form-item class="no-bottom-margin">
       <img :src="avatarURL" slot="label">
       <i-input
-        v-model="form.content" 
+        v-model="form.content"
         type="textarea"
         @on-click="postComment"
-        :autosize="textareaAutoresize" 
+        :autosize="textareaAutoresize"
         :placeholder="placeholder"
         :disabled="isPosting || commentsLoadingState === 'loading'"></i-input>
     </i-form-item>
 
-    <i-form-item class="editar-tools">
+    <!-- <i-form-item class="editar-tools">
       <i-tooltip :content="editarTools.markdown.toolTipContent" placement="bottom" >
         <a @click="handleMarkdown" class="markdown" :class="{'tool-enabled':editarTools.markdown.isMarkdown }">
           <i-icon type="social-markdown"></i-icon>
@@ -23,17 +23,17 @@
           <i-icon type="android-happy"></i-icon>
         </a>
       </i-tooltip>
-    </i-form-item>
+    </i-form-item> -->
 
     <i-form-item class="float-to-right">
-      <i-button :type="isPosting ? 'ghost' : 'primary'" 
-        @click="postComment" 
+      <i-button :type="isPosting ? 'ghost' : 'primary'"
+        @click="postComment"
         :disabled="form.content.trim() === '' || isPosting"
         :loading="isPosting">
         {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
       </i-button>
-      <i-button type="ghost" 
-        style="margin-left: 8px" 
+      <i-button type="ghost"
+        style="margin-left: 8px"
         :disabled="form.content.trim() === '' || isPosting"
         @click="form.content = ''">
         {{$i18next.t('button/reset')}}
@@ -61,12 +61,12 @@ export default {
       form: {
         content: ''
       },
-      editarTools: {
-        markdown: {
-          isMarkdown: false,
-          toolTipContent: this.$i18next.t('text/markdownDisabled')
-        }
-      },
+      // editarTools: {
+      //   markdown: {
+      //     isMarkdown: false,
+      //     toolTipContent: this.$i18next.t('text/markdownDisabled')
+      //   }
+      // },
       textareaAutoresize: {
         minRows: 3,
         maxRows: 10
@@ -156,12 +156,12 @@ export default {
           console.log(error)
         })
       }
-    },
-    handleMarkdown () {
-      this.editarTools.markdown.isMarkdown = !this.editarTools.markdown.isMarkdown
-      this.editarTools.markdown.toolTipContent = this.editarTools.markdown.isMarkdown ? this.$i18next.t('text/markdownEnabled') : this.$i18next.t('text/markdownDisabled')
-    },
-    handleEmoji () {}
+    }
+    // handleMarkdown () {
+    //   this.editarTools.markdown.isMarkdown = !this.editarTools.markdown.isMarkdown
+    //   this.editarTools.markdown.toolTipContent = this.editarTools.markdown.isMarkdown ? this.$i18next.t('text/markdownEnabled') : this.$i18next.t('text/markdownDisabled')
+    // },
+    // handleEmoji () {}
   }
 }
 </script>
@@ -193,7 +193,7 @@ img {
 }
 </style>
 <style>
-.editar-tools{
+/*.editar-tools{
   margin: -10px auto -5px auto !important
 }
 .editar-tools .ivu-form-item-content{
@@ -231,7 +231,7 @@ a.tool-enabled{
 a.tool-enabled i{
   background: #2d8cf0;
   color: #eee;
-}
+}*/
 .ivu-spin {
   position: unset;
   background-color: unset;
