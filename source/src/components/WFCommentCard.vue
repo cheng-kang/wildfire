@@ -225,16 +225,6 @@ export default {
     }
 
     if (this.parentComment) {
-      const replyToCommentAuthorUid = this.parentComment.authorUid
-      if (replyToCommentAuthorUid !== this.anonymousUserId) {
-        this.$userApp.database().ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
-          let author = snapshot.val()
-          if (author && author.displayName) {
-            _this.replyToCommentAuthorUsername = author.displayName
-            _this.replyToCommentAuthorPhotoURL = author.photoURL
-          }
-        })
-      }
       const replyToCommentId = this.comment.replyToCommentId
       const replyToCommentRef = this.parentComment['.key'] === replyToCommentId
                                   ? `sites/${this.$config.siteId}/${this.encodedPageURL}/comments/${replyToCommentId}`
@@ -242,6 +232,17 @@ export default {
       this.$commentDB.ref(replyToCommentRef).once('value').then((snapshot) => {
         let comment = snapshot.val()
         _this.replyToCommentContent = comment.content
+
+        const replyToCommentAuthorUid = comment.authorUid
+        if (replyToCommentAuthorUid !== _this.anonymousUserId) {
+          _this.$userApp.database().ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
+            let author = snapshot.val()
+            if (author && author.displayName) {
+              _this.replyToCommentAuthorUsername = author.displayName
+              _this.replyToCommentAuthorPhotoURL = author.photoURL
+            }
+          })
+        }
       })
     }
   },
