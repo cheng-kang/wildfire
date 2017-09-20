@@ -17,10 +17,15 @@
           {{username}}
       </i-menu-item>
       <div class="wf-nav-right">
-        <a v-if="!user" 
-          @click="signUpFormModal = true">
-          {{$i18next.t('button/signUp')}} | {{$i18next.t('button/signIn')}}
-        </a>
+        <template v-if="!user" >
+          <a @click="showSignFormModal('signUp')">
+            {{$i18next.t('button/signUp')}}
+          </a>
+          /
+          <a @click="showSignFormModal('signIn')">
+            {{$i18next.t('button/signIn')}}
+          </a>
+        </template>
 
         <a v-else
           @click="signOut">
@@ -28,10 +33,11 @@
         </a>
       </div>
     </i-menu>
-    <i-modal v-model="signUpFormModal" :closable="false" :footer-hide="true">
+    <i-modal v-model="signUpFormModal" :closable="false">
       <div style="text-align:center">
-        <wf-sign-form></wf-sign-form>
+        <wf-sign-form :init-tab="signFormInitTab"></wf-sign-form>
       </div>
+      <div slot="footer"></div>
     </i-modal>
   </header>
 </template>
@@ -45,7 +51,8 @@ export default {
   components: { WfSignForm },
   data () {
     return {
-      signUpFormModal: false
+      signUpFormModal: false,
+      signFormInitTab: 'signIn'
     }
   },
   computed: {
@@ -68,21 +75,18 @@ export default {
         title: this.$i18next.t('text/signOutTitle'),
         content: `<p> ${this.$i18next.t('text/signOutConfirmText')} </p>`,
         onOk: () => {
-          const { database } = this.$config
-          if (database === 'firebase') {
-            this.$userApp.auth().signOut().then(() => {
-              console.log('Firebase User Sign Out.')
-            }).catch((error) => {
-              console.log(error)
-            })
-          } else {
-            // if database === 'wilddog'
-          }
+          this.$auth.signOut().then(() => {
+            console.log('User Sign Out.')
+          })
         },
         onCancel: () => {
           console.log('Aborted Sign Out.')
         }
       })
+    },
+    showSignFormModal (which) {
+      this.signFormInitTab = which
+      this.signUpFormModal = true
     }
   }
 }

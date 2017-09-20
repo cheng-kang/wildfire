@@ -69,29 +69,30 @@ export default {
   },
   methods: {
     listenToUserAuth () {
-      this.$userApp.auth().onAuthStateChanged((user) => {
+      const _this = this
+      this.$auth.onAuthStateChanged((user) => {
         if (user === null) {
-          this.user = null
+          _this.user = null
           return
         }
-        this.$userApp.database().ref(`users/${user.uid}`).once('value').then((snapshot) => {
-          this.user = snapshot.val()
-          this.user['uid'] = user.uid
+        _this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
+          _this.user = snapshot.val()
+          _this.user['uid'] = user.uid
         })
       })
     },
     listenToCommentsFromFirebase () {
       this.commentsLoadingState = 'loading'
       const _this = this
-      const { siteId, pageURL } = this.$config
+      const { pageURL } = this.$config
 
-      this.$commentDB.ref(`sites/${siteId}/${btoa(pageURL)}/commentsCount`).on('value', snapshot => {
+      this.$database.ref(`pages/${btoa(pageURL)}/commentsCount`).on('value', snapshot => {
         const count = parseInt(snapshot.val()) || 0
         _this.pageCommentsCount = count
       })
 
-      this.$bindAsArray('comments', this.$commentDB
-      .ref(`sites/${siteId}/${btoa(pageURL)}/comments`).orderByChild('order'), () => {
+      this.$bindAsArray('comments', this.$database
+      .ref(`pages/${btoa(pageURL)}/comments`).orderByChild('order'), () => {
         _this.commentsLoadingState = 'failed'
         window._wildfire.pageCommentsCount = 0
       }, () => {

@@ -159,14 +159,6 @@ export default {
       numberOfRepliesWhenShowingLess: 4
     }
   },
-  firebase: function () {
-    if (this.comment.replyToCommentId) { return {} }
-    const { siteId } = this.$config
-    const commentKey = this.comment['.key']
-    return {
-      replies: this.$commentDB.ref(`sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}`)
-    }
-  },
   computed: {
     likeUserIdList () {
       return this.comment.likes === undefined ? [] : Object.keys(this.comment.likes)
@@ -210,13 +202,14 @@ export default {
     // data initialization
     this.avatarURL = this.$config.defaultAvatarURL
     this.authorUsername = this.$i18next.t('text/anonymousUser')
-    this.replyToAuthorUsername = this.$i18next.t('text/anonymousUser')
+    this.replyToCommentAuthorUsername = this.$i18next.t('text/anonymousUser')
+    this.replyToCommentAuthorPhotoURL = this.$config.defaultAvatarURL
 
     const _this = this
     const uid = this.comment.authorUid
     if (uid !== this.anonymousUserId) {
       // if not anomymous user, get username & avatar
-      this.$userApp.database().ref(`users/${uid}`).once('value').then((snapshot) => {
+      this.$database.ref(`users/${uid}`).once('value').then((snapshot) => {
         let author = snapshot.val()
         if (!author) { return }
         if (author.photoURL) {
@@ -231,15 +224,15 @@ export default {
     if (this.parentComment) {
       const replyToCommentId = this.comment.replyToCommentId
       const replyToCommentRef = this.parentComment['.key'] === replyToCommentId
-                                  ? `sites/${this.$config.siteId}/${this.encodedPageURL}/comments/${replyToCommentId}`
-                                  : `sites/${this.$config.siteId}/${this.encodedPageURL}/replies/${this.parentComment['.key']}/${replyToCommentId}`
-      this.$commentDB.ref(replyToCommentRef).once('value').then((snapshot) => {
+                                  ? `/pages/${this.encodedPageURL}/comments/${replyToCommentId}`
+                                  : `/pages/${this.encodedPageURL}/replies/${this.parentComment['.key']}/${replyToCommentId}`
+      this.$database.ref(replyToCommentRef).once('value').then((snapshot) => {
         let comment = snapshot.val()
         _this.replyToCommentContent = comment.content
 
         const replyToCommentAuthorUid = comment.authorUid
         if (replyToCommentAuthorUid !== _this.anonymousUserId) {
-          _this.$userApp.database().ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
+          _this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
             let author = snapshot.val()
             if (author && author.displayName) {
               _this.replyToCommentAuthorUsername = author.displayName
@@ -248,6 +241,9 @@ export default {
           })
         }
       })
+    } else {
+      const commentKey = this.comment['.key']
+      this.$bindAsArray('replies', this.$database.ref(`pages/${this.encodedPageURL}/replies/${commentKey}`))
     }
   },
   methods: {
@@ -260,8 +256,7 @@ export default {
 
       const commentId = this.comment['.key']
       const parentCommentId = this.parentComment ? this.parentComment['.key'] : null
-      const { siteId } = this.$config
-      const baseRef = `/sites/${siteId}/${this.encodedPageURL}`
+      const baseRef = `/pages/${this.encodedPageURL}`
 
       const ref = baseRef + (parentCommentId
         ? `/replies/${parentCommentId}/${commentId}/${type}s/${uid}`
@@ -279,27 +274,26 @@ export default {
         if (shouldRemoveOppositeVote) {
           updates[removeOppositeVoteRef] = null
         }
-        this.$commentDB.ref().update(updates)
+        this.$database.ref().update(updates)
       } else {
-        this.$commentDB.ref(ref).remove()
+        this.$database.ref(ref).remove()
       }
     },
     confirmDelete () {
-      const { siteId } = this.$config
       if (this.parentComment) {
         const commentKey = this.parentComment['.key']
         const replyKey = this.comment['.key']
         let updates = {}
-        updates[`sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`] = null
-        updates[`sites/${siteId}/${this.encodedPageURL}/comments/${commentKey}/repliesCount`] = this.newRepliesCount
-        this.$commentDB.ref().update(updates)
+        updates[`pages/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`] = null
+        updates[`pages/${this.encodedPageURL}/comments/${commentKey}/repliesCount`] = this.newRepliesCount
+        this.$database.ref().update(updates)
       } else {
         const commentKey = this.comment['.key']
         let updates = {}
-        updates[`sites/${siteId}/${this.encodedPageURL}/replies/${commentKey}`] = null
-        updates[`sites/${siteId}/${this.encodedPageURL}/comments/${commentKey}`] = null
-        updates[`sites/${siteId}/${this.encodedPageURL}/commentsCount`] = this.newCommentsCount
-        this.$commentDB.ref().update(updates)
+        updates[`pages/${this.encodedPageURL}/replies/${commentKey}`] = null
+        updates[`pages/${this.encodedPageURL}/comments/${commentKey}`] = null
+        updates[`pages/${this.encodedPageURL}/commentsCount`] = this.newCommentsCount
+        this.$database.ref().update(updates)
       }
     },
     objectWithDotKey (obj, key) {
@@ -307,11 +301,8 @@ export default {
     },
     marked (content) {
       var hyperdown = new HyperDown()
-
       return hyperdown.makeHtml(content)
     }
-  },
-  filters: {
   }
 }
 </script>

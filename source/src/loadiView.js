@@ -179,4 +179,4 @@ if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue)
 }
 
-export var iView = Object.assign(iview, {install})
+export default Object.assign(iview, {install})

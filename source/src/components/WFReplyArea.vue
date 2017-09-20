@@ -39,7 +39,6 @@
         {{$i18next.t('button/reset')}}
       </i-button>
     </i-form-item>
-
   </i-form>
 </template>
 
@@ -111,7 +110,8 @@ export default {
       this.isPosting = true
       const { content } = this.form
       const { user, isReply, encodedPageURL, rootComment, replyToComment } = this
-      const { siteId, anonymousUserId } = this.$config
+      const { anonymousUserId } = this.$config
+      console.log(anonymousUserId)
       if (content.trim() !== '') {
         const aDate = new Date()
         const author = user ? user.displayName : this.$i18next.t('text/anonymousUser')
@@ -128,21 +128,23 @@ export default {
 
         const _this = this
         const postData = { author, authorUid, date, order, content, replyToCommentId }
-        const emptyRef = this.$commentDB.ref(`/sites/${siteId}/${encodedPageURL}`).push()
-        const newKey = emptyRef.key
+        const emptyRef = this.$database.ref(`/pages/${encodedPageURL}`).push()
+        const newKey = this.$config.database === 'firebase' ? emptyRef.key : emptyRef.key()
 
         if (rootComment) {
-          updates[`/sites/${siteId}/${encodedPageURL}/replies/${rootComment['.key']}/${newKey}`] = postData
-          updates[`/sites/${siteId}/${encodedPageURL}/comments/${rootComment['.key']}/repliesCount`] = this.newRepliesCount
+          updates[`/pages/${encodedPageURL}/replies/${rootComment['.key']}/${newKey}`] = postData
+          updates[`/pages/${encodedPageURL}/comments/${rootComment['.key']}/repliesCount`] = this.newRepliesCount
         } else if (isReply) {
-          updates[`/sites/${siteId}/${encodedPageURL}/replies/${replyToComment['.key']}/${newKey}`] = postData
-          updates[`/sites/${siteId}/${encodedPageURL}/comments/${replyToComment['.key']}/repliesCount`] = this.newRepliesCount
+          updates[`/pages/${encodedPageURL}/replies/${replyToComment['.key']}/${newKey}`] = postData
+          updates[`/pages/${encodedPageURL}/comments/${replyToComment['.key']}/repliesCount`] = this.newRepliesCount
         } else {
-          updates[`/sites/${siteId}/${encodedPageURL}/comments/${newKey}`] = { ...postData, repliesCount: 0 }
-          updates[`/sites/${siteId}/${encodedPageURL}/commentsCount`] = this.newCommentsCount
+          updates[`/pages/${encodedPageURL}/comments/${newKey}`] = Object.assign({}, postData, {repliesCount: 0})
+          updates[`/pages/${encodedPageURL}/commentsCount`] = this.newCommentsCount
         }
 
-        this.$commentDB.ref().update(updates)
+        console.log(updates)
+
+        this.$database.ref().update(updates)
         .then(() => {
           _this.isPosting = false
           _this.$emit('finishedReplying') // When successfully post reply, hide the reply area

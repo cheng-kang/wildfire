@@ -1,88 +1,82 @@
 const wildfireConfig = {
-  database: 'firebase',
+  database: 'wilddog',
   databaseConfig: {
-    apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
-    authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
-    databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
-    projectId: 'wildfirewebsite-35a4f',
-    storageBucket: '',
-    messagingSenderId: '911552849262'
+    siteId: 'wd2231595668ouosqu'
   },
-  siteId: 'wildfire',
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
   locale: 'zh-CN'
 }
 
+// const wildfireConfig = {
+//   database: 'firebase',
+//   databaseConfig: {
+//     apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
+//     authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
+//     databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
+//     projectId: 'wildfirewebsite-35a4f',
+//     storageBucket: '',
+//     messagingSenderId: '911552849262'
+//   },
+//   pageURL: 'http://chengkang.me/wildfire',
+//   pageTitle: 'Wildfire Demo',
+//   locale: 'zh-CN'
+// }
+
 const {
   database = 'firebase',
   databaseConfig, // required
-  siteId, // required
   pageTitle = document.title,
   pageURL = window.location.href,
   locale = 'en'
 // } = window.wildfireConfig
 } = wildfireConfig
 
-window._wildfire = {
-  currentUser: null,
-  config: {
-    database,
-    databaseConfig,
-    siteId,
-    pageTitle,
-    pageURL,
-    locale,
-    defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
-    anonymousUserId: 'anonymous'
-  }
+Vue.prototype.$config = {
+  database,
+  databaseConfig,
+  pageTitle,
+  pageURL,
+  locale,
+  defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
+  anonymousUserId: 'anonymous'
 }
 
-Vue.prototype.$config = window._wildfire.config
-
 import Vue from 'vue'
+import wilddog from 'wilddog'
+import WildVue from 'wildvue'
 import firebase from 'firebase'
-import moment from 'moment'
 import VueFire from 'vuefire'
+import moment from 'moment'
 import i18next from 'i18next'
 import App from './App'
 
 Vue.config.productionTip = true
-Vue.use(VueFire)
 Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment
 
 // Moved all iview injection into ./loadiView.js
 // You can choose the component you want to use in that file.
-import { iView } from './loadiView'
+import iView from './loadiView'
 Vue.use(iView)
 
 import highlight from './highlight.js'
 Vue.use(highlight)
 
-const userAppConfig = {
-  apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
-  authDomain: 'wild-fire-ee770.firebaseapp.com',
-  databaseURL: 'https://wild-fire-ee770.firebaseio.com',
-  projectId: 'wild-fire-ee770',
-  storageBucket: 'wild-fire-ee770.appspot.com',
-  messagingSenderId: '655484997793'
+if (database === 'wilddog') {
+  Vue.use(WildVue)
+  Vue.prototype.$app = wilddog.initializeApp({
+    authDomain: `${databaseConfig.siteId}.wilddog.com`,
+    syncURL: `https://${databaseConfig.siteId}.wilddogio.com`
+  })
+  Vue.prototype.$database = Vue.prototype.$app.sync()
+  Vue.prototype.$auth = Vue.prototype.$app.auth()
+} else if (database === 'firebase') {
+  Vue.use(VueFire)
+  Vue.prototype.$app = firebase.initializeApp(databaseConfig)
+  Vue.prototype.$database = Vue.prototype.$app.database()
+  Vue.prototype.$auth = Vue.prototype.$app.auth()
 }
-
-window._wildfire.userApp = firebase.initializeApp(userAppConfig, 'userApp')
-
-Vue.prototype.$userApp = window._wildfire.userApp
-
-window._wildfire.userApp.database().ref('/sites/' + siteId).once('value').then((snapshot) => {
-  const result = snapshot.val()
-  if (result) {
-    console.log('Site Exist.')
-    return
-  }
-
-  console.error('Site Does Not Exist!')
-  return
-})
 
 moment.locale(locale.toLowerCase())
 
@@ -123,12 +117,10 @@ i18next.init({
         'text/reEnterPassword': 'Re-enter password',
         'text/confirm': 'Confirm',
         'text/signOutTitle': 'Sign Out',
-        'text/signOutConfirmText': 'Are you sure you want to sign out?',
-        'text/markdownDisabled': 'Click to enadle Markdown for the editar',
-        'text/markdownEnabled': 'Markdown is enabled',
-        'error/noSiteId': 'Please check your config: missing "siteId".',
-        'error/notValidSiteId': 'Please set a valid "siteId".',
-        'error/notValidServiceProvider': 'Please check your config: "sercive" should be "firebase" or "wilddo"g.',
+        'text/signOutConfirmText': 'Are you sure to sign out Wildfire?',
+        // 'text/markdownDisabled': 'Click to enadle Markdown for the editar',
+        // 'text/markdownEnabled': 'Markdown is enabled',
+        'error/notValidServiceProvider': 'Please check your config: "sercice" should be "firebase" or "wilddog".',
         'error/noDatabaseConfig': 'Please check your config: missing "databaseConfig"',
         'error/failedToLoadComments': 'Failed to load comments.',
         'error/failedToPostComment': 'Failed to post comment.',
@@ -181,10 +173,8 @@ i18next.init({
         'text/confirm': '确认',
         'text/signOutTitle': '注销登录',
         'text/signOutConfirmText': '是否注销登录？',
-        'text/markdownDisabled': '点击开启 Markdown 模式',
-        'text/markdownEnabled': 'Markdown 模式已开启',
-        'error/noSiteId': '请检查你的配置：找不到 "siteId。"',
-        'error/notValidSiteId': '请设置一个有效的 "siteId。"',
+        // 'text/markdownDisabled': '点击开启 Markdown 模式',
+        // 'text/markdownEnabled': 'Markdown 模式已开启',
         'error/notValidServiceProvider': '请检查你的配置： "sercive" 应该为 "firebase" 或者 "wilddog"。',
         'error/noDatabaseConfig': '请检查你的配置： 找不到 "databaseConfig"',
         'error/failedToLoadComments': '加载评论失败。',
@@ -213,10 +203,6 @@ i18next.init({
     console.log('i18next Initialized!')
   }
 })
-
-window._wildfire.commentDB = firebase.initializeApp(window._wildfire.config.databaseConfig).database()
-
-Vue.prototype.$commentDB = window._wildfire.commentDB
 
 /* eslint-disable no-new */
 new Vue({

@@ -10,10 +10,9 @@
   margin: 0 10px;
   width: 25%;
 }
-
 </style>
 <template> 
-  <i-tabs value="signIn">
+  <i-tabs :value="initTab">
     <i-tab-pane :label="$i18next.t('button/signIn')" name="signIn" :disabled="loadingSignUp">
       <div class="form-warp">
         <i-form ref="signInForm" :model="signInForm" :rules="rule" :label-width="80">
@@ -85,6 +84,7 @@
 import crypto from 'crypto'
 export default {
   name: 'wf-sign-form',
+  props: ['initTab'],
   data () {
     const _this = this
     const validatePasswordCheck = (rule, value, callback) => {
@@ -131,12 +131,10 @@ export default {
           this.loadingSignIn = true
           const email = this.signInForm.email
           const password = this.encrypt(this.signInForm.password)
-          this.$userApp.auth().signInWithEmailAndPassword(email, password)
+          this.$auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
-            this.$userApp.database().ref(`users/${user.uid}`).once('value').then((snapshot) => {
+            this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
               this.loadingSignIn = false
-              let userInfo = snapshot.val()
-              this.finishSignIn(userInfo)
               this.closeModel()
               this.$Message.info(this.$i18next.t('message/signInSuccess'))
             })
@@ -157,23 +155,18 @@ export default {
           const email = this.signUpForm.email
           const password = this.encrypt(this.signUpForm.password)
           const displayName = email.split('@')[0]
-          const photoURL = window._wildfire.config.defaultAvatarURL
+          const photoURL = this.$config.defaultAvatarURL
 
-          this.$userApp.auth().createUserWithEmailAndPassword(email, password)
+          this.$auth.createUserWithEmailAndPassword(email, password)
           .then((user) => {
             let updates = {}
             updates['/displayName'] = displayName
             updates['/email'] = email
             updates['/photoURL'] = photoURL
 
-            this.$userApp.database().ref(`/users/${user.uid}`).update(updates)
+            this.$database.ref(`/users/${user.uid}`).update(updates)
             .then(() => {
               this.loadingSignUp = false
-              this.finishSignIn({
-                'email': email,
-                'displayName': displayName,
-                'photoURL': photoURL
-              })
               this.closeModel()
               this.$Message.info(this.$i18next.t('message/signUpSuccess'))
             }).catch((error) => {
@@ -204,10 +197,6 @@ export default {
           this.$Message.error(this.$i18next.t('message/invalidForm'))
         }
       })
-    },
-    finishSignIn (userInfo) {
-      // this.$emit('finishSignIn', userInfo)
-      console.log('finished signin')
     },
     closeModel () {
       this.$refs['signInForm'].resetFields()
