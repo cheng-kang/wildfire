@@ -1,27 +1,27 @@
-// const wildfireConfig = {
-//   database: 'wilddog',
-//   databaseConfig: {
-//     siteId: 'wd2231595668ouosqu'
-//   },
-//   pageURL: 'http://chengkang.me/wildfire',
-//   pageTitle: 'Wildfire Demo',
-//   locale: 'zh-CN'
-// }
-
 const wildfireConfig = {
-  database: 'firebase',
+  database: 'wilddog',
   databaseConfig: {
-    apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
-    authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
-    databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
-    projectId: 'wildfirewebsite-35a4f',
-    storageBucket: '',
-    messagingSenderId: '911552849262'
+    siteId: 'wd2231595668ouosqu'
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
   locale: 'zh-CN'
 }
+
+// const wildfireConfig = {
+//   database: 'firebase',
+//   databaseConfig: {
+//     apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
+//     authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
+//     databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
+//     projectId: 'wildfirewebsite-35a4f',
+//     storageBucket: '',
+//     messagingSenderId: '911552849262'
+//   },
+//   pageURL: 'http://chengkang.me/wildfire',
+//   pageTitle: 'Wildfire Demo',
+//   locale: 'zh-CN'
+// }
 
 const {
   database = 'firebase',
@@ -44,7 +44,7 @@ Vue.prototype.$config = {
 
 import Vue from 'vue'
 import wilddog from 'wilddog'
-import WildVue from 'wildvue'
+import VueWild from 'vuewild'
 import firebase from 'firebase'
 import VueFire from 'vuefire'
 import moment from 'moment'
@@ -61,7 +61,7 @@ import { iView } from './loadiView'
 Vue.use(iView)
 
 if (database === 'wilddog') {
-  Vue.use(WildVue)
+  Vue.use(VueWild)
   Vue.prototype.$app = wilddog.initializeApp({
     authDomain: `${databaseConfig.siteId}.wilddog.com`,
     syncURL: `https://${databaseConfig.siteId}.wilddogio.com`

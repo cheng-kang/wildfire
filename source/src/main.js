@@ -44,7 +44,7 @@ Vue.prototype.$config = {
 
 import Vue from 'vue'
 import wilddog from 'wilddog'
-import WildVue from 'wildvue'
+import VueWild from 'vuewild'
 import firebase from 'firebase'
 import VueFire from 'vuefire'
 import moment from 'moment'
@@ -64,7 +64,7 @@ import highlight from './highlight.js'
 Vue.use(highlight)
 
 if (database === 'wilddog') {
-  Vue.use(WildVue)
+  Vue.use(VueWild)
   Vue.prototype.$app = wilddog.initializeApp({
     authDomain: `${databaseConfig.siteId}.wilddog.com`,
     syncURL: `https://${databaseConfig.siteId}.wilddogio.com`

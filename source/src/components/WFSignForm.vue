@@ -81,7 +81,6 @@
 </template>
 
 <script>
-import crypto from 'crypto'
 export default {
   name: 'wf-sign-form',
   props: ['initTab'],
@@ -130,7 +129,7 @@ export default {
         if (valid) {
           this.loadingSignIn = true
           const email = this.signInForm.email
-          const password = this.encrypt(this.signInForm.password)
+          const password = this.signInForm.password
           this.$auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
             this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
@@ -153,7 +152,7 @@ export default {
         if (valid) {
           this.loadingSignUp = true
           const email = this.signUpForm.email
-          const password = this.encrypt(this.signUpForm.password)
+          const password = this.signUpForm.password
           const displayName = email.split('@')[0]
           const photoURL = this.$config.defaultAvatarURL
 
@@ -202,13 +201,6 @@ export default {
       this.$refs['signInForm'].resetFields()
       this.$refs['signUpForm'].resetFields()
       this.$parent.close()
-    },
-    encrypt (password) {
-      var md5 = crypto.createHash('md5')
-      var sha1 = crypto.createHash('sha1')
-      md5.update(password)
-      sha1.update(md5.digest('hex'))
-      return sha1.digest('hex')
     }
   }
 }
