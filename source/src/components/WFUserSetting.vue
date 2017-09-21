@@ -192,6 +192,10 @@ export default {
             .then(() => {
               this.sendingProfile = false
               this.$Message.info(this.$i18next.t('message/updateSuccess'))
+
+              // 说明：更新用户信息后，需要全局更新所有和该用户有关的信息
+              // 处理起来比较费事，下一版再做
+              // 暂时的处理方法，更新后0.5秒直接刷新页面
               setTimeout(() => {
                 location.reload()
               }, 500)
@@ -207,56 +211,7 @@ export default {
     },
     handleChangeAccount () {
       console.log(this.user)
-      // this.$refs[name].validate((valid) => {
-      //   if (valid) {
-      //     this.loadingSignUp = true
-      //     const email = this.signUpForm.email
-      //     const password = this.signUpForm.password
-      //     const displayName = email.split('@')[0]
-      //     const photoURL = this.$config.defaultAvatarURL
-
-      //     this.$auth.createUserWithEmailAndPassword(email, password)
-      //     .then((user) => {
-      //       let updates = {}
-      //       updates['/displayName'] = displayName
-      //       updates['/email'] = email
-      //       updates['/photoURL'] = photoURL
-
-      //       this.$database.ref(`/users/${user.uid}`).update(updates)
-      //       .then(() => {
-      //         this.loadingSignUp = false
-      //         this.closeModel()
-      //         this.$Message.info(this.$i18next.t('message/signUpSuccess'))
-      //       }).catch((error) => {
-      //         this.loadingSignUp = false
-      //         console.log(error.code, error.message)
-      //         this.$Message.error(this.$i18next.t('message/somethingGoesWrong'))
-      //       })
-      //     }).catch((error) => {
-      //       this.loadingSignUp = false
-      //       var errorCode = error.code
-      //       var errorMessage = error.message
-      //       switch (errorCode) {
-      //         case 'auth/email-already-in-use':
-      //           errorMessage = this.$i18next.t('message/emailAlreadyInUse')
-      //           break
-      //         case 'auth/operation-not-allowed':
-      //           errorMessage = this.$i18next.t('message/operationNotAllowed')
-      //           break
-      //         case 'auth/weak-password':
-      //           errorMessage = this.$i18next.t('message/weakPassword')
-      //           break
-      //         default:
-      //           console.log(errorCode, error.message)
-      //           errorMessage = this.$i18next.t('message/somethingGoesWrong')
-      //           break
-      //       }
-      //       this.$Message.error(errorMessage)
-      //     })
-      //   } else {
-      //     this.$Message.error(this.$i18next.t('message/invalidForm'))
-      //   }
-      // })
+      // 修改密码需要通过发邮件的方式，下版再做。
     },
     resetAvatar () {
       this.profileForm.photoURL = this.user.photoURL
