@@ -111,7 +111,7 @@ export default {
       const { content } = this.form
       const { user, isReply, encodedPageURL, rootComment, replyToComment } = this
       const { anonymousUserId } = this.$config
-      console.log(anonymousUserId)
+
       if (content.trim() !== '') {
         const aDate = new Date()
         const author = user ? user.displayName : this.$i18next.t('text/anonymousUser')
@@ -125,7 +125,6 @@ export default {
         if (isReply) {
           replyToCommentId = replyToComment['.key']
         }
-
         const _this = this
         const postData = { author, authorUid, date, order, content, replyToCommentId }
         const emptyRef = this.$database.ref(`/pages/${encodedPageURL}`).push()
@@ -141,8 +140,7 @@ export default {
           updates[`/pages/${encodedPageURL}/comments/${newKey}`] = Object.assign({}, postData, {repliesCount: 0})
           updates[`/pages/${encodedPageURL}/commentsCount`] = this.newCommentsCount
         }
-
-        console.log(updates)
+        // console.log(updates)
 
         this.$database.ref().update(updates)
         .then(() => {

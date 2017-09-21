@@ -47,7 +47,7 @@
           </i-dropdown>
         </header>
         <div class="wf-comment-content">
-          <div v-html="marked(comment.content)" v-highlight></div>
+          <div v-html="markdown(comment.content)" ></div>
         </div>
         <footer>
           <a href="javascript:void(0)"
@@ -139,9 +139,12 @@
 </template>
 
 <script>
+import 'highlight.js/styles/googlecode.css'
+import hljs from 'highlight.js'
+import marked from 'marked'
+
 import WfReplyArea from './WFReplyArea'
 
-import HyperDown from 'hyperdown'
 export default {
   name: 'wf-comment-card',
   components: {
@@ -302,9 +305,24 @@ export default {
     objectWithDotKey (obj, key) {
       return Object.assign({}, obj, {'.key': key})
     },
-    marked (content) {
-      var hyperdown = new HyperDown()
-      return hyperdown.makeHtml(content)
+    markdown (content) {
+      // var hyperdown = new HyperDown()
+      // var reg = new RegExp(/(\r\n|\r|\n)/, 'g')
+      // return hyperdown.makeHtml(content.replace(reg, '\nWF空格WF\n\n')).replace(/WF空格WF/g, '<br/>')
+      marked.setOptions({
+        renderer: new marked.Renderer(),
+        gfm: true,
+        tables: true,
+        breaks: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false,
+        highlight: (code) => {
+          return hljs.highlightAuto(code).value
+        }
+      })
+      return marked(content)
     }
   }
 }
@@ -373,9 +391,9 @@ export default {
 }
 
 .wf-comment-body {
+  position: relative;
   flex: 1;
   line-height: 21px;
-  font-size:
 }
 
 .wf-comment-body header {
@@ -387,7 +405,6 @@ export default {
 .wf-comment-body header .header-content .username a {
   font-size: 13px;
   font-weight: 700;
-
   color: rgba(40, 140, 228, 0.85);
   text-decoration: none;
 }
@@ -460,5 +477,18 @@ footer .disabled {
 }
 .ivu-btn {
   padding: 4px;
+}
+</style>
+
+<style>
+.wf-comment-content pre {
+  background: #f2f2f2;
+  border: 1px solid rgba(100,100,100,0.1);
+  padding: 10px 20px;
+  max-height: 300px;
+  
+  /* 60px for avatar, 20px for padding */
+  max-width: calc( 39rem - 60px - 20px);
+  overflow: auto;
 }
 </style>

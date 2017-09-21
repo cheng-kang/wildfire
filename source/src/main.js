@@ -60,8 +60,8 @@ Vue.prototype.$moment = moment
 import iView from './loadiView'
 Vue.use(iView)
 
-import highlight from './highlight.js'
-Vue.use(highlight)
+// import highlight from './highlight.js'
+// Vue.use(highlight)
 
 if (database === 'wilddog') {
   Vue.use(VueWild)
