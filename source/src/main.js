@@ -1,30 +1,30 @@
-const wildfireConfig = {
-  database: 'wilddog',
-  databaseConfig: {
-    siteId: 'wd2231595668ouosqu'
-  },
-  pageURL: 'http://chengkang.me/wildfire',
-  pageTitle: 'Wildfire Demo',
-  locale: 'zh-CN'
-}
-
 // const wildfireConfig = {
-//   database: 'firebase',
+//   database: 'wilddog',
 //   databaseConfig: {
-//     apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
-//     authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
-//     databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
-//     projectId: 'wildfirewebsite-35a4f',
-//     storageBucket: '',
-//     messagingSenderId: '911552849262'
+//     siteId: 'wd2231595668ouosqu'
 //   },
 //   pageURL: 'http://chengkang.me/wildfire',
 //   pageTitle: 'Wildfire Demo',
 //   locale: 'zh-CN'
 // }
 
+const wildfireConfig = {
+  database: 'firebase',
+  databaseConfig: {
+    apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
+    authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
+    databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
+    projectId: 'wildfirewebsite-35a4f',
+    storageBucket: '',
+    messagingSenderId: '911552849262'
+  },
+  pageURL: 'http://chengkang.me/wildfire',
+  pageTitle: 'Wildfire Demo',
+  locale: 'zh-CN'
+}
+
 const {
-  database = 'firebase',
+  database,
   databaseConfig, // required
   pageTitle = document.title,
   pageURL = window.location.href,
@@ -97,14 +97,17 @@ i18next.init({
         'button/discussions': 'Discussions',
         'button/signUp': 'Sign Up',
         'button/signIn': 'Sign in',
+        'button/modify': 'Modify',
         'button/signOut': 'Sign out',
         'button/posting': 'Posting',
+        'button/profile': 'Profile',
+        'button/account': 'Account',
         'text/loading': 'Loading',
         'text/loadingComments': 'Loading comments',
         'textarea/joinTheConversation': 'Join the discusstion...',
         'textarea/joinTheConversationAnonymously': 'Join the discusstion as Anonymous User',
         'textarea/replyToUserComment': 'reply to {{username}}\'s comment',
-        'text/anonymousUser': 'Anoymous User',
+        'text/anonymousUser': 'Anonymous User',
         'text/add_wildfire_to_your_site': 'Add Wildfire to your site',
         'text/postTheFirstComment': 'Post the first comment!',
         'text/showMoreDiscussion': 'Show more',
@@ -114,10 +117,16 @@ i18next.init({
         'text/areYouSureToDeleteThisComment': 'Are you sure to delete this comment?',
         'text/email': 'Email',
         'text/password': 'Password',
+        'text/oldPassword': 'Old Password',
+        'text/newPassword': 'New Password',
+        'text/displayName': 'Nickname',
+        'text/photoURL': 'Avatar URL',
         'text/reEnterPassword': 'Re-enter password',
         'text/confirm': 'Confirm',
         'text/signOutTitle': 'Sign Out',
         'text/signOutConfirmText': 'Are you sure to sign out Wildfire?',
+        'text/pleaseSignIn': 'Please Sign In',
+        'text/unSignInWarning': 'You need to Sign in first before modifying your profile.',
         // 'text/markdownDisabled': 'Click to enadle Markdown for the editar',
         // 'text/markdownEnabled': 'Markdown is enabled',
         'error/notValidServiceProvider': 'Please check your config: "sercice" should be "firebase" or "wilddog".',
@@ -130,6 +139,7 @@ i18next.init({
         'error/pleaseReEnterPassword': 'Please re-enter your password.',
         'error/twoPasswordsDontMatch': 'The two passwords don\'t match.',
         'error/passwordMin': 'Password should be at least 6 digits.',
+        'error/invalidPhotoURL': 'Invalid Avatar URL!',
         'message/invalidForm': 'Invalid form! Check it and try again.',
         'message/signUpSuccess': 'Signup success!',
         'message/signUpFailed': 'Signup failed, please try again!',
@@ -137,6 +147,7 @@ i18next.init({
         'message/signInFailed': 'Signin failed, please try again!',
         'message/emailAlreadyInUse': 'Email already in use, try to login!',
         'message/operationNotAllowed': 'Email accounts are not enabled, please contact the admin!',
+        'message/updateSuccess': 'Update success',
         'message/somethingGoesWrong': 'Oops! Something goes wrong!'
       }
     },
@@ -152,8 +163,11 @@ i18next.init({
         'button/discussions': '条讨论',
         'button/signUp': '注册',
         'button/signIn': '登录',
+        'button/modify': '修改',
         'button/signOut': '注销',
         'button/posting': '发送中',
+        'button/profile': '普通设置',
+        'button/account': '账号设置',
         'text/loading': '加载中',
         'text/loadingComments': '评论加载中',
         'textarea/joinTheConversation': '一起来发言吧...',
@@ -169,10 +183,16 @@ i18next.init({
         'text/areYouSureToDeleteThisComment': '你确定要删除这条评论吗？',
         'text/email': '电子邮箱',
         'text/password': '密码',
+        'text/oldPassword': '原始密码',
+        'text/newPassword': '新密码',
+        'text/displayName': '昵称',
+        'text/photoURL': '头像链接',
         'text/reEnterPassword': '再次输入密码',
         'text/confirm': '确认',
         'text/signOutTitle': '注销登录',
         'text/signOutConfirmText': '是否注销登录？',
+        'text/pleaseSignIn': '请先登录',
+        'text/unSignInWarning': '当前为匿名用户，您需要登录后才能进行个性化设置！',
         // 'text/markdownDisabled': '点击开启 Markdown 模式',
         // 'text/markdownEnabled': 'Markdown 模式已开启',
         'error/notValidServiceProvider': '请检查你的配置： "sercive" 应该为 "firebase" 或者 "wilddog"。',
@@ -185,6 +205,7 @@ i18next.init({
         'error/pleaseReEnterPassword': '请再次输入密码。',
         'error/twoPasswordsDontMatch': '两次输入的密码不一致。',
         'error/passwordMin': '密码长度不能小于6位。',
+        'error/invalidPhotoURL': '不是有效的图片地址！',
         'message/invalidForm': '表单验证失败，请按要求填写！',
         'message/signUpSuccess': '注册成功！',
         'message/signUpFailed': '注册失败，请重试！',
@@ -192,6 +213,7 @@ i18next.init({
         'message/signInFailed': '登录失败，请重试！',
         'message/emailAlreadyInUse': '邮箱已经注册，请直接登录！',
         'message/operationNotAllowed': '邮箱登录被禁止，请联系站主！',
+        'message/updateSuccess': '更新成功',
         'message/somethingGoesWrong': '发生了未知错误！'
       }
     }

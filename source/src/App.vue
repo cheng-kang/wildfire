@@ -94,7 +94,7 @@ export default {
       this.$bindAsArray('comments', this.$database
       .ref(`pages/${btoa(pageURL)}/comments`).orderByChild('order'), () => {
         _this.commentsLoadingState = 'failed'
-        window._wildfire.pageCommentsCount = 0
+        _this.pageCommentsCount = 0
       }, () => {
         _this.commentsLoadingState = 'finished'
       })

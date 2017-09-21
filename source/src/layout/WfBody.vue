@@ -12,6 +12,7 @@
           :user="user"
           :comment="objectWithDotKey(comment, comment['.key'])"
           :page-comments-count="pageCommentsCount"
+          :comments-loading-state="commentsLoadingState"
           ></wf-comment-card>
       </ul>
       <i-page 

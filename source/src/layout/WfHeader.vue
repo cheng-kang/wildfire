@@ -1,6 +1,6 @@
 <template>
   <header>
-    <i-menu mode="horizontal" theme="light" active-name="1">
+    <i-menu ref="statusMenu" mode="horizontal" theme="light" active-name="1" >
       <i-menu-item name="1">
         <i-spin v-if="commentsLoadingState === 'loading'"
           :defaultSlotStyle="{ 
@@ -13,9 +13,9 @@
         </i-spin>
         <span v-else>{{discussionCount}} {{$i18next.t('button/discussions')}}</span>
       </i-menu-item>
-      <i-menu-item name="2">
-          {{username}}
-      </i-menu-item>
+      <a class="wf-nav-username" @click="showUserSettingModal">
+        {{username}}
+      </a>
       <div class="wf-nav-right">
         <template v-if="!user" >
           <a @click="showSignFormModal('signUp')">
@@ -33,25 +33,31 @@
         </a>
       </div>
     </i-menu>
-    <i-modal v-model="signUpFormModal" :closable="false">
+    <i-modal v-model="signFormModal" :closable="false" :footer-hide="true">
       <div style="text-align:center">
         <wf-sign-form :init-tab="signFormInitTab"></wf-sign-form>
       </div>
-      <div slot="footer"></div>
+    </i-modal>
+    <i-modal v-model="userSettingModal" :closable="false" :footer-hide="true">
+      <div style="text-align:center">
+        <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
+      </div>
     </i-modal>
   </header>
 </template>
 
 <script>
 import WfSignForm from '../components/WfSignForm'
+import WfUserSetting from '../components/WfUserSetting'
 
 export default {
   name: 'wf-header',
   props: ['user', 'discussionCount', 'commentsLoadingState'],
-  components: { WfSignForm },
+  components: { WfSignForm, WfUserSetting },
   data () {
     return {
-      signUpFormModal: false,
+      signFormModal: false,
+      userSettingModal: false,
       signFormInitTab: 'signIn'
     }
   },
@@ -74,6 +80,8 @@ export default {
       this.$Modal.confirm({
         title: this.$i18next.t('text/signOutTitle'),
         content: `<p> ${this.$i18next.t('text/signOutConfirmText')} </p>`,
+        okText: this.$i18next.t('text/confirm'),
+        cancelText: this.$i18next.t('button/cancel'),
         onOk: () => {
           this.$auth.signOut().then(() => {
             console.log('User Sign Out.')
@@ -86,7 +94,18 @@ export default {
     },
     showSignFormModal (which) {
       this.signFormInitTab = which
-      this.signUpFormModal = true
+      this.signFormModal = true
+    },
+    showUserSettingModal () {
+      if (this.user) {
+        this.userSettingModal = true
+      } else {
+        this.$Modal.warning({
+          title: this.$i18next.t('text/pleaseSignIn'),
+          content: this.$i18next.t('text/unSignInWarning'),
+          okText: this.$i18next.t('text/confirm')
+        })
+      }
     }
   }
 }
@@ -98,6 +117,11 @@ header {
 }
 .wf-nav-right {
   float: right;
+}
+.wf-nav-username {
+  display: inline-block;
+  padding:0 20px;
+  margin:0 20px;
 }
 </style>
 <style>

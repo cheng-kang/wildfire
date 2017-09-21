@@ -71,9 +71,11 @@
             <span>{{dislikeUserIdList.length || ''}}</span>
             <i-icon type="heart-broken"></i-icon>
           </a>
-          <i-button type="text" class="wf-reply-button"
-            @click="isReplying = !isReplying"
-          >
+          <i-button 
+          type="text" 
+          class="wf-reply-button"
+          @click="isReplying = !isReplying"
+          v-if="commentsLoadingState === 'finished'">
             {{isReplying ? $i18next.t('button/hide') : $i18next.t('button/reply')}}
           </i-button>
           <i-poptip
@@ -116,6 +118,7 @@
           :user="user"
           :comment="objectWithDotKey(reply, reply['.key'])"
           :parent-comment="comment"
+          :comments-loading-state="commentsLoadingState"
           ></wf-comment-card>
         <i-button type="text"
           v-show="replies.length > numberOfRepliesWhenShowingLess"
@@ -144,7 +147,7 @@ export default {
   components: {
     WfReplyArea, 'wf-comment-card': this
   },
-  props: ['user', 'comment', 'pageCommentsCount', 'parentComment'],
+  props: ['user', 'comment', 'pageCommentsCount', 'commentsLoadingState', 'parentComment'],
   data () {
     return {
       isHeaderMenuShowing: false,

@@ -26,7 +26,7 @@ import 'iview/dist/styles/iview.css'
 // import Affix from 'iview/src/components/affix'
 // import Alert from 'iview/src/components/alert'
 // import AutoComplete from 'iview/src/components/auto-complete'
-// import Avatar from 'iview/src/components/avatar'
+import Avatar from 'iview/src/components/avatar'
 // import BackTop from 'iview/src/components/back-top'
 // import Badge from 'iview/src/components/badge'
 // import Breadcrumb from 'iview/src/components/breadcrumb'
@@ -74,7 +74,7 @@ const iview = {
   // Affix,
   // Alert,
   // AutoComplete,
-  // Avatar,
+  Avatar,
   // BackTop,
   // Badge,
   // Breadcrumb,

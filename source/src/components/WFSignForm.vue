@@ -13,37 +13,7 @@
 </style>
 <template> 
   <i-tabs :value="initTab">
-    <i-tab-pane :label="$i18next.t('button/signIn')" name="signIn" :disabled="loadingSignUp">
-      <div class="form-warp">
-        <i-form ref="signInForm" :model="signInForm" :rules="rule" :label-width="80">
-          <i-form-item :label="$i18next.t('text/email')" prop="email">
-            <i-input type="text" v-model="signInForm.email" :placeholder="$i18next.t('text/email')">
-            </i-input>
-          </i-form-item>
-          <i-form-item :label="$i18next.t('text/password')" prop="password">
-            <i-input type="password" v-model="signInForm.password" :placeholder="$i18next.t('text/password')">
-            </i-input>
-          </i-form-item>
-          <div class="form-itme-button">
-            <i-button 
-            type="ghost" 
-            @click="closeModel()" 
-            :disabled="loadingSignIn">
-              {{ $i18next.t('button/cancel') }}
-            </i-button>
-            <i-button 
-            type="primary" 
-            @click="handleSignIn('signInForm')" 
-            :disabled="loadingSignIn" 
-            :loading="loadingSignIn">
-              {{ $i18next.t('button/signIn') }}
-            </i-button>
-          </div>
-        </i-form>
-      </div>
-    </i-tab-pane>
-
-    <i-tab-pane :label="$i18next.t('button/signUp')" name="signUp" :disabled="loadingSignIn">
+        <i-tab-pane :label="$i18next.t('button/signUp')" name="signUp" :disabled="loadingSignIn">
       <div class="form-warp">
         <i-form ref="signUpForm" :model="signUpForm" :rules="rule" :label-width="80">
           <i-form-item :label="$i18next.t('text/email')" prop="email">
@@ -77,11 +47,40 @@
         </i-form>
       </div>
     </i-tab-pane>
+
+    <i-tab-pane :label="$i18next.t('button/signIn')" name="signIn" :disabled="loadingSignUp">
+      <div class="form-warp">
+        <i-form ref="signInForm" :model="signInForm" :rules="rule" :label-width="80">
+          <i-form-item :label="$i18next.t('text/email')" prop="email">
+            <i-input type="text" v-model="signInForm.email" :placeholder="$i18next.t('text/email')">
+            </i-input>
+          </i-form-item>
+          <i-form-item :label="$i18next.t('text/password')" prop="password">
+            <i-input type="password" v-model="signInForm.password" :placeholder="$i18next.t('text/password')">
+            </i-input>
+          </i-form-item>
+          <div class="form-itme-button">
+            <i-button 
+            type="ghost" 
+            @click="closeModel()" 
+            :disabled="loadingSignIn">
+              {{ $i18next.t('button/cancel') }}
+            </i-button>
+            <i-button 
+            type="primary" 
+            @click="handleSignIn('signInForm')" 
+            :disabled="loadingSignIn" 
+            :loading="loadingSignIn">
+              {{ $i18next.t('button/signIn') }}
+            </i-button>
+          </div>
+        </i-form>
+      </div>
+    </i-tab-pane>
   </i-tabs>
 </template>
 
 <script>
-import crypto from 'crypto'
 export default {
   name: 'wf-sign-form',
   props: ['initTab'],
@@ -130,7 +129,7 @@ export default {
         if (valid) {
           this.loadingSignIn = true
           const email = this.signInForm.email
-          const password = this.encrypt(this.signInForm.password)
+          const password = this.signInForm.password
           this.$auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
             this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
@@ -153,7 +152,7 @@ export default {
         if (valid) {
           this.loadingSignUp = true
           const email = this.signUpForm.email
-          const password = this.encrypt(this.signUpForm.password)
+          const password = this.signUpForm.password
           const displayName = email.split('@')[0]
           const photoURL = this.$config.defaultAvatarURL
 
@@ -189,6 +188,8 @@ export default {
                 errorMessage = this.$i18next.t('message/weakPassword')
                 break
               default:
+                console.log(errorCode, error.message)
+                errorMessage = this.$i18next.t('message/somethingGoesWrong')
                 break
             }
             this.$Message.error(errorMessage)
@@ -202,13 +203,6 @@ export default {
       this.$refs['signInForm'].resetFields()
       this.$refs['signUpForm'].resetFields()
       this.$parent.close()
-    },
-    encrypt (password) {
-      var md5 = crypto.createHash('md5')
-      var sha1 = crypto.createHash('sha1')
-      md5.update(password)
-      sha1.update(md5.digest('hex'))
-      return sha1.digest('hex')
     }
   }
 }
