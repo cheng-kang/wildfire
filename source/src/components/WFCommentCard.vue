@@ -46,8 +46,23 @@
             </i-dropdown-menu>
           </i-dropdown>
         </header>
-        <div class="wf-comment-content">
-          <div v-html="marked(comment.content)" v-highlight></div>
+        <div class="wf-comment-content" :id="'wf-comment-content-'+comment['.key']">
+          <div v-html="marked(comment.content)"
+            :class="{ less: isContentTooLong && !isShowingFullText }" 
+            v-highlight></div>
+          <i-button type="text" 
+            v-if="isContentTooLong" 
+            @click="isShowingFullText = !isShowingFullText" 
+            long>
+            <template v-if="isShowingFullText">
+              <i-icon type="chevron-up"></i-icon>
+              {{$i18next.t('button/showLessText')}}
+            </template>
+            <template v-else>
+              <i-icon type="chevron-down"></i-icon>
+              {{$i18next.t('button/showFullText')}}
+            </template>
+          </i-button>
         </div>
         <footer>
           <a href="javascript:void(0)"
@@ -139,6 +154,8 @@
 </template>
 
 <script>
+const MAX_CONTENT_HEIGHT = 180
+
 import WfReplyArea from './WFReplyArea'
 
 import HyperDown from 'hyperdown'
@@ -154,6 +171,8 @@ export default {
       isReplying: false,
       avatarURL: '',
       authorUsername: '',
+      isContentTooLong: false,
+      isShowingFullText: false,
       replyToCommentAuthorUsername: '',
       replyToCommentAuthorPhotoURL: '',
       replyToCommentContent: '',
@@ -248,6 +267,12 @@ export default {
       const commentKey = this.comment['.key']
       this.$bindAsArray('replies', this.$database.ref(`pages/${this.encodedPageURL}/replies/${commentKey}`))
     }
+  },
+  mounted () {
+    const contentEle = document.getElementById('wf-comment-content-' + this.comment['.key'])
+    const contentEleHeight = parseInt(window.getComputedStyle(contentEle).height)
+    this.isContentTooLong = (contentEleHeight > MAX_CONTENT_HEIGHT)
+    this.isShowingFullText = false
   },
   methods: {
     /**
@@ -410,6 +435,12 @@ export default {
 
 .wf-comment-content {
   padding-bottom: 3px;
+}
+
+.less {
+  height: 180px;
+  overflow: hidden;
+  margin-bottom: 10px;
 }
 
 footer {
