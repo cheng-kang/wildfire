@@ -71,11 +71,13 @@ if (database === 'wilddog') {
   })
   Vue.prototype.$database = Vue.prototype.$app.sync()
   Vue.prototype.$auth = Vue.prototype.$app.auth()
+  Vue.prototype.$package = wilddog
 } else if (database === 'firebase') {
   Vue.use(VueFire)
   Vue.prototype.$app = firebase.initializeApp(databaseConfig)
   Vue.prototype.$database = Vue.prototype.$app.database()
   Vue.prototype.$auth = Vue.prototype.$app.auth()
+  Vue.prototype.$package = firebase
 }
 
 moment.locale(locale.toLowerCase())
@@ -140,6 +142,7 @@ i18next.init({
         'error/twoPasswordsDontMatch': 'The two passwords don\'t match.',
         'error/passwordMin': 'Password should be at least 6 digits.',
         'error/invalidPhotoURL': 'Invalid Avatar URL!',
+        'error/wrongPassword': 'Wrong password!',
         'message/invalidForm': 'Invalid form! Check it and try again.',
         'message/signUpSuccess': 'Signup success!',
         'message/signUpFailed': 'Signup failed, please try again!',
@@ -148,7 +151,8 @@ i18next.init({
         'message/emailAlreadyInUse': 'Email already in use, try to login!',
         'message/operationNotAllowed': 'Email accounts are not enabled, please contact the admin!',
         'message/updateSuccess': 'Update success',
-        'message/somethingGoesWrong': 'Oops! Something goes wrong!'
+        'message/somethingGoesWrong': 'Oops! Something goes wrong!',
+        'message/passwordChanged': 'Password changed!'
       }
     },
     'zh-CN': {
@@ -206,6 +210,7 @@ i18next.init({
         'error/twoPasswordsDontMatch': '两次输入的密码不一致。',
         'error/passwordMin': '密码长度不能小于6位。',
         'error/invalidPhotoURL': '不是有效的图片地址！',
+        'error/wrongPassword': '密码错误！',
         'message/invalidForm': '表单验证失败，请按要求填写！',
         'message/signUpSuccess': '注册成功！',
         'message/signUpFailed': '注册失败，请重试！',
@@ -214,7 +219,8 @@ i18next.init({
         'message/emailAlreadyInUse': '邮箱已经注册，请直接登录！',
         'message/operationNotAllowed': '邮箱登录被禁止，请联系站主！',
         'message/updateSuccess': '更新成功',
-        'message/somethingGoesWrong': '发生了未知错误！'
+        'message/somethingGoesWrong': '发生了未知错误！',
+        'message/passwordChanged': '密码修改成功！'
       }
     }
   }

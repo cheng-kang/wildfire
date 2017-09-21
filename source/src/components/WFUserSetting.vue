@@ -95,7 +95,7 @@
             <i-button
             type="primary" 
             @click="handleChangeAccount()" 
-            :disabled="sendingAccount"
+            :disabled="sendingAccount || passwordTesting" 
             :loading="sendingAccount">
               {{ $i18next.t('button/modify') }} 
             </i-button>
@@ -113,8 +113,33 @@ export default {
   props: ['user'],
   data () {
     const _this = this
+    const validateOldPassword = (rule, value, callback) => {
+      this.passwordTesting = true
+      const credential = this.$package.auth.EmailAuthProvider.credential(this.user.email, value)
+      if (typeof (this.$auth.currentUser.reauthenticate) === 'function') {
+        this.$auth.currentUser.reauthenticate(credential)
+        .then(() => {
+          this.passwordTesting = false
+          callback()
+        })
+        .catch(() => {
+          this.passwordTesting = false
+          callback(new Error(_this.$i18next.t('error/wrongPassword')))
+        })
+      } else if (typeof (this.$auth.currentUser.reauthenticateWithCredential) === 'function') {
+        this.$auth.currentUser.reauthenticateWithCredential(credential)
+        .then(() => {
+          this.passwordTesting = false
+          callback()
+        })
+        .catch(() => {
+          this.passwordTesting = false
+          callback(new Error(_this.$i18next.t('error/wrongPassword')))
+        })
+      }
+    }
     const validatePasswordCheck = (rule, value, callback) => {
-      if (value !== this.signUpForm.password) {
+      if (value !== this.accountForm.newPassword) {
         callback(new Error(_this.$i18next.t('error/twoPasswordsDontMatch')))
       } else {
         callback()
@@ -140,6 +165,7 @@ export default {
     }
     return {
       avatarTesting: false,
+      passwordTesting: false,
       sendingProfile: false,
       sendingAccount: false,
       avatarTestURL: this.user.photoURL,
@@ -163,7 +189,8 @@ export default {
         ],
         oldPassword: [
           { required: true, message: _this.$i18next.t('error/pleaseEnterPassword'), trigger: 'blur' },
-          { type: 'string', min: 6, message: _this.$i18next.t('error/passwordMin'), trigger: 'blur' }
+          { type: 'string', min: 6, message: _this.$i18next.t('error/passwordMin'), trigger: 'blur' },
+          { validator: validateOldPassword, trigger: 'blur' }
         ],
         newPassword: [
           { required: true, message: _this.$i18next.t('error/pleaseEnterPassword'), trigger: 'blur' },
@@ -186,7 +213,7 @@ export default {
           const { displayName, photoURL } = this.profileForm
           const updates = {
             '/displayName': displayName,
-            'photoURL': photoURL
+            '/photoURL': photoURL
           }
           this.$database.ref(`/users/${this.user.uid}`).update(updates)
             .then(() => {
@@ -210,8 +237,24 @@ export default {
       })
     },
     handleChangeAccount () {
-      console.log(this.user)
-      // 修改密码需要通过发邮件的方式，下版再做。
+      this.$refs['accountForm'].validate((valid) => {
+        if (valid) {
+          this.sendingAccount = true
+          const password = this.accountForm.newPassword
+          this.$auth.currentUser.updatePassword(password).then(() => {
+            this.sendingAccount = false
+            console.log(this.user.email, 'Password changed!')
+            this.$refs['accountForm'].resetFields()
+            this.$Message.info(this.$i18next.t('message/passwordChanged'))
+          }).catch((error) => {
+            this.sendingAccount = false
+            console.log(error.code, error.message)
+            this.$refs['accountForm'].resetFields()
+          })
+        } else {
+          this.$Message.error(this.$i18next.t('message/invalidForm'))
+        }
+      })
     },
     resetAvatar () {
       this.profileForm.photoURL = this.user.photoURL
