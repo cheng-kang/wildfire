@@ -32,6 +32,9 @@
 .ivu-input-group-append .ivu-btn, .ivu-input-group-prepend .ivu-btn {
   margin: -7px
 }
+.align-for-profile{
+  margin-right: -100px
+}
 </style>
 <template> 
   <i-tabs value="profile">
@@ -47,9 +50,9 @@
               <i-button slot="append" icon="refresh" @click="resetAvatar"></i-button>
             </i-input>
           </i-form-item>
-          <div class="form-itme-button">
+          <div class="form-itme-button align-for-profile">
             <i-button 
-            type="ghost" 
+            type="text" 
             @click="closeModel()" 
             :disabled="sendingProfile">
               {{ $i18next.t('button/cancel') }}
@@ -86,7 +89,7 @@
           </i-form-item>
           <div class="form-itme-button">
             <i-button 
-            type="ghost" 
+            type="text" 
             @click="closeModel()" 
             :disabled="sendingAccount">
               {{ $i18next.t('button/cancel') }}

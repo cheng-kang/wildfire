@@ -26,17 +26,18 @@
     </i-form-item> -->
 
     <i-form-item class="float-to-right">
+      <i-button type="text"
+        :disabled="form.content.trim() === '' || isPosting"
+        @click="form.content = ''">
+        {{$i18next.t('button/reset')}}
+      </i-button>
+      
       <i-button :type="isPosting ? 'ghost' : 'primary'"
+        style="margin-left: 8px"
         @click="postComment"
         :disabled="form.content.trim() === '' || isPosting"
         :loading="isPosting">
         {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
-      </i-button>
-      <i-button type="ghost"
-        style="margin-left: 8px"
-        :disabled="form.content.trim() === '' || isPosting"
-        @click="form.content = ''">
-        {{$i18next.t('button/reset')}}
       </i-button>
     </i-form-item>
   </i-form>

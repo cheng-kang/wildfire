@@ -30,7 +30,7 @@
           </i-form-item>
           <div class="form-itme-button">
             <i-button 
-            type="ghost" 
+            type="text" 
             @click="closeModel()" 
             :disabled="loadingSignUp">
               {{ $i18next.t('button/cancel') }}
@@ -61,7 +61,7 @@
           </i-form-item>
           <div class="form-itme-button">
             <i-button 
-            type="ghost" 
+            type="text" 
             @click="closeModel()" 
             :disabled="loadingSignIn">
               {{ $i18next.t('button/cancel') }}

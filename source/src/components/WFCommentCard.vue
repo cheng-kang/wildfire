@@ -46,8 +46,23 @@
             </i-dropdown-menu>
           </i-dropdown>
         </header>
-        <div class="wf-comment-content">
-          <div v-html="markdown(comment.content)" ></div>
+        <div class="wf-comment-content" :class="{'code-overflow-hidden': !isShowingFullText}" :id="'wf-comment-content-'+comment['.key']">
+          <div v-html="markdown(comment.content)"
+            :class="{ less: isContentTooLong && !isShowingFullText }" 
+            ></div>
+          <i-button type="text" 
+            v-if="isContentTooLong" 
+            @click="isShowingFullText = !isShowingFullText" 
+            long>
+            <template v-if="isShowingFullText">
+              <i-icon type="chevron-up"></i-icon>
+              {{$i18next.t('button/showLessText')}}
+            </template>
+            <template v-else>
+              <i-icon type="chevron-down"></i-icon>
+              {{$i18next.t('button/showFullText')}}
+            </template>
+          </i-button>
         </div>
         <footer>
           <a href="javascript:void(0)"
@@ -143,6 +158,8 @@ import 'highlight.js/styles/googlecode.css'
 import hljs from 'highlight.js'
 import marked from 'marked'
 
+const MAX_CONTENT_HEIGHT = 180
+
 import WfReplyArea from './WFReplyArea'
 
 export default {
@@ -157,6 +174,8 @@ export default {
       isReplying: false,
       avatarURL: '',
       authorUsername: '',
+      isContentTooLong: false,
+      isShowingFullText: false,
       replyToCommentAuthorUsername: '',
       replyToCommentAuthorPhotoURL: '',
       replyToCommentContent: '',
@@ -252,6 +271,12 @@ export default {
       this.$bindAsArray('replies', this.$database.ref(`pages/${this.encodedPageURL}/replies/${commentKey}`))
     }
   },
+  mounted () {
+    const contentEle = document.getElementById('wf-comment-content-' + this.comment['.key'])
+    const contentEleHeight = parseInt(window.getComputedStyle(contentEle).height)
+    this.isContentTooLong = (contentEleHeight > MAX_CONTENT_HEIGHT)
+    this.isShowingFullText = false
+  },
   methods: {
     /**
      * @param  {string='like', 'dislike'} type
@@ -306,9 +331,6 @@ export default {
       return Object.assign({}, obj, {'.key': key})
     },
     markdown (content) {
-      // var hyperdown = new HyperDown()
-      // var reg = new RegExp(/(\r\n|\r|\n)/, 'g')
-      // return hyperdown.makeHtml(content.replace(reg, '\nWF空格WF\n\n')).replace(/WF空格WF/g, '<br/>')
       marked.setOptions({
         renderer: new marked.Renderer(),
         gfm: true,
@@ -429,6 +451,12 @@ export default {
   padding-bottom: 3px;
 }
 
+.less {
+  height: 180px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
 footer {
   display: flex;
   align-items: center;
@@ -490,5 +518,8 @@ footer .disabled {
   /* 60px for avatar, 20px for padding */
   max-width: calc( 39rem - 60px - 20px);
   overflow: auto;
+}
+.code-overflow-hidden pre{
+  overflow: hidden !important;
 }
 </style>
