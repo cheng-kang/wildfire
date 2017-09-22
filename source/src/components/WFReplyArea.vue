@@ -1,7 +1,7 @@
 <template>
   <i-form :model="form" :label-width="60" :class="{ 'wf-reply': isReply }">
     <i-form-item class="no-bottom-margin">
-      <img :src="avatarURL" slot="label">
+      <img :src="avatarURL" slot="label" :class="{ anonymous: user === null }">
       <i-input
         v-model="form.content"
         type="textarea"
@@ -103,6 +103,9 @@ export default {
     newRepliesCount () {
       return (parseInt(this.rootCommentRepliesCount) || 0) + 1
     }
+  },
+  created () {
+    console.log(this.user)
   },
   methods: {
     postComment () {

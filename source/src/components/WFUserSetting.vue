@@ -52,17 +52,17 @@
           </i-form-item>
           <div class="form-itme-button align-for-profile">
             <i-button 
-            type="text" 
-            @click="closeModel()" 
-            :disabled="sendingProfile">
-              {{ $i18next.t('button/cancel') }}
-            </i-button>
-            <i-button 
             type="primary" 
             @click="handleChangeProfile()" 
             :disabled="sendingProfile || avatarTesting" 
             :loading="sendingProfile">
               {{ $i18next.t('button/modify') }}
+            </i-button>
+            <i-button 
+            type="text" 
+            @click="closeModel()" 
+            :disabled="sendingProfile">
+              {{ $i18next.t('button/cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -88,19 +88,18 @@
             </i-input>
           </i-form-item>
           <div class="form-itme-button">
-            <i-button 
-            type="text" 
-            @click="closeModel()" 
-            :disabled="sendingAccount">
-              {{ $i18next.t('button/cancel') }}
-            </i-button>
-
             <i-button
             type="primary" 
             @click="handleChangeAccount()" 
             :disabled="sendingAccount || passwordTesting" 
             :loading="sendingAccount">
               {{ $i18next.t('button/modify') }} 
+            </i-button>
+            <i-button 
+            type="text" 
+            @click="closeModel()" 
+            :disabled="sendingAccount">
+              {{ $i18next.t('button/cancel') }}
             </i-button>
           </div>
         </i-form>

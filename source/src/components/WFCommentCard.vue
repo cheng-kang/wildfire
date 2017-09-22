@@ -2,7 +2,7 @@
   <li class="wf-comment-item" :class="{'wf-reply-item': comment.replyToCommentId}">
     <section class="comment">
       <div class="wf-comment-avatar">
-        <img :src="avatarURL">
+        <img :src="avatarURL" :class="{ anonymous: isPostedByAnonymousUser }">
       </div>
       <div class="wf-comment-body">
         <header>
@@ -197,6 +197,9 @@ export default {
     anonymousUserId () {
       return this.$config.anonymousUserId
     },
+    isPostedByAnonymousUser () {
+      return this.comment.authorUid === this.anonymousUserId
+    },
     encodedPageURL () {
       return btoa(this.$config.pageURL)
     },
@@ -230,18 +233,17 @@ export default {
     this.replyToCommentAuthorUsername = this.$i18next.t('text/anonymousUser')
     this.replyToCommentAuthorPhotoURL = this.$config.defaultAvatarURL
 
-    const _this = this
-    const uid = this.comment.authorUid
-    if (uid !== this.anonymousUserId) {
+    if (!this.isPostedByAnonymousUser) {
+      const authorUid = this.comment.authorUid
       // if not anomymous user, get username & avatar
-      this.$database.ref(`users/${uid}`).once('value').then((snapshot) => {
+      this.$database.ref(`users/${authorUid}`).once('value').then((snapshot) => {
         let author = snapshot.val()
         if (!author) { return }
         if (author.photoURL) {
-          _this.avatarURL = author.photoURL
+          this.avatarURL = author.photoURL
         }
         if (author.displayName) {
-          _this.authorUsername = author.displayName
+          this.authorUsername = author.displayName
         }
       })
     }
@@ -253,15 +255,15 @@ export default {
                                   : `/pages/${this.encodedPageURL}/replies/${this.parentComment['.key']}/${replyToCommentId}`
       this.$database.ref(replyToCommentRef).once('value').then((snapshot) => {
         let comment = snapshot.val()
-        _this.replyToCommentContent = comment.content
+        this.replyToCommentContent = comment.content
 
         const replyToCommentAuthorUid = comment.authorUid
-        if (replyToCommentAuthorUid !== _this.anonymousUserId) {
-          _this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
+        if (replyToCommentAuthorUid !== this.anonymousUserId) {
+          this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
             let author = snapshot.val()
             if (author && author.displayName) {
-              _this.replyToCommentAuthorUsername = author.displayName
-              _this.replyToCommentAuthorPhotoURL = author.photoURL
+              this.replyToCommentAuthorUsername = author.displayName
+              this.replyToCommentAuthorPhotoURL = author.photoURL
             }
           })
         }
@@ -510,14 +512,16 @@ footer .disabled {
 
 <style>
 .wf-comment-content pre {
-  background: #f2f2f2;
-  border: 1px solid rgba(100,100,100,0.1);
+  background: #f6f8fa;
   padding: 10px 20px;
   max-height: 300px;
   
   /* 60px for avatar, 20px for padding */
   max-width: calc( 39rem - 60px - 20px);
   overflow: auto;
+}
+.wf-comment-content img {
+  max-width: 100%;
 }
 .code-overflow-hidden pre{
   overflow: hidden !important;
