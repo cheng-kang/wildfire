@@ -3,7 +3,8 @@
     <wf-reply-area 
       :user="user" 
       :commentsLoadingState="commentsLoadingState"
-      :page-comments-count="pageCommentsCount"></wf-reply-area>
+      :page-comments-count="pageCommentsCount"
+      :isMain="true"></wf-reply-area>
     <template v-if="comments.length !== 0">
       <ul class="wf-comment-group">
         <wf-comment-card 

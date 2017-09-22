@@ -6,10 +6,57 @@
         v-model="form.content"
         type="textarea"
         @on-click="postComment"
+        @on-change="contentOnChange"
         :autosize="textareaAutoresize"
         :placeholder="placeholder"
-        :disabled="isPosting || commentsLoadingState === 'loading'"></i-input>
+        :disabled="shouldDisableInput"></i-input>
     </i-form-item>
+    <section class="top-reply-area" v-if="isMain">
+      <div>
+        <i-switch size="small" @on-change="switchMentioning" :disabled="shouldDisableSwitch">
+          <span slot="open">{{$i18next.t('switch/on')}}</span>
+          <span slot="close">{{$i18next.t('switch/off')}}</span>
+        </i-switch>
+        <span :style="{ color: shouldDisableSwitchText ? '#bbbec4' : '#495060' }">
+          {{$i18next.t('text/enableMentioning')}}{{isLoadingUserData ? (' - ' + $i18next.t('text/loadingUserData')) : ''}}
+        </span>
+      </div>
+      <i-form-item>
+          <i-button :type="isPosting ? 'ghost' : 'primary'" 
+            @click="postComment" 
+            :disabled="shouldDisableButton"
+            :loading="isPosting">
+            {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
+          </i-button>
+          <i-button type="ghost" 
+            style="margin-left: 8px" 
+            :disabled="shouldDisableButton"
+            @click="form.content = ''">
+            {{$i18next.t('button/reset')}}
+          </i-button>
+      </i-form-item>
+      <i-modal
+        v-model="shouldShowAutoComplete"
+        width="330"
+        style="text-align: center;"
+        :closable="false"
+        :footer-hide="true">
+        <i-auto-complete
+          v-model="mentioningUsername"
+          :autofocus="true"
+          icon="ios-search"
+          placeholder="input here"
+          style="width:300px"
+          @on-select="autoCompleteOnSelect">
+          <i-option v-for="user in mentioningUserAutoComplete" :value="JSON.stringify(user)" :key="user.id">
+            <div class="mentioning-option">
+              <img :src="user.photoURL">
+              <span>{{ user.displayName }}</span>
+            </div>
+          </i-option>
+        </i-auto-complete>
+      </i-modal>
+    </section>
 
     <!-- <i-form-item class="editar-tools">
       <i-tooltip :content="editarTools.markdown.toolTipContent" placement="bottom" >
@@ -25,9 +72,9 @@
       </i-tooltip>
     </i-form-item> -->
 
-    <i-form-item class="float-to-right">
+    <i-form-item class="float-to-right" v-else>
       <i-button type="text"
-        :disabled="form.content.trim() === '' || isPosting"
+        :disabled="shouldDisableButton"
         @click="form.content = ''">
         {{$i18next.t('button/reset')}}
       </i-button>
@@ -35,7 +82,7 @@
       <i-button :type="isPosting ? 'ghost' : 'primary'"
         style="margin-left: 8px"
         @click="postComment"
-        :disabled="form.content.trim() === '' || isPosting"
+        :disabled="shouldDisableButton"
         :loading="isPosting">
         {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
       </i-button>
@@ -53,7 +100,8 @@ export default {
     'rootComment',
     'commentsLoadingState',
     'pageCommentsCount',
-    'rootCommentRepliesCount'
+    'rootCommentRepliesCount',
+    'isMain'
   ],
   data () {
     return {
@@ -70,7 +118,14 @@ export default {
       textareaAutoresize: {
         minRows: 3,
         maxRows: 10
-      }
+      },
+      isMentioningEnabled: false,
+      isSettingUpMentioning: false,
+      users: [],
+      isLoadingUserData: false,
+      mentioningUsername: '',
+      atPosition: null,
+      shouldShowAutoComplete: false
     }
   },
   computed: {
@@ -102,10 +157,25 @@ export default {
     },
     newRepliesCount () {
       return (parseInt(this.rootCommentRepliesCount) || 0) + 1
+    },
+    mentioningUserAutoComplete () {
+      if (!this.mentioningUsername) { return [] }
+      return this.users.filter(user => {
+        return user.displayName.toLowerCase().indexOf(this.mentioningUsername.toLowerCase()) !== -1
+      })
+    },
+    shouldDisableInput () {
+      return this.isPosting || this.commentsLoadingState === 'loading'
+    },
+    shouldDisableButton () {
+      return this.form.content.trim() === '' || this.isPosting
+    },
+    shouldDisableSwitch () {
+      return this.shouldDisableInput || this.isLoadingUserData
+    },
+    shouldDisableSwitchText () {
+      return !this.isMentioningEnabled || this.shouldDisableSwitch
     }
-  },
-  created () {
-    console.log(this.user)
   },
   methods: {
     postComment () {
@@ -160,6 +230,43 @@ export default {
           console.log(error)
         })
       }
+    },
+    switchMentioning (newValue) {
+      this.isMentioningEnabled = newValue
+      if (newValue) {
+        this.isLoadingUserData = true
+        this.$database.ref('/users').once('value').then(snapshot => {
+          const result = snapshot.val() || {}
+          console.log(snapshot)
+          console.log(snapshot.val())
+          this.users = Object.keys(result).map(id => {
+            const { displayName, photoURL, email } = result[id]
+            return {
+              id,
+              displayName,
+              photoURL,
+              email
+            }
+          })
+          this.isLoadingUserData = false
+        })
+      }
+    },
+    contentOnChange (e) {
+      console.log(e.data === '@' && this.isMentioningEnabled)
+      if (e.data === '@' && this.isMentioningEnabled) {
+        this.atPosition = e.target.selectionStart
+        this.mentioningUsername = ''
+        this.shouldShowAutoComplete = true
+      }
+    },
+    autoCompleteOnSelect (value) {
+      this.shouldShowAutoComplete = false
+      let user = JSON.parse(value)
+      const formattedMentionText = `[@${user.displayName}](${user.email}) `
+      const content = this.form.content
+      // replace the '@' symbol with formatted text
+      this.form.content = [content.slice(0, this.atPosition - 1), formattedMentionText, content.slice(this.atPosition)].join('')
     }
     // handleMarkdown () {
     //   this.editarTools.markdown.isMarkdown = !this.editarTools.markdown.isMarkdown
@@ -194,6 +301,16 @@ img {
 }
 .ivu-form-item {
   margin-bottom: 12px;
+}
+.mentioning-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.mentioning-option img {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
 }
 </style>
 <style>
@@ -256,4 +373,23 @@ a.tool-enabled i{
 .ivu-spin-show-text .ivu-spin-text i {
   margin-right: 5px;
 }*/
+
+.top-reply-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.top-reply-area div {
+  font-size: 10px;
+  margin-left: 60px;
+  align-self: flex-start;
+}
+.ivu-switch-checked .ivu-switch-inner {
+  left: 4px;
+  font-size: 8px;
+}
+.ivu-switch-inner {
+  left: 12.5px;
+  font-size: 8px;
+}
 </style>
