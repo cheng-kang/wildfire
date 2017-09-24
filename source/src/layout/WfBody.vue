@@ -17,7 +17,8 @@
           ></wf-comment-card>
       </ul>
       <i-page 
-        :total="pageCommentsCount" 
+        :total="pageCommentsCount"
+        v-if="pageCommentsCount > 10"
         size="small"
         @on-change="pageChanged"></i-page>
     </template>

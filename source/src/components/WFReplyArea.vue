@@ -13,7 +13,7 @@
     </i-form-item>
     <section class="top-reply-area" v-if="isMain">
       <div class="tool-bar">
-        <span :style="{ color: shouldDisableSwitchText ? '#bbbec4' : '#495060' }">
+        <span style="color: #bbbec4">
           {{isLoadingUserData 
               ? $i18next.t('text/initializingMentionAutocomplete') 
               : $i18next.t('text/initializedMentionAutocomplete')}}
