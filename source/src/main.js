@@ -43,6 +43,7 @@ Vue.prototype.$config = {
 }
 
 import Vue from 'vue'
+import VueResource from 'vue-resource'
 import wilddog from 'wilddog'
 import VueWild from 'vuewild'
 import firebase from 'firebase'
@@ -53,6 +54,7 @@ import App from './App'
 import './assets/style.css'
 
 Vue.config.productionTip = true
+Vue.use(VueResource)
 Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment
 
@@ -247,6 +249,16 @@ i18next.init({
   } else {
     console.log('i18next Initialized!')
   }
+})
+
+Vue.prototype.$ip = 'Getting IP...'
+Vue.http.get('https://api.ipify.org?format=json').then(response => {
+  // get body data
+  Vue.prototype.$ip = response.body.ip
+}, response => {
+  // error callback
+  console.log(response)
+  Vue.prototype.$ip = 'Cannot get IP'
 })
 
 /* eslint-disable no-new */

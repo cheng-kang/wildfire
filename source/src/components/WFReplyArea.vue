@@ -169,6 +169,7 @@ export default {
         const authorUid = user ? user.uid : anonymousUserId
         const date = aDate.toISOString()
         const order = -1 * aDate.getTime()
+        const ip = this.$ip
 
         let replyToCommentId = null
         let updates = {}
@@ -176,7 +177,7 @@ export default {
         if (isReply) {
           replyToCommentId = replyToComment['.key']
         }
-        const postData = { author, authorUid, date, order, content, replyToCommentId }
+        const postData = { author, authorUid, date, order, content, replyToCommentId, ip }
         const emptyRef = this.$database.ref(`/pages/${encodedPageURL}`).push()
         const newKey = this.$config.database === 'firebase' ? emptyRef.key : emptyRef.key()
 
