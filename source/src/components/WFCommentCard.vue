@@ -47,9 +47,9 @@
           </i-dropdown>
         </header>
         <div class="wf-comment-content" :class="{'code-overflow-hidden': !isShowingFullText}" :id="'wf-comment-content-'+comment['.key']">
-          <div v-html="markdown(comment.content)"
-            :class="{ less: isContentTooLong && !isShowingFullText }" 
-            ></div>
+          <div :class="{ less: isContentTooLong && !isShowingFullText }">
+            <wf-marked-content :content="comment.content"></wf-marked-content>
+          </div>
           <i-button type="text" 
             v-if="isContentTooLong" 
             @click="isShowingFullText = !isShowingFullText" 
@@ -154,18 +154,19 @@
 </template>
 
 <script>
-import 'highlight.js/styles/googlecode.css'
-import hljs from 'highlight.js'
-import marked from 'marked'
+// import 'highlight.js/styles/googlecode.css'
+// import hljs from 'highlight.js'
+// import marked from 'marked'
 
 const MAX_CONTENT_HEIGHT = 180
 
 import WfReplyArea from './WFReplyArea'
+import WfMarkedContent from './WFMarkedContent'
 
 export default {
   name: 'wf-comment-card',
   components: {
-    WfReplyArea, 'wf-comment-card': this
+    WfReplyArea, 'wf-comment-card': this, WfMarkedContent
   },
   props: ['user', 'comment', 'pageCommentsCount', 'commentsLoadingState', 'parentComment'],
   data () {
@@ -329,26 +330,29 @@ export default {
     },
     objectWithDotKey (obj, key) {
       return Object.assign({}, obj, {'.key': key})
-    },
-    markdown (content) {
-      marked.setOptions({
-        renderer: new marked.Renderer(),
-        gfm: true,
-        tables: true,
-        breaks: true,
-        pedantic: false,
-        sanitize: false,
-        smartLists: true,
-        smartypants: false,
-        highlight: (code) => {
-          return hljs.highlightAuto(code).value
-        }
-      })
-      return marked(content)
     }
+    // markdown (content) {
+    //   var renderer = new marked.Renderer()
+    //   marked.setOptions({
+    //     renderer: renderer,
+    //     gfm: true,
+    //     tables: true,
+    //     breaks: true,
+    //     pedantic: false,
+    //     sanitize: false,
+    //     smartLists: true,
+    //     smartypants: false,
+    //     highlight: (code) => {
+    //       return hljs.highlightAuto(code).value
+    //     }
+    //   })
+    //   return marked(content)
+    // }
   }
 }
 </script>
+
+
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
