@@ -1,41 +1,3 @@
-<style scoped>
-.form-warp{
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-items: space-between;
-  width: 80%;
-  margin: auto;
-  padding-top: 10px;
-  padding-bottom: 30px
-}
-.form-warp form{
-  flex: 1 1 100%;
-}
-.form-warp .avatar{
-  flex: 0 0 100px;
-  height: 100px;
-  position: relative;
-  top: -16px;
-  left: 10px
-}
-.form-warp .avatar .ivu-avatar{
-  width: 70px;
-  height: 70px;
-  border: 1px solid rgba(0,0,0,0.2)
-}
-.form-itme-button button{
-  margin: 0 10px;
-  width: 25%;
-}
-.ivu-input-group-append .ivu-btn, .ivu-input-group-prepend .ivu-btn {
-  margin: -7px
-}
-.align-for-profile{
-  margin-right: -100px
-}
-</style>
 <template> 
   <i-tabs value="profile">
     <i-tab-pane :label="$i18next.t('button/profile')" name="profile" :disabled="sendingAccount">
@@ -52,17 +14,17 @@
           </i-form-item>
           <div class="form-itme-button align-for-profile">
             <i-button 
-            type="text" 
-            @click="closeModel()" 
-            :disabled="sendingProfile">
-              {{ $i18next.t('button/cancel') }}
-            </i-button>
-            <i-button 
             type="primary" 
             @click="handleChangeProfile()" 
             :disabled="sendingProfile || avatarTesting" 
             :loading="sendingProfile">
               {{ $i18next.t('button/modify') }}
+            </i-button>
+            <i-button 
+            type="text" 
+            @click="closeModel()" 
+            :disabled="sendingProfile">
+              {{ $i18next.t('button/cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -88,19 +50,18 @@
             </i-input>
           </i-form-item>
           <div class="form-itme-button">
-            <i-button 
-            type="text" 
-            @click="closeModel()" 
-            :disabled="sendingAccount">
-              {{ $i18next.t('button/cancel') }}
-            </i-button>
-
             <i-button
             type="primary" 
             @click="handleChangeAccount()" 
             :disabled="sendingAccount || passwordTesting" 
             :loading="sendingAccount">
               {{ $i18next.t('button/modify') }} 
+            </i-button>
+            <i-button 
+            type="text" 
+            @click="closeModel()" 
+            :disabled="sendingAccount">
+              {{ $i18next.t('button/cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -111,6 +72,7 @@
 </template>
 
 <script>
+import Bus from '../bus'
 export default {
   name: 'wf-user-setting',
   props: ['user'],
@@ -207,7 +169,12 @@ export default {
       shouldShowPassword: true
     }
   },
-  // watch
+  created () {
+    Bus.$on('CurrentUserInfoUpdated', updates => {
+      this.user.displayName = updates['/displayName']
+      this.user.photoURL = updates['/photoURL']
+    })
+  },
   methods: {
     handleChangeProfile () {
       this.$refs['profileForm'].validate((valid) => {
@@ -219,16 +186,15 @@ export default {
             '/photoURL': photoURL
           }
           this.$database.ref(`/users/${this.user.uid}`).update(updates)
-            .then(() => {
+            .then(snapshot => {
+              this.user.displayName = displayName
+              this.user.photoURL = photoURL
+
               this.sendingProfile = false
               this.$Message.info(this.$i18next.t('message/updateSuccess'))
 
-              // 说明：更新用户信息后，需要全局更新所有和该用户有关的信息
-              // 处理起来比较费事，下一版再做
-              // 暂时的处理方法，更新后0.5秒直接刷新页面
-              setTimeout(() => {
-                location.reload()
-              }, 500)
+              // Broadcast 'CurrentUserInfoUpdated' event
+              Bus.$emit('CurrentUserInfoUpdated', updates)
             }).catch((error) => {
               this.sendingProfile = false
               console.log(error.code, error.message)
@@ -265,7 +231,6 @@ export default {
       this.$refs.profileForm.validateField('photoURL')
     },
     closeModel () {
-      this.$refs['profileForm'].resetFields()
       this.$refs['accountForm'].resetFields()
       this.avatarTestURL = this.user.photoURL
       this.$parent.close()
@@ -273,3 +238,41 @@ export default {
   }
 }
 </script>
+<style scoped>
+.form-warp{
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-items: space-between;
+  width: 80%;
+  margin: auto;
+  padding-top: 10px;
+  padding-bottom: 30px
+}
+.form-warp form{
+  flex: 1 1 100%;
+}
+.form-warp .avatar{
+  flex: 0 0 100px;
+  height: 100px;
+  position: relative;
+  top: -16px;
+  left: 10px
+}
+.form-warp .avatar .ivu-avatar{
+  width: 70px;
+  height: 70px;
+  border: 1px solid rgba(0,0,0,0.2)
+}
+.form-itme-button button{
+  margin: 0 10px;
+  width: 25%;
+}
+.ivu-input-group-append .ivu-btn, .ivu-input-group-prepend .ivu-btn {
+  margin: -7px
+}
+.align-for-profile{
+  margin-right: -100px
+}
+</style>

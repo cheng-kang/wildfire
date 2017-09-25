@@ -29,19 +29,18 @@
             </i-input>
           </i-form-item>
           <div class="form-itme-button">
-            <i-button 
-            type="text" 
-            @click="closeModel()" 
-            :disabled="loadingSignUp">
-              {{ $i18next.t('button/cancel') }}
-            </i-button>
-
             <i-button
             type="primary" 
             @click="handleSignUp('signUpForm')" 
             :disabled="loadingSignUp"
             :loading="loadingSignUp">
               {{ $i18next.t('button/signUp') }} 
+            </i-button>
+            <i-button 
+            type="text" 
+            @click="closeModel()" 
+            :disabled="loadingSignUp">
+              {{ $i18next.t('button/cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -61,17 +60,17 @@
           </i-form-item>
           <div class="form-itme-button">
             <i-button 
-            type="text" 
-            @click="closeModel()" 
-            :disabled="loadingSignIn">
-              {{ $i18next.t('button/cancel') }}
-            </i-button>
-            <i-button 
             type="primary" 
             @click="handleSignIn('signInForm')" 
             :disabled="loadingSignIn" 
             :loading="loadingSignIn">
               {{ $i18next.t('button/signIn') }}
+            </i-button>
+            <i-button 
+            type="text" 
+            @click="closeModel()" 
+            :disabled="loadingSignIn">
+              {{ $i18next.t('button/cancel') }}
             </i-button>
           </div>
         </i-form>

@@ -85,15 +85,15 @@ export default {
                           let e = event || window.event
                           if (e.wheelDelta > 0 || e.detail > 0) {
                             if (e.target.width < imgWidth) {
-                              e.target.style.left = parseFloat(e.target.style.left) - e.layerX / e.target.width * step + 'px'
-                              e.target.style.top = parseFloat(e.target.style.top) - e.layerY / e.target.height * step * ratio + 'px'
+                              e.target.style.left = (parseFloat(e.target.style.left) - e.offsetX / e.target.width * step) + 'px'
+                              e.target.style.top = (parseFloat(e.target.style.top) - e.offsetY / e.target.height * step * ratio) + 'px'
                               e.target.width += step
                               e.target.height = e.target.width * ratio
                             }
                           } else if (e.wheelDelta < 0 || e.detail < 0) {
                             if (e.target.width > imgInitWidth + step) {
-                              e.target.style.left = parseFloat(e.target.style.left) + e.layerX / e.target.width * step + 'px'
-                              e.target.style.top = parseFloat(e.target.style.top) + e.layerY / e.target.height * step * ratio + 'px'
+                              e.target.style.left = parseFloat(e.target.style.left) + e.offsetX / e.target.width * step + 'px'
+                              e.target.style.top = parseFloat(e.target.style.top) + e.offsetY / e.target.height * step * ratio + 'px'
                               e.target.width -= step
                               e.target.height = e.target.width * ratio
                             } else {
@@ -103,11 +103,12 @@ export default {
                               e.target.style.left = (warpWidth - imgInitWidth) / 2 + 'px'
                             }
                           }
+                          e = undefined
                         },
                         mousedown: (event) => {
                           let e = event || window.event
                           e.preventDefault()
-                          var imgTarget = e.target
+                          let imgTarget = e.target
                           let disX = e.clientX - imgTarget.offsetLeft
                           let disY = e.clientY - imgTarget.offsetTop
                           imgTarget.onmousemove = (event) => {
@@ -129,15 +130,26 @@ export default {
                   ])
                 }
               })
+              modalInstance.component.mask = () => {
+                if (modalInstance.component.maskClosable) {
+                  modalInstance.component.close()
+                  modalInstance.remove()
+                }
+              }
               modalInstance.show({
                 onRemove: () => {
                   modalInstance = null
+                  image = null
+                  // console.log(modalInstance)
                 },
                 title: '查看大图 - ' + text,
                 okText: '确定',
                 width: warpWidth + 40
               })
             }
+          },
+          showUserProp (username, email) {
+            console.log(username, email)
           }
         }
       })
@@ -147,7 +159,18 @@ export default {
     markdown (content) {
       var render = new marked.Renderer()
       render.image = (href, title, text) => {
-        return `<div @click="showFullImage('${href}', '${title}', '${text}')" class="thumbnail" style="background-image: url(${href})"> </div>`
+        // ![text](href "title")
+        return `<div @click="showFullImage('${href}', '${title}', '${text}')" class="thumbnail" style="background-image: url(${href})" alt="${title}"> </div>`
+      }
+      render.link = (href, title, text) => {
+        // [text](href "title")
+        if (text.indexOf('@') === 0) {
+          const username = text.substring(1)
+          const email = href
+          return `<a @click="showUserProp('${username}', '${email}')">${text}</a>`
+        } else {
+          return `<a href="${href}" alt="${title}">${text}</a>`
+        }
       }
       marked.setOptions({
         renderer: render,

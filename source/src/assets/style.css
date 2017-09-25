@@ -1,4 +1,9 @@
-.wf-main {
+img.anonymous {
+  opacity: 0.9;
+  -webkit-filter: grayscale(70%);
+  filter: grayscale(70%);
+}
+/*.wf-main {
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s, opacity 1.5s ease-in-out;
@@ -297,4 +302,4 @@ ul.wf-reply-group {
 
 .wf-delete-button {
   color: red;
-}
+}*/

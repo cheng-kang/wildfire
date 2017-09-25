@@ -43,6 +43,7 @@ Vue.prototype.$config = {
 }
 
 import Vue from 'vue'
+import VueResource from 'vue-resource'
 import wilddog from 'wilddog'
 import VueWild from 'vuewild'
 import firebase from 'firebase'
@@ -50,8 +51,10 @@ import VueFire from 'vuefire'
 import moment from 'moment'
 import i18next from 'i18next'
 import App from './App'
+import './assets/style.css'
 
 Vue.config.productionTip = true
+Vue.use(VueResource)
 Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment
 
@@ -106,6 +109,9 @@ i18next.init({
         'button/account': 'Account',
         'button/showLessText': 'Show less text',
         'button/showFullText': 'Show full text',
+        'button/reportThisComment': 'Report this comment',
+        'switch/on': 'ON',
+        'switch/off': 'OFF',
         'text/loading': 'Loading',
         'text/loadingComments': 'Loading comments',
         'textarea/joinTheConversation': 'Join the discusstion...',
@@ -117,6 +123,7 @@ i18next.init({
         'text/showMoreDiscussion': 'Show more',
         'text/showLessDiscussion': 'Show less',
         'text/loadingCommentContent': 'Loading comment content...',
+        'text/loadingUserData': 'Loading user data...',
         'text/commentPosted': 'Comment posted!',
         'text/areYouSureToDeleteThisComment': 'Are you sure to delete this comment?',
         'text/email': 'Email',
@@ -131,8 +138,8 @@ i18next.init({
         'text/signOutConfirmText': 'Are you sure to sign out Wildfire?',
         'text/pleaseSignIn': 'Please Sign In',
         'text/unSignInWarning': 'You need to Sign in first before modifying your profile.',
-        // 'text/markdownDisabled': 'Click to enadle Markdown for the editar',
-        // 'text/markdownEnabled': 'Markdown is enabled',
+        'text/initializingMentionAutocomplete': 'Initializing Mention (@) auto-complete...',
+        'text/initializedMentionAutocomplete': 'Mention (@) auto-complete is on',
         'error/notValidServiceProvider': 'Please check your config: "sercice" should be "firebase" or "wilddog".',
         'error/noDatabaseConfig': 'Please check your config: missing "databaseConfig"',
         'error/failedToLoadComments': 'Failed to load comments.',
@@ -154,7 +161,9 @@ i18next.init({
         'message/operationNotAllowed': 'Email accounts are not enabled, please contact the admin!',
         'message/updateSuccess': 'Update success',
         'message/somethingGoesWrong': 'Oops! Something goes wrong!',
-        'message/passwordChanged': 'Password changed!'
+        'message/passwordChanged': 'Password changed!',
+        'message/reportCommentSucceeded': 'Comment reported.',
+        'message/reportCommentFailed': 'Something went wrong, please try again later.'
       }
     },
     'zh-CN': {
@@ -176,6 +185,9 @@ i18next.init({
         'button/account': '账号设置',
         'button/showLessText': '收起',
         'button/showFullText': '展开全部',
+        'button/reportThisComment': '举报此条评论',
+        'switch/on': '开',
+        'switch/off': '关',
         'text/loading': '加载中',
         'text/loadingComments': '评论加载中',
         'textarea/joinTheConversation': '一起来发言吧...',
@@ -187,6 +199,7 @@ i18next.init({
         'text/showMoreDiscussion': '展开更多讨论',
         'text/showLessDiscussion': '收起更多讨论',
         'text/loadingCommentContent': '加载评论内容中...',
+        'text/loadingUserData': '加载用户数据中...',
         'text/commentPosted': '评论成功！',
         'text/areYouSureToDeleteThisComment': '你确定要删除这条评论吗？',
         'text/email': '电子邮箱',
@@ -201,8 +214,8 @@ i18next.init({
         'text/signOutConfirmText': '是否注销登录？',
         'text/pleaseSignIn': '请先登录',
         'text/unSignInWarning': '当前为匿名用户，您需要登录后才能进行个性化设置！',
-        // 'text/markdownDisabled': '点击开启 Markdown 模式',
-        // 'text/markdownEnabled': 'Markdown 模式已开启',
+        'text/initializingMentionAutocomplete': '初始化提及功能（@）自动补全中...',
+        'text/initializedMentionAutocomplete': '提及功能（@）自动补全已启用',
         'error/notValidServiceProvider': '请检查你的配置： "sercive" 应该为 "firebase" 或者 "wilddog"。',
         'error/noDatabaseConfig': '请检查你的配置： 找不到 "databaseConfig"',
         'error/failedToLoadComments': '加载评论失败。',
@@ -224,7 +237,9 @@ i18next.init({
         'message/operationNotAllowed': '邮箱登录被禁止，请联系站主！',
         'message/updateSuccess': '更新成功',
         'message/somethingGoesWrong': '发生了未知错误！',
-        'message/passwordChanged': '密码修改成功！'
+        'message/passwordChanged': '密码修改成功！',
+        'message/reportCommentSucceeded': '评论举报成功。',
+        'message/reportCommentFailed': '出错了，请稍后再试。'
       }
     }
   }
@@ -234,6 +249,16 @@ i18next.init({
   } else {
     console.log('i18next Initialized!')
   }
+})
+
+Vue.prototype.$ip = 'Getting IP...'
+Vue.http.get('https://api.ipify.org?format=json').then(response => {
+  // get body data
+  Vue.prototype.$ip = response.body.ip
+}, response => {
+  // error callback
+  console.log(response)
+  Vue.prototype.$ip = 'Cannot get IP'
 })
 
 /* eslint-disable no-new */

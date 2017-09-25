@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import Bus from '../bus'
 import WfSignForm from '../components/WfSignForm'
 import WfUserSetting from '../components/WfUserSetting'
 
@@ -67,6 +68,12 @@ export default {
       ? this.user.displayName
       : this.$i18next.t('text/anonymousUser')
     }
+  },
+  created () {
+    Bus.$on('CurrentUserInfoUpdated', updates => {
+      this.user.displayName = updates['/displayName']
+      this.user.photoURL = updates['/photoURL']
+    })
   },
   methods: {
     signUp () {
@@ -122,6 +129,9 @@ header {
   display: inline-block;
   padding:0 20px;
   margin:0 20px;
+/*  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;*/
 }
 </style>
 <style>

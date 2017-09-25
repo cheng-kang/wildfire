@@ -2,7 +2,7 @@
   <li class="wf-comment-item" :class="{'wf-reply-item': comment.replyToCommentId}">
     <section class="comment">
       <div class="wf-comment-avatar">
-        <img :src="avatarURL">
+        <img :src="avatarURL" :class="{ anonymous: isPostedByAnonymousUser }">
       </div>
       <div class="wf-comment-body">
         <header>
@@ -36,13 +36,14 @@
               </i-poptip>
             </span>
           </div>
-          <i-dropdown>
+          <i-dropdown v-if="this.user"
+            @on-click="handleDropdownClick">
             <a href="javascript:void(0)" class="drowdown-menu-button">
                 <i-icon type="arrow-down-b"></i-icon>
             </a>
             <i-dropdown-menu slot="list">
-                <i-dropdown-item>report</i-dropdown-item>
-                <i-dropdown-item>ban</i-dropdown-item>
+                <i-dropdown-item style="color: red"
+                  name="reportCurrentComment">{{$i18next.t('button/reportThisComment')}}</i-dropdown-item>
             </i-dropdown-menu>
           </i-dropdown>
         </header>
@@ -154,9 +155,7 @@
 </template>
 
 <script>
-// import 'highlight.js/styles/googlecode.css'
-// import hljs from 'highlight.js'
-// import marked from 'marked'
+import Bus from '../bus'
 
 const MAX_CONTENT_HEIGHT = 180
 
@@ -198,6 +197,9 @@ export default {
     anonymousUserId () {
       return this.$config.anonymousUserId
     },
+    isPostedByAnonymousUser () {
+      return this.comment.authorUid === this.anonymousUserId
+    },
     encodedPageURL () {
       return btoa(this.$config.pageURL)
     },
@@ -222,6 +224,9 @@ export default {
     },
     newRepliesCount () {
       return (parseInt(this.parentComment.repliesCount) || 0) - 1
+    },
+    isReply () {
+      return !!this.parentComment
     }
   },
   created () {
@@ -231,19 +236,28 @@ export default {
     this.replyToCommentAuthorUsername = this.$i18next.t('text/anonymousUser')
     this.replyToCommentAuthorPhotoURL = this.$config.defaultAvatarURL
 
-    const _this = this
-    const uid = this.comment.authorUid
-    if (uid !== this.anonymousUserId) {
-      // if not anomymous user, get username & avatar
-      this.$database.ref(`users/${uid}`).once('value').then((snapshot) => {
-        let author = snapshot.val()
-        if (!author) { return }
-        if (author.photoURL) {
-          _this.avatarURL = author.photoURL
-        }
-        if (author.displayName) {
-          _this.authorUsername = author.displayName
-        }
+    if (!this.isPostedByAnonymousUser) {
+      const authorUid = this.comment.authorUid
+      if (this.user && authorUid === this.user.uid) {
+        this.avatarURL = this.user.photoURL
+        this.authorUsername = this.user.displayName
+      } else {
+        // if not anomymous user and not current user, get username & avatar from DB
+        this.$database.ref(`users/${authorUid}`).once('value').then((snapshot) => {
+          let author = snapshot.val()
+          if (!author) { return }
+          if (author.photoURL) {
+            this.avatarURL = author.photoURL
+          }
+          if (author.displayName) {
+            this.authorUsername = author.displayName
+          }
+        })
+      }
+
+      Bus.$on('CurrentUserInfoUpdated', updates => {
+        this.authorUsername = updates['/displayName']
+        this.avatarURL = updates['/photoURL']
       })
     }
 
@@ -254,15 +268,15 @@ export default {
                                   : `/pages/${this.encodedPageURL}/replies/${this.parentComment['.key']}/${replyToCommentId}`
       this.$database.ref(replyToCommentRef).once('value').then((snapshot) => {
         let comment = snapshot.val()
-        _this.replyToCommentContent = comment.content
+        this.replyToCommentContent = comment.content
 
         const replyToCommentAuthorUid = comment.authorUid
-        if (replyToCommentAuthorUid !== _this.anonymousUserId) {
-          _this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
+        if (replyToCommentAuthorUid !== this.anonymousUserId) {
+          this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
             let author = snapshot.val()
             if (author && author.displayName) {
-              _this.replyToCommentAuthorUsername = author.displayName
-              _this.replyToCommentAuthorPhotoURL = author.photoURL
+              this.replyToCommentAuthorUsername = author.displayName
+              this.replyToCommentAuthorPhotoURL = author.photoURL
             }
           })
         }
@@ -330,24 +344,25 @@ export default {
     },
     objectWithDotKey (obj, key) {
       return Object.assign({}, obj, {'.key': key})
+    },
+    handleDropdownClick (name) {
+      this[name]()
+    },
+    reportCurrentComment () {
+      if (!this.user) { return }
+      this.$database.ref(`reportedComments`).push({
+        date: (new Date()).toISOString(),
+        commentId: this.isReply ? null : this.comment['.key'],
+        replyId: this.isReply ? this.comment['.key'] : null,
+        page: this.encodedPageURL,
+        byUid: this.user.uid
+      }).then(() => {
+        this.$Message.success(this.$i18next.t('message/reportCommentSucceeded'))
+      }).catch(err => {
+        this.$Message.error(this.$i18next.t('message/reportCommentFailed'))
+        console.log(err)
+      })
     }
-    // markdown (content) {
-    //   var renderer = new marked.Renderer()
-    //   marked.setOptions({
-    //     renderer: renderer,
-    //     gfm: true,
-    //     tables: true,
-    //     breaks: true,
-    //     pedantic: false,
-    //     sanitize: false,
-    //     smartLists: true,
-    //     smartypants: false,
-    //     highlight: (code) => {
-    //       return hljs.highlightAuto(code).value
-    //     }
-    //   })
-    //   return marked(content)
-    // }
   }
 }
 </script>
@@ -514,14 +529,16 @@ footer .disabled {
 
 <style>
 .wf-comment-content pre {
-  background: #f2f2f2;
-  border: 1px solid rgba(100,100,100,0.1);
+  background: #f6f8fa;
   padding: 10px 20px;
   max-height: 300px;
   
   /* 60px for avatar, 20px for padding */
   max-width: calc( 39rem - 60px - 20px);
   overflow: auto;
+}
+.wf-comment-content img {
+  max-width: 100%;
 }
 .code-overflow-hidden pre{
   overflow: hidden !important;

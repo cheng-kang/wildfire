@@ -25,7 +25,7 @@ import 'iview/dist/styles/iview.css'
 
 // import Affix from 'iview/src/components/affix'
 // import Alert from 'iview/src/components/alert'
-// import AutoComplete from 'iview/src/components/auto-complete'
+import AutoComplete from 'iview/src/components/auto-complete'
 import Avatar from 'iview/src/components/avatar'
 // import BackTop from 'iview/src/components/back-top'
 // import Badge from 'iview/src/components/badge'
@@ -57,7 +57,7 @@ import Poptip from 'iview/src/components/poptip'
 // import Slider from 'iview/src/components/slider'
 import Spin from 'iview/src/components/spin'
 // import Steps from 'iview/src/components/steps'
-// import Switch from 'iview/src/components/switch'
+import Switch from 'iview/src/components/switch'
 // import Table from 'iview/src/components/table'
 import Tabs from 'iview/src/components/tabs'
 // import Tag from 'iview/src/components/tag'
@@ -68,19 +68,24 @@ import Tooltip from 'iview/src/components/tooltip'
 // import Tree from 'iview/src/components/tree'
 // import Upload from 'iview/src/components/upload'
 import { Row, Col } from 'iview/src/components/grid'
-// import { Select, Option, OptionGroup } from 'iview/src/components/select'
+import {
+  Select,
+  // OptionGroup,
+  Option
+} from 'iview/src/components/select'
 
 const iview = {
   // Affix,
   // Alert,
-  // AutoComplete,
+  AutoComplete,
+  iAutoComplete: AutoComplete,
   Avatar,
   // BackTop,
   // Badge,
   // Breadcrumb,
   // BreadcrumbItem: Breadcrumb.Item,
-  iButton: Button,
   Button,
+  iButton: Button,
   // ButtonGroup: Button.Group,
   Card,
   iCard: Card,
@@ -121,8 +126,8 @@ const iview = {
   Modal,
   iModal: Modal,
   // Notice,
-  // Option: Option,
-  // iOption: Option,
+  Option,
+  iOption: Option,
   // OptionGroup,
   Page,
   iPage: Page,
@@ -135,15 +140,15 @@ const iview = {
   // RadioGroup: Radio.Group,
   // Rate,
   Row,
-  // Select,
-  // iSelect: Select,
+  Select,
+  iSelect: Select,
   // Slider,
   Spin,
   iSpin: Spin,
   // Step: Steps.Step,
   // Steps,
-  // // Switch,
-  // iSwitch: Switch,
+  // Switch,
+  iSwitch: Switch,
   // iTable: Table,
   // Table,
   Tabs: Tabs,

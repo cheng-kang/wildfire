@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import Bus from './bus'
 import WfHeader from './layout/WfHeader'
 import WfBody from './layout/WfBody'
 import WfFooter from './layout/WfFooter'
@@ -61,6 +62,10 @@ export default {
   created () {
     this.listenToUserAuth()
     this.listenToCommentsFromFirebase()
+    Bus.$on('CurrentUserInfoUpdated', updates => {
+      this.user.displayName = updates['/displayName']
+      this.user.photoURL = updates['/photoURL']
+    })
   },
   mounted () {
     // hide lodaing modal
