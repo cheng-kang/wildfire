@@ -107,6 +107,7 @@ i18next.init({
         'button/account': 'Account',
         'button/showLessText': 'Show less text',
         'button/showFullText': 'Show full text',
+        'button/reportThisComment': 'Report this comment',
         'switch/on': 'ON',
         'switch/off': 'OFF',
         'text/loading': 'Loading',
@@ -158,7 +159,9 @@ i18next.init({
         'message/operationNotAllowed': 'Email accounts are not enabled, please contact the admin!',
         'message/updateSuccess': 'Update success',
         'message/somethingGoesWrong': 'Oops! Something goes wrong!',
-        'message/passwordChanged': 'Password changed!'
+        'message/passwordChanged': 'Password changed!',
+        'message/reportCommentSucceeded': 'Comment reported.',
+        'message/reportCommentFailed': 'Something went wrong, please try again later.'
       }
     },
     'zh-CN': {
@@ -180,6 +183,7 @@ i18next.init({
         'button/account': '账号设置',
         'button/showLessText': '收起',
         'button/showFullText': '展开全部',
+        'button/reportThisComment': '举报此条评论',
         'switch/on': '开',
         'switch/off': '关',
         'text/loading': '加载中',
@@ -231,7 +235,9 @@ i18next.init({
         'message/operationNotAllowed': '邮箱登录被禁止，请联系站主！',
         'message/updateSuccess': '更新成功',
         'message/somethingGoesWrong': '发生了未知错误！',
-        'message/passwordChanged': '密码修改成功！'
+        'message/passwordChanged': '密码修改成功！',
+        'message/reportCommentSucceeded': '评论举报成功。',
+        'message/reportCommentFailed': '出错了，请稍后再试。'
       }
     }
   }

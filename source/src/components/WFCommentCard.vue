@@ -36,13 +36,14 @@
               </i-poptip>
             </span>
           </div>
-          <i-dropdown>
+          <i-dropdown v-if="this.user"
+            @on-click="handleDropdownClick">
             <a href="javascript:void(0)" class="drowdown-menu-button">
                 <i-icon type="arrow-down-b"></i-icon>
             </a>
             <i-dropdown-menu slot="list">
-                <i-dropdown-item>report</i-dropdown-item>
-                <i-dropdown-item>ban</i-dropdown-item>
+                <i-dropdown-item style="color: red"
+                  name="reportCurrentComment">{{$i18next.t('button/reportThisComment')}}</i-dropdown-item>
             </i-dropdown-menu>
           </i-dropdown>
         </header>
@@ -225,6 +226,9 @@ export default {
     },
     newRepliesCount () {
       return (parseInt(this.parentComment.repliesCount) || 0) - 1
+    },
+    isReply () {
+      return !!this.parentComment
     }
   },
   created () {
@@ -236,9 +240,7 @@ export default {
 
     if (!this.isPostedByAnonymousUser) {
       const authorUid = this.comment.authorUid
-      console.log(this.user)
       if (this.user && authorUid === this.user.uid) {
-        console.log('user')
         this.avatarURL = this.user.photoURL
         this.authorUsername = this.user.displayName
       } else {
@@ -360,6 +362,24 @@ export default {
         }
       })
       return marked(content)
+    },
+    handleDropdownClick (name) {
+      this[name]()
+    },
+    reportCurrentComment () {
+      if (!this.user) { return }
+      this.$database.ref(`reportedComments`).push({
+        date: (new Date()).toISOString(),
+        commentId: this.isReply ? null : this.comment['.key'],
+        replyId: this.isReply ? this.comment['.key'] : null,
+        page: this.encodedPageURL,
+        byUid: this.user.uid
+      }).then(() => {
+        this.$Message.success(this.$i18next.t('message/reportCommentSucceeded'))
+      }).catch(err => {
+        this.$Message.error(this.$i18next.t('message/reportCommentFailed'))
+        console.log(err)
+      })
     }
   }
 }
