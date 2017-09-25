@@ -47,9 +47,10 @@
           style="width:300px"
           @on-select="autoCompleteOnSelect">
           <i-option v-for="user in mentioningUserAutoComplete" :value="JSON.stringify(user)" :key="user.id">
-            <div class="mentioning-option">
+            <div class="mention-option">
               <img :src="user.photoURL">
               <span>{{ user.displayName }}</span>
+              <span>{{ user.email }}</span>
             </div>
           </i-option>
         </i-auto-complete>
@@ -97,7 +98,6 @@ export default {
         minRows: 3,
         maxRows: 10
       },
-      isSettingUpMentioning: false,
       users: [],
       isLoadingUserData: true,
       mentioningUsername: '',
@@ -302,15 +302,24 @@ img {
 .ivu-form-item {
   margin-bottom: 12px;
 }
-.mentioning-option {
+.mention-option {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-.mentioning-option img {
+.mention-option img {
   width: 18px;
   height: 18px;
   margin-right: 10px;
+}
+.mention-option span:nth-of-type(1) {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mention-option span:nth-of-type(2) {
+  margin-left: 20px;
+  font-style: italic;
 }
 </style>
 <style>

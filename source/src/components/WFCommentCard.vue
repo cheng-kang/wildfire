@@ -154,6 +154,7 @@
 </template>
 
 <script>
+import Bus from '../bus'
 import 'highlight.js/styles/googlecode.css'
 import hljs from 'highlight.js'
 import marked from 'marked'
@@ -235,16 +236,28 @@ export default {
 
     if (!this.isPostedByAnonymousUser) {
       const authorUid = this.comment.authorUid
-      // if not anomymous user, get username & avatar
-      this.$database.ref(`users/${authorUid}`).once('value').then((snapshot) => {
-        let author = snapshot.val()
-        if (!author) { return }
-        if (author.photoURL) {
-          this.avatarURL = author.photoURL
-        }
-        if (author.displayName) {
-          this.authorUsername = author.displayName
-        }
+      console.log(this.user)
+      if (this.user && authorUid === this.user.uid) {
+        console.log('user')
+        this.avatarURL = this.user.photoURL
+        this.authorUsername = this.user.displayName
+      } else {
+        // if not anomymous user and not current user, get username & avatar from DB
+        this.$database.ref(`users/${authorUid}`).once('value').then((snapshot) => {
+          let author = snapshot.val()
+          if (!author) { return }
+          if (author.photoURL) {
+            this.avatarURL = author.photoURL
+          }
+          if (author.displayName) {
+            this.authorUsername = author.displayName
+          }
+        })
+      }
+
+      Bus.$on('CurrentUserInfoUpdated', updates => {
+        this.authorUsername = updates['/displayName']
+        this.avatarURL = updates['/photoURL']
       })
     }
 
