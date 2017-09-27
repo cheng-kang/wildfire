@@ -165,7 +165,6 @@ export default {
 
       if (content.trim() !== '') {
         const aDate = new Date()
-        const author = user ? user.displayName : this.$i18next.t('text/anonymousUser')
         const authorUid = user ? user.uid : anonymousUserId
         const date = aDate.toISOString()
         const order = -1 * aDate.getTime()
@@ -177,8 +176,11 @@ export default {
         if (isReply) {
           replyToCommentId = replyToComment['.key']
         }
-        const postData = { author, authorUid, date, order, content, replyToCommentId, ip }
+        const postData = { authorUid, date, order, content, replyToCommentId, ip }
         const emptyRef = this.$database.ref(`/pages/${encodedPageURL}`).push()
+        // Note:
+        // firebase: ref.key
+        // wilddog: ref.key()
         const newKey = this.$config.database === 'firebase' ? emptyRef.key : emptyRef.key()
 
         if (rootComment) {
