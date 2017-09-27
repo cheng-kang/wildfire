@@ -194,11 +194,11 @@ export default {
     currentUserId () {
       return this.user ? this.user.uid : 'null'
     },
-    anonymousUserId () {
-      return this.$config.anonymousUserId
+    anonymousUserIdPrefix () {
+      return this.$config.anonymousUserIdPrefix
     },
     isPostedByAnonymousUser () {
-      return this.comment.authorUid === this.anonymousUserId
+      return this.comment.authorUid.indexOf(this.anonymousUserIdPrefix) !== -1
     },
     encodedPageURL () {
       return btoa(this.$config.pageURL)
@@ -212,9 +212,7 @@ export default {
         : {}
     },
     canDelete () {
-      return this.user &&
-              this.comment.authorUid !== this.$config.anonymousUserId &&
-              this.user.uid === this.comment.authorUid
+      return this.user && this.user.uid === this.comment.authorUid
     },
     showingReplies () {
       return this.isShowingLessReplies ? this.replies.slice(0, 4) : this.replies
@@ -271,7 +269,7 @@ export default {
         this.replyToCommentContent = comment.content
 
         const replyToCommentAuthorUid = comment.authorUid
-        if (replyToCommentAuthorUid !== this.anonymousUserId) {
+        if (replyToCommentAuthorUid.indexOf(this.anonymousUserIdPrefix) === -1) {
           this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
             let author = snapshot.val()
             if (author && author.displayName) {

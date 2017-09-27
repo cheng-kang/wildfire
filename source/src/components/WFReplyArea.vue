@@ -115,7 +115,7 @@ export default {
         : this.$config.defaultAvatarURL
     },
     username () {
-      return this.user.uid === this.$config.anonymousUserId
+      return this.user
               ? this.$i18next.t('text/anonymousUser')
               : this.user.displayName
     },
@@ -161,14 +161,14 @@ export default {
       this.isPosting = true
       const { content } = this.form
       const { user, users, isReply, encodedPageURL, rootComment, replyToComment } = this
-      const { anonymousUserId } = this.$config
+      const { anonymousUserIdPrefix } = this.$config
 
       if (content.trim() !== '') {
         const aDate = new Date()
-        const authorUid = user ? user.uid : anonymousUserId
+        const ip = this.$ip
+        const authorUid = user ? user.uid : (anonymousUserIdPrefix + ip)
         const date = aDate.toISOString()
         const order = -1 * aDate.getTime()
-        const ip = this.$ip
 
         let replyToCommentId = null
         let updates = {}
@@ -197,7 +197,7 @@ export default {
         this.$database.ref().update(updates)
         .then(() => {
           this.isPosting = false
-          this.$emit('finishedReplying') // When successfully post reply, hide the reply area
+          this.$emit('finishedReplying') // When successfully posted reply, hide current reply area
           this.form.content = ''
           this.$Message.success(this.$i18next.t('text/commentPosted'))
 
