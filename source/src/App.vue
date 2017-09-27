@@ -81,9 +81,10 @@ export default {
         }
         this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
           this.user = snapshot.val()
-          this.user.uid = user.uid
+          this.$set(this.user, 'uid', user.uid)
+          this.$set(this.user, 'isAdmin', false)
           this.$database.ref('admin').once('value').then(snapshot => {
-            this.user.isAdmin = snapshot.val() === this.user.email
+            this.$set(this.user, 'isAdmin', snapshot.val() === this.user.email)
           })
         })
       })
