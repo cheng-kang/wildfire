@@ -74,34 +74,35 @@ export default {
   },
   methods: {
     listenToUserAuth () {
-      const _this = this
       this.$auth.onAuthStateChanged((user) => {
         if (user === null) {
-          _this.user = null
+          this.user = null
           return
         }
-        _this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
-          _this.user = snapshot.val()
-          _this.user['uid'] = user.uid
+        this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
+          this.user = snapshot.val()
+          this.user.uid = user.uid
+          this.$database.ref('admin').once('value').then(snapshot => {
+            this.user.isAdmin = snapshot.val() === this.user.email
+          })
         })
       })
     },
     listenToCommentsFromFirebase () {
       this.commentsLoadingState = 'loading'
-      const _this = this
       const { pageURL } = this.$config
 
       this.$database.ref(`pages/${btoa(pageURL)}/commentsCount`).on('value', snapshot => {
         const count = parseInt(snapshot.val()) || 0
-        _this.pageCommentsCount = count
+        this.pageCommentsCount = count
       })
 
       this.$bindAsArray('comments', this.$database
       .ref(`pages/${btoa(pageURL)}/comments`).orderByChild('order'), () => {
-        _this.commentsLoadingState = 'failed'
-        _this.pageCommentsCount = 0
+        this.commentsLoadingState = 'failed'
+        this.pageCommentsCount = 0
       }, () => {
-        _this.commentsLoadingState = 'finished'
+        this.commentsLoadingState = 'finished'
       })
     }
   }

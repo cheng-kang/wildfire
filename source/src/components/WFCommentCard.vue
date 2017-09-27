@@ -212,7 +212,7 @@ export default {
         : {}
     },
     canDelete () {
-      return this.user && this.user.uid === this.comment.authorUid
+      return this.user && (this.user.uid === this.comment.authorUid || this.user.isAdmin)
     },
     showingReplies () {
       return this.isShowingLessReplies ? this.replies.slice(0, 4) : this.replies
