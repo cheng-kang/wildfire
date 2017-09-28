@@ -8,7 +8,7 @@
             alignItems: 'center', 
             justifyContent: 'center'
             }">
-            <i-icon type="load-c" size=18 class="spin-icon" :style="{marginRight: '5px'}"></i-icon>
+            <i-icon type="load-c" size="18" class="spin-icon" :style="{marginRight: '5px'}"></i-icon>
             <div>{{$i18next.t('text/loading')}}</div>
         </i-spin>
         <span v-else>{{discussionCount}} {{$i18next.t('button/discussions')}}</span>

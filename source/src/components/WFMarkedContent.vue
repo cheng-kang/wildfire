@@ -29,6 +29,7 @@ import 'highlight.js/styles/googlecode.css'
 import hljs from 'highlight.js'
 import marked from 'marked'
 import Vue from 'vue'
+import Bus from '../bus'
 export default {
   name: 'wf-marked-content',
   props: ['content'],
@@ -148,8 +149,8 @@ export default {
               })
             }
           },
-          showUserProp (username, email) {
-            console.log(username, email)
+          showUserInfo (email) {
+            Bus.$emit('ShowUserInfo', email)
           }
         }
       })
@@ -165,9 +166,8 @@ export default {
       render.link = (href, title, text) => {
         // [text](href "title")
         if (text.indexOf('@') === 0) {
-          const username = text.substring(1)
           const email = href
-          return `<a @click="showUserProp('${username}', '${email}')">${text}</a>`
+          return `<a @click="showUserInfo('${email}')">${text}</a>`
         } else {
           return `<a href="${href}" alt="${title}">${text}</a>`
         }

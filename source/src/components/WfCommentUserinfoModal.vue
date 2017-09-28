@@ -3,7 +3,7 @@
     <img :src="selectedCommentUserInfo.photoURL">
     <div>
       <h3>{{selectedCommentUserInfo.displayName}}</h3>
-      <p>
+      <p v-if="formattedIP">
         <span>IP:</span> {{formattedIP}}
       </p>
       <p v-if="!isAnonymousUser">
@@ -26,12 +26,13 @@ export default {
     selectedCommentUserInfo: () => Bus.$data.selectedCommentUserInfo,
     formattedIP () {
       const ip = this.selectedCommentUserInfo.ip
+      if (!ip || (ip.indexOf('unknown') !== -1)) { return null }
       const lastDotIdx = ip.lastIndexOf('.')
       const lastSec = ip.slice(lastDotIdx + 1)
       return `***.**.**.${lastSec}`
     },
     isAnonymousUser () {
-      return this.selectedCommentUserInfo.uid.indexOf(this.$config.anonymousUserIdPrefix) !== -1
+      return this.selectedCommentUserInfo.uid && this.selectedCommentUserInfo.uid.indexOf(this.$config.anonymousUserIdPrefix) !== -1
     }
   }
 }

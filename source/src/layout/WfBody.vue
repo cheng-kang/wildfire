@@ -126,7 +126,25 @@ export default {
       Bus.$data.currentReplyAreaId = id
       this.shouldShowMentionAutoComplete = true
     })
-    Bus.$on('ShowUserInfo', () => {
+    Bus.$on('ShowUserInfo', data => {
+      if (typeof data === 'object') {
+        this.$set(Bus.$data, 'selectedCommentUserInfo', data)
+      } else {
+        this.$database.ref('/users').orderByChild('email').equalTo(data).once('value', snapshot => {
+          const res = snapshot.val()
+          console.log(res)
+          if (res) {
+            const uid = Object.keys(res)[0]
+            const userByEmail = res[uid]
+            this.$set(Bus.$data, 'selectedCommentUserInfo', {
+              uid: uid,
+              displayName: userByEmail.displayName,
+              photoURL: userByEmail.photoURL,
+              email: userByEmail.email
+            })
+          }
+        })
+      }
       this.shouldShowCommentUserModal = true
     })
   },

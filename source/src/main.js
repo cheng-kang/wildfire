@@ -253,14 +253,14 @@ i18next.init({
   }
 })
 
-Vue.prototype.$ip = 'Getting IP...'
+Vue.prototype.$ip = 'unknown'
 Vue.http.get('https://api.ipify.org?format=json').then(response => {
   // get body data
   Vue.prototype.$ip = response.body.ip
 }, response => {
   // error callback
   console.log(response)
-  Vue.prototype.$ip = 'Cannot get IP'
+  Vue.prototype.$ip = 'unknown-failed'
 })
 
 /* eslint-disable no-new */

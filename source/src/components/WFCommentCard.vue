@@ -366,14 +366,13 @@ export default {
       })
     },
     showUserInfo () {
-      this.$set(Bus.$data, 'selectedCommentUserInfo', {
+      Bus.$emit('ShowUserInfo', {
         uid: this.comment.authorUid,
         displayName: this.authorUsername,
         photoURL: this.avatarURL,
         email: this.authorEmail,
         ip: this.comment.ip
       })
-      Bus.$emit('ShowUserInfo')
     }
   }
 }
