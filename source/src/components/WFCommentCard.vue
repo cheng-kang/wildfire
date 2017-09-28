@@ -549,7 +549,7 @@ footer .disabled {
   overflow: auto;
 }
 .wf-comment-content img {
-  max-width: 100%;
+  max-width: 100% !important;
 }
 .code-overflow-hidden pre{
   overflow: hidden !important;

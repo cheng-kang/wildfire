@@ -159,10 +159,10 @@ export default {
     },
     markdown (content) {
       var render = new marked.Renderer()
-      render.image = (href, title, text) => {
-        // ![text](href "title")
-        return `<div @click="showFullImage('${href}', '${title}', '${text}')" class="thumbnail" style="background-image: url(${href})" alt="${title}"> </div>`
-      }
+      // render.image = (href, title, text) => {
+      //   // ![text](href "title")
+      //   return `<div @click="showFullImage('${href}', '${title}', '${text}')" class="thumbnail" style="background-image: url(${href})" alt="${title}"> </div>`
+      // }
       render.link = (href, title, text) => {
         // [text](href "title")
         if (text.indexOf('@') === 0) {
