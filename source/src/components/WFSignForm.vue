@@ -161,6 +161,7 @@ export default {
             updates['/displayName'] = displayName
             updates['/email'] = email
             updates['/photoURL'] = photoURL
+            updates['/regDate'] = (new Date()).toISOString()
 
             this.$database.ref(`/users/${user.uid}`).update(updates)
             .then(() => {
