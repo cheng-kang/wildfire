@@ -164,7 +164,6 @@ export default {
       //   return `<div @click="showFullImage('${href}', '${title}', '${text}')" class="thumbnail" style="background-image: url(${href})" alt="${title}"> </div>`
       // }
       render.link = (href, title, text) => {
-        // [text](href "title")
         if (text.indexOf('@') === 0) {
           const email = href
           return `<a @click="showUserInfo('${email}')">${text}</a>`

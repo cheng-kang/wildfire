@@ -19,7 +19,7 @@
               : $i18next.t('text/initializedMentionAutocomplete')}}
         </span>
       </div>
-      <i-form-item>
+      <div>
           <i-button :type="isPosting ? 'ghost' : 'primary'" 
             @click="postComment" 
             :disabled="shouldDisableButton"
@@ -32,7 +32,7 @@
             @click="form.content = ''">
             {{$i18next.t('button/reset')}}
           </i-button>
-      </i-form-item>
+      </div>
     </section>
 
     <i-form-item class="float-to-right" v-else>
@@ -279,11 +279,15 @@ img {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-left: 60px;
 }
 .top-reply-area div {
   font-size: 10px;
-  margin-left: 60px;
   display: flex;
+}
+.top-reply-area .tool-bar {
+  flex: 1;
+  margin-right: 10px;
 }
 .ivu-switch-checked .ivu-switch-inner {
   left: 4px;
