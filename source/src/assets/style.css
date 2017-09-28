@@ -3,6 +3,14 @@ img.anonymous {
   -webkit-filter: grayscale(70%);
   filter: grayscale(70%);
 }
+.vertical-center-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.vertical-center-modal .ivu-modal{
+  top: 0;
+}
 /*.wf-main {
   visibility: hidden;
   opacity: 0;

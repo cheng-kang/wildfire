@@ -5,8 +5,11 @@ const Bus = new Vue({
       // Mention:
       isLoadingUserData: true,
       users: [],
-      currentReplyAreaId: null
+      currentReplyAreaId: null,
       // End
+
+      // CommentUserModal
+      selectedCommentUserInfo: {}
     }
   }})
 export default Bus

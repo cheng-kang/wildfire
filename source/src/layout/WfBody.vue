@@ -61,6 +61,13 @@
         </i-option>
       </i-auto-complete>
     </i-modal>
+    <i-modal
+      v-model="shouldShowCommentUserModal"
+      :closable="false"
+      :footer-hide="true"
+      class-name="vertical-center-modal">
+      <wf-comment-userinfo-modal></wf-comment-userinfo-modal>
+    </i-modal>
   </section>
 </template>
 
@@ -68,16 +75,18 @@
 import Bus from '../bus'
 import WfReplyArea from '../components/WFReplyArea'
 import WfCommentCard from '../components/WFCommentCard'
+import WfCommentUserinfoModal from '../components/WfCommentUserinfoModal'
 export default {
   name: 'wf-body',
-  components: { WfReplyArea, WfCommentCard },
+  components: { WfReplyArea, WfCommentCard, WfCommentUserinfoModal },
   props: ['user', 'comments', 'commentsLoadingState', 'pageCommentsCount'],
   data () {
     return {
       numberOfCommentsPerPage: 10,
       currentPage: 1,
       shouldShowMentionAutoComplete: false,
-      mentioningUsername: ''
+      mentioningUsername: '',
+      shouldShowCommentUserModal: false
     }
   },
   computed: {
@@ -116,6 +125,9 @@ export default {
     Bus.$on('ShowMentionAutoComplete', id => {
       Bus.$data.currentReplyAreaId = id
       this.shouldShowMentionAutoComplete = true
+    })
+    Bus.$on('ShowUserInfo', () => {
+      this.shouldShowCommentUserModal = true
     })
   },
   methods: {

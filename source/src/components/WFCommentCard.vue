@@ -7,7 +7,7 @@
       <div class="wf-comment-body">
         <header>
           <div class="header-content">
-            <span class="username"><a href="#">{{authorUsername}}</a></span>
+            <a class="username" @click="showUserInfo">{{authorUsername}}</a>
             <i-poptip
               v-if="comment.replyToCommentId !== undefined"
               trigger="hover"
@@ -239,6 +239,7 @@ export default {
       if (this.user && authorUid === this.user.uid) {
         this.avatarURL = this.user.photoURL
         this.authorUsername = this.user.displayName
+        this.authorEmail = this.user.email
       } else {
         // if not anomymous user and not current user, get username & avatar from DB
         this.$database.ref(`users/${authorUid}`).once('value').then((snapshot) => {
@@ -249,6 +250,9 @@ export default {
           }
           if (author.displayName) {
             this.authorUsername = author.displayName
+          }
+          if (author.email) {
+            this.authorEmail = author.email
           }
         })
       }
@@ -360,6 +364,16 @@ export default {
         this.$Message.error(this.$i18next.t('message/reportCommentFailed'))
         console.log(err)
       })
+    },
+    showUserInfo () {
+      this.$set(Bus.$data, 'selectedCommentUserInfo', {
+        uid: this.comment.authorUid,
+        displayName: this.authorUsername,
+        photoURL: this.avatarURL,
+        email: this.authorEmail,
+        ip: this.comment.ip
+      })
+      Bus.$emit('ShowUserInfo')
     }
   }
 }
@@ -441,14 +455,14 @@ export default {
   color: #656c7a;
 }
 
-.wf-comment-body header .header-content .username a {
+.wf-comment-body header .header-content a.username {
   font-size: 13px;
   font-weight: 700;
   color: rgba(40, 140, 228, 0.85);
   text-decoration: none;
 }
 
-.wf-comment-body header .header-content .username a:hover {
+.wf-comment-body header .header-content a.username:hover {
   color: #288ce4;
 }
 
