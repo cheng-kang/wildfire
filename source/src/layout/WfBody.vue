@@ -39,10 +39,33 @@
         {{$i18next.t('error/failedToLoadComments')}}
       </span>
     </p>
+    <i-modal
+      v-model="shouldShowMentionAutoComplete"
+      width="330"
+      style="text-align: center;"
+      :closable="false"
+      :footer-hide="true">
+      <i-auto-complete
+        v-model="mentioningUsername"
+        :autofocus="true"
+        icon="ios-search"
+        placeholder="input username here"
+        style="width:300px"
+        @on-select="mentionAutoCompleteOnSelect">
+        <i-option v-for="user in mentioningUserAutoComplete" :value="JSON.stringify(user)" :key="user.id">
+          <div class="mention-option">
+            <img :src="user.photoURL">
+            <span>{{ user.displayName }}</span>
+            <span>{{ user.email }}</span>
+          </div>
+        </i-option>
+      </i-auto-complete>
+    </i-modal>
   </section>
 </template>
 
 <script>
+import Bus from '../bus'
 import WfReplyArea from '../components/WFReplyArea'
 import WfCommentCard from '../components/WFCommentCard'
 export default {
@@ -66,7 +89,38 @@ export default {
           {'.key': comment['.key']}
         )
       })
+    },
+    shouldShowMentionAutoComplete () {
+      return Bus.$data.shouldShowMentionAutoComplete
+    },
+    mentioningUsername () {
+      return Bus.$data.mentioningUsername
+    },
+    mentioningUserAutoComplete () {
+      if (!this.mentioningUsername) { return [] }
+      return Bus.$data.users.filter(user => {
+        return user.displayName.toLowerCase().indexOf(this.mentioningUsername.toLowerCase()) !== -1
+      })
     }
+  },
+  created () {
+    this.$database.ref('/users').once('value').then(snapshot => {
+      const result = snapshot.val() || {}
+      Bus.$data.users = Object.keys(result).map(id => {
+        const { displayName, photoURL, email } = result[id]
+        return {
+          id,
+          displayName,
+          photoURL,
+          email
+        }
+      })
+      Bus.$data.isLoadingUserData = false
+    })
+    Bus.$on('ShowMentionAutoComplete', id => {
+      Bus.$data.currentReplyAreaId = id
+      Bus.$data.shouldShowMentionAutoComplete = true
+    })
   },
   methods: {
     objectWithDotKey (obj, key) {
@@ -74,6 +128,14 @@ export default {
     },
     pageChanged (newPage) {
       this.currentPage = newPage
+    },
+    mentionAutoCompleteOnSelect (value) {
+      Bus.$data.shouldShowMentionAutoComplete = false
+      Bus.$data.mentioningUsername = ''
+      let selectedUser = JSON.parse(value)
+      const formattedMentionText = `[@${selectedUser.displayName}](${selectedUser.email}) `
+
+      Bus.$emit('MentionAutoCompleteSelected-' + Bus.$data.currentReplyAreaId, formattedMentionText)
     }
   }
 }
@@ -93,5 +155,24 @@ ul.wf-reply-group {
 }
 .ivu-page {
   text-align: center;
+}
+.mention-option {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.mention-option img {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+}
+.mention-option span:nth-of-type(1) {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mention-option span:nth-of-type(2) {
+  margin-left: 20px;
+  font-style: italic;
 }
 </style>

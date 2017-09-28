@@ -33,28 +33,6 @@
             {{$i18next.t('button/reset')}}
           </i-button>
       </i-form-item>
-      <i-modal
-        v-model="shouldShowAutoComplete"
-        width="330"
-        style="text-align: center;"
-        :closable="false"
-        :footer-hide="true">
-        <i-auto-complete
-          v-model="mentioningUsername"
-          :autofocus="true"
-          icon="ios-search"
-          placeholder="input here"
-          style="width:300px"
-          @on-select="autoCompleteOnSelect">
-          <i-option v-for="user in mentioningUserAutoComplete" :value="JSON.stringify(user)" :key="user.id">
-            <div class="mention-option">
-              <img :src="user.photoURL">
-              <span>{{ user.displayName }}</span>
-              <span>{{ user.email }}</span>
-            </div>
-          </i-option>
-        </i-auto-complete>
-      </i-modal>
     </section>
 
     <i-form-item class="float-to-right" v-else>
@@ -76,6 +54,7 @@
 </template>
 
 <script>
+import Bus from '../bus'
 export default {
   name: 'wf-reply-area',
   props: [
@@ -99,7 +78,6 @@ export default {
         maxRows: 10
       },
       users: [],
-      isLoadingUserData: true,
       mentioningUsername: '',
       atPosition: null,
       shouldShowAutoComplete: false
@@ -135,24 +113,25 @@ export default {
     newRepliesCount () {
       return (parseInt(this.rootCommentRepliesCount) || 0) + 1
     },
-    mentioningUserAutoComplete () {
-      if (!this.mentioningUsername) { return [] }
-      return this.users.filter(user => {
-        return user.displayName.toLowerCase().indexOf(this.mentioningUsername.toLowerCase()) !== -1
-      })
-    },
     shouldDisableInput () {
       return this.isPosting || this.commentsLoadingState === 'loading'
     },
     shouldDisableButton () {
       return this.form.content.trim() === '' || this.isPosting
     },
+    isLoadingUserData () {
+      return Bus.$data.isLoadingUserData
+    },
     isMentionEnabled () {
       return !this.isLoadingUserData
     }
   },
   created () {
-    this.initMentionAutocomplete()
+    Bus.$on(`MentionAutoCompleteSelected-${this._uid}`, formattedMentionText => {
+      const content = this.form.content
+      // replace the '@' symbol with formatted text
+      this.form.content = [content.slice(0, this.atPosition - 1), formattedMentionText, content.slice(this.atPosition)].join('')
+    })
   },
   methods: {
     postComment () {
@@ -246,35 +225,12 @@ export default {
         })
       }
     },
-    initMentionAutocomplete () {
-      this.$database.ref('/users').once('value').then(snapshot => {
-        const result = snapshot.val() || {}
-        this.users = Object.keys(result).map(id => {
-          const { displayName, photoURL, email } = result[id]
-          return {
-            id,
-            displayName,
-            photoURL,
-            email
-          }
-        })
-        this.isLoadingUserData = false
-      })
-    },
     contentOnChange (e) {
+      this.shouldShowAutoComplete = true
       if (e.data === '@' && this.isMentionEnabled) {
         this.atPosition = e.target.selectionStart
-        this.mentioningUsername = ''
-        this.shouldShowAutoComplete = true
+        Bus.$emit('ShowMentionAutoComplete', this._uid)
       }
-    },
-    autoCompleteOnSelect (value) {
-      this.shouldShowAutoComplete = false
-      let user = JSON.parse(value)
-      const formattedMentionText = `[@${user.displayName}](${user.email}) `
-      const content = this.form.content
-      // replace the '@' symbol with formatted text
-      this.form.content = [content.slice(0, this.atPosition - 1), formattedMentionText, content.slice(this.atPosition)].join('')
     }
   }
 }
@@ -304,25 +260,6 @@ img {
 }
 .ivu-form-item {
   margin-bottom: 12px;
-}
-.mention-option {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.mention-option img {
-  width: 18px;
-  height: 18px;
-  margin-right: 10px;
-}
-.mention-option span:nth-of-type(1) {
-  max-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.mention-option span:nth-of-type(2) {
-  margin-left: 20px;
-  font-style: italic;
 }
 </style>
 <style>
