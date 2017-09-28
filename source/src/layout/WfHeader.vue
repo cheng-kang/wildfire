@@ -33,12 +33,20 @@
         </a>
       </div>
     </i-menu>
-    <i-modal v-model="signFormModal" :closable="false" :footer-hide="true">
+    <i-modal
+      v-model="signFormModal"
+      :closable="false"
+      :footer-hide="true"
+      class-name="vertical-center-modal">
       <div style="text-align:center">
         <wf-sign-form :init-tab="signFormInitTab"></wf-sign-form>
       </div>
     </i-modal>
-    <i-modal v-model="userSettingModal" :closable="false" :footer-hide="true">
+    <i-modal
+      v-model="userSettingModal"
+      :closable="false"
+      :footer-hide="true"
+      class-name="vertical-center-modal">
       <div style="text-align:center">
         <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
       </div>
