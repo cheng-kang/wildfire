@@ -49,7 +49,7 @@
         v-model="mentioningUsername"
         :autofocus="true"
         icon="ios-search"
-        placeholder="input username here"
+        :placeholder="$i18next.t('text/mentionAutocompletePlaceholder')"
         style="width:300px"
         @on-select="mentionAutoCompleteOnSelect">
         <i-option v-for="user in mentioningUserAutoComplete" :value="JSON.stringify(user)" :key="user.id">
@@ -75,7 +75,9 @@ export default {
   data () {
     return {
       numberOfCommentsPerPage: 10,
-      currentPage: 1
+      currentPage: 1,
+      shouldShowMentionAutoComplete: false,
+      mentioningUsername: ''
     }
   },
   computed: {
@@ -89,12 +91,6 @@ export default {
           {'.key': comment['.key']}
         )
       })
-    },
-    shouldShowMentionAutoComplete () {
-      return Bus.$data.shouldShowMentionAutoComplete
-    },
-    mentioningUsername () {
-      return Bus.$data.mentioningUsername
     },
     mentioningUserAutoComplete () {
       if (!this.mentioningUsername) { return [] }
@@ -119,7 +115,7 @@ export default {
     })
     Bus.$on('ShowMentionAutoComplete', id => {
       Bus.$data.currentReplyAreaId = id
-      Bus.$data.shouldShowMentionAutoComplete = true
+      this.shouldShowMentionAutoComplete = true
     })
   },
   methods: {
@@ -130,8 +126,8 @@ export default {
       this.currentPage = newPage
     },
     mentionAutoCompleteOnSelect (value) {
-      Bus.$data.shouldShowMentionAutoComplete = false
-      Bus.$data.mentioningUsername = ''
+      this.shouldShowMentionAutoComplete = false
+      this.mentioningUsername = ''
       let selectedUser = JSON.parse(value)
       const formattedMentionText = `[@${selectedUser.displayName}](${selectedUser.email}) `
 

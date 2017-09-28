@@ -5,9 +5,7 @@ const Bus = new Vue({
       // Mention:
       isLoadingUserData: true,
       users: [],
-      currentReplyAreaId: null,
-      shouldShowMentionAutoComplete: false,
-      mentioningUsername: ''
+      currentReplyAreaId: null
       // End
     }
   }})
