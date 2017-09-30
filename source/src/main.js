@@ -1,27 +1,27 @@
-const wildfireConfig = {
-  database: 'wilddog',
-  databaseConfig: {
-    siteId: 'wd2231595668ouosqu'
-  },
-  pageURL: 'http://chengkang.me/wildfire',
-  pageTitle: 'Wildfire Demo',
-  locale: 'zh-CN'
-}
-
 // const wildfireConfig = {
-//   database: 'firebase',
+//   database: 'wilddog',
 //   databaseConfig: {
-//     apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
-//     authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
-//     databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
-//     projectId: 'wildfirewebsite-35a4f',
-//     storageBucket: '',
-//     messagingSenderId: '911552849262'
+//     siteId: 'wd2231595668ouosqu'
 //   },
 //   pageURL: 'http://chengkang.me/wildfire',
 //   pageTitle: 'Wildfire Demo',
 //   locale: 'zh-CN'
 // }
+
+const wildfireConfig = {
+  database: 'firebase',
+  databaseConfig: {
+    apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
+    authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
+    databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
+    projectId: 'wildfirewebsite-35a4f',
+    storageBucket: '',
+    messagingSenderId: '911552849262'
+  },
+  pageURL: 'http://chengkang.me/wildfire',
+  pageTitle: 'Wildfire Demo',
+  locale: 'zh-CN'
+}
 
 const {
   database,
@@ -153,6 +153,7 @@ i18next.init({
         'error/passwordMin': 'Password should be at least 6 digits.',
         'error/invalidPhotoURL': 'Invalid Avatar URL!',
         'error/wrongPassword': 'Wrong password!',
+        'error/mentionFuncNotAuthorized': 'Sign in to enable Mention (@)',
         'message/invalidForm': 'Invalid form! Check it and try again.',
         'message/signUpSuccess': 'Signup success!',
         'message/signUpFailed': 'Signup failed, please try again!',
@@ -230,6 +231,7 @@ i18next.init({
         'error/passwordMin': '密码长度不能小于6位。',
         'error/invalidPhotoURL': '不是有效的图片地址！',
         'error/wrongPassword': '密码错误！',
+        'error/mentionFuncNotAuthorized': '登录以激活提及（@）功能',
         'message/invalidForm': '表单验证失败，请按要求填写！',
         'message/signUpSuccess': '注册成功！',
         'message/signUpFailed': '注册失败，请重试！',

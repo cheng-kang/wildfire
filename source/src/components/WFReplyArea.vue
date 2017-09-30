@@ -16,7 +16,9 @@
         <span style="color: #bbbec4">
           {{isLoadingUserData 
               ? $i18next.t('text/initializingMentionAutocomplete') 
-              : $i18next.t('text/initializedMentionAutocomplete')}}
+              : (this.user 
+                  ? $i18next.t('text/initializedMentionAutocomplete')
+                  : $i18next.t('error/mentionFuncNotAuthorized'))}}
         </span>
       </div>
       <div>
@@ -135,6 +137,7 @@ export default {
   },
   methods: {
     postComment () {
+      console.log(this.user)
       if (this.isPosting) { return }
 
       this.isPosting = true
@@ -180,6 +183,13 @@ export default {
           this.form.content = ''
           this.$Message.success(this.$i18next.t('text/commentPosted'))
 
+          //
+          // ↓Handle Mention↓
+          //
+
+          // Forbid anonymous user to use Mention
+          if (!this.user) { return }
+
           const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || []
           if (users.length !== 0) {
             mentions.forEach(mention => {
@@ -216,6 +226,7 @@ export default {
               })
             })
           }
+          // ↑End of Handle Mention↑
         })
         .catch((error) => {
           this.isPosting = false
@@ -226,6 +237,9 @@ export default {
       }
     },
     contentOnChange (e) {
+      // Forbid anonymous user to use Mention
+      if (!this.user) { return }
+
       this.shouldShowAutoComplete = true
       if (e.data === '@' && this.isMentionEnabled) {
         this.atPosition = e.target.selectionStart

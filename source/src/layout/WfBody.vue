@@ -4,6 +4,7 @@
       :user="user" 
       :commentsLoadingState="commentsLoadingState"
       :page-comments-count="pageCommentsCount"
+      style="margin-bottom: 30px;"
       :isMain="true"></wf-reply-area>
     <template v-if="comments.length !== 0">
       <ul class="wf-comment-group">
