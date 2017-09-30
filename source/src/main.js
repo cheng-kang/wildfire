@@ -1,27 +1,27 @@
-// const wildfireConfig = {
-//   database: 'wilddog',
-//   databaseConfig: {
-//     siteId: 'wd2231595668ouosqu'
-//   },
-//   pageURL: 'http://chengkang.me/wildfire',
-//   pageTitle: 'Wildfire Demo',
-//   locale: 'zh-CN'
-// }
-
 const wildfireConfig = {
-  database: 'firebase',
+  database: 'wilddog',
   databaseConfig: {
-    apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
-    authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
-    databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
-    projectId: 'wildfirewebsite-35a4f',
-    storageBucket: '',
-    messagingSenderId: '911552849262'
+    siteId: 'wd2231595668ouosqu'
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
   locale: 'zh-CN'
 }
+
+// const wildfireConfig = {
+//   database: 'firebase',
+//   databaseConfig: {
+//     apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
+//     authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
+//     databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
+//     projectId: 'wildfirewebsite-35a4f',
+//     storageBucket: '',
+//     messagingSenderId: '911552849262'
+//   },
+//   pageURL: 'http://chengkang.me/wildfire',
+//   pageTitle: 'Wildfire Demo',
+//   locale: 'zh-CN'
+// }
 
 const {
   database,

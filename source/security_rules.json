@@ -3,7 +3,7 @@
     "mention": {
       "$uid": {
         "$mentionId": {
-          ".write": "$uid == auth.uid || (!data.exists() && newData.exists())",
+          ".write": "$uid == auth.uid || (!data.exists() && newData.exists())"
         },
         ".read": "$uid == auth.uid"
       }
@@ -13,7 +13,7 @@
         "comments": {
           "$commentId": {
             "likes": {
-              ".write": "auth != null",
+              ".write": "auth != null"
             },
             "repliesCount": {
               ".write": true,
