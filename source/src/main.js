@@ -154,6 +154,7 @@ i18next.init({
         'error/invalidPhotoURL': 'Invalid Avatar URL!',
         'error/wrongPassword': 'Wrong password!',
         'error/mentionFuncNotAuthorized': 'Sign in to enable Mention (@)',
+        'error/deleteFailed': 'Failed to delete.',
         'message/invalidForm': 'Invalid form! Check it and try again.',
         'message/signUpSuccess': 'Signup success!',
         'message/signUpFailed': 'Signup failed, please try again!',
@@ -165,7 +166,8 @@ i18next.init({
         'message/somethingGoesWrong': 'Oops! Something goes wrong!',
         'message/passwordChanged': 'Password changed!',
         'message/reportCommentSucceeded': 'Comment reported.',
-        'message/reportCommentFailed': 'Something went wrong, please try again later.'
+        'message/reportCommentFailed': 'Something went wrong, please try again later.',
+        'message/deleteSucceed': 'Deleted.'
       }
     },
     'zh-CN': {
@@ -232,6 +234,7 @@ i18next.init({
         'error/invalidPhotoURL': '不是有效的图片地址！',
         'error/wrongPassword': '密码错误！',
         'error/mentionFuncNotAuthorized': '登录以激活提及（@）功能',
+        'error/deleteFailed': '删除失败。',
         'message/invalidForm': '表单验证失败，请按要求填写！',
         'message/signUpSuccess': '注册成功！',
         'message/signUpFailed': '注册失败，请重试！',
@@ -243,7 +246,8 @@ i18next.init({
         'message/somethingGoesWrong': '发生了未知错误！',
         'message/passwordChanged': '密码修改成功！',
         'message/reportCommentSucceeded': '评论举报成功。',
-        'message/reportCommentFailed': '出错了，请稍后再试。'
+        'message/reportCommentFailed': '出错了，请稍后再试。',
+        'message/deleteSucceed': '删除成功。'
       }
     }
   }

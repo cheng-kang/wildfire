@@ -334,14 +334,22 @@ export default {
         let updates = {}
         updates[`pages/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`] = null
         updates[`pages/${this.encodedPageURL}/comments/${commentKey}/repliesCount`] = this.newRepliesCount
-        this.$database.ref().update(updates)
+        this.$database.ref().update(updates).then(() => {
+          this.$Message.success(this.$i18next.t('message/deleteSucceed'))
+        }).catch(() => {
+          this.$Message.error(this.$i18next.t('message/deleteFailed'))
+        })
       } else {
         const commentKey = this.comment['.key']
         let updates = {}
         updates[`pages/${this.encodedPageURL}/replies/${commentKey}`] = null
         updates[`pages/${this.encodedPageURL}/comments/${commentKey}`] = null
         updates[`pages/${this.encodedPageURL}/commentsCount`] = this.newCommentsCount
-        this.$database.ref().update(updates)
+        this.$database.ref().update(updates).then(() => {
+          this.$Message.success(this.$i18next.t('message/deleteSucceed'))
+        }).catch(() => {
+          this.$Message.error(this.$i18next.t('message/deleteFailed'))
+        })
       }
     },
     objectWithDotKey (obj, key) {
