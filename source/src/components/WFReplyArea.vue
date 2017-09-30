@@ -137,7 +137,6 @@ export default {
   },
   methods: {
     postComment () {
-      console.log(this.user)
       if (this.isPosting) { return }
 
       this.isPosting = true
