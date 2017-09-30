@@ -1,0 +1,52 @@
+{
+  "rules": {
+    "mention": {
+      "$uid": {
+        "$mentionId": {
+          ".write": "$uid == auth.uid || (!data.exists() && newData.exists())",
+        },
+        ".read": "$uid == auth.uid"
+      }
+    },
+    "pages": {
+      "$pageURL": {
+        "comments": {
+          "$commentId": {
+            "likes": {
+              ".write": "auth != null",
+            },
+            "repliesCount": {
+              ".write": true,
+              ".validate": "newData.isNumber()"
+            },
+            ".write": "!data.exists() || (auth != null && data.child('authorUid').val() == auth.uid) || (root.child('admin').exists() && (root.child('users').child(auth.uid).child('email').val() == root.child('admin').val()))"
+          }
+        },
+        "replies": {
+          "$replyToCommentId": {
+            "$replyId": {
+              ".write": "!data.exists() || (auth != null && data.child('authorUid').val() == auth.uid) || (root.child('admin').exists() && (root.child('users').child(auth.uid).child('email').val() == root.child('admin').val()))"
+            },
+            ".write": "(auth != null && data.parent().parent().child('comments').child($replyToCommentId).child('authorUid').val() == auth.uid) || (root.child('admin').exists() && (root.child('users').child(auth.uid).child('email').val() == root.child('admin').val()))"
+          }
+        },
+        "commentsCount": {
+          ".write": true,
+          ".validate": "newData.isNumber()"
+        }
+      },
+      ".read": true
+    },
+    "users": {
+      "$uid": {
+        ".write": "$uid === auth.uid",
+        ".read": true
+      },
+      ".read": true
+    },
+    "admin": {
+      ".read": "auth != null",
+      ".write": false
+    }
+  }
+}
