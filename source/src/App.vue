@@ -21,7 +21,9 @@ import WfFooter from './layout/WfFooter'
 export default {
   name: 'wildfire',
   components: {
-    WfHeader, WfBody, WfFooter
+    WfHeader,
+    WfBody,
+    WfFooter
   },
   data () {
     return {
