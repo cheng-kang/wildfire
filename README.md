@@ -22,10 +22,16 @@ A comment service powered by Wilddog and Firebase. Wilddog is mainly for users f
 ## Current Status
 
 - [x] `Firebase` support
+- [x] `Wilddog` support
 - [x] sign in/sign out
 - [x] comment
 - [x] reply to comment
 - [x] like/dislike a comment/reply
+- [x] delete comment/reply
+- [x] Mention (@)
+- [x] `Markdown` support
+- [x] update user profile
+- [x] report
 
 ## Mind Graph
 
