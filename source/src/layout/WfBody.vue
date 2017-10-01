@@ -2,10 +2,11 @@
   <section>
     <wf-reply-area 
       :user="user" 
-      :commentsLoadingState="commentsLoadingState"
+      :comments-loading-state="commentsLoadingState"
       :page-comments-count="pageCommentsCount"
       style="margin-bottom: 30px;"
       :isMain="true"></wf-reply-area>
+
     <template v-if="comments.length !== 0">
       <ul class="wf-comment-group">
         <wf-comment-card 
@@ -23,14 +24,19 @@
         size="small"
         @on-change="pageChanged"></i-page>
     </template>
+
     <p v-else class="no-content-tip">
       <i-spin v-if="commentsLoadingState === 'loading'"
-        :defaultSlotStyle="{ 
+        :default-slot-style="{ 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center'
-          }">
-          <i-icon type="load-c" size=18 class="spin-icon" :style="{marginRight: '5px'}"></i-icon>
+        }">
+          <i-icon
+            type="load-c"
+            size="18"
+            class="spin-icon"
+            :style="{marginRight: '5px'}"></i-icon>
           <div>{{$i18next.t('text/loadingComments')}}</div>
       </i-spin>
       <span v-if="commentsLoadingState === 'finished'">
@@ -40,6 +46,7 @@
         {{$i18next.t('error/failedToLoadComments')}}
       </span>
     </p>
+
     <i-modal
       v-model="shouldShowMentionAutoComplete"
       width="330"
@@ -53,6 +60,7 @@
         :placeholder="$i18next.t('text/mentionAutocompletePlaceholder')"
         style="width:300px"
         @on-select="mentionAutoCompleteOnSelect">
+
         <i-option v-for="user in mentioningUserAutoComplete" :value="JSON.stringify(user)" :key="user.id">
           <div class="mention-option">
             <img :src="user.photoURL">
@@ -60,8 +68,10 @@
             <span>{{ user.email }}</span>
           </div>
         </i-option>
+
       </i-auto-complete>
     </i-modal>
+
     <i-modal
       v-model="shouldShowCommentUserModal"
       :closable="false"
@@ -79,24 +89,48 @@ import WfCommentCard from '../components/WFCommentCard'
 import WfCommentUserinfoModal from '../components/WfCommentUserinfoModal'
 export default {
   name: 'wf-body',
-  components: { WfReplyArea, WfCommentCard, WfCommentUserinfoModal },
-  props: ['user', 'comments', 'commentsLoadingState', 'pageCommentsCount'],
+  components: {
+    WfReplyArea,
+    WfCommentCard,
+    WfCommentUserinfoModal
+  },
+  props: [
+    'user',
+    'comments',
+    'commentsLoadingState',
+    'pageCommentsCount'
+  ],
   data () {
     return {
       numberOfCommentsPerPage: 10,
       currentPage: 1,
+      /*
+        Mention
+       */
       shouldShowMentionAutoComplete: false,
       mentioningUsername: '',
+      /*
+        End of: Mention
+       */
+      /*
+        Comment User Modal
+       */
       shouldShowCommentUserModal: false
+      /*
+        End of: Comment User Modal
+       */
     }
   },
   computed: {
     currentPageComments () {
-      return this.comments.slice((this.currentPage - 1) * this.numberOfCommentsPerPage, this.currentPage * this.numberOfCommentsPerPage)
+      const start = (this.currentPage - 1) * this.numberOfCommentsPerPage
+      const end = this.currentPage * this.numberOfCommentsPerPage
+      return this.comments.slice(start, end)
     },
     currentPageCommentsWithDotKey () {
       return this.currentPageComments.map((comment) => {
-        return Object.assign({replies: {}},
+        return Object.assign(
+          {replies: {}},
           comment,
           {'.key': comment['.key']}
         )
@@ -105,11 +139,16 @@ export default {
     mentioningUserAutoComplete () {
       if (!this.mentioningUsername) { return [] }
       return Bus.$data.users.filter(user => {
-        return user.displayName.toLowerCase().indexOf(this.mentioningUsername.toLowerCase()) !== -1
+        const usernameLC = user.displayName.toLowerCase()
+        const mentioningUsernameLC = this.mentioningUsername.toLowerCase()
+        return usernameLC.indexOf(mentioningUsernameLC) !== -1
       })
     }
   },
   created () {
+    /*
+      Format users data for Mention auto complete
+     */
     this.$database.ref('/users').once('value').then(snapshot => {
       const result = snapshot.val() || {}
       Bus.$data.users = Object.keys(result).map(id => {
@@ -123,17 +162,32 @@ export default {
       })
       Bus.$data.isLoadingUserData = false
     })
+
+    /*
+      `ShowMentionAutoComplete` event observer
+      Note: shows Mention auto complete modal when needed.
+            It saves the uid of the current active reply
+            area for later use (to specify reciever of
+            `MentionAutoCompleteSelected-${id}` event)
+     */
     Bus.$on('ShowMentionAutoComplete', id => {
       Bus.$data.currentReplyAreaId = id
       this.shouldShowMentionAutoComplete = true
     })
+
+    /*
+      `ShowUserInfo` event observer
+      Note: shows user info modal which displays selected
+            user information. If the param type is not `object`,
+            retrieve user data with the passed param (which
+            should be the email of the user).
+     */
     Bus.$on('ShowUserInfo', data => {
       if (typeof data === 'object') {
         this.$set(Bus.$data, 'selectedCommentUserInfo', data)
       } else {
         this.$database.ref('/users').orderByChild('email').equalTo(data).once('value', snapshot => {
           const res = snapshot.val()
-          console.log(res)
           if (res) {
             const uid = Object.keys(res)[0]
             const userByEmail = res[uid]
@@ -162,6 +216,11 @@ export default {
       let selectedUser = JSON.parse(value)
       const formattedMentionText = `[@${selectedUser.displayName}](${selectedUser.email}) `
 
+      /*
+        Broadcast auto complete selection
+        Note: a uid suffix is included in the event
+              name to specify the reciever.
+       */
       Bus.$emit('MentionAutoCompleteSelected-' + Bus.$data.currentReplyAreaId, formattedMentionText)
     }
   }

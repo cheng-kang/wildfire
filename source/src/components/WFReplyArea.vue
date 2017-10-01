@@ -1,13 +1,15 @@
 <template>
-  <i-form :model="form" :label-width="60" :class="{ 'wf-reply': isReply }">
+  <i-form :model="form"
+    :label-width="60"
+    :class="{ 'wf-reply': isReply }">
     <i-form-item class="no-bottom-margin">
-      <img :src="avatarURL" slot="label" :class="{ anonymous: user === null }">
+      <img slot="label" :src="avatarURL" :class="{ anonymous: user === null }">
       <i-input
         v-model="form.content"
         type="textarea"
         @on-click="postComment"
         @on-change="contentOnChange"
-        :autosize="textareaAutoresize"
+        :autosize="{ minRows: 3, maxRows: 10 }"
         :placeholder="placeholder"
         :disabled="shouldDisableInput"></i-input>
     </i-form-item>
@@ -75,14 +77,16 @@ export default {
       form: {
         content: ''
       },
-      textareaAutoresize: {
-        minRows: 3,
-        maxRows: 10
-      },
       users: [],
+      /*
+        Mention
+       */
       mentioningUsername: '',
       atPosition: null,
       shouldShowAutoComplete: false
+      /*
+        End of: Mention
+       */
     }
   },
   computed: {
@@ -129,6 +133,10 @@ export default {
     }
   },
   created () {
+    /*
+      `MentionAutoCompleteSelected` event observer
+      Note: update current reply area when recieves the event.
+     */
     Bus.$on(`MentionAutoCompleteSelected-${this._uid}`, formattedMentionText => {
       const content = this.form.content
       // replace the '@' symbol with formatted text
@@ -159,10 +167,14 @@ export default {
         }
         const postData = { authorUid, date, order, content, replyToCommentId, ip }
         const emptyRef = this.$database.ref(`/pages/${encodedPageURL}`).push()
-        // Note:
-        // firebase: ref.key
-        // wilddog: ref.key()
-        const newKey = this.$config.database === 'firebase' ? emptyRef.key : emptyRef.key()
+
+        /*
+          There is a difference between `firebase` and `wilddog`
+          Note:
+            - firebase: ref.key
+            - wilddog: ref.key()
+         */
+        const newKey = this.$config.databaseProvider === 'firebase' ? emptyRef.key : emptyRef.key()
 
         if (rootComment) {
           updates[`/pages/${encodedPageURL}/replies/${rootComment['.key']}/${newKey}`] = postData
@@ -182,10 +194,9 @@ export default {
           this.form.content = ''
           this.$Message.success(this.$i18next.t('text/commentPosted'))
 
-          //
-          // ↓Handle Mention↓
-          //
-
+          /*
+            Handle Mention
+           */
           // Forbid anonymous user to use Mention
           if (!this.user) { return }
 
@@ -225,7 +236,9 @@ export default {
               })
             })
           }
-          // ↑End of Handle Mention↑
+          /*
+            End of: Handle Mention
+           */
         })
         .catch((error) => {
           this.isPosting = false

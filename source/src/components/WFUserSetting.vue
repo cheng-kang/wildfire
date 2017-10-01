@@ -73,6 +73,8 @@
 
 <script>
 import Bus from '../bus'
+import firebase from 'firebase'
+import wilddog from 'wilddog'
 export default {
   name: 'wf-user-setting',
   props: ['user'],
@@ -80,7 +82,10 @@ export default {
     const _this = this
     const validateOldPassword = (rule, value, callback) => {
       this.passwordTesting = true
-      const credential = this.$package.auth.EmailAuthProvider.credential(this.user.email, value)
+      let authService = this.$config.databaseProvider === 'firebase'
+                      ? firebase.auth.EmailAuthProvider.credential
+                      : wilddog.auth.WilddogAuthProvider.emailCredential
+      const credential = authService(this.user.email, value)
       if (typeof (this.$auth.currentUser.reauthenticate) === 'function') {
         this.$auth.currentUser.reauthenticate(credential)
         .then(() => {
@@ -212,7 +217,6 @@ export default {
           const password = this.accountForm.newPassword
           this.$auth.currentUser.updatePassword(password).then(() => {
             this.sendingAccount = false
-            console.log(this.user.email, 'Password changed!')
             this.$refs['accountForm'].resetFields()
             this.$Message.info(this.$i18next.t('message/passwordChanged'))
           }).catch((error) => {
@@ -238,6 +242,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .form-warp{
   height: 100%;

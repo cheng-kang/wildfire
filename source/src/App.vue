@@ -25,12 +25,10 @@ export default {
   },
   data () {
     return {
-      isLoaded: false,
       commentsLoadingState: 'prepare',
       user: null,
       pageCommentsCount: 0,
       comments: [],
-      numberOfCommentsPerPage: 10,
       discussionCount: 0
     }
   },
@@ -46,11 +44,8 @@ export default {
     }
   },
   watch: {
-    pageCommentsCount (newValue) {
-      this.discussionCount = newValue + this.comments.reduce((sum, { repliesCount }) => {
-        sum += repliesCount || 0
-        return sum
-      }, 0)
+    pageCommentsCount (newValue, oldValue) {
+      this.discussionCount = this.discussionCount - oldValue + newValue
     },
     comments (newValue) {
       this.discussionCount = this.pageCommentsCount + newValue.reduce((sum, { repliesCount }) => {
@@ -60,8 +55,15 @@ export default {
     }
   },
   created () {
-    this.listenToUserAuth()
+    this.listenToAuthStateChange()
     this.listenToCommentsFromFirebase()
+
+    /*
+      `CurrentUserInfoUpdated` event observer
+      Note: this observer watches user profile updates
+            and change accordingly. The change here will
+            affect all child components.
+     */
     Bus.$on('CurrentUserInfoUpdated', updates => {
       this.user.displayName = updates['/displayName']
       this.user.photoURL = updates['/photoURL']
@@ -69,19 +71,27 @@ export default {
   },
   mounted () {
     // hide lodaing modal
-    this.isLoaded = true
     // document.getElementById('wf-loading-modal').style.display = 'none'
   },
   methods: {
-    listenToUserAuth () {
+    /*
+      Auth state observer
+      Note: when auth state is changed, `this.user` is updated
+            accordingly. If a user signs in, it retrieves user
+            data from database (different from the auth `user`
+            object).
+     */
+    listenToAuthStateChange () {
       this.$auth.onAuthStateChanged((user) => {
-        if (user === null) {
+        if (!user) {
           this.user = null
           return
         }
         this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
           this.user = snapshot.val()
           this.$set(this.user, 'uid', user.uid)
+
+          // Check if the current user is admin
           this.$set(this.user, 'isAdmin', false)
           this.$database.ref('admin').once('value').then(snapshot => {
             this.$set(this.user, 'isAdmin', snapshot.val() === this.user.email)
@@ -89,6 +99,12 @@ export default {
         })
       })
     },
+    /*
+      Comments observer
+      Note: this keeps the comments up-to-realtime. It also
+            watches `commentsCount` node in order to get the
+            correct discussion count.
+     */
     listenToCommentsFromFirebase () {
       this.commentsLoadingState = 'loading'
       const { pageURL } = this.$config

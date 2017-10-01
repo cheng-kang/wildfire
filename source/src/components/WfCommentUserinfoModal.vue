@@ -3,8 +3,8 @@
     <img :src="selectedCommentUserInfo.photoURL">
     <div>
       <h3>{{selectedCommentUserInfo.displayName}}</h3>
-      <p v-if="formattedIP">
-        <span>IP:</span> {{formattedIP}}
+      <p v-if="encodedIP">
+        <span>IP:</span> {{encodedIP}}
       </p>
       <p v-if="!isAnonymousUser">
         <span>Email:</span> {{selectedCommentUserInfo.email}}
@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     selectedCommentUserInfo: () => Bus.$data.selectedCommentUserInfo,
-    formattedIP () {
+    encodedIP () {
       const ip = this.selectedCommentUserInfo.ip
       if (!ip || (ip.indexOf('unknown') !== -1)) { return null }
       const lastDotIdx = ip.lastIndexOf('.')

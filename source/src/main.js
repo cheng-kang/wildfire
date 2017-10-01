@@ -1,5 +1,23 @@
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import wilddog from 'wilddog'
+import VueWild from 'vuewild'
+import firebase from 'firebase'
+import VueFire from 'vuefire'
+import moment from 'moment'
+import i18next from 'i18next'
+import iView from './loadiView'
+import App from './App'
+import './assets/style.css'
+
+// ↓Should be `false` in production
+Vue.config.productionTip = true
+
+/*
+  Testing configs
+ */
 const wildfireConfig = {
-  database: 'wilddog',
+  databaseProvider: 'wilddog',
   databaseConfig: {
     siteId: 'wd2231595668ouosqu'
   },
@@ -9,7 +27,7 @@ const wildfireConfig = {
 }
 
 // const wildfireConfig = {
-//   database: 'firebase',
+//   databaseProvider: 'firebase',
 //   databaseConfig: {
 //     apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
 //     authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
@@ -24,16 +42,27 @@ const wildfireConfig = {
 // }
 
 const {
-  database,
+  databaseProvider,
   databaseConfig, // required
   pageTitle = document.title,
   pageURL = window.location.href,
   locale = 'en'
-// } = window.wildfireConfig
 } = wildfireConfig
+/*
+  End of: Testing configs
+ */
+
+// Init configs from global configuration object
+// const {
+//   databaseProvider,
+//   databaseConfig, // required
+//   pageTitle = document.title,
+//   pageURL = window.location.href,
+//   locale = 'en'
+// } = window.wildfireConfig
 
 Vue.prototype.$config = {
-  database,
+  databaseProvider,
   databaseConfig,
   pageTitle,
   pageURL,
@@ -41,32 +70,13 @@ Vue.prototype.$config = {
   defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
   anonymousUserIdPrefix: 'ANON:'
 }
-
-import Vue from 'vue'
-import VueResource from 'vue-resource'
-import wilddog from 'wilddog'
-import VueWild from 'vuewild'
-import firebase from 'firebase'
-import VueFire from 'vuefire'
-import moment from 'moment'
-import i18next from 'i18next'
-import App from './App'
-import './assets/style.css'
-
-Vue.config.productionTip = true
-Vue.use(VueResource)
 Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment
 
-// Moved all iview injection into ./loadiView.js
-// You can choose the component you want to use in that file.
-import iView from './loadiView'
+Vue.use(VueResource)
 Vue.use(iView)
 
-// import highlight from './highlight.js'
-// Vue.use(highlight)
-
-if (database === 'wilddog') {
+if (databaseProvider === 'wilddog') {
   Vue.use(VueWild)
   Vue.prototype.$app = wilddog.initializeApp({
     authDomain: `${databaseConfig.siteId}.wilddog.com`,
@@ -74,17 +84,34 @@ if (database === 'wilddog') {
   })
   Vue.prototype.$database = Vue.prototype.$app.sync()
   Vue.prototype.$auth = Vue.prototype.$app.auth()
-  Vue.prototype.$package = wilddog
-} else if (database === 'firebase') {
+} else if (databaseProvider === 'firebase') {
   Vue.use(VueFire)
   Vue.prototype.$app = firebase.initializeApp(databaseConfig)
   Vue.prototype.$database = Vue.prototype.$app.database()
   Vue.prototype.$auth = Vue.prototype.$app.auth()
-  Vue.prototype.$package = firebase
 }
 
+/*
+  Get current client IP address
+ */
+Vue.prototype.$ip = 'unknown'
+Vue.http.get('https://api.ipify.org?format=json').then(response => {
+  Vue.prototype.$ip = response.body.ip
+}, response => {
+  // error callback
+  console.log(response)
+  Vue.prototype.$ip = 'unknown-failed'
+})
+
+/*
+  Init moment.js locale
+    note: the locale string should be lowercase
+ */
 moment.locale(locale.toLowerCase())
 
+/*
+  Init i18next for internationalization
+ */
 i18next.init({
   lng: locale,
   fallbackLng: 'en',
@@ -259,16 +286,10 @@ i18next.init({
   }
 })
 
-Vue.prototype.$ip = 'unknown'
-Vue.http.get('https://api.ipify.org?format=json').then(response => {
-  // get body data
-  Vue.prototype.$ip = response.body.ip
-}, response => {
-  // error callback
-  console.log(response)
-  Vue.prototype.$ip = 'unknown-failed'
-})
-
+/*
+  Init Wildfire Application
+    note: should disable eslint `no-new`
+ */
 /* eslint-disable no-new */
 new Vue({
   el: '#wildfire',

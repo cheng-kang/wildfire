@@ -1,18 +1,32 @@
 <template>
   <header>
-    <i-menu ref="statusMenu" mode="horizontal" theme="light" active-name="1" >
+    <i-menu
+      ref="statusMenu"
+      mode="horizontal"
+      theme="light"
+      active-name="1" >
       <i-menu-item name="1">
         <i-spin v-if="commentsLoadingState === 'loading'"
-          :defaultSlotStyle="{ 
+          :default-slot-style="{ 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center'
-            }">
-            <i-icon type="load-c" size="18" class="spin-icon" :style="{marginRight: '5px'}"></i-icon>
-            <div>{{$i18next.t('text/loading')}}</div>
+          }">
+          <i-icon
+            type="load-c"
+            size="18"
+            class="spin-icon"
+            :style="{marginRight: '5px'}"></i-icon>
+          <div>
+            {{$i18next.t('text/loading')}}
+          </div>
         </i-spin>
-        <span v-else>{{discussionCount}} {{$i18next.t('button/discussions')}}</span>
+
+        <span v-else>
+          {{discussionCount}} {{$i18next.t('button/discussions')}}
+        </span>
       </i-menu-item>
+
       <a class="wf-nav-username" @click="showUserSettingModal">
         {{username}}
       </a>
@@ -27,12 +41,12 @@
           </a>
         </template>
 
-        <a v-else
-          @click="signOut">
+        <a v-else @click="signOut">
           {{$i18next.t('button/signOut')}}
         </a>
       </div>
     </i-menu>
+
     <i-modal
       v-model="signFormModal"
       :closable="false"
@@ -42,6 +56,7 @@
         <wf-sign-form :init-tab="signFormInitTab"></wf-sign-form>
       </div>
     </i-modal>
+
     <i-modal
       v-model="userSettingModal"
       :closable="false"
@@ -55,14 +70,20 @@
 </template>
 
 <script>
-import Bus from '../bus'
 import WfSignForm from '../components/WfSignForm'
 import WfUserSetting from '../components/WfUserSetting'
 
 export default {
   name: 'wf-header',
-  props: ['user', 'discussionCount', 'commentsLoadingState'],
-  components: { WfSignForm, WfUserSetting },
+  props: [
+    'user',
+    'discussionCount',
+    'commentsLoadingState'
+  ],
+  components: {
+    WfSignForm,
+    WfUserSetting
+  },
   data () {
     return {
       signFormModal: false,
@@ -77,20 +98,7 @@ export default {
       : this.$i18next.t('text/anonymousUser')
     }
   },
-  created () {
-    Bus.$on('CurrentUserInfoUpdated', updates => {
-      this.user.displayName = updates['/displayName']
-      this.user.photoURL = updates['/photoURL']
-    })
-  },
   methods: {
-    signUp () {
-      this.$Modal.confirm({
-        render: (h) => {
-          return h('wf-sign-up-form')
-        }
-      })
-    },
     signOut () {
       this.$Modal.confirm({
         title: this.$i18next.t('text/signOutTitle'),
@@ -137,13 +145,5 @@ header {
   display: inline-block;
   padding:0 20px;
   margin:0 20px;
-/*  max-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;*/
-}
-</style>
-<style>
-.ivu-spin-text div {
-  display: inline-block;
 }
 </style>

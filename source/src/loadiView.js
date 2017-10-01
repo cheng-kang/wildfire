@@ -63,11 +63,11 @@ import Tabs from 'iview/src/components/tabs'
 // import Tag from 'iview/src/components/tag'
 // import Timeline from 'iview/src/components/timeline'
 // import TimePicker from 'iview/src/components/time-picker'
-import Tooltip from 'iview/src/components/tooltip'
+// import Tooltip from 'iview/src/components/tooltip'
 // import Transfer from 'iview/src/components/transfer'
 // import Tree from 'iview/src/components/tree'
 // import Upload from 'iview/src/components/upload'
-import { Row, Col } from 'iview/src/components/grid'
+// import { Row, Col } from 'iview/src/components/grid'
 import {
   Select,
   // OptionGroup,
@@ -80,6 +80,7 @@ const iview = {
   AutoComplete,
   iAutoComplete: AutoComplete,
   Avatar,
+  iAvatar: Avatar,
   // BackTop,
   // Badge,
   // Breadcrumb,
@@ -95,7 +96,7 @@ const iview = {
   // Checkbox,
   // CheckboxGroup: Checkbox.Group,
   // iCircle: Circle,
-  Col,
+  // Col,
   // iCol: Col,
   // Collapse,
   // ColorPicker,
@@ -139,7 +140,7 @@ const iview = {
   // Radio,
   // RadioGroup: Radio.Group,
   // Rate,
-  Row,
+  // Row,
   Select,
   iSelect: Select,
   // Slider,
@@ -154,12 +155,12 @@ const iview = {
   Tabs: Tabs,
   TabPane: Tabs.Pane,
   iTabs: Tabs,
-  iTabPane: Tabs.Pane,
+  iTabPane: Tabs.Pane
   // Tag,
   // Timeline,
   // TimelineItem: Timeline.Item,
   // TimePicker,
-  Tooltip
+  // Tooltip
   // Transfer,
   // Tree,
   // Upload

@@ -5,17 +5,16 @@
       <img src="http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/add-button.svg">
       {{$i18next.t('text/add_wildfire_to_your_site')}}
     </a>
-    <img class="wf-logo" src="http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/wildfire-logo.svg" title="Wildfire - Provided by Lahk">
+    <img
+      class="wf-logo"
+      src="http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/wildfire-logo.svg"
+      title="Wildfire - Provided by Lahk">
   </footer>
 </template>
 
 <script>
 export default {
-  name: 'wf-footer',
-  data () {
-    return {
-    }
-  }
+  name: 'wf-footer'
 }
 </script>
 
@@ -30,13 +29,11 @@ footer {
   color: #656c7a;
   font-weight: 500;
 }
-
 a {
   display: flex;
   align-items: center;
   font-size: 12px;
 }
-
 img {
   width: 18px;
   height: 18px;

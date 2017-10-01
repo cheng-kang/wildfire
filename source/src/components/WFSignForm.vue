@@ -1,16 +1,3 @@
-<style scoped>
-.form-warp{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 10px 50px 30px 50px
-}
-.form-itme-button button{
-  margin: 0 10px;
-  width: 25%;
-}
-</style>
 <template> 
   <i-tabs :value="initTab">
         <i-tab-pane :label="$i18next.t('button/signUp')" name="signUp" :disabled="loadingSignIn">
@@ -207,3 +194,17 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.form-warp{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 50px 30px 50px
+}
+.form-itme-button button{
+  margin: 0 10px;
+  width: 25%;
+}
+</style>
