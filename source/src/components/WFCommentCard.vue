@@ -30,7 +30,7 @@
                 </span>
               </div>
               <div slot="content" v-else>
-                {{$i18next.t('text/loadingCommentContent')}}
+                {{$t('text/loadingCommentContent')}}
               </div>
             </i-poptip>
             <span class="meta">
@@ -50,7 +50,7 @@
             <i-dropdown-menu slot="list">
               <i-dropdown-item style="color: red"
                 name="reportCurrentComment">
-                {{$i18next.t('button/reportThisComment')}}
+                {{$t('button/reportThisComment')}}
               </i-dropdown-item>
             </i-dropdown-menu>
           </i-dropdown>
@@ -67,11 +67,11 @@
             long>
             <template v-if="isShowingFullText">
               <i-icon type="chevron-up"></i-icon>
-              {{$i18next.t('button/showLessText')}}
+              {{$t('button/showLessText')}}
             </template>
             <template v-else>
               <i-icon type="chevron-down"></i-icon>
-              {{$i18next.t('button/showFullText')}}
+              {{$t('button/showFullText')}}
             </template>
           </i-button>
         </div>
@@ -100,15 +100,15 @@
             class="wf-reply-button"
             @click="isReplying = !isReplying"
             v-if="commentsLoadingState === 'finished'">
-            {{isReplying ? $i18next.t('button/hide') : $i18next.t('button/reply')}}
+            {{isReplying ? $t('button/hide') : $t('button/reply')}}
           </i-button>
           <i-poptip
             confirm
-            :title="$i18next.t('text/areYouSureToDeleteThisComment')"
+            :title="$t('text/areYouSureToDeleteThisComment')"
             @on-ok="confirmDelete">
             <i-button type="text" class="wf-delete-button"
               v-if="canDelete">
-              {{$i18next.t('button/delete')}}
+              {{$t('button/delete')}}
             </i-button>
           </i-poptip>
         </footer>
@@ -149,11 +149,11 @@
           long>
           <template v-if="isShowingLessReplies">
             <i-icon type="chevron-down"></i-icon>
-            {{$i18next.t('text/showMoreDiscussion')}}
+            {{$t('text/showMoreDiscussion')}}
           </template>
           <template v-else>
             <i-icon type="chevron-up"></i-icon>
-            {{$i18next.t('text/showLessDiscussion')}}
+            {{$t('text/showLessDiscussion')}}
           </template>
         </i-button>
       </ul>
@@ -263,9 +263,9 @@ export default {
   },
   created () {
     // Init user info as anonymous user
-    this.author.displayName = this.$i18next.t('text/anonymousUser')
+    this.author.displayName = this.$t('text/anonymousUser')
     this.author.photoURL = this.$config.defaultAvatarURL
-    this.replyToComment.author.displayName = this.$i18next.t('text/anonymousUser')
+    this.replyToComment.author.displayName = this.$t('text/anonymousUser')
     this.replyToComment.author.photoURL = this.$config.defaultAvatarURL
 
     if (!this.isPostedByAnonymousUser) {
@@ -411,9 +411,9 @@ export default {
         updates[`pages/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`] = null
         updates[`pages/${this.encodedPageURL}/comments/${commentKey}/repliesCount`] = this.newRepliesCount
         this.$database.ref().update(updates).then(() => {
-          this.$Message.success(this.$i18next.t('message/deleteSucceed'))
+          this.$Message.success(this.$t('message/deleteSucceed'))
         }).catch(() => {
-          this.$Message.error(this.$i18next.t('message/deleteFailed'))
+          this.$Message.error(this.$t('message/deleteFailed'))
         })
       } else {
         const commentKey = this.comment['.key']
@@ -422,9 +422,9 @@ export default {
         updates[`pages/${this.encodedPageURL}/comments/${commentKey}`] = null
         updates[`pages/${this.encodedPageURL}/commentsCount`] = this.newCommentsCount
         this.$database.ref().update(updates).then(() => {
-          this.$Message.success(this.$i18next.t('message/deleteSucceed'))
+          this.$Message.success(this.$t('message/deleteSucceed'))
         }).catch(() => {
-          this.$Message.error(this.$i18next.t('message/deleteFailed'))
+          this.$Message.error(this.$t('message/deleteFailed'))
         })
       }
     },
@@ -440,9 +440,9 @@ export default {
         page: this.encodedPageURL,
         byUid: this.user.uid
       }).then(() => {
-        this.$Message.success(this.$i18next.t('message/reportCommentSucceeded'))
+        this.$Message.success(this.$t('message/reportCommentSucceeded'))
       }).catch(err => {
-        this.$Message.error(this.$i18next.t('message/reportCommentFailed'))
+        this.$Message.error(this.$t('message/reportCommentFailed'))
         console.log(err)
       })
     },
