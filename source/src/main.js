@@ -16,15 +16,15 @@ Vue.config.productionTip = true
 /*
   Testing configs
  */
-// const wildfireConfig = {
-//   databaseProvider: 'wilddog',
-//   databaseConfig: {
-//     siteId: 'wd2231595668ouosqu'
-//   },
-//   pageURL: 'http://chengkang.me/wildfire',
-//   pageTitle: 'Wildfire Demo',
-//   locale: 'zh-CN'
-// }
+const wildfireConfig = {
+  databaseProvider: 'wilddog',
+  databaseConfig: {
+    siteId: 'wd2231595668ouosqu'
+  },
+  pageURL: 'http://chengkang.me/wildfire',
+  pageTitle: 'Wildfire Demo',
+  locale: 'zh-CN'
+}
 
 // const wildfireConfig = {
 //   databaseProvider: 'firebase',
@@ -41,25 +41,25 @@ Vue.config.productionTip = true
 //   locale: 'zh-CN'
 // }
 
-// const {
-//   databaseProvider,
-//   databaseConfig, // required
-//   pageTitle = document.title,
-//   pageURL = window.location.href,
-//   locale = 'en'
-// } = wildfireConfig
-/*
-  End of: Testing configs
- */
-
-// Init configs from global configuration object
 const {
   databaseProvider,
   databaseConfig, // required
   pageTitle = document.title,
   pageURL = window.location.href,
   locale = 'en'
-} = window.wildfireConfig()
+} = wildfireConfig
+/*
+  End of: Testing configs
+ */
+
+// Init configs from global configuration object
+// const {
+//   databaseProvider,
+//   databaseConfig, // required
+//   pageTitle = document.title,
+//   pageURL = window.location.href,
+//   locale = 'en'
+// } = window.wildfireConfig()
 
 Vue.prototype.$config = {
   databaseProvider,
@@ -70,7 +70,7 @@ Vue.prototype.$config = {
   defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
   anonymousUserIdPrefix: 'ANON:'
 }
-Vue.prototype.$t = i18next.t
+Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment
 
 Vue.use(VueResource)

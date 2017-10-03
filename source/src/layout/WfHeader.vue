@@ -18,12 +18,12 @@
             class="spin-icon"
             :style="{marginRight: '5px'}"></i-icon>
           <div>
-            {{$t('text/loading')}}
+            {{$i18next.t('text/loading')}}
           </div>
         </i-spin>
 
         <span v-else>
-          {{discussionCount}} {{$t('button/discussions')}}
+          {{discussionCount}} {{$i18next.t('button/discussions')}}
         </span>
       </i-menu-item>
 
@@ -33,16 +33,16 @@
       <div class="wf-nav-right">
         <template v-if="!user" >
           <a @click="showSignFormModal('signUp')">
-            {{$t('button/signUp')}}
+            {{$i18next.t('button/signUp')}}
           </a>
           /
           <a @click="showSignFormModal('signIn')">
-            {{$t('button/signIn')}}
+            {{$i18next.t('button/signIn')}}
           </a>
         </template>
 
         <a v-else @click="signOut">
-          {{$t('button/signOut')}}
+          {{$i18next.t('button/signOut')}}
         </a>
       </div>
     </i-menu>
@@ -95,16 +95,16 @@ export default {
     username () {
       return this.user
       ? this.user.displayName
-      : this.$t('text/anonymousUser')
+      : this.$i18next.t('text/anonymousUser')
     }
   },
   methods: {
     signOut () {
       this.$Modal.confirm({
-        title: this.$t('text/signOutTitle'),
-        content: `<p> ${this.$t('text/signOutConfirmText')} </p>`,
-        okText: this.$t('text/confirm'),
-        cancelText: this.$t('button/cancel'),
+        title: this.$i18next.t('text/signOutTitle'),
+        content: `<p> ${this.$i18next.t('text/signOutConfirmText')} </p>`,
+        okText: this.$i18next.t('text/confirm'),
+        cancelText: this.$i18next.t('button/cancel'),
         onOk: () => {
           this.$auth.signOut().then(() => {
             console.log('User Sign Out.')
@@ -124,9 +124,9 @@ export default {
         this.userSettingModal = true
       } else {
         this.$Modal.warning({
-          title: this.$t('text/pleaseSignIn'),
-          content: this.$t('text/unSignInWarning'),
-          okText: this.$t('text/confirm')
+          title: this.$i18next.t('text/pleaseSignIn'),
+          content: this.$i18next.t('text/unSignInWarning'),
+          okText: this.$i18next.t('text/confirm')
         })
       }
     }
