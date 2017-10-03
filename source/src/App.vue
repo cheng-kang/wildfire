@@ -73,7 +73,7 @@ export default {
   },
   mounted () {
     // hide lodaing modal
-    // document.getElementById('wf-loading-modal').style.display = 'none'
+    document.getElementById('wf-loading-modal').style.display = 'none'
   },
   methods: {
     /*

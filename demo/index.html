@@ -7,23 +7,16 @@
 </head>
 <body>
   <div class="wildfire_thread"></div>
-  <div id="wild-fire"></div>
   <script type="text/javascript">
-    var wildfireConfig = {
-      database: 'firebase',
+    var wildfireConfig = () => ({
+      databaseProvider: 'wilddog',
       databaseConfig: {
-        apiKey: "AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs",
-        authDomain: "wildfirewebsite-35a4f.firebaseapp.com",
-        databaseURL: "https://wildfirewebsite-35a4f.firebaseio.com",
-        projectId: "wildfirewebsite-35a4f",
-        storageBucket: "",
-        messagingSenderId: "911552849262"
+        siteId: 'wd2231595668ouosqu'
       },
-      siteId: 'wildfire',
       pageURL: 'http://chengkang.me/wildfire',
       pageTitle: 'Wildfire Demo',
       locale: 'zh-CN'
-    };
+    });
     (function() { // DON'T EDIT BELOW THIS LINE
     var d = document, s = d.createElement('script');
     s.src = './wildfire.js';
