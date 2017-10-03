@@ -37,13 +37,13 @@
             size="18"
             class="spin-icon"
             :style="{marginRight: '5px'}"></i-icon>
-          <div>{{$i18next.t('text/loadingComments')}}</div>
+          <div>{{$t('text/loadingComments')}}</div>
       </i-spin>
       <span v-if="commentsLoadingState === 'finished'">
-        {{$i18next.t('text/postTheFirstComment')}}
+        {{$t('text/postTheFirstComment')}}
       </span>
       <span v-if="commentsLoadingState === 'failed'" class="error">
-        {{$i18next.t('error/failedToLoadComments')}}
+        {{$t('error/failedToLoadComments')}}
       </span>
     </p>
 
@@ -57,7 +57,7 @@
         v-model="mentioningUsername"
         :autofocus="true"
         icon="ios-search"
-        :placeholder="$i18next.t('text/mentionAutocompletePlaceholder')"
+        :placeholder="$t('text/mentionAutocompletePlaceholder')"
         style="width:300px"
         @on-select="mentionAutoCompleteOnSelect">
 

@@ -17,25 +17,26 @@
       <div class="tool-bar">
         <span style="color: #bbbec4">
           {{isLoadingUserData 
-              ? $i18next.t('text/initializingMentionAutocomplete') 
+              ? $t('text/initializingMentionAutocomplete') 
               : (this.user 
-                  ? $i18next.t('text/initializedMentionAutocomplete')
-                  : $i18next.t('error/mentionFuncNotAuthorized'))}}
+                  ? $t('text/initializedMentionAutocomplete')
+                  : $t('error/mentionFuncNotAuthorized'))}}
         </span>
       </div>
       <div>
-          <i-button :type="isPosting ? 'ghost' : 'primary'" 
-            @click="postComment" 
-            :disabled="shouldDisableButton"
-            :loading="isPosting">
-            {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
-          </i-button>
-          <i-button type="ghost" 
-            style="margin-left: 8px" 
-            :disabled="shouldDisableButton"
-            @click="form.content = ''">
-            {{$i18next.t('button/reset')}}
-          </i-button>
+        <i-button type="text"
+          :disabled="shouldDisableButton"
+          @click="form.content = ''">
+          {{$t('button/reset')}}
+        </i-button>
+        
+        <i-button :type="isPosting ? 'ghost' : 'primary'"
+          style="margin-left: 8px"
+          @click="postComment"
+          :disabled="shouldDisableButton"
+          :loading="isPosting">
+          {{$t(isPosting ? 'button/posting' : 'button/post')}}
+        </i-button>
       </div>
     </section>
 
@@ -43,7 +44,7 @@
       <i-button type="text"
         :disabled="shouldDisableButton"
         @click="form.content = ''">
-        {{$i18next.t('button/reset')}}
+        {{$t('button/reset')}}
       </i-button>
       
       <i-button :type="isPosting ? 'ghost' : 'primary'"
@@ -51,7 +52,7 @@
         @click="postComment"
         :disabled="shouldDisableButton"
         :loading="isPosting">
-        {{$i18next.t(isPosting ? 'button/posting' : 'button/post')}}
+        {{$t(isPosting ? 'button/posting' : 'button/post')}}
       </i-button>
     </i-form-item>
   </i-form>
@@ -100,15 +101,15 @@ export default {
     },
     username () {
       return this.user
-              ? this.$i18next.t('text/anonymousUser')
+              ? this.$t('text/anonymousUser')
               : this.user.displayName
     },
     placeholder () {
       return this.isReply
-      ? this.$i18next.t('textarea/replyToUserComment', { username: this.replyToCommentAuthorUsername })
+      ? this.$t('textarea/replyToUserComment', { username: this.replyToCommentAuthorUsername })
       : (this.user
-          ? this.$i18next.t('textarea/joinTheConversation')
-          : this.$i18next.t('textarea/joinTheConversationAnonymously'))
+          ? this.$t('textarea/joinTheConversation')
+          : this.$t('textarea/joinTheConversationAnonymously'))
     },
     isReply () {
       return !!this.replyToComment
@@ -192,7 +193,7 @@ export default {
           this.isPosting = false
           this.$emit('finishedReplying') // When successfully posted reply, hide current reply area
           this.form.content = ''
-          this.$Message.success(this.$i18next.t('text/commentPosted'))
+          this.$Message.success(this.$t('text/commentPosted'))
 
           /*
             Handle Mention
@@ -243,7 +244,7 @@ export default {
         .catch((error) => {
           this.isPosting = false
           this.form.content = ''
-          this.$Message.error(this.$i18next.t('error/failedToPostComment'))
+          this.$Message.error(this.$t('error/failedToPostComment'))
           console.log(error)
         })
       }

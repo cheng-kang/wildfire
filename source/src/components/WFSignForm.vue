@@ -1,18 +1,18 @@
 <template> 
   <i-tabs :value="initTab">
-        <i-tab-pane :label="$i18next.t('button/signUp')" name="signUp" :disabled="loadingSignIn">
+        <i-tab-pane :label="$t('button/signUp')" name="signUp" :disabled="loadingSignIn">
       <div class="form-warp">
         <i-form ref="signUpForm" :model="signUpForm" :rules="rule" :label-width="80">
-          <i-form-item :label="$i18next.t('text/email')" prop="email">
-            <i-input type="text" v-model="signUpForm.email" :placeholder="$i18next.t('text/email')">
+          <i-form-item :label="$t('text/email')" prop="email">
+            <i-input type="text" v-model="signUpForm.email" :placeholder="$t('text/email')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('text/password')" prop="password">
-            <i-input type="password" v-model="signUpForm.password" :placeholder="$i18next.t('text/password')">
+          <i-form-item :label="$t('text/password')" prop="password">
+            <i-input type="password" v-model="signUpForm.password" :placeholder="$t('text/password')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('text/confirm')" prop="passwordCheck">
-            <i-input type="password" v-model="signUpForm.passwordCheck" :placeholder="$i18next.t('text/reEnterPassword')">
+          <i-form-item :label="$t('text/confirm')" prop="passwordCheck">
+            <i-input type="password" v-model="signUpForm.passwordCheck" :placeholder="$t('text/reEnterPassword')">
             </i-input>
           </i-form-item>
           <div class="form-itme-button">
@@ -21,28 +21,28 @@
             @click="handleSignUp('signUpForm')" 
             :disabled="loadingSignUp"
             :loading="loadingSignUp">
-              {{ $i18next.t('button/signUp') }} 
+              {{ $t('button/signUp') }} 
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
             :disabled="loadingSignUp">
-              {{ $i18next.t('button/cancel') }}
+              {{ $t('button/cancel') }}
             </i-button>
           </div>
         </i-form>
       </div>
     </i-tab-pane>
 
-    <i-tab-pane :label="$i18next.t('button/signIn')" name="signIn" :disabled="loadingSignUp">
+    <i-tab-pane :label="$t('button/signIn')" name="signIn" :disabled="loadingSignUp">
       <div class="form-warp">
         <i-form ref="signInForm" :model="signInForm" :rules="rule" :label-width="80">
-          <i-form-item :label="$i18next.t('text/email')" prop="email">
-            <i-input type="text" v-model="signInForm.email" :placeholder="$i18next.t('text/email')">
+          <i-form-item :label="$t('text/email')" prop="email">
+            <i-input type="text" v-model="signInForm.email" :placeholder="$t('text/email')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('text/password')" prop="password">
-            <i-input type="password" v-model="signInForm.password" :placeholder="$i18next.t('text/password')">
+          <i-form-item :label="$t('text/password')" prop="password">
+            <i-input type="password" v-model="signInForm.password" :placeholder="$t('text/password')">
             </i-input>
           </i-form-item>
           <div class="form-itme-button">
@@ -51,13 +51,13 @@
             @click="handleSignIn('signInForm')" 
             :disabled="loadingSignIn" 
             :loading="loadingSignIn">
-              {{ $i18next.t('button/signIn') }}
+              {{ $t('button/signIn') }}
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
             :disabled="loadingSignIn">
-              {{ $i18next.t('button/cancel') }}
+              {{ $t('button/cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -74,7 +74,7 @@ export default {
     const _this = this
     const validatePasswordCheck = (rule, value, callback) => {
       if (value !== this.signUpForm.password) {
-        callback(new Error(_this.$i18next.t('error/twoPasswordsDontMatch')))
+        callback(new Error(_this.$t('error/twoPasswordsDontMatch')))
       } else {
         callback()
       }
@@ -94,15 +94,15 @@ export default {
       },
       rule: {
         email: [
-          { required: true, message: _this.$i18next.t('error/pleaseEnterEmail'), trigger: 'blur' },
-          { type: 'email', message: _this.$i18next.t('error/invalidEmail'), trigger: 'blur' }
+          { required: true, message: _this.$t('error/pleaseEnterEmail'), trigger: 'blur' },
+          { type: 'email', message: _this.$t('error/invalidEmail'), trigger: 'blur' }
         ],
         password: [
-          { required: true, message: _this.$i18next.t('error/pleaseEnterPassword'), trigger: 'blur' },
-          { type: 'string', min: 6, message: _this.$i18next.t('error/passwordMin'), trigger: 'blur' }
+          { required: true, message: _this.$t('error/pleaseEnterPassword'), trigger: 'blur' },
+          { type: 'string', min: 6, message: _this.$t('error/passwordMin'), trigger: 'blur' }
         ],
         passwordCheck: [
-          { required: true, message: _this.$i18next.t('error/pleaseReEnterPassword'), trigger: 'blur' },
+          { required: true, message: _this.$t('error/pleaseReEnterPassword'), trigger: 'blur' },
           { validator: validatePasswordCheck, trigger: 'blur' }
         ]
       },
@@ -121,15 +121,15 @@ export default {
             this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
               this.loadingSignIn = false
               this.closeModel()
-              this.$Message.info(this.$i18next.t('message/signInSuccess'))
+              this.$Message.info(this.$t('message/signInSuccess'))
             })
           }).catch((error) => {
             this.loadingSignIn = false
-            this.$Message.error(this.$i18next.t('message/signInFailed'))
+            this.$Message.error(this.$t('message/signInFailed'))
             console.log(error.code, error.message)
           })
         } else {
-          this.$Message.error(this.$i18next.t('message/invalidForm'))
+          this.$Message.error(this.$t('message/invalidForm'))
         }
       })
     },
@@ -154,11 +154,11 @@ export default {
             .then(() => {
               this.loadingSignUp = false
               this.closeModel()
-              this.$Message.info(this.$i18next.t('message/signUpSuccess'))
+              this.$Message.info(this.$t('message/signUpSuccess'))
             }).catch((error) => {
               this.loadingSignUp = false
               console.log(error.code, error.message)
-              this.$Message.error(this.$i18next.t('message/somethingGoesWrong'))
+              this.$Message.error(this.$t('message/somethingGoesWrong'))
             })
           }).catch((error) => {
             this.loadingSignUp = false
@@ -166,23 +166,23 @@ export default {
             var errorMessage = error.message
             switch (errorCode) {
               case 'auth/email-already-in-use':
-                errorMessage = this.$i18next.t('message/emailAlreadyInUse')
+                errorMessage = this.$t('message/emailAlreadyInUse')
                 break
               case 'auth/operation-not-allowed':
-                errorMessage = this.$i18next.t('message/operationNotAllowed')
+                errorMessage = this.$t('message/operationNotAllowed')
                 break
               case 'auth/weak-password':
-                errorMessage = this.$i18next.t('message/weakPassword')
+                errorMessage = this.$t('message/weakPassword')
                 break
               default:
                 console.log(errorCode, error.message)
-                errorMessage = this.$i18next.t('message/somethingGoesWrong')
+                errorMessage = this.$t('message/somethingGoesWrong')
                 break
             }
             this.$Message.error(errorMessage)
           })
         } else {
-          this.$Message.error(this.$i18next.t('message/invalidForm'))
+          this.$Message.error(this.$t('message/invalidForm'))
         }
       })
     },

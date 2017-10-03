@@ -1,14 +1,14 @@
 <template> 
   <i-tabs value="profile">
-    <i-tab-pane :label="$i18next.t('button/profile')" name="profile" :disabled="sendingAccount">
+    <i-tab-pane :label="$t('button/profile')" name="profile" :disabled="sendingAccount">
       <div class="form-warp">
         <i-form ref="profileForm" :model="profileForm" :rules="rule" :label-width="80">
-          <i-form-item :label="$i18next.t('text/displayName')" prop="displayName">
-            <i-input type="text" v-model="profileForm.displayName" :placeholder="$i18next.t('text/displayName')">
+          <i-form-item :label="$t('text/displayName')" prop="displayName">
+            <i-input type="text" v-model="profileForm.displayName" :placeholder="$t('text/displayName')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('text/photoURL')" prop="photoURL">
-            <i-input type="text" v-model="profileForm.photoURL" :placeholder="$i18next.t('text/photoURL')">
+          <i-form-item :label="$t('text/photoURL')" prop="photoURL">
+            <i-input type="text" v-model="profileForm.photoURL" :placeholder="$t('text/photoURL')">
               <i-button slot="append" icon="refresh" @click="resetAvatar"></i-button>
             </i-input>
           </i-form-item>
@@ -18,13 +18,13 @@
             @click="handleChangeProfile()" 
             :disabled="sendingProfile || avatarTesting" 
             :loading="sendingProfile">
-              {{ $i18next.t('button/modify') }}
+              {{ $t('button/modify') }}
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
             :disabled="sendingProfile">
-              {{ $i18next.t('button/cancel') }}
+              {{ $t('button/cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -34,19 +34,19 @@
       </div>
     </i-tab-pane>
 
-    <i-tab-pane :label="$i18next.t('button/account')" name="account" :disabled="sendingProfile">
+    <i-tab-pane :label="$t('button/account')" name="account" :disabled="sendingProfile">
       <div class="form-warp">
         <i-form ref="accountForm" :model="accountForm" :rules="rule" :label-width="80">
-          <i-form-item :label="$i18next.t('text/oldPassword')" prop="oldPassword">
-            <i-input type="password" v-model="accountForm.oldPassword" :placeholder="$i18next.t('text/oldPassword')">
+          <i-form-item :label="$t('text/oldPassword')" prop="oldPassword">
+            <i-input type="password" v-model="accountForm.oldPassword" :placeholder="$t('text/oldPassword')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('text/newPassword')" prop="newPassword">
-            <i-input type="password" v-model="accountForm.newPassword" :placeholder="$i18next.t('text/newPassword')">
+          <i-form-item :label="$t('text/newPassword')" prop="newPassword">
+            <i-input type="password" v-model="accountForm.newPassword" :placeholder="$t('text/newPassword')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('text/confirm')" prop="passwordCheck">
-            <i-input type="password" v-model="accountForm.passwordCheck" :placeholder="$i18next.t('text/reEnterPassword')">
+          <i-form-item :label="$t('text/confirm')" prop="passwordCheck">
+            <i-input type="password" v-model="accountForm.passwordCheck" :placeholder="$t('text/reEnterPassword')">
             </i-input>
           </i-form-item>
           <div class="form-itme-button">
@@ -55,13 +55,13 @@
             @click="handleChangeAccount()" 
             :disabled="sendingAccount || passwordTesting" 
             :loading="sendingAccount">
-              {{ $i18next.t('button/modify') }} 
+              {{ $t('button/modify') }} 
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
             :disabled="sendingAccount">
-              {{ $i18next.t('button/cancel') }}
+              {{ $t('button/cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -94,7 +94,7 @@ export default {
         })
         .catch(() => {
           this.passwordTesting = false
-          callback(new Error(_this.$i18next.t('error/wrongPassword')))
+          callback(new Error(_this.$t('error/wrongPassword')))
         })
       } else if (typeof (this.$auth.currentUser.reauthenticateWithCredential) === 'function') {
         this.$auth.currentUser.reauthenticateWithCredential(credential)
@@ -104,13 +104,13 @@ export default {
         })
         .catch(() => {
           this.passwordTesting = false
-          callback(new Error(_this.$i18next.t('error/wrongPassword')))
+          callback(new Error(_this.$t('error/wrongPassword')))
         })
       }
     }
     const validatePasswordCheck = (rule, value, callback) => {
       if (value !== this.accountForm.newPassword) {
-        callback(new Error(_this.$i18next.t('error/twoPasswordsDontMatch')))
+        callback(new Error(_this.$t('error/twoPasswordsDontMatch')))
       } else {
         callback()
       }
@@ -127,7 +127,7 @@ export default {
       avatar.onerror = () => {
         this.avatarTestURL = this.user.photoURL
         this.avatarTesting = false
-        callback(new Error(_this.$i18next.t('error/invalidPhotoURL')))
+        callback(new Error(_this.$t('error/invalidPhotoURL')))
       }
     }
     const validateDisplayName = (rule, value, callback) => {
@@ -158,16 +158,16 @@ export default {
           { validator: validatePhotoURL, trigger: 'blur' }
         ],
         oldPassword: [
-          { required: true, message: _this.$i18next.t('error/pleaseEnterPassword'), trigger: 'blur' },
-          { type: 'string', min: 6, message: _this.$i18next.t('error/passwordMin'), trigger: 'blur' },
+          { required: true, message: _this.$t('error/pleaseEnterPassword'), trigger: 'blur' },
+          { type: 'string', min: 6, message: _this.$t('error/passwordMin'), trigger: 'blur' },
           { validator: validateOldPassword, trigger: 'blur' }
         ],
         newPassword: [
-          { required: true, message: _this.$i18next.t('error/pleaseEnterPassword'), trigger: 'blur' },
-          { type: 'string', min: 6, message: _this.$i18next.t('error/passwordMin'), trigger: 'blur' }
+          { required: true, message: _this.$t('error/pleaseEnterPassword'), trigger: 'blur' },
+          { type: 'string', min: 6, message: _this.$t('error/passwordMin'), trigger: 'blur' }
         ],
         passwordCheck: [
-          { required: true, message: _this.$i18next.t('error/pleaseReEnterPassword'), trigger: 'blur' },
+          { required: true, message: _this.$t('error/pleaseReEnterPassword'), trigger: 'blur' },
           { validator: validatePasswordCheck, trigger: 'blur' }
         ]
       },
@@ -196,17 +196,17 @@ export default {
               this.user.photoURL = photoURL
 
               this.sendingProfile = false
-              this.$Message.info(this.$i18next.t('message/updateSuccess'))
+              this.$Message.info(this.$t('message/updateSuccess'))
 
               // Broadcast 'CurrentUserInfoUpdated' event
               Bus.$emit('CurrentUserInfoUpdated', updates)
             }).catch((error) => {
               this.sendingProfile = false
               console.log(error.code, error.message)
-              this.$Message.error(this.$i18next.t('message/somethingGoesWrong'))
+              this.$Message.error(this.$t('message/somethingGoesWrong'))
             })
         } else {
-          this.$Message.error(this.$i18next.t('message/invalidForm'))
+          this.$Message.error(this.$t('message/invalidForm'))
         }
       })
     },
@@ -218,14 +218,14 @@ export default {
           this.$auth.currentUser.updatePassword(password).then(() => {
             this.sendingAccount = false
             this.$refs['accountForm'].resetFields()
-            this.$Message.info(this.$i18next.t('message/passwordChanged'))
+            this.$Message.info(this.$t('message/passwordChanged'))
           }).catch((error) => {
             this.sendingAccount = false
             console.log(error.code, error.message)
             this.$refs['accountForm'].resetFields()
           })
         } else {
-          this.$Message.error(this.$i18next.t('message/invalidForm'))
+          this.$Message.error(this.$t('message/invalidForm'))
         }
       })
     },
