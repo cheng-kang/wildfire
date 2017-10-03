@@ -19,24 +19,7 @@ export default {
 </script>
 
 <style scoped>
-footer {
-  margin-top: 30px;
-  height: 45px;
-  border-top: 2px solid #d4d4d4;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #656c7a;
-  font-weight: 500;
-}
-a {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-}
-img {
-  width: 18px;
-  height: 18px;
-  margin-right: 10px;
-}
+footer { font-weight: 500; display: flex; height: 45px; margin-top: 30px; color: #656c7a; border-top: 2px solid #d4d4d4; justify-content: space-between; align-items: center; }
+a { font-size: 12px; display: flex; align-items: center; }
+img { width: 18px; height: 18px; margin-right: 10px; }
 </style>

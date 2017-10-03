@@ -135,15 +135,7 @@ export default {
 </script>
 
 <style scoped>
-header {
-  margin-bottom: 30px;
-}
-.wf-nav-right {
-  float: right;
-}
-.wf-nav-username {
-  display: inline-block;
-  padding:0 20px;
-  margin:0 20px;
-}
+header { margin-bottom: 30px; }
+.wf-nav-right { float: right; }
+.wf-nav-username { display: inline-block; margin: 0 20px; padding: 0 20px; }
 </style>

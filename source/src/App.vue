@@ -127,15 +127,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.wildfire {
-  margin: 0 auto;
-  padding: 10px;
-
-  max-width: 39rem;
-
-  font-family: "Helvetica Neue",arial,sans-serif;
-  font-size: 15px;
-}
-</style>

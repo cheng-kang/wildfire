@@ -196,15 +196,6 @@ export default {
 </script>
 
 <style scoped>
-.form-warp{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 10px 50px 30px 50px
-}
-.form-itme-button button{
-  margin: 0 10px;
-  width: 25%;
-}
+.form-warp { display: flex; flex-direction: column; height: 100%; padding: 10px 50px 30px 50px; justify-content: center; }
+.form-itme-button button { width: 25%; margin: 0 10px; }
 </style>

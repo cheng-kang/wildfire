@@ -264,64 +264,11 @@ export default {
 </script>
 
 <style scoped>
-img {
-  width: 48px;
-  height: 48px;
-}
-.wf-reply img {
-  width: 36px;
-  height: 36px;
-}
-.no-bottom-margin {
-  /*margin-bottom: 0;*/
-}
-.float-to-right {
-  text-align: right;
-}
-.ivu-form .ivu-form-item-label {
-  padding: 0;
-  text-align: left;
-}
-.ivu-form {
-  margin-top: 10px;
-}
-.ivu-form-item {
-  margin-bottom: 12px;
-}
-</style>
-<style>
-.ivu-spin {
-  position: unset;
-  background-color: unset;
-}
-.spin-icon {
-  animation: ani-demo-spin 1s linear infinite;
-}
-@keyframes ani-demo-spin {
-  from { transform: rotate(0deg);}
-  50%  { transform: rotate(180deg);}
-  to   { transform: rotate(360deg);}
-}
-.top-reply-area {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-left: 60px;
-}
-.top-reply-area div {
-  font-size: 10px;
-  display: flex;
-}
-.top-reply-area .tool-bar {
-  flex: 1;
-  margin-right: 10px;
-}
-.ivu-switch-checked .ivu-switch-inner {
-  left: 4px;
-  font-size: 8px;
-}
-.ivu-switch-inner {
-  left: 12.5px;
-  font-size: 8px;
-}
+img { width: 48px; height: 48px; }
+.wf-reply img { width: 36px; height: 36px; }
+.no-bottom-margin {    /*margin-bottom: 0;*/ }
+.float-to-right { text-align: right; }
+.ivu-form .ivu-form-item-label { padding: 0; text-align: left; }
+.ivu-form { margin-top: 10px; }
+.ivu-form-item { margin-bottom: 12px; }
 </style>

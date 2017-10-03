@@ -244,40 +244,11 @@ export default {
 </script>
 
 <style scoped>
-.form-warp{
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-items: space-between;
-  width: 80%;
-  margin: auto;
-  padding-top: 10px;
-  padding-bottom: 30px
-}
-.form-warp form{
-  flex: 1 1 100%;
-}
-.form-warp .avatar{
-  flex: 0 0 100px;
-  height: 100px;
-  position: relative;
-  top: -16px;
-  left: 10px
-}
-.form-warp .avatar .ivu-avatar{
-  width: 70px;
-  height: 70px;
-  border: 1px solid rgba(0,0,0,0.2)
-}
-.form-itme-button button{
-  margin: 0 10px;
-  width: 25%;
-}
-.ivu-input-group-append .ivu-btn, .ivu-input-group-prepend .ivu-btn {
-  margin: -7px
-}
-.align-for-profile{
-  margin-right: -100px
-}
+.form-warp { display: flex; flex-direction: row; width: 80%; height: 100%; margin: auto; padding-top: 10px; padding-bottom: 30px; align-items: center; align-items: space-between; }
+.form-warp form { flex: 1 1 100%; }
+.form-warp .avatar { position: relative; top: -16px; left: 10px; height: 100px; flex: 0 0 100px; }
+.form-warp .avatar .ivu-avatar { width: 70px; height: 70px; border: 1px solid rgba(0, 0, 0, .2); }
+.form-itme-button button { width: 25%; margin: 0 10px; }
+.ivu-input-group-append .ivu-btn, .ivu-input-group-prepend .ivu-btn { margin: -7px; }
+.align-for-profile { margin-right: -100px; }
 </style>
