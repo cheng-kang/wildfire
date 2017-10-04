@@ -1,0 +1,56 @@
+body {
+  font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #34495e;
+  background-color: #fff;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.reveal {
+  width: 85%;
+  height: 70%;
+  border: 1px solid black;
+}
+
+.footnote {
+  font-size: 14px;
+  word-spacing: 0.05em;
+  color: #7f8c8d;
+}
+
+.reveal section .wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 64px;
+  text-align: left;
+}
+
+#slide1 .logos {
+  margin: 48px 0;
+}
+
+#slide1 .title {
+  margin-bottom: 16px;
+}
+
+#slide1 .subtitle {
+  margin-bottom: 48px;
+}
+
+#slide1 .footnote {
+  margin-top: 32px;
+}
+
+#slide2 {
+}
