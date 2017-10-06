@@ -182,7 +182,8 @@
 
   // load & init i18next
   loadJS({
-    url: 'https://unpkg.com/i18next/i18next.min.js',
+    // url: 'https://unpkg.com/i18next/i18next.min.js',
+    url: './static/js/i18next.min.js',
     shouldLoad: () => {
       return window.i18next === undefined
     },
