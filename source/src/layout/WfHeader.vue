@@ -4,12 +4,13 @@
       ref="statusMenu"
       mode="horizontal"
       theme="light"
-      active-name="1" >
+      active-name="1"
+      @on-select="showReportMangementModal">
       <i-menu-item name="1">
         <i-spin v-if="commentsLoadingState === 'loading'"
-          :default-slot-style="{ 
-            display: 'flex', 
-            alignItems: 'center', 
+          :default-slot-style="{
+            display: 'flex',
+            alignItems: 'center',
             justifyContent: 'center'
           }">
           <i-icon
@@ -30,6 +31,16 @@
       <a class="wf-nav-username" @click="showUserSettingModal">
         {{username}}
       </a>
+      <i-submenu name="3">
+        <template slot="title"></template>
+        <i-menu-group title="个人中心">
+          <i-menu-item name="3-1">系统消息</i-menu-item>
+          <i-menu-item name="3-2">历史记录</i-menu-item>
+        </i-menu-group>
+        <i-menu-group title="站长中心" v-if="isSiteOwner">
+          <i-menu-item name="3-3">举报管理</i-menu-item>
+        </i-menu-group>
+      </i-submenu>
       <div class="wf-nav-right">
         <template v-if="!user" >
           <a @click="showSignFormModal('signUp')">
@@ -66,12 +77,18 @@
         <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
       </div>
     </i-modal>
+    <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true">
+      <div style="text-align:center">
+        <wf-report-management :user="user" v-if='isSiteOwner'></wf-report-management>
+      </div>
+    </i-modal>
   </header>
 </template>
 
 <script>
 import WfSignForm from '../components/WfSignForm'
 import WfUserSetting from '../components/WfUserSetting'
+import WfReportManagement from '../components/WfReportManagement'
 
 export default {
   name: 'wf-header',
@@ -82,13 +99,15 @@ export default {
   ],
   components: {
     WfSignForm,
-    WfUserSetting
+    WfUserSetting,
+    WfReportManagement
   },
   data () {
     return {
       signFormModal: false,
       userSettingModal: false,
-      signFormInitTab: 'signIn'
+      signFormInitTab: 'signIn',
+      reportMangementModal: false
     }
   },
   computed: {
@@ -96,6 +115,9 @@ export default {
       return this.user
       ? this.user.displayName
       : this.$i18next.t('text/anonymousUser')
+    },
+    isSiteOwner () {
+      return true
     }
   },
   methods: {
@@ -129,6 +151,11 @@ export default {
           okText: this.$i18next.t('text/confirm')
         })
       }
+    },
+    showReportMangementModal (name) {
+      if (name === '3-3') {
+        this.reportMangementModal = true
+      }
     }
   }
 }
@@ -137,5 +164,5 @@ export default {
 <style scoped>
 header { margin-bottom: 30px; }
 .wf-nav-right { float: right; }
-.wf-nav-username { display: inline-block; margin: 0 20px; padding: 0 20px; }
+.wf-nav-username { display: inline-block; margin: 0 20px; padding: 0 20px; float: left;}
 </style>

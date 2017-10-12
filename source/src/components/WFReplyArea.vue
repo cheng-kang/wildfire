@@ -16,9 +16,9 @@
     <section class="top-reply-area" v-if="isMain">
       <div class="tool-bar">
         <span style="color: #bbbec4">
-          {{isLoadingUserData 
-              ? $i18next.t('text/initializingMentionAutocomplete') 
-              : (this.user 
+          {{isLoadingUserData
+              ? $i18next.t('text/initializingMentionAutocomplete')
+              : (this.user
                   ? $i18next.t('text/initializedMentionAutocomplete')
                   : $i18next.t('error/mentionFuncNotAuthorized'))}}
         </span>
@@ -29,7 +29,7 @@
           @click="form.content = ''">
           {{$i18next.t('button/reset')}}
         </i-button>
-        
+
         <i-button :type="isPosting ? 'ghost' : 'primary'"
           style="margin-left: 8px"
           @click="postComment"
@@ -46,7 +46,7 @@
         @click="form.content = ''">
         {{$i18next.t('button/reset')}}
       </i-button>
-      
+
       <i-button :type="isPosting ? 'ghost' : 'primary'"
         style="margin-left: 8px"
         @click="postComment"

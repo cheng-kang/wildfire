@@ -17,9 +17,9 @@
                 <i-icon type="forward"></i-icon>
                 {{replyToComment.author.displayName}}
               </span>
-              <div 
-                v-if="replyToComment.content && 
-                      replyToComment.author.displayName && 
+              <div
+                v-if="replyToComment.content &&
+                      replyToComment.author.displayName &&
                       replyToComment.author.photoURL"
                 slot="content"
                 class="reply-poptip">
@@ -61,9 +61,9 @@
           <div :class="{ less: isContentTooLong && !isShowingFullText }">
             <wf-marked-content :content="comment.content"></wf-marked-content>
           </div>
-          <i-button v-if="isContentTooLong" 
+          <i-button v-if="isContentTooLong"
             type="text"
-            @click="isShowingFullText = !isShowingFullText" 
+            @click="isShowingFullText = !isShowingFullText"
             long>
             <template v-if="isShowingFullText">
               <i-icon type="chevron-up"></i-icon>
@@ -95,8 +95,8 @@
             <span>{{dislikeUserIdList.length || ''}}</span>
             <i-icon type="heart-broken"></i-icon>
           </a>
-          <i-button 
-            type="text" 
+          <i-button
+            type="text"
             class="wf-reply-button"
             @click="isReplying = !isReplying"
             v-if="commentsLoadingState === 'finished'">
@@ -135,7 +135,7 @@
       <ul class="wf-reply-group" v-if="!replyToCommentId">
         <wf-comment-card
           v-for="(reply, idx) in replies"
-          v-show="!isShowingLessReplies || 
+          v-show="!isShowingLessReplies ||
                   (isShowingLessReplies && idx < numberOfRepliesWhenShowingLess)"
           :key="reply['.key']"
           :user="user"
@@ -432,13 +432,43 @@ export default {
       this[name]()
     },
     reportCurrentComment () {
-      if (!this.user) { return }
-      this.$database.ref(`reportedComments`).push({
-        date: (new Date()).toISOString(),
-        commentId: this.isReply ? null : this.comment['.key'],
-        replyId: this.isReply ? this.comment['.key'] : null,
-        page: this.encodedPageURL,
-        byUid: this.user.uid
+      if (!this.user) {
+        return
+      }
+      let now = new Date()
+      const actionUid = this.currentUserId
+      const date = now.toISOString()
+      const order = -1 * now.getTime()
+      var comment = {
+        'encodedPageURL': this.encodedPageURL,
+        'commentId': this.comment['.key'],
+        'content': this.comment.content,
+        'date': this.comment.date
+      }
+      if (this.comment.replyToCommentId) {
+        comment.rootCommentId = this.comment.replyToCommentId
+      } else {
+        comment.repliesCount = this.comment.repliesCount
+      }
+
+      var author = {
+        'ip': this.comment.ip
+      }
+      if (this.comment.authorUid.indexOf('ANON') > -1) {
+        author.isAnonymousUser = true
+      } else {
+        author.isAnonymousUser = false
+        author.authorUid = this.comment.authorUid
+        author.email = this.author.email
+        author.displayName = this.author.displayName
+      }
+
+      this.$database.ref(`reported/comments/`).push({
+        actionUid,
+        date,
+        order,
+        comment,
+        author
       }).then(() => {
         this.$Message.success(this.$i18next.t('message/reportCommentSucceeded'))
       }).catch(err => {
