@@ -8,14 +8,14 @@
       <div class="wf-comment-body">
         <header>
           <div class="header-content">
-            <a class="username" @click="showUserInfo">{{author.displayName}}</a>
+            <a class="username" :title="author.displayName" @click="showUserInfo">{{shortenedUsername(author.displayName)}}</a>
             <i-poptip
               v-if="replyToCommentId"
               trigger="hover"
               placement="top">
               <span class="parent-link">
                 <i-icon type="forward"></i-icon>
-                {{replyToComment.author.displayName}}
+                {{shortenedUsername(replyToComment.author.displayName)}}
               </span>
               <div
                 v-if="replyToComment.content &&
@@ -25,8 +25,8 @@
                 class="reply-poptip">
                 <img :src="replyToComment.author.photoURL">
                 <span>
-                  <span><strong>{{replyToComment.author.displayName}}</strong></span>
-                  <span>{{this.replyToComment.content}}</span>
+                  <span :title="replyToComment.author.displayName"><strong>{{replyToComment.author.displayName}}</strong></span>
+                  <span :title="replyToComment.content">{{replyToComment.content}}</span>
                 </span>
               </div>
               <div slot="content" v-else>
@@ -372,6 +372,12 @@ export default {
     },
     isAnonymousUser (uid) {
       return uid.indexOf(this.$config.anonymousUserIdPrefix) !== -1
+    },
+    shortenedUsername (username) {
+      if (username.length > 10) {
+        return username.slice(0, 10) + '...'
+      }
+      return username
     },
     /**
      * @param  {string='like', 'dislike'} type
