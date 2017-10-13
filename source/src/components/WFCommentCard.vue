@@ -406,29 +406,34 @@ export default {
       }
     },
     confirmDelete () {
+      let commentURL
+      let countURL
+      let replyURL
       if (this.parentComment) {
         const commentKey = this.parentCommentId
         const replyKey = this.comment['.key']
-        let updates = {}
-        updates[`pages/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`] = null
-        updates[`pages/${this.encodedPageURL}/comments/${commentKey}/repliesCount`] = this.newRepliesCount
-        this.$database.ref().update(updates).then(() => {
-          this.$Message.success(this.$i18next.t('message/deleteSucceed'))
-        }).catch(() => {
-          this.$Message.error(this.$i18next.t('message/deleteFailed'))
-        })
+        commentURL = `pages/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`
+        countURL = `pages/${this.encodedPageURL}/comments/${commentKey}/repliesCount`
       } else {
         const commentKey = this.comment['.key']
-        let updates = {}
-        updates[`pages/${this.encodedPageURL}/replies/${commentKey}`] = null
-        updates[`pages/${this.encodedPageURL}/comments/${commentKey}`] = null
-        updates[`pages/${this.encodedPageURL}/commentsCount`] = this.newCommentsCount
-        this.$database.ref().update(updates).then(() => {
-          this.$Message.success(this.$i18next.t('message/deleteSucceed'))
-        }).catch(() => {
-          this.$Message.error(this.$i18next.t('message/deleteFailed'))
-        })
+        commentURL = `pages/${this.encodedPageURL}/comments/${commentKey}`
+        countURL = `pages/${this.encodedPageURL}/commentsCount`
+        if (this.comment.repliesCount) {
+          replyURL = `pages/${this.encodedPageURL}/replies/${commentKey}`
+        }
       }
+      this.$database.ref(commentURL).remove().then(() => {
+        this.$database.ref(countURL).transaction((currentCount) => {
+          return (currentCount || 0) > 0 ? (currentCount || 0) - 1 : 0
+        }).then(() => {
+          if (replyURL) {
+            this.$database.ref(replyURL).remove()
+          }
+          this.$Message.success(this.$i18next.t('message/deleteSucceed'))
+        })
+      }).catch(() => {
+        this.$Message.error(this.$i18next.t('message/deleteFailed'))
+      })
     },
     handleDropdownClick (name) {
       this[name]()
