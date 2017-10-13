@@ -202,7 +202,7 @@ export default {
         email: ''
       },
       isContentTooLong: false,
-      isShowingFullText: false,
+      isShowingFullText: true,
       replyToComment: {
         author: {
           displayName: '',
@@ -361,8 +361,10 @@ export default {
      */
     const contentEle = document.getElementById('wf-comment-content-' + this.comment['.key'])
     const contentEleHeight = parseInt(window.getComputedStyle(contentEle).height)
-    this.isContentTooLong = (contentEleHeight > MAX_CONTENT_HEIGHT)
-    this.isShowingFullText = false
+    if (contentEleHeight > MAX_CONTENT_HEIGHT) {
+      this.isContentTooLong = true
+      this.isShowingFullText = false
+    }
   },
   methods: {
     objectWithDotKey (obj, key) {
