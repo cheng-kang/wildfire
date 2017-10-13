@@ -328,8 +328,11 @@ export default {
 
       this.$database.ref(replyToCommentRef).once('value').then((snapshot) => {
         let comment = snapshot.val()
+        if (!comment) {
+          this.replyToComment.content = this.$i18next.t('text/commentDeleted')
+          return
+        }
         this.replyToComment.content = comment.content
-
         const replyToCommentAuthorUid = comment.authorUid
         if (!this.isAnonymousUser(replyToCommentAuthorUid)) {
           this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value')
@@ -477,7 +480,7 @@ export default {
             'date': this.comment.date
           }
           if (this.comment.replyToCommentId) {
-            comment.rootCommentId = this.comment.replyToCommentId
+            comment.rootCommentId = this.parentCommentId
           } else {
             comment.repliesCount = this.comment.repliesCount
           }
