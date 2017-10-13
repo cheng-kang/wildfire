@@ -195,7 +195,7 @@ export default {
             return (currentCount || 0) + 1
           }).then(() => {
             this.isPosting = false
-            this.$emit('finishedReplying') // When successfully posted reply, hide current reply area
+            this.$emit('finished-replying') // When successfully posted reply, hide current reply area
             this.form.content = ''
             this.$Message.success(this.$i18next.t('text/commentPosted'))
 
