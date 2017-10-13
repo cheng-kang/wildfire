@@ -6,9 +6,10 @@
   padding: 10px;
 
   img.anonymous { opacity: .9; -webkit-filter: grayscale(70%); filter: grayscale(70%); }
-  .wf-comment-content pre { overflow: auto;    /* 60px for avatar, 20px for padding */ max-width: calc(39rem - 60px - 20px); max-height: 300px; padding: 10px 20px; background: #f6f8fa; }
+  .wf-comment-content pre { /* 60px for avatar, 20px for padding */ width: calc(39rem - 60px - 20px); max-height: 300px; padding: 10px 15px; background: #f6f8fa; }
+  .wf-comment-content pre code {overflow: auto; max-width: calc(39rem - 60px - 20px - 30px);}
   .wf-comment-content img { max-width: 100% !important; }
-  .code-overflow-hidden pre { overflow: hidden !important; }
+  .code-overflow-hidden pre code{ overflow: hidden !important; }
   .thumbnail { line-height: 150px; display: inline-block; overflow: hidden; width: 150px; height: 150px; cursor: pointer; border: 1px solid #fff; border-radius: 4px; background: transparent; background-repeat: no-repeat; background-position: 50%; background-size: 100%; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }
   .top-reply-area { display: flex; flex-direction: row; margin-left: 60px; justify-content: space-between; }
   .top-reply-area div { font-size: 10px; display: flex; }

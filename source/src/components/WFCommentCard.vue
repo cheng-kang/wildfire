@@ -442,45 +442,64 @@ export default {
       if (!this.user) {
         return
       }
-      let now = new Date()
-      const actionUid = this.currentUserId
-      const date = now.toISOString()
-      const order = -1 * now.getTime()
-      var comment = {
-        'encodedPageURL': this.encodedPageURL,
-        'commentId': this.comment['.key'],
-        'content': this.comment.content,
-        'date': this.comment.date
-      }
-      if (this.comment.replyToCommentId) {
-        comment.rootCommentId = this.comment.replyToCommentId
-      } else {
-        comment.repliesCount = this.comment.repliesCount
-      }
+      var now = new Date()
+      this.$database.ref(`reported/comments/${this.comment['.key']}`)
+      .once('value').then((snapshot) => {
+        let temp = snapshot.val()
+        if (temp) {
+          var actionBy = temp.actionBy
+          if (this.currentUserId in actionBy) {
+            this.$Message.error(this.$i18next.t('message/reportRepeatError'))
+          } else {
+            actionBy[this.currentUserId] = now.toISOString()
+            this.$database.ref(`reported/comments/${this.comment['.key']}/actionBy`)
+            .update(actionBy).then(() => {
+              this.$Message.success(this.$i18next.t('message/reportCommentSucceeded'))
+            }).catch(err => {
+              this.$Message.error(this.$i18next.t('message/reportCommentFailed'))
+              console.log(err)
+            })
+          }
+        } else {
+          let actionBy = {}
+          actionBy[this.currentUserId] = now.toISOString()
+          const order = -1 * now.getTime()
+          var comment = {
+            'encodedPageURL': this.encodedPageURL,
+            'commentId': this.comment['.key'],
+            'content': this.comment.content,
+            'date': this.comment.date
+          }
+          if (this.comment.replyToCommentId) {
+            comment.rootCommentId = this.comment.replyToCommentId
+          } else {
+            comment.repliesCount = this.comment.repliesCount
+          }
 
-      var author = {
-        'ip': this.comment.ip
-      }
-      if (this.comment.authorUid.indexOf('ANON') > -1) {
-        author.isAnonymousUser = true
-      } else {
-        author.isAnonymousUser = false
-        author.authorUid = this.comment.authorUid
-        author.email = this.author.email
-        author.displayName = this.author.displayName
-      }
+          var author = {
+            'ip': this.comment.ip
+          }
+          if (this.comment.authorUid.indexOf('ANON') > -1) {
+            author.isAnonymousUser = true
+          } else {
+            author.isAnonymousUser = false
+            author.authorUid = this.comment.authorUid
+            author.email = this.author.email
+            author.displayName = this.author.displayName
+          }
 
-      this.$database.ref(`reported/comments/`).push({
-        actionUid,
-        date,
-        order,
-        comment,
-        author
-      }).then(() => {
-        this.$Message.success(this.$i18next.t('message/reportCommentSucceeded'))
-      }).catch(err => {
-        this.$Message.error(this.$i18next.t('message/reportCommentFailed'))
-        console.log(err)
+          this.$database.ref(`reported/comments/${this.comment['.key']}`).update({
+            actionBy,
+            order,
+            comment,
+            author
+          }).then(() => {
+            this.$Message.success(this.$i18next.t('message/reportCommentSucceeded'))
+          }).catch(err => {
+            this.$Message.error(this.$i18next.t('message/reportCommentFailed'))
+            console.log(err)
+          })
+        }
       })
     },
     showUserInfo () {

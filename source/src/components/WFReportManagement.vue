@@ -18,15 +18,15 @@
 </style>
 <template>
   <i-tabs value="reportUser">
-    <i-tab-pane label="被举报用户" name="reportUser" >
+    <i-tab-pane :label="$i18next.t('text/reportedUsers')" name="reportUser" >
       <div class="form-warp">
         123
       </div>
     </i-tab-pane>
-    <i-tab-pane label="被举报评论" name="reportComment" >
+    <i-tab-pane :label="$i18next.t('text/reportedComments')" name="reportComment" >
       <i-table height="300" :columns="commentsTable" :data="computedComments" :border="false" class="reported-table"></i-table>
     </i-tab-pane>
-    <i-tab-pane label="禁用规则" name="banRules">
+    <i-tab-pane :label="$i18next.t('text/banRules')" name="banRules">
       <div class="form-warp">
         ban-rules
       </div>
@@ -43,7 +43,7 @@ export default {
     return {
       commentsTable: [
         {
-          title: '用户',
+          title: this.$i18next.t('text/usersInfo'),
           key: 'account',
           width: 180,
           align: 'center',
@@ -54,13 +54,14 @@ export default {
           }
         },
         {
-          title: '评论内容',
+          title: this.$i18next.t('text/commentsContent'),
           key: 'comment',
-          width: 250,
+          width: 300,
           ellipsis: true,
           align: 'center',
           render: (h, params) => {
             return h('div', [
+              h('p', this.$i18next.t('text/reportedBy0Users').replace(0, params.row.comment.count)),
               h('p', params.row.comment.outline),
               h('a', {
                 props: {
@@ -78,13 +79,13 @@ export default {
                     type: 'ios-search'
                   }
                 }),
-                h('span', '查看详情')
+                h('span', this.$i18next.t('text/findMoreDetial'))
               ])
             ])
           }
         },
         {
-          title: '操作',
+          title: this.$i18next.t('text/action'),
           key: 'action',
           align: 'center',
           fixed: 'right',
@@ -92,7 +93,7 @@ export default {
           render: (h, params) => {
             var attr = ''
             if (params.row.action.delAction.repliesCount) {
-              attr = '删除该评论将一并删除0条对其的回复，\n'.replace('0', params.row.action.delAction.repliesCount)
+              attr = this.$i18next.t('text/deleteWithAll0Replies').replace('0', params.row.action.delAction.repliesCount)
             }
             return h('div', [
               h('Button', {
@@ -100,31 +101,45 @@ export default {
                   type: 'text',
                   size: 'small'
                 }
-              }, '封禁用户'),
+              }, this.$i18next.t('button/banThisUser')),
               h('Poptip', {
                 props: {
                   confirm: true,
-                  title: attr + `确认要删除这条评论吗？`,
+                  title: attr + this.$i18next.t('text/sureToDelete'),
                   transfer: true,
-                  okText: 'OK',
-                  cancelText: 'Cancel'
+                  okText: this.$i18next.t('button/delete'),
+                  cancelText: this.$i18next.t('button/cancel')
                 },
                 on: {
                   'on-ok': () => {
+                    /*
+                      Notice:
+                        When you want to delete a reply while the root comment has
+                        been deleted, it will occur a error cause the reply is null.
+                        Be relaxed, it's ok with the logic.
+                    */
                     let delAction = params.row.action.delAction
+                    // Delete the target comment (or reply).
                     this.$database.ref(`pages/${delAction.encodedPageURL}/${delAction.commentURL}`)
-                      .remove()
-                    this.$database.ref(`pages/${delAction.encodedPageURL}/${delAction.countURL}`)
-                      .once('value').then((snapshot) => {
-                        let count = parseInt(snapshot.val()) - 1
-                        let update = {}
-                        update[`pages/${delAction.encodedPageURL}/${delAction.countURL}`] = count
-                        this.$database.ref().update(update)
+                      .remove().then(() => {
+                        if (delAction.replyURL) {
+                          // The target is a root comment, which has some replies. Delete all of them.
+                          this.$database.ref(`pages/${delAction.encodedPageURL}/${delAction.replyURL}`)
+                            .remove()
+                        }
+                        /*
+                          Change the count of comments (or replies).
+                          Sometimes the root comment has been deleted, when you want to handle a reply
+                          of it, it will occur a error cause the target reply is null. it's fine. Then
+                          just set the root comment's repliesCount as null.
+                        */
+                        this.$database.ref(`pages/${delAction.encodedPageURL}/${delAction.countURL}`)
+                          .transaction((currentCount) => {
+                            return currentCount ? currentCount - 1 : null
+                          })
+                        // Finish this report by remove it.
+                        this.$database.ref(`reported/${params.row.action.reportURL}`).remove()
                       })
-                    if (delAction.replyURL) {
-                      this.$database.ref(`pages/${delAction.encodedPageURL}/${delAction.replyURL}`)
-                        .remove()
-                    }
                   },
                   'on-cancel': () => {
                     return
@@ -136,15 +151,15 @@ export default {
                     type: 'text',
                     size: 'small'
                   }
-                }, '删除评论')
+                }, this.$i18next.t('button/deleteTheComment'))
               ]),
               h('Poptip', {
                 props: {
                   confirm: true,
-                  title: '您确认忽略这条举报吗？',
+                  title: this.$i18next.t('button/sureToIgnore'),
                   transfer: true,
-                  okText: 'OK',
-                  cancelText: 'Cancel'
+                  okText: this.$i18next.t('button/delete'),
+                  cancelText: this.$i18next.t('button/cancel')
                 },
                 on: {
                   'on-ok': () => {
@@ -160,7 +175,7 @@ export default {
                     type: 'text',
                     size: 'small'
                   }
-                }, '忽略')
+                }, this.$i18next.t('button/ignore'))
               ])
             ])
           }
@@ -179,8 +194,11 @@ export default {
       for (var i = 0; i < this.reportedCommentsRaw.length; i++) {
         let temp = {}
         let item = this.reportedCommentsRaw[i]
+
         temp.account = this.parseUser(item.author)
-        temp.comment = this.parseComment(item.comment)
+        temp.comment = Object.assign({}, this.parseComment(item.comment), {
+          count: Object.keys(item.actionBy).length
+        })
         temp.action = this.parseAction(item)
         result.push(temp)
       }
@@ -231,13 +249,16 @@ export default {
       }
 
       if (item.comment.rootCommentId) {
+        // delete a reply
         delAction.encodedPageURL = item.comment.encodedPageURL
         delAction.commentURL = `replies/${item.comment.rootCommentId}/${item.comment.commentId}`
         delAction.countURL = `comments/${item.comment.rootCommentId}/repliesCount`
       } else {
-        delAction.commentURL = `comments//${item.comment.commentId}`
-        delAction.countURL = `comments/commentsCount`
+        // delete a normal comment
+        delAction.commentURL = `comments/${item.comment.commentId}`
+        delAction.countURL = `commentsCount`
         if (item.comment.repliesCount) {
+          // delete a root comment with replies
           delAction.repliesCount = item.comment.repliesCount
           delAction.replyURL = `replies/${item.comment.commentId}`
         }
