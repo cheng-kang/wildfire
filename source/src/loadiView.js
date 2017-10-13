@@ -58,7 +58,7 @@ import Poptip from 'iview/src/components/poptip'
 import Spin from 'iview/src/components/spin'
 // import Steps from 'iview/src/components/steps'
 import Switch from 'iview/src/components/switch'
-// import Table from 'iview/src/components/table'
+import Table from 'iview/src/components/table'
 import Tabs from 'iview/src/components/tabs'
 // import Tag from 'iview/src/components/tag'
 // import Timeline from 'iview/src/components/timeline'
@@ -119,10 +119,10 @@ const iview = {
   // LoadingBar,
   Menu,
   iMenu: Menu,
-  // MenuGroup: Menu.Group,
+  MenuGroup: Menu.Group,
   MenuItem: Menu.Item,
   iMenuItem: Menu.Item,
-  // Submenu: Menu.Sub,
+  Submenu: Menu.Sub,
   Message,
   Modal,
   iModal: Modal,
@@ -150,8 +150,8 @@ const iview = {
   // Steps,
   // Switch,
   iSwitch: Switch,
-  // iTable: Table,
-  // Table,
+  iTable: Table,
+  Table,
   Tabs: Tabs,
   TabPane: Tabs.Pane,
   iTabs: Tabs,

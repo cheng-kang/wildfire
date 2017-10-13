@@ -16,9 +16,9 @@
     <section class="top-reply-area" v-if="isMain">
       <div class="tool-bar">
         <span style="color: #bbbec4">
-          {{isLoadingUserData 
-              ? $i18next.t('text/initializingMentionAutocomplete') 
-              : (this.user 
+          {{isLoadingUserData
+              ? $i18next.t('text/initializingMentionAutocomplete')
+              : (this.user
                   ? $i18next.t('text/initializedMentionAutocomplete')
                   : $i18next.t('error/mentionFuncNotAuthorized'))}}
         </span>
@@ -29,7 +29,7 @@
           @click="form.content = ''">
           {{$i18next.t('button/reset')}}
         </i-button>
-        
+
         <i-button :type="isPosting ? 'ghost' : 'primary'"
           style="margin-left: 8px"
           @click="postComment"
@@ -46,7 +46,7 @@
         @click="form.content = ''">
         {{$i18next.t('button/reset')}}
       </i-button>
-      
+
       <i-button :type="isPosting ? 'ghost' : 'primary'"
         style="margin-left: 8px"
         @click="postComment"
@@ -161,85 +161,90 @@ export default {
         const order = -1 * aDate.getTime()
 
         let replyToCommentId = null
-        let updates = {}
 
         if (isReply) {
           replyToCommentId = replyToComment['.key']
         }
-        const postData = { authorUid, date, order, content, replyToCommentId, ip }
-        const emptyRef = this.$database.ref(`/pages/${encodedPageURL}`).push()
 
+        let commentURL
+        let countURL
+        let postData = { authorUid, date, order, content, replyToCommentId, ip }
+        if (rootComment) {
+          commentURL = `/pages/${encodedPageURL}/replies/${rootComment['.key']}`
+          countURL = `/pages/${encodedPageURL}/comments/${rootComment['.key']}/repliesCount`
+        } else if (isReply) {
+          commentURL = `/pages/${encodedPageURL}/replies/${replyToComment['.key']}`
+          countURL = `/pages/${encodedPageURL}/comments/${replyToComment['.key']}/repliesCount`
+        } else {
+          commentURL = `/pages/${encodedPageURL}/comments`
+          countURL = `/pages/${encodedPageURL}/commentsCount`
+          postData = Object.assign({}, postData, {repliesCount: 0})
+        }
+
+        var newNode = this.$database.ref(commentURL).push(postData)
         /*
           There is a difference between `firebase` and `wilddog`
           Note:
             - firebase: ref.key
             - wilddog: ref.key()
          */
-        const newKey = this.$config.databaseProvider === 'firebase' ? emptyRef.key : emptyRef.key()
+        const newKey = this.$config.databaseProvider === 'firebase' ? newNode.key : newNode.key()
 
-        if (rootComment) {
-          updates[`/pages/${encodedPageURL}/replies/${rootComment['.key']}/${newKey}`] = postData
-          updates[`/pages/${encodedPageURL}/comments/${rootComment['.key']}/repliesCount`] = this.newRepliesCount
-        } else if (isReply) {
-          updates[`/pages/${encodedPageURL}/replies/${replyToComment['.key']}/${newKey}`] = postData
-          updates[`/pages/${encodedPageURL}/comments/${replyToComment['.key']}/repliesCount`] = this.newRepliesCount
-        } else {
-          updates[`/pages/${encodedPageURL}/comments/${newKey}`] = Object.assign({}, postData, {repliesCount: 0})
-          updates[`/pages/${encodedPageURL}/commentsCount`] = this.newCommentsCount
-        }
+        newNode.then(() => {
+          this.$database.ref(countURL).transaction((currentCount) => {
+            return (currentCount || 0) + 1
+          }).then(() => {
+            this.isPosting = false
+            this.$emit('finishedReplying') // When successfully posted reply, hide current reply area
+            this.form.content = ''
+            this.$Message.success(this.$i18next.t('text/commentPosted'))
 
-        this.$database.ref().update(updates)
-        .then(() => {
-          this.isPosting = false
-          this.$emit('finishedReplying') // When successfully posted reply, hide current reply area
-          this.form.content = ''
-          this.$Message.success(this.$i18next.t('text/commentPosted'))
+            /*
+              Handle Mention
+             */
+            // Forbid anonymous user to use Mention
+            if (!this.user) { return }
 
-          /*
-            Handle Mention
-           */
-          // Forbid anonymous user to use Mention
-          if (!this.user) { return }
+            const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || []
+            if (users.length !== 0) {
+              mentions.forEach(mention => {
+                const email = mention.slice(mention.indexOf('(') + 1, -1)
+                const mentionedUid = this.users.find(user => {
+                  return user.email === email
+                }).id
 
-          const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || []
-          if (users.length !== 0) {
-            mentions.forEach(mention => {
-              const email = mention.slice(mention.indexOf('(') + 1, -1)
-              const mentionedUid = this.users.find(user => {
-                return user.email === email
-              }).id
-
-              this.$database.ref(`/mention/${mentionedUid}`).push({
-                date,
-                order,
-                page: encodedPageURL,
-                commentId: isReply ? null : newKey,
-                replyId: isReply ? newKey : null,
-                isRead: false
+                this.$database.ref(`/mention/${mentionedUid}`).push({
+                  date,
+                  order,
+                  page: encodedPageURL,
+                  commentId: isReply ? null : newKey,
+                  replyId: isReply ? newKey : null,
+                  isRead: false
+                })
               })
-            })
-          } else {
-            mentions.forEach(mention => {
-              const email = mention.slice(mention.indexOf('(') + 1, -1)
-              this.$database.ref(`users`).orderByChild('email').equalTo(email).once('value').then((snapshot) => {
-                let res = snapshot.val()
-                if (res) {
-                  const mentionedUid = Object.keys(res)[0]
-                  this.$database.ref(`/mention/${mentionedUid}`).push({
-                    date,
-                    order,
-                    page: encodedPageURL,
-                    commentId: isReply ? null : newKey,
-                    replyId: isReply ? newKey : null,
-                    isRead: false
-                  })
-                }
+            } else {
+              mentions.forEach(mention => {
+                const email = mention.slice(mention.indexOf('(') + 1, -1)
+                this.$database.ref(`users`).orderByChild('email').equalTo(email).once('value').then((snapshot) => {
+                  let res = snapshot.val()
+                  if (res) {
+                    const mentionedUid = Object.keys(res)[0]
+                    this.$database.ref(`/mention/${mentionedUid}`).push({
+                      date,
+                      order,
+                      page: encodedPageURL,
+                      commentId: isReply ? null : newKey,
+                      replyId: isReply ? newKey : null,
+                      isRead: false
+                    })
+                  }
+                })
               })
-            })
-          }
-          /*
-            End of: Handle Mention
-           */
+            }
+            /*
+              End of: Handle Mention
+             */
+          })
         })
         .catch((error) => {
           this.isPosting = false
