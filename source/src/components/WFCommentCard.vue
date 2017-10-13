@@ -231,7 +231,7 @@ export default {
       return this.comment.replyToCommentId
     },
     parentCommentId () {
-      return this.parentComment['.key']
+      return this.parentComment ? this.parentComment['.key'] : undefined
     },
     likeUserIdList () {
       return this.comment.likes === undefined ? [] : Object.keys(this.comment.likes)
@@ -388,31 +388,38 @@ export default {
     toggleVote (type) {
       if (!this.user) { return }
       const { uid } = this.user
-
+      const now = new Date()
       const commentId = this.comment['.key']
-      const parentCommentId = this.parentComment ? this.parentCommentId : null
-      const baseRef = `/pages/${this.encodedPageURL}`
 
-      const ref = baseRef + (parentCommentId
-        ? `/replies/${parentCommentId}/${commentId}/${type}s/${uid}`
-        : `/comments/${commentId}/${type}s/${uid}`)
-
-      const oppositeType = type === 'like' ? 'dislike' : 'like'
-      const removeOppositeVoteRef = baseRef + (parentCommentId
-        ? `/replies/${parentCommentId}/${commentId}/${oppositeType}s/${uid}`
-        : `/comments/${commentId}/${oppositeType}s/${uid}`)
-
-      let updates = {}
-      if (this[`${type}UserIdList`].indexOf(uid) === -1) {
-        updates[ref] = (new Date()).toISOString()
-        const shouldRemoveOppositeVote = this[`${oppositeType}UserIdList`].indexOf(uid) !== -1
-        if (shouldRemoveOppositeVote) {
-          updates[removeOppositeVoteRef] = null
-        }
-        this.$database.ref().update(updates)
+      let commentURL = `/pages/${this.encodedPageURL}`
+      if (this.parentCommentId) {
+        commentURL += `/replies/${this.parentCommentId}/${commentId}`
       } else {
-        this.$database.ref(ref).remove()
+        commentURL += `/comments/${commentId}`
       }
+
+      let likes = this.comment.likes || {}
+      let dislikes = this.comment.dislikes || {}
+      if (type === 'like') {
+        if (uid in likes) {
+          likes[uid] = null
+        } else {
+          likes[uid] = now.toISOString()
+          dislikes[uid] = null
+        }
+      } else if (type === 'dislike') {
+        if (uid in dislikes) {
+          dislikes[uid] = null
+        } else {
+          dislikes[uid] = now.toISOString()
+          likes[uid] = null
+        }
+      }
+
+      this.$database.ref(commentURL).update({
+        '/likes': likes,
+        '/dislikes': dislikes
+      })
     },
     confirmDelete () {
       let commentURL
