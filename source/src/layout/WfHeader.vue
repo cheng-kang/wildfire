@@ -28,8 +28,8 @@
         </span>
       </i-menu-item>
 
-      <a class="wf-nav-username" @click="showUserSettingModal">
-        {{username}}
+      <a class="wf-nav-username" :title="username" @click="showUserSettingModal">
+        {{shortenedUsername(username)}}
       </a>
       <i-submenu name="3">
         <template slot="title"></template>
@@ -121,6 +121,12 @@ export default {
     }
   },
   methods: {
+    shortenedUsername (username) {
+      if (username.length > 10) {
+        return username.slice(0, 10) + '...'
+      }
+      return username
+    },
     signOut () {
       this.$Modal.confirm({
         title: this.$i18next.t('text/signOutTitle'),

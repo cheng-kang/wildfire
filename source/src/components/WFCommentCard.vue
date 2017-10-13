@@ -8,14 +8,14 @@
       <div class="wf-comment-body">
         <header>
           <div class="header-content">
-            <a class="username" @click="showUserInfo">{{author.displayName}}</a>
+            <a class="username" :title="author.displayName" @click="showUserInfo">{{shortenedUsername(author.displayName)}}</a>
             <i-poptip
               v-if="replyToCommentId"
               trigger="hover"
               placement="top">
               <span class="parent-link">
                 <i-icon type="forward"></i-icon>
-                {{replyToComment.author.displayName}}
+                {{shortenedUsername(replyToComment.author.displayName)}}
               </span>
               <div
                 v-if="replyToComment.content &&
@@ -25,8 +25,8 @@
                 class="reply-poptip">
                 <img :src="replyToComment.author.photoURL">
                 <span>
-                  <span><strong>{{replyToComment.author.displayName}}</strong></span>
-                  <span>{{this.replyToComment.content}}</span>
+                  <span :title="replyToComment.author.displayName"><strong>{{replyToComment.author.displayName}}</strong></span>
+                  <span :title="replyToComment.content">{{replyToComment.content}}</span>
                 </span>
               </div>
               <div slot="content" v-else>
@@ -373,6 +373,12 @@ export default {
     isAnonymousUser (uid) {
       return uid.indexOf(this.$config.anonymousUserIdPrefix) !== -1
     },
+    shortenedUsername (username) {
+      if (username.length > 10) {
+        return username.slice(0, 10) + '...'
+      }
+      return username
+    },
     /**
      * @param  {string='like', 'dislike'} type
      */
@@ -537,7 +543,7 @@ export default {
 .wf-comment-body header .header-content .parent-link { font-size: 12px; }
 .wf-comment-body header .header-content .parent-link:hover { color: black; }
 .wf-comment-content { padding-bottom: 3px; }
-.less { overflow: hidden; height: 180px; margin-bottom: 10px; }
+.less { overflow: hidden; max-height: 180px; margin-bottom: 10px; }
 footer { font-size: 13px; display: flex; align-items: center; }
 footer .like-count, .dislike-count { color: rgba(237, 63, 20, .8); }
 footer .separator { font-weight: 500; margin: 0 6px; color: #e7e9ee; }
