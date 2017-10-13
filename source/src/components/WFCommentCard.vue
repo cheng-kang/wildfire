@@ -519,7 +519,7 @@ export default {
 .wf-comment-body header .header-content .parent-link { font-size: 12px; }
 .wf-comment-body header .header-content .parent-link:hover { color: black; }
 .wf-comment-content { padding-bottom: 3px; }
-.less { overflow: hidden; height: 180px; margin-bottom: 10px; }
+.less { overflow: hidden; max-height: 180px; margin-bottom: 10px; }
 footer { font-size: 13px; display: flex; align-items: center; }
 footer .like-count, .dislike-count { color: rgba(237, 63, 20, .8); }
 footer .separator { font-weight: 500; margin: 0 6px; color: #e7e9ee; }
