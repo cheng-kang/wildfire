@@ -209,9 +209,7 @@ export default {
             if (users.length !== 0) {
               mentions.forEach(mention => {
                 const email = mention.slice(mention.indexOf('(') + 1, -1)
-                const mentionedUid = this.users.find(user => {
-                  return user.email === email
-                }).id
+                const mentionedUid = this.users.find(user => user.email === email).id
 
                 this.$database.ref(`/mention/${mentionedUid}`).push({
                   date,

@@ -5,7 +5,7 @@
       mode="horizontal"
       theme="light"
       active-name="1"
-      @on-select="showReportMangementModal">
+      @on-select="menuOnSelect">
       <i-menu-item name="1">
         <i-spin v-if="commentsLoadingState === 'loading'"
           :default-slot-style="{
@@ -77,6 +77,11 @@
         <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
       </div>
     </i-modal>
+    <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true">
+      <div style="text-align:center">
+        <wf-personal-center :user="user"></wf-personal-center>
+      </div>
+    </i-modal>
     <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true">
       <div style="text-align:center">
         <wf-report-management :user="user" v-if='isSiteOwner'></wf-report-management>
@@ -88,6 +93,7 @@
 <script>
 import WfSignForm from '../components/WfSignForm'
 import WfUserSetting from '../components/WfUserSetting'
+import WfPersonalCenter from '../components/WfPersonalCenter'
 import WfReportManagement from '../components/WfReportManagement'
 
 export default {
@@ -100,6 +106,7 @@ export default {
   components: {
     WfSignForm,
     WfUserSetting,
+    WfPersonalCenter,
     WfReportManagement
   },
   data () {
@@ -107,6 +114,7 @@ export default {
       signFormModal: false,
       userSettingModal: false,
       signFormInitTab: 'signIn',
+      personalCenterModal: false,
       reportMangementModal: false
     }
   },
@@ -158,8 +166,10 @@ export default {
         })
       }
     },
-    showReportMangementModal (name) {
-      if (name === '3-3') {
+    menuOnSelect (name) {
+      if (name === '3-1') {
+        this.personalCenterModal = true
+      } else if (name === '3-3') {
         this.reportMangementModal = true
       }
     }
