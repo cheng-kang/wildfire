@@ -5,9 +5,9 @@
       :discussion-count="discussionCount"
       :comments-loading-state="commentsLoadingState"></wf-header>
     <wf-body 
-      :user="user" 
+      :user="user"
       :page-comments-count="pageCommentsCount"
-      :comments="commentsWithDotKey" 
+      :comments="commentsWithId" 
       :comments-loading-state="commentsLoadingState"></wf-body>
     <wf-footer :user="user"></wf-footer>
   </div>
@@ -30,30 +30,20 @@ export default {
       commentsLoadingState: 'prepare',
       user: null,
       pageCommentsCount: 0,
+      pageComments: [],
       comments: [],
       discussionCount: 0
     }
   },
   computed: {
-    commentsWithDotKey () {
+    commentsWithId () {
       // make sure each comment object has (1) '.key', and (2) 'replies'
       return this.comments.map((comment) => {
         return Object.assign({replies: {}},
           comment,
-          {'.key': comment['.key']}
+          { 'commentId': comment['.key'] }
         )
       })
-    }
-  },
-  watch: {
-    pageCommentsCount (newValue, oldValue) {
-      this.discussionCount = this.discussionCount - oldValue + newValue
-    },
-    comments (newValue) {
-      this.discussionCount = this.pageCommentsCount + newValue.reduce((sum, { repliesCount }) => {
-        sum += repliesCount || 0
-        return sum
-      }, 0)
     }
   },
   created () {
@@ -92,12 +82,7 @@ export default {
         this.$database.ref(`users/${user.uid}`).once('value').then((snapshot) => {
           this.user = snapshot.val()
           this.$set(this.user, 'uid', user.uid)
-
-          // Check if the current user is admin
-          this.$set(this.user, 'isAdmin', false)
-          this.$database.ref('admin').once('value').then(snapshot => {
-            this.$set(this.user, 'isAdmin', snapshot.val() === this.user.email)
-          })
+          this.$set(this.user, 'isAdmin', snapshot.val().isAdmin || false)
         })
       })
     },
@@ -111,13 +96,20 @@ export default {
       this.commentsLoadingState = 'loading'
       const { pageURL } = this.$config
 
-      this.$database.ref(`pages/${btoa(pageURL)}/commentsCount`).on('value', snapshot => {
-        const count = parseInt(snapshot.val()) || 0
-        this.pageCommentsCount = count
+      this.$database.ref(`pages/${btoa(pageURL)}/comments`).on('value', snapshot => {
+        this.pageComments = snapshot.val() || {}
+        this.pageCommentsCount = Object.keys(this.pageComments).length
+        Promise.all(Object.keys(this.pageComments).map(commentId => {
+          return this.$database.ref(`commentReplies/${commentId}`).once('value')
+        })).then(snaps => {
+          this.discussionCount = this.pageCommentsCount + snaps.reduce((repliesCount, snap) => {
+            return repliesCount + Object.keys(snap.val() || {}).length
+          }, 0)
+        })
       })
 
       this.$bindAsArray('comments', this.$database
-      .ref(`pages/${btoa(pageURL)}/comments`).orderByChild('order'), () => {
+      .ref(`comments`).orderByChild('pageURL').equalTo(btoa(pageURL)), () => {
         this.commentsLoadingState = 'failed'
         this.pageCommentsCount = 0
       }, () => {

@@ -1,6 +1,5 @@
 <template>
-  <li class="wf-comment-item"
-    :class="{'wf-reply-item': replyToCommentId}">
+  <li class="wf-comment-item" :class="{'wf-reply-item': !isTopLevelComment}">
     <section class="comment">
       <div class="wf-comment-avatar">
         <img :src="author.photoURL" :class="{ anonymous: isPostedByAnonymousUser }">
@@ -10,7 +9,7 @@
           <div class="header-content">
             <a class="username" :title="author.displayName" @click="showUserInfo">{{shortenedUsername(author.displayName)}}</a>
             <i-poptip
-              v-if="replyToCommentId"
+              v-if="!isTopLevelComment"
               trigger="hover"
               placement="top">
               <span class="parent-link">
@@ -24,10 +23,12 @@
                 slot="content"
                 class="reply-poptip">
                 <img :src="replyToComment.author.photoURL">
-                <span>
-                  <span :title="replyToComment.author.displayName"><strong>{{replyToComment.author.displayName}}</strong></span>
+                <div>
+                  <span :title="replyToComment.author.displayName">
+                    <strong>{{replyToComment.author.displayName}}</strong>
+                  </span>
                   <span :title="replyToComment.content">{{replyToComment.content}}</span>
-                </span>
+                </div>
               </div>
               <div slot="content" v-else>
                 {{$i18next.t('text/loadingCommentContent')}}
@@ -43,6 +44,7 @@
             </span>
           </div>
           <i-dropdown v-if="this.user"
+            placement="bottom-end"
             @on-click="handleDropdownClick">
             <a href="javascript:void(0)" class="drowdown-menu-button">
               <i-icon type="arrow-down-b"></i-icon>
@@ -57,14 +59,13 @@
         </header>
         <div class="wf-comment-content"
           :class="{'code-overflow-hidden': !isShowingFullText}"
-          :id="'wf-comment-content-'+comment['.key']">
+          :id="'wf-comment-content-'+comment.commentId">
           <div :class="{ less: isContentTooLong && !isShowingFullText }">
             <wf-marked-content :content="comment.content"></wf-marked-content>
           </div>
           <i-button v-if="isContentTooLong"
-            type="text"
             @click="isShowingFullText = !isShowingFullText"
-            long>
+            type="text" long>
             <template v-if="isShowingFullText">
               <i-icon type="chevron-up"></i-icon>
               {{$i18next.t('button/showLessText')}}
@@ -98,9 +99,9 @@
           <i-button
             type="text"
             class="wf-reply-button"
-            @click="isReplying = !isReplying"
+            @click="isShowingReplyArea = !isShowingReplyArea"
             v-if="commentsLoadingState === 'finished'">
-            {{isReplying ? $i18next.t('button/hide') : $i18next.t('button/reply')}}
+            {{isShowingReplyArea ? $i18next.t('button/hide') : $i18next.t('button/reply')}}
           </i-button>
           <i-poptip
             confirm
@@ -114,37 +115,35 @@
         </footer>
         <!-- If this is a comment -->
         <wf-reply-area v-if="!parentComment"
-          v-show="isReplying"
+          v-show="isShowingReplyArea"
           :user="user"
           :reply-to-comment-author-username="author.displayName"
-          :reply-to-comment="commentWithDotKey"
-          :page-comments-count="pageCommentsCount"
-          @finished-replying="isReplying = false"></wf-reply-area>
+          :reply-to-comment="comment"
+          @finished-replying="isShowingReplyArea = false"></wf-reply-area>
         <!-- If this is a reply (to a comment/reply) -->
         <wf-reply-area v-if="parentComment"
-          v-show="isReplying"
+          v-show="isShowingReplyArea"
           :user="user"
           :reply-to-comment-author-username="author.displayName"
-          :reply-to-comment="commentWithDotKey"
-          :root-comment="parentCommentWithDotKey"
-          :root-comment-replies-count="parentComment.repliesCount || 0"
-          @finished-replying="isReplying = false"></wf-reply-area>
+          :reply-to-comment="comment"
+          :root-comment="parentComment"
+          @finished-replying="isShowingReplyArea = false"></wf-reply-area>
       </div>
     </section>
     <section class="replies">
-      <ul class="wf-reply-group" v-if="!replyToCommentId">
+      <ul class="wf-reply-group" v-if="isTopLevelComment">
         <wf-comment-card
-          v-for="(reply, idx) in replies"
+          v-for="(reply, idx) in repliesWithId"
           v-show="!isShowingLessReplies ||
                   (isShowingLessReplies && idx < numberOfRepliesWhenShowingLess)"
-          :key="reply['.key']"
+          :key="reply.commentId"
           :user="user"
-          :comment="objectWithDotKey(reply, reply['.key'])"
+          :comment="reply"
           :parent-comment="comment"
           :comments-loading-state="commentsLoadingState"
           ></wf-comment-card>
         <i-button type="text"
-          v-show="replies.length > numberOfRepliesWhenShowingLess"
+          v-show="repliesWithId.length > numberOfRepliesWhenShowingLess"
           @click="isShowingLessReplies = !isShowingLessReplies"
           long>
           <template v-if="isShowingLessReplies">
@@ -189,13 +188,12 @@ export default {
   props: [
     'user',
     'comment',
-    'pageCommentsCount',
     'commentsLoadingState',
     'parentComment'
   ],
   data () {
     return {
-      isReplying: false,
+      isShowingReplyArea: false,
       author: {
         displayName: '',
         photoURL: '',
@@ -210,55 +208,45 @@ export default {
         },
         content: ''
       },
+      votes: {
+        likes: {},
+        dislikes: {}
+      },
       replies: [],
       isShowingLessReplies: true,
       numberOfRepliesWhenShowingLess: 4
     }
   },
   computed: {
-    commentWithDotKey () {
-      return Object.assign({'.key': this.comment['.key']}, this.comment)
+    repliesWithId () {
+      return this.replies.map(reply => {
+        return Object.assign(
+          {},
+          reply,
+          { commentId: reply['.key'] }
+          )
+      })
     },
-    parentCommentWithDotKey () {
-      return this.parentComment
-              ? Object.assign(
-                  {'.key': this.parentCommentId},
-                  this.parentComment
-                )
-              : {}
-    },
-    replyToCommentId () {
-      return this.comment.replyToCommentId
-    },
-    parentCommentId () {
-      return this.parentComment ? this.parentComment['.key'] : undefined
+    isTopLevelComment () {
+      return !this.comment.parentCommentId
     },
     likeUserIdList () {
-      return this.comment.likes === undefined ? [] : Object.keys(this.comment.likes)
+      return this.votes.likes === undefined ? [] : Object.keys(this.votes.likes)
     },
     dislikeUserIdList () {
-      return this.comment.dislikes === undefined ? [] : Object.keys(this.comment.dislikes)
+      return this.votes.dislikes === undefined ? [] : Object.keys(this.votes.dislikes)
     },
     currentUserId () {
       return this.user ? this.user.uid : 'null'
     },
     isPostedByAnonymousUser () {
-      return this.isAnonymousUser(this.comment.authorUid)
+      return this.isAnonymousUser(this.comment.uid)
     },
     encodedPageURL () {
       return btoa(this.$config.pageURL)
     },
     canDelete () {
-      return this.user && (this.user.uid === this.comment.authorUid || this.user.isAdmin)
-    },
-    newCommentsCount () {
-      return (parseInt(this.pageCommentsCount) || 0) - 1
-    },
-    newRepliesCount () {
-      return (parseInt(this.parentComment.repliesCount) || 0) - 1
-    },
-    isReply () {
-      return !!this.parentComment
+      return this.user && (this.user.uid === this.comment.uid || this.user.isAdmin)
     }
   },
   created () {
@@ -269,7 +257,7 @@ export default {
     this.replyToComment.author.photoURL = this.$config.defaultAvatarURL
 
     if (!this.isPostedByAnonymousUser) {
-      const authorUid = this.comment.authorUid
+      const authorUid = this.comment.uid
       if (this.user && authorUid === this.user.uid) {
         // If is current user, use current user info
         this.author.photoURL = this.user.photoURL
@@ -306,34 +294,26 @@ export default {
             user, update user info when recieves this event.
      */
     Bus.$on('CurrentUserInfoUpdated', updates => {
-      if (this.user && this.comment.authorUid === this.user.uid) {
+      if (this.user && this.comment.uid === this.user.uid) {
         this.author.displayName = updates['/displayName']
         this.author.photoURL = updates['/photoURL']
       }
     })
 
-    /*
-      If this comment is a reply (second-level comment),
-        1. determine if it's (1) a reply to comment, (2) a
-            reply to a reply, or (3) a comment
-        2. get the corresponding data asynchronously
-     */
-    if (this.parentComment) {
-      let replyToCommentRef = ''
-      if (this.parentCommentId === this.replyToCommentId) {
-        replyToCommentRef = `/pages/${this.encodedPageURL}/comments/${this.replyToCommentId}`
-      } else {
-        replyToCommentRef = `/pages/${this.encodedPageURL}/replies/${this.parentCommentId}/${this.replyToCommentId}`
-      }
+    // Get Voting data
+    this.$bindAsObject('votes', this.$database.ref(`votes/${this.comment.commentId}`))
 
-      this.$database.ref(replyToCommentRef).once('value').then((snapshot) => {
+    // If this comment is (1) a reply to comment, or
+    // (2) a reply to a reply, get corresponding detail data.
+    if (!this.isTopLevelComment) {
+      this.$database.ref(`comments/${this.comment.parentCommentId}`).once('value').then((snapshot) => {
         let comment = snapshot.val()
         if (!comment) {
           this.replyToComment.content = this.$i18next.t('text/commentDeleted')
           return
         }
         this.replyToComment.content = comment.content
-        const replyToCommentAuthorUid = comment.authorUid
+        const replyToCommentAuthorUid = comment.uid
         if (!this.isAnonymousUser(replyToCommentAuthorUid)) {
           this.$database.ref(`users/${replyToCommentAuthorUid}`).once('value')
           .then((snapshot) => {
@@ -353,8 +333,10 @@ export default {
         }
       })
     } else {
-      const commentKey = this.comment['.key']
-      this.$bindAsArray('replies', this.$database.ref(`pages/${this.encodedPageURL}/replies/${commentKey}`))
+    // If the comment is top-level comment,
+    // get its replies.
+      const commentKey = this.comment.commentId
+      this.$bindAsArray('replies', this.$database.ref(`comments`).orderByChild('rootCommentId').equalTo(commentKey))
     }
   },
   mounted () {
@@ -362,7 +344,7 @@ export default {
       Calculate comment content height
       Note: If longer than MAX_CONTENT_HEIGHT, then fold.
      */
-    const contentEle = document.getElementById('wf-comment-content-' + this.comment['.key'])
+    const contentEle = document.getElementById('wf-comment-content-' + this.comment.commentId)
     const contentEleHeight = parseInt(window.getComputedStyle(contentEle).height)
     if (contentEleHeight > MAX_CONTENT_HEIGHT) {
       this.isContentTooLong = true
@@ -370,11 +352,9 @@ export default {
     }
   },
   methods: {
-    objectWithDotKey (obj, key) {
-      return Object.assign({}, obj, {'.key': key})
-    },
     isAnonymousUser (uid) {
-      return uid.indexOf(this.$config.anonymousUserIdPrefix) !== -1
+      const { anonymousUserId } = this.$config
+      return !uid || uid === anonymousUserId
     },
     shortenedUsername (username) {
       if (username.length > 10) {
@@ -389,17 +369,10 @@ export default {
       if (!this.user) { return }
       const { uid } = this.user
       const now = new Date()
-      const commentId = this.comment['.key']
+      const commentId = this.comment.commentId
 
-      let commentURL = `/pages/${this.encodedPageURL}`
-      if (this.parentCommentId) {
-        commentURL += `/replies/${this.parentCommentId}/${commentId}`
-      } else {
-        commentURL += `/comments/${commentId}`
-      }
-
-      let likes = this.comment.likes || {}
-      let dislikes = this.comment.dislikes || {}
+      let likes = this.votes.likes || {}
+      let dislikes = this.votes.dislikes || {}
       if (type === 'like') {
         if (uid in likes) {
           likes[uid] = null
@@ -416,37 +389,28 @@ export default {
         }
       }
 
-      this.$database.ref(commentURL).update({
+      this.$database.ref(`votes/${commentId}`).update({
         '/likes': likes,
         '/dislikes': dislikes
       })
     },
     confirmDelete () {
-      let commentURL
-      let countURL
-      let replyURL
-      if (this.parentComment) {
-        const commentKey = this.parentCommentId
-        const replyKey = this.comment['.key']
-        commentURL = `pages/${this.encodedPageURL}/replies/${commentKey}/${replyKey}`
-        countURL = `pages/${this.encodedPageURL}/comments/${commentKey}/repliesCount`
-      } else {
-        const commentKey = this.comment['.key']
-        commentURL = `pages/${this.encodedPageURL}/comments/${commentKey}`
-        countURL = `pages/${this.encodedPageURL}/commentsCount`
-        if (this.comment.repliesCount) {
-          replyURL = `pages/${this.encodedPageURL}/replies/${commentKey}`
-        }
-      }
-      this.$database.ref(commentURL).remove().then(() => {
-        this.$database.ref(countURL).transaction((currentCount) => {
-          return (currentCount || 0) > 0 ? (currentCount || 0) - 1 : 0
-        }).then(() => {
-          if (replyURL) {
-            this.$database.ref(replyURL).remove()
-          }
-          this.$Message.success(this.$i18next.t('message/deleteSucceed'))
+      const commentId = this.comment.commentId
+      let updates = {}
+      updates[`comments/${commentId}`] = null
+      updates[`votes/${commentId}`] = null
+      if (this.isTopLevelComment) {
+        updates[`pages/${this.comment.pageURL}/comments/${commentId}`] = null
+        updates[`commentReplies/${commentId}`] = null
+        this.repliesWithId.forEach(reply => {
+          updates[`comments/${reply.commentId}`] = null
         })
+      } else {
+        updates[`commentReplies/${this.comment.rootCommentId}/${commentId}`] = null
+      }
+
+      this.$database.ref().update(updates).then(() => {
+        this.$Message.success(this.$i18next.t('message/deleteSucceed'))
       }).catch(() => {
         this.$Message.error(this.$i18next.t('message/deleteFailed'))
       })
@@ -455,11 +419,10 @@ export default {
       this[name]()
     },
     reportCurrentComment () {
-      if (!this.user) {
-        return
-      }
+      if (!this.user) { return }
+
       var now = new Date()
-      this.$database.ref(`reported/comments/${this.comment['.key']}`)
+      this.$database.ref(`reported/comments/${this.comment.commentId}`)
       .once('value').then((snapshot) => {
         let temp = snapshot.val()
         if (temp) {
@@ -468,7 +431,7 @@ export default {
             this.$Message.error(this.$i18next.t('message/reportRepeatError'))
           } else {
             actionBy[this.currentUserId] = now.toISOString()
-            this.$database.ref(`reported/comments/${this.comment['.key']}/actionBy`)
+            this.$database.ref(`reported/comments/${this.comment.commentId}/actionBy`)
             .update(actionBy).then(() => {
               this.$Message.success(this.$i18next.t('message/reportCommentSucceeded'))
             }).catch(err => {
@@ -480,31 +443,28 @@ export default {
           let actionBy = {}
           actionBy[this.currentUserId] = now.toISOString()
           const order = -1 * now.getTime()
-          var comment = {
-            'encodedPageURL': this.encodedPageURL,
-            'commentId': this.comment['.key'],
+
+          let comment = {
+            'pageURL': this.encodedPageURL,
+            'commentId': this.comment.commentId,
             'content': this.comment.content,
             'date': this.comment.date
-          }
-          if (this.comment.replyToCommentId) {
-            comment.rootCommentId = this.parentCommentId
-          } else {
-            comment.repliesCount = this.comment.repliesCount
           }
 
           var author = {
             'ip': this.comment.ip
           }
-          if (this.comment.authorUid.indexOf('ANON') > -1) {
+          // ！！！author 可简化
+          if (this.isAnonymousUser(this.comment.uid)) {
             author.isAnonymousUser = true
           } else {
             author.isAnonymousUser = false
-            author.authorUid = this.comment.authorUid
+            author.authorUid = this.comment.uid
             author.email = this.author.email
             author.displayName = this.author.displayName
           }
 
-          this.$database.ref(`reported/comments/${this.comment['.key']}`).update({
+          this.$database.ref(`reported/comments/${this.comment.commentId}`).update({
             actionBy,
             order,
             comment,
@@ -520,7 +480,7 @@ export default {
     },
     showUserInfo () {
       Bus.$emit('ShowUserInfo', {
-        uid: this.comment.authorUid,
+        uid: this.comment.uid,
         displayName: this.author.displayName,
         photoURL: this.author.photoURL,
         email: this.author.email,

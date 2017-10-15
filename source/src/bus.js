@@ -32,6 +32,7 @@ const Bus = new Vue({
        */
       isLoadingUserData: true,
       users: [],
+      admin: null,
       currentReplyAreaId: null,
       /*
         End of: Mention

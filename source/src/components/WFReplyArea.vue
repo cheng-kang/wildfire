@@ -114,12 +114,6 @@ export default {
     isReply () {
       return !!this.replyToComment
     },
-    newCommentsCount () {
-      return (parseInt(this.pageCommentsCount) || 0) + 1
-    },
-    newRepliesCount () {
-      return (parseInt(this.rootCommentRepliesCount) || 0) + 1
-    },
     shouldDisableInput () {
       return this.isPosting || this.commentsLoadingState === 'loading'
     },
@@ -145,43 +139,42 @@ export default {
     })
   },
   methods: {
+    isAnonymousUser (uid) {
+      const { anonymousUserId } = this.$config
+      return !uid || uid === anonymousUserId
+    },
     postComment () {
       if (this.isPosting) { return }
 
       this.isPosting = true
       const { content } = this.form
-      const { user, users, isReply, encodedPageURL, rootComment, replyToComment } = this
-      const { anonymousUserIdPrefix } = this.$config
+      const { user, users, isReply, encodedPageURL, replyToComment } = this
+      const { anonymousUserId } = this.$config
 
       if (content.trim() !== '') {
         const aDate = new Date()
         const ip = this.$ip
-        const authorUid = user ? user.uid : (anonymousUserIdPrefix + ip)
+        const uid = user ? user.uid : anonymousUserId
         const date = aDate.toISOString()
-        const order = -1 * aDate.getTime()
 
-        let replyToCommentId = null
+        let pageURL = null
+        let parentCommentId = null
+        let rootCommentId = null
 
         if (isReply) {
-          replyToCommentId = replyToComment['.key']
-        }
-
-        let commentURL
-        let countURL
-        let postData = { authorUid, date, order, content, replyToCommentId, ip }
-        if (rootComment) {
-          commentURL = `/pages/${encodedPageURL}/replies/${rootComment['.key']}`
-          countURL = `/pages/${encodedPageURL}/comments/${rootComment['.key']}/repliesCount`
-        } else if (isReply) {
-          commentURL = `/pages/${encodedPageURL}/replies/${replyToComment['.key']}`
-          countURL = `/pages/${encodedPageURL}/comments/${replyToComment['.key']}/repliesCount`
+          parentCommentId = replyToComment['.key']
+          if (replyToComment.rootCommentId) {
+            rootCommentId = replyToComment.rootCommentId
+          } else {
+            rootCommentId = replyToComment['.key']
+          }
         } else {
-          commentURL = `/pages/${encodedPageURL}/comments`
-          countURL = `/pages/${encodedPageURL}/commentsCount`
-          postData = Object.assign({}, postData, {repliesCount: 0})
+          pageURL = encodedPageURL
         }
 
-        var newNode = this.$database.ref(commentURL).push(postData)
+        const postData = { uid, content, date, ip, pageURL, parentCommentId, rootCommentId }
+
+        var newNode = this.$database.ref().push()
         /*
           There is a difference between `firebase` and `wilddog`
           Note:
@@ -190,59 +183,106 @@ export default {
          */
         const newKey = this.$config.databaseProvider === 'firebase' ? newNode.key : newNode.key()
 
-        newNode.then(() => {
-          this.$database.ref(countURL).transaction((currentCount) => {
-            return (currentCount || 0) + 1
-          }).then(() => {
-            this.isPosting = false
-            this.$emit('finished-replying') // When successfully posted reply, hide current reply area
-            this.form.content = ''
-            this.$Message.success(this.$i18next.t('text/commentPosted'))
+        let updates = {}
+        updates[`comments/${newKey}`] = postData
+        if (isReply) {
+          updates[`commentReplies/${rootCommentId}/${newKey}`] = date
+        } else {
+          updates[`pages/${encodedPageURL}/comments/${newKey}`] = date
+        }
 
-            /*
-              Handle Mention
-             */
-            // Forbid anonymous user to use Mention
-            if (!this.user) { return }
+        this.$database.ref().update(updates).then(() => {
+          this.isPosting = false
+          this.$emit('finished-replying') // When successfully posted reply, hide current reply area
+          this.form.content = ''
+          this.$Message.success(this.$i18next.t('text/commentPosted'))
 
-            const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || []
-            if (users.length !== 0) {
-              mentions.forEach(mention => {
-                const email = mention.slice(mention.indexOf('(') + 1, -1)
-                const mentionedUid = this.users.find(user => user.email === email).id
+          /*
+            Handle Mention
+           */
+          // Forbid anonymous user to use Mention
+          if (!this.user) { return }
 
-                this.$database.ref(`/mention/${mentionedUid}`).push({
-                  date,
-                  order,
-                  page: encodedPageURL,
-                  commentId: isReply ? null : newKey,
-                  replyId: isReply ? newKey : null,
-                  isRead: false
-                })
-              })
-            } else {
-              mentions.forEach(mention => {
-                const email = mention.slice(mention.indexOf('(') + 1, -1)
-                this.$database.ref(`users`).orderByChild('email').equalTo(email).once('value').then((snapshot) => {
-                  let res = snapshot.val()
-                  if (res) {
-                    const mentionedUid = Object.keys(res)[0]
-                    this.$database.ref(`/mention/${mentionedUid}`).push({
-                      date,
-                      order,
-                      page: encodedPageURL,
-                      commentId: isReply ? null : newKey,
-                      replyId: isReply ? newKey : null,
-                      isRead: false
-                    })
-                  }
-                })
-              })
-            }
-            /*
-              End of: Handle Mention
-             */
-          })
+          const admin = Bus.$data.admin
+
+          let shouldNotifyAdmin = true
+          let shouldNotifyParentCommentAuthor = true
+          let shouldNotifyRootCommentAuthor = true
+          let isAdminMentioned = false
+          let isParentCommentAuthorMentioned = true
+          let isRootCommentAuthorMentioned = true
+          // If current user is admin,
+          // then no notification to `admin`.
+          if (user && user.uid === admin.uid) {
+            shouldNotifyAdmin = false
+          }
+          // If replying to comment posted by
+          //  (1) anonymous user,
+          //  (2) self, or
+          //  (3) admin,
+          // then no notification to `parentCommentAuthor`.
+          if (!replyToComment || this.isAnonymousUser(replyToComment.uid)) {
+            shouldNotifyParentCommentAuthor = false
+          } else if (user && user.uid === replyToComment.uid) {
+            shouldNotifyParentCommentAuthor = false
+          } else if (admin.uid === replyToComment.uid) {
+            shouldNotifyParentCommentAuthor = false
+          }
+          // If `rootComment` posted by
+          //  (1) anonymous user,
+          //  (2) self, or
+          //  (3) admin,
+          // then no notification to `rootCommentAuthor`.
+          if (!replyToComment || this.isAnonymousUser(replyToComment.rootCommentUid)) {
+            shouldNotifyRootCommentAuthor = false
+          } else if (user && user.uid === replyToComment.rootCommentUid) {
+            shouldNotifyRootCommentAuthor = false
+          } else if (admin.uid === replyToComment.rootCommentUid) {
+            shouldNotifyRootCommentAuthor = false
+          }
+
+          const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || []
+          if (users.length !== 0) {
+            const mentionedUids = mentions.map(mention => this.users.find(user => user.email === mention.slice(mention.indexOf('(') + 1, -1)).id)
+            this.handleNotifications(
+              mentionedUids,
+              newKey,
+              {
+                shouldNotifyAdmin,
+                shouldNotifyParentCommentAuthor,
+                shouldNotifyRootCommentAuthor
+              },
+              {
+                isAdminMentioned,
+                isParentCommentAuthorMentioned,
+                isRootCommentAuthorMentioned
+              }
+              )
+          } else {
+            Promise.all(mentions.map(mention => {
+              const email = mention.slice(mention.indexOf('(') + 1, -1)
+              return this.$database.ref(`users`).orderByChild('email').equalTo(email).once('value')
+            })).then(snaps => {
+              const mentionedUids = snaps.map(snap => snap.val() ? Object.keys(snap.val())[0] : undefined)
+              this.handleNotifications(
+                mentionedUids,
+                newKey,
+                {
+                  shouldNotifyAdmin,
+                  shouldNotifyParentCommentAuthor,
+                  shouldNotifyRootCommentAuthor
+                },
+                {
+                  isAdminMentioned,
+                  isParentCommentAuthorMentioned,
+                  isRootCommentAuthorMentioned
+                }
+                )
+            })
+          }
+          /*
+            End of: Handle Mention
+           */
         })
         .catch((error) => {
           this.isPosting = false
@@ -251,6 +291,96 @@ export default {
           console.log(error)
         })
       }
+    },
+    handleNotifications (mentionedUids, commentId, notifyFlags, mentionFlags) {
+      const user = this.user
+      const admin = Bus.$data.admin
+      const {
+        shouldNotifyAdmin,
+        shouldNotifyParentCommentAuthor,
+        shouldNotifyRootCommentAuthor
+      } = notifyFlags
+      let {
+        isAdminMentioned,
+        isParentCommentAuthorMentioned,
+        isRootCommentAuthorMentioned
+      } = mentionFlags
+      mentionedUids.forEach(mentionedUid => {
+        // Incase uid is undefined/null
+        if (!mentionedUid) { return }
+
+        // If mentioning self, no notification.
+        if (mentionedUid === user.uid) { return }
+        // If mentioning (1) admin, (2) parentCommentAuthor,
+        // or (3) rootCommentAuthor, then set related flag
+        // and leave the notification
+        if (mentionedUid === admin.uid) {
+          isAdminMentioned = true
+          return
+        }
+        if (this.replyToComment && mentionedUid === this.replyToComment.uid) {
+          isParentCommentAuthorMentioned = true
+          return
+        }
+        if (this.replyToComment && mentionedUid === this.replyToComment.rootCommentUid) {
+          isRootCommentAuthorMentioned = true
+          return
+        }
+        // Post notification to mentioned user
+        this.postNotification({
+          uid: mentionedUid,
+          type: 'm',
+          pageURL: this.encodedPageURL,
+          commentId
+        })
+      })
+
+      if (shouldNotifyAdmin) {
+        this.postNotification({
+          uid: admin.uid,
+          type: isAdminMentioned
+                ? 'm'
+                : (this.replyToComment
+                    ? (this.replyToComment.uid === admin.uid
+                      ? 'r' : 'd')
+                    : 'c'),
+          pageURL: this.encodedPageURL,
+          commentId
+        })
+      }
+      if (shouldNotifyParentCommentAuthor) {
+        this.postNotification({
+          uid: this.replyToComment.uid,
+          type: isParentCommentAuthorMentioned ? 'm' : 'r',
+          pageURL: this.encodedPageURL,
+          commentId
+        })
+      }
+      if (shouldNotifyRootCommentAuthor) {
+        this.postNotification({
+          uid: this.replyToComment.rootCommentUid,
+          type: isRootCommentAuthorMentioned
+                ? 'm'
+                : (this.replyToComment.parentCommentUid === this.replyToComment.rootCommentUid
+                    ? 'r' : 'd'),
+          pageURL: this.encodedPageURL,
+          commentId
+        })
+      }
+    },
+    postNotification (data) {
+      const aDate = new Date()
+      const date = aDate.toISOString()
+      const {uid, type, pageURL = null, commentId = null, content = null} = data
+      this.$database.ref('notifications').push({
+        uid,
+        type,
+        pageURL,
+        commentId,
+        content,
+        date,
+        isRead: false
+      })
     },
     contentOnChange (e) {
       // Forbid anonymous user to use Mention
