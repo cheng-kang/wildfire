@@ -31,7 +31,7 @@
       <a class="wf-nav-username" :title="username" @click="showUserSettingModal">
         {{shortenedUsername(username)}}
       </a>
-      <i-submenu name="3">
+      <i-submenu name="3" v-if="user">
         <template slot="title"></template>
         <i-menu-group title="个人中心">
           <i-menu-item name="3-1">系统消息</i-menu-item>
@@ -79,7 +79,7 @@
     </i-modal>
     <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true">
       <div style="text-align:center">
-        <wf-personal-center :user="user"></wf-personal-center>
+        <wf-personal-center :user="user" v-if="user"></wf-personal-center>
       </div>
     </i-modal>
     <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true">

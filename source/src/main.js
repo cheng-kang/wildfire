@@ -19,7 +19,7 @@ Vue.config.productionTip = true
 const wildfireConfig = {
   databaseProvider: 'wilddog',
   databaseConfig: {
-    siteId: 'wd2231595668ouosqu'
+    siteId: 'wd2168973289ifdmcg'
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
@@ -68,7 +68,7 @@ Vue.prototype.$config = {
   pageURL,
   locale,
   defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
-  anonymousUserIdPrefix: 'ANON:'
+  anonymousUserId: 'Anonymous'
 }
 Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment

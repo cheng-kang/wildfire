@@ -3,18 +3,16 @@
     <wf-reply-area 
       :user="user" 
       :comments-loading-state="commentsLoadingState"
-      :page-comments-count="pageCommentsCount"
       style="margin-bottom: 30px;"
       :isMain="true"></wf-reply-area>
 
     <template v-if="comments.length !== 0">
       <ul class="wf-comment-group">
         <wf-comment-card 
-          v-for="(comment, idx) in currentPageCommentsWithDotKey"
-          :key="comment['.key']"
+          v-for="(comment, idx) in currentPageComments"
+          :key="comment.commentId"
           :user="user"
-          :comment="objectWithDotKey(comment, comment['.key'])"
-          :page-comments-count="pageCommentsCount"
+          :comment="comment"
           :comments-loading-state="commentsLoadingState"
           ></wf-comment-card>
       </ul>
@@ -32,11 +30,7 @@
           alignItems: 'center', 
           justifyContent: 'center'
         }">
-          <i-icon
-            type="load-c"
-            size="18"
-            class="spin-icon"
-            :style="{marginRight: '5px'}"></i-icon>
+          <i-icon class="spin-icon" type="load-c" size="18" :style="{marginRight: '5px'}"></i-icon>
           <div>{{$i18next.t('text/loadingComments')}}</div>
       </i-spin>
       <span v-if="commentsLoadingState === 'finished'">
@@ -127,15 +121,6 @@ export default {
       const end = this.currentPage * this.numberOfCommentsPerPage
       return this.comments.slice(start, end)
     },
-    currentPageCommentsWithDotKey () {
-      return this.currentPageComments.map((comment) => {
-        return Object.assign(
-          {replies: {}},
-          comment,
-          {'.key': comment['.key']}
-        )
-      })
-    },
     mentioningUserAutoComplete () {
       if (!this.mentioningUsername) { return [] }
       return Bus.$data.users.filter(user => {
@@ -152,9 +137,12 @@ export default {
     this.$database.ref('/users').once('value').then(snapshot => {
       const result = snapshot.val() || {}
       Bus.$data.users = Object.keys(result).map(id => {
-        const { displayName, photoURL, email } = result[id]
+        const { displayName, photoURL, email, isAdmin } = result[id]
+        if (isAdmin) {
+          Bus.$data.admin = { uid: id, displayName, photoURL, email }
+        }
         return {
-          id,
+          uid: id,
           displayName,
           photoURL,
           email
@@ -204,9 +192,6 @@ export default {
     })
   },
   methods: {
-    objectWithDotKey (obj, key) {
-      return Object.assign({}, obj, {'.key': key})
-    },
     pageChanged (newPage) {
       this.currentPage = newPage
     },

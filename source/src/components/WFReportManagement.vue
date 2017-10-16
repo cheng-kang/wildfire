@@ -273,12 +273,12 @@ export default {
       }
 
       var delAction = {
-        encodedPageURL: item.comment.encodedPageURL
+        encodedPageURL: item.comment.pageURL
       }
 
       if (item.comment.rootCommentId) {
         // delete a reply
-        delAction.encodedPageURL = item.comment.encodedPageURL
+        delAction.encodedPageURL = item.comment.pageURL
         delAction.commentURL = `replies/${item.comment.rootCommentId}/${item.comment.commentId}`
         delAction.countURL = `comments/${item.comment.rootCommentId}/repliesCount`
       } else {
