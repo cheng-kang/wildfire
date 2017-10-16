@@ -150,7 +150,7 @@ export default {
   font-size: 0.8em;
   margin-right: 16px;
   color: #656c7a;
-  min-width: 60px;
+  width: 60px;
   text-align: left;
 }
 .notification-list li span.content {
