@@ -75,7 +75,8 @@ export default {
               h('Poptip', {
                 props: {
                   transfer: true,
-                  showTitle: false
+                  showTitle: false,
+                  placement: 'bottom'
                 }
               }, [
                 h('p', [
