@@ -37,13 +37,12 @@ export default {
   },
   computed: {
     commentsWithId () {
-      // make sure each comment object has (1) '.key', and (2) 'replies'
       return this.comments.map((comment) => {
         return Object.assign({replies: {}},
           comment,
           { 'commentId': comment['.key'] }
         )
-      })
+      }).reverse() // reverse the list to get descending comments
     }
   },
   created () {
