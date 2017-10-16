@@ -159,20 +159,25 @@ export default {
 
         let pageURL = null
         let parentCommentId = null
+        let parentCommentUid = null
         let rootCommentId = null
+        let rootCommentUid = null
 
         if (isReply) {
-          parentCommentId = replyToComment['.key']
+          parentCommentId = replyToComment.commentId
+          parentCommentUid = replyToComment.uid
           if (replyToComment.rootCommentId) {
             rootCommentId = replyToComment.rootCommentId
+            rootCommentUid = replyToComment.rootCommentUid
           } else {
-            rootCommentId = replyToComment['.key']
+            rootCommentId = replyToComment.commentId
+            rootCommentUid = replyToComment.uid
           }
         } else {
           pageURL = encodedPageURL
         }
 
-        const postData = { uid, content, date, ip, pageURL, parentCommentId, rootCommentId }
+        const postData = { uid, content, date, ip, pageURL, parentCommentId, parentCommentUid, rootCommentId, rootCommentUid }
 
         var newNode = this.$database.ref().push()
         /*
@@ -200,8 +205,6 @@ export default {
           /*
             Handle Mention
            */
-          // Forbid anonymous user to use Mention
-          if (!this.user) { return }
 
           const admin = Bus.$data.admin
 
@@ -209,8 +212,8 @@ export default {
           let shouldNotifyParentCommentAuthor = true
           let shouldNotifyRootCommentAuthor = true
           let isAdminMentioned = false
-          let isParentCommentAuthorMentioned = true
-          let isRootCommentAuthorMentioned = true
+          let isParentCommentAuthorMentioned = false
+          let isRootCommentAuthorMentioned = false
           // If current user is admin,
           // then no notification to `admin`.
           if (user && user.uid === admin.uid) {
@@ -220,6 +223,7 @@ export default {
           //  (1) anonymous user,
           //  (2) self, or
           //  (3) admin,
+          // or new comment is top-level comment,
           // then no notification to `parentCommentAuthor`.
           if (!replyToComment || this.isAnonymousUser(replyToComment.uid)) {
             shouldNotifyParentCommentAuthor = false
@@ -232,6 +236,8 @@ export default {
           //  (1) anonymous user,
           //  (2) self, or
           //  (3) admin,
+          // or new comment is top-level comment,
+          // or `rootCommentAuthor` is `parentCommentAuthor`,
           // then no notification to `rootCommentAuthor`.
           if (!replyToComment || this.isAnonymousUser(replyToComment.rootCommentUid)) {
             shouldNotifyRootCommentAuthor = false
@@ -239,8 +245,28 @@ export default {
             shouldNotifyRootCommentAuthor = false
           } else if (admin.uid === replyToComment.rootCommentUid) {
             shouldNotifyRootCommentAuthor = false
+          } else if (replyToComment.uid === replyToComment.rootCommentUid) {
+            shouldNotifyRootCommentAuthor = false
           }
 
+          // Forbid anonymous user to use Mention
+          if (!this.user) {
+            this.handleNotifications(
+              [],
+              newKey,
+              {
+                shouldNotifyAdmin,
+                shouldNotifyParentCommentAuthor,
+                shouldNotifyRootCommentAuthor
+              },
+              {
+                isAdminMentioned,
+                isParentCommentAuthorMentioned,
+                isRootCommentAuthorMentioned
+              }
+              )
+            return
+          }
           const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || []
           if (users.length !== 0) {
             const mentionedUids = mentions.map(mention => this.users.find(user => user.email === mention.slice(mention.indexOf('(') + 1, -1)).id)
@@ -362,10 +388,7 @@ export default {
       if (shouldNotifyRootCommentAuthor) {
         this.postNotification({
           uid: this.replyToComment.rootCommentUid,
-          type: isRootCommentAuthorMentioned
-                ? 'm'
-                : (this.replyToComment.parentCommentUid === this.replyToComment.rootCommentUid
-                    ? 'r' : 'd'),
+          type: isRootCommentAuthorMentioned ? 'm' : 'd',
           pageURL: this.encodedPageURL,
           pageTitle: this.$config.pageTitle,
           commentId

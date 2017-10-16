@@ -69,9 +69,14 @@ export default {
           this.notifications[newNotifId] = Object.assign({}, this.notifications[newNotifId], { processedContent: this.$i18next.t('notif/relatedContentNoLongerExists') })
           return
         }
-
         this.$database.ref(`users/${comment.uid}`).once('value').then(userSnap => {
-          const commentAuthor = userSnap.val()
+          let commentAuthor = userSnap.val()
+          if (!commentAuthor) {
+            commentAuthor = {
+              email: this.$i18next.t('text/anonymousUser'),
+              displayName: this.$i18next.t('text/anonymousUser')
+            }
+          }
           let updatedContent
           if (type === 'c') {
             updatedContent = this.$i18next.t('notif/newCommentOnPage+', {
@@ -82,7 +87,6 @@ export default {
               pageURL: encodedPageURL
             })
             updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
-            console.log(updatedContent)
           } else if (type === 'r') {
             updatedContent = this.$i18next.t('notif/newReplyToComment+', {
               email: commentAuthor.email,

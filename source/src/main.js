@@ -333,7 +333,7 @@ i18next.init({
         'notif/newCommentOnPage': '有人在 <a href="{{pageURL}}" target="blank">{{pageTitle}}</a> 发布了新评论。',
         'notif/newCommentOnPage+': '<a title="{{email}}">{{displayName}}</a> 在 <a href="{{pageURL}}" title="点击访问 {{pageTitle}}" target="blank">{{pageTitle}}</a> 发布了 <a title="{{content}}">新评论</a>。',
         'notif/newReplyToComment': '有人回复了你的评论。 ',
-        'notif/newReplyToComment+': '<a title="{{email}}">{{displayName}}</a> 对你的评论进行了<a title="{{content}}">回复</a>。<a href="{{pageURL}}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>Details</a>',
+        'notif/newReplyToComment+': '<a title="{{email}}">{{displayName}}</a> 对你的评论进行了<a title="{{content}}">回复</a>。',
         'notif/newDiscussionInComment': '有人在你的评论的讨论中进行了回复。',
         'notif/newDiscussionInComment+': '<a title="{{email}}">{{displayName}}</a> 在你的评论的讨论中进行了 <a title="{{content}}">回复</a> 。',
         'notif/newMention': '有人在评论中 @ 了你。',
