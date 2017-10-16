@@ -24,7 +24,7 @@
         </i-spin>
 
         <span v-else>
-          {{discussionCount}} {{$i18next.t('button/discussions')}}
+          {{discussionCount}} {{$i18next.t(discussionCount < 2 ? 'button/comment' : 'button/comments')}}
         </span>
       </i-menu-item>
 
