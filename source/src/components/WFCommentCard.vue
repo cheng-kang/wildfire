@@ -77,7 +77,7 @@
           </i-button>
         </div>
         <footer>
-          <a href="javascript:void(0)"
+          <a :title="$i18next.t('text/likeComment')"
             :class="{
               inactive: likeUserIdList.indexOf(currentUserId) === -1,
               disabled: !user
@@ -87,7 +87,7 @@
             <i-icon type="heart"></i-icon>
           </a>
           <span class="separator">|</span>
-          <a href="javascript:void(0)"
+          <a :title="$i18next.t('text/dislikeComment')"
             :class="{
               inactive: dislikeUserIdList.indexOf(currentUserId) === -1,
               disabled: !user
@@ -499,7 +499,7 @@ export default {
 .wf-comment-item section.replies ul { width: 100%; }
 .reply-poptip { display: flex; flex-direction: row; align-items: center; }
 .reply-poptip img { width: 30px; height: 30px; }
-.reply-poptip > span { display: flex; flex-direction: column; }
+.reply-poptip div { display: flex; flex-direction: column; }
 .reply-poptip span span { overflow: auto; max-width: 120px; text-overflow: ellipsis; }
 .drowdown-menu-button { opacity: 0; }
 .wf-comment-item section.comment:hover .drowdown-menu-button { opacity: 1; }

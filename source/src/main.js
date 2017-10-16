@@ -23,6 +23,7 @@ const wildfireConfig = {
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
+  // locale: 'en'
   locale: 'zh-CN'
 }
 
@@ -211,7 +212,27 @@ i18next.init({
         'message/reportCommentSucceeded': 'Comment reported.',
         'message/reportCommentFailed': 'Something went wrong, please try again later.',
         'message/reportRepeatError': 'You had already reported this comment!',
-        'message/deleteSucceed': 'Deleted.'
+        'message/deleteSucceed': 'Deleted.',
+        'notif/newCommentOnPage': 'Someone posted new comment on <a href="{{pageURL}}" target="blank">{{pageTitle}}</a>.',
+        'notif/newCommentOnPage+': '<a title="{{email}}">{{displayName}}</a> posted <a title="{{content}}">new comment</a> on <a href="{{pageURL}}" title="Click to visit {{pageTitle}}" target="blank">{{pageTitle}}</a>.',
+        'notif/newReplyToComment': 'Someone posted new reply your comment.',
+        'notif/newReplyToComment+': '<a title="{{email}}">{{displayName}}</a> posted <a title="{{content}}">new reply</a> to your comment.',
+        'notif/newDiscussionInComment': 'Someone posted new reply in the discussion of your comment.',
+        'notif/newDiscussionInComment+': '<a title="{{email}}">{{displayName}}</a> posted <a title="{{content}}">new reply</a> in the discussion of your comment.',
+        'notif/newMention': 'Someone mentioned you in comment.',
+        'notif/newMention+': '<a title="{{email}}">{{displayName}}</a> mentioned you in <a title="{{content}}">comment</a>.',
+        'notif/details': ' <a href="{{pageURL}}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>Details</a>',
+        'notif/relatedContentNoLongerExists': 'Related content no longer exists.',
+        'notif/notificationDoesntExist': 'Notification doesn\'t exist.',
+        'notif/tips': '*Tips: view more information by hovering your mouse on the highlighted text; open related webpage by clicking Details button.',
+        'notif/noNotification': 'No notification.',
+        'text/notification': 'Notification',
+        'text/history': 'History',
+        'text/personalCenter': 'Personal',
+        'text/adminCenter': 'Admin',
+        'text/reportMangement': 'Reports',
+        'text/likeComment': 'Like this comment!',
+        'text/dislikeComment': 'Dislike this comment.'
       }
     },
     'zh-CN': {
@@ -308,7 +329,27 @@ i18next.init({
         'message/reportCommentSucceeded': '评论举报成功。',
         'message/reportCommentFailed': '出错了，请稍后再试。',
         'message/reportRepeatError': '请勿重复举报！',
-        'message/deleteSucceed': '删除成功。'
+        'message/deleteSucceed': '删除成功。',
+        'notif/newCommentOnPage': '有人在 <a href="{{pageURL}}" target="blank">{{pageTitle}}</a> 发布了新评论。',
+        'notif/newCommentOnPage+': '<a title="{{email}}">{{displayName}}</a> 在 <a href="{{pageURL}}" title="点击访问 {{pageTitle}}" target="blank">{{pageTitle}}</a> 发布了 <a title="{{content}}">新评论</a>。',
+        'notif/newReplyToComment': '有人回复了你的评论。 ',
+        'notif/newReplyToComment+': '<a title="{{email}}">{{displayName}}</a> 对你的评论进行了<a title="{{content}}">回复</a>。<a href="{{pageURL}}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>Details</a>',
+        'notif/newDiscussionInComment': '有人在你的评论的讨论中进行了回复。',
+        'notif/newDiscussionInComment+': '<a title="{{email}}">{{displayName}}</a> 在你的评论的讨论中进行了 <a title="{{content}}">回复</a> 。',
+        'notif/newMention': '有人在评论中 @ 了你。',
+        'notif/newMention+': '<a title="{{email}}">{{displayName}}</a> 在 <a title="{{content}}">评论</a> 中 @ 了你。',
+        'notif/details': '<a href="{{pageURL}}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>',
+        'notif/relatedContentNoLongerExists': '相关内容已不存在。',
+        'notif/notificationDoesntExist': '该消息不存在。',
+        'notif/tips': '*小提示：鼠标悬停在高亮文字上可查看更多内容；点击查看详情可跳转到相应网页。',
+        'notif/noNotification': '暂无消息',
+        'text/notification': '系统消息',
+        'text/history': '历史记录',
+        'text/personalCenter': '个人中心',
+        'text/adminCenter': '站长中心',
+        'text/reportMangement': '举报管理',
+        'text/likeComment': '为这条评论点赞！',
+        'text/dislikeComment': '踩这条评论。'
       }
     }
   }

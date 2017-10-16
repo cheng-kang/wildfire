@@ -331,6 +331,7 @@ export default {
           uid: mentionedUid,
           type: 'm',
           pageURL: this.encodedPageURL,
+          pageTitle: this.$config.pageTitle,
           commentId
         })
       })
@@ -345,6 +346,7 @@ export default {
                       ? 'r' : 'd')
                     : 'c'),
           pageURL: this.encodedPageURL,
+          pageTitle: this.$config.pageTitle,
           commentId
         })
       }
@@ -353,6 +355,7 @@ export default {
           uid: this.replyToComment.uid,
           type: isParentCommentAuthorMentioned ? 'm' : 'r',
           pageURL: this.encodedPageURL,
+          pageTitle: this.$config.pageTitle,
           commentId
         })
       }
@@ -364,6 +367,7 @@ export default {
                 : (this.replyToComment.parentCommentUid === this.replyToComment.rootCommentUid
                     ? 'r' : 'd'),
           pageURL: this.encodedPageURL,
+          pageTitle: this.$config.pageTitle,
           commentId
         })
       }
@@ -371,11 +375,12 @@ export default {
     postNotification (data) {
       const aDate = new Date()
       const date = aDate.toISOString()
-      const {uid, type, pageURL = null, commentId = null, content = null} = data
+      const {uid, type, pageURL = null, pageTitle = null, commentId = null, content = null} = data
       this.$database.ref('notifications').push({
         uid,
         type,
         pageURL,
+        pageTitle,
         commentId,
         content,
         date,

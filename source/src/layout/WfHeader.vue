@@ -33,12 +33,12 @@
       </a>
       <i-submenu name="3" v-if="user">
         <template slot="title"></template>
-        <i-menu-group title="个人中心">
-          <i-menu-item name="3-1">系统消息</i-menu-item>
-          <i-menu-item name="3-2">历史记录</i-menu-item>
+        <i-menu-group :title="$i18next.t('text/personalCenter')">
+          <i-menu-item name="3-1">{{$i18next.t('text/notification')}}</i-menu-item>
+          <i-menu-item name="3-2">{{$i18next.t('text/history')}}</i-menu-item>
         </i-menu-group>
-        <i-menu-group title="站长中心" v-if="isSiteOwner">
-          <i-menu-item name="3-3">举报管理</i-menu-item>
+        <i-menu-group :title="$i18next.t('text/adminCenter')" v-if="isSiteOwner">
+          <i-menu-item name="3-3">{{$i18next.t('text/reportMangement')}}</i-menu-item>
         </i-menu-group>
       </i-submenu>
       <div class="wf-nav-right">

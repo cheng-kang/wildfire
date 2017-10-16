@@ -1,17 +1,17 @@
 <template >
   <Tabs value="notification-box">
-    <TabPane label="系统消息" name="notification-box">
-      <span v-if="Object.keys(notifications).length === 0">暂无消息</span>
-      <div class="tips" v-else>*小提示：鼠标悬停在高亮文字上可查看更多内容；点击查看详情可跳转到相应网页。</div>
+    <TabPane :label="$i18next.t('text/notification')" name="notification-box">
+      <span v-if="Object.keys(notifications).length === 0">{{$i18next.t('notif/noNotification')}}</span>
+      <div class="tips" v-else>{{$i18next.t('notif/tips')}}</div>
       <ul class="notification-list">
         <li v-for="notifId in notifIdsDESC">
           <span class="meta">{{$moment(notifications[notifId].date).fromNow()}}</span>
           <span class="content" v-html="notifications[notifId].processedContent"></span>
-          <i-button class="del-btn" type="text" style="color: #ed3f14" @click="deleteNotif(notifId)">删除</i-button>
+          <i-button class="del-btn" type="text" style="color: #ed3f14" @click="deleteNotif(notifId)">{{$i18next.t('button/delete')}}</i-button>
         </li>
       </ul>
     </TabPane>
-    <TabPane label="历史记录" name="history">
+    <TabPane :label="$i18next.t('text/history')" name="history">
     </TabPane>
   </Tabs>
 </template>
@@ -40,18 +40,24 @@ export default {
       const newNotif = newNotifSnap.val()
       const newNotifId = this.$config.databaseProvider === 'firebase' ? newNotifSnap.key : newNotifSnap.key()
 
-      const { type, pageURL, commentId, content = '该消息不存在。' } = newNotif
+      const { type, pageURL, pageTitle, commentId, content = this.$i18next.t('notif/notificationDoesntExist') } = newNotif
+      const encodedPageURL = atob(pageURL)
       let processedContent
       if (type === 'c') {
-        processedContent = `有人在你的页面添加了评论。<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>`
+        processedContent = this.$i18next.t('notif/newCommentOnPage', { pageTitle, pageURL: encodedPageURL })
+        processedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
       } else if (type === 'r') {
-        processedContent = `有人回复了你的评论。<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>`
+        processedContent = this.$i18next.t('notif/newReplyToComment')
+        processedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
       } else if (type === 'd') {
-        processedContent = `有人参与了你的评论的讨论。<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>`
+        processedContent = this.$i18next.t('notif/newDiscussionInComment')
+        processedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
       } else if (type === 'm') {
-        processedContent = `有人 @ 了你。<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>`
+        processedContent = this.$i18next.t('notif/newMention')
+        processedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
       } else {
-        processedContent = content + (pageURL ? `<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>` : '')
+        processedContent = content
+        processedContent += pageURL ? this.$i18next.t('notif/details', { pageURL: encodedPageURL }) : ''
       }
       Object.assign(newNotif, { processedContent })
       this.notifications = Object.assign({}, this.notifications, { [newNotifId]: newNotif })
@@ -60,7 +66,7 @@ export default {
         const comment = commentSnap.val()
         // When comment is deleted
         if (!comment) {
-          this.notifications[newNotifId] = Object.assign({}, this.notifications[newNotifId], { processedContent: '相关内容已不存在。' })
+          this.notifications[newNotifId] = Object.assign({}, this.notifications[newNotifId], { processedContent: this.$i18next.t('notif/relatedContentNoLongerExists') })
           return
         }
 
@@ -68,13 +74,36 @@ export default {
           const commentAuthor = userSnap.val()
           let updatedContent
           if (type === 'c') {
-            updatedContent = `<a title="${commentAuthor.email}">${commentAuthor.displayName}</a> 在你的页面添加了 <a title="${comment.content}">评论</a>。<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>`
+            updatedContent = this.$i18next.t('notif/newCommentOnPage+', {
+              email: commentAuthor.email,
+              displayName: commentAuthor.displayName,
+              content: comment.content,
+              pageTitle,
+              pageURL: encodedPageURL
+            })
+            updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+            console.log(updatedContent)
           } else if (type === 'r') {
-            updatedContent = `<a title="${commentAuthor.email}">${commentAuthor.displayName}</a> 对你的评论进行了 <a title="${comment.content}">回复</a>。<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>`
+            updatedContent = this.$i18next.t('notif/newReplyToComment+', {
+              email: commentAuthor.email,
+              displayName: commentAuthor.displayName,
+              content: comment.content
+            })
+            updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
           } else if (type === 'd') {
-            updatedContent = `<a title="${commentAuthor.email}">${commentAuthor.displayName}</a> 参与了你的评论的 <a title="${comment.content}">讨论</a>。<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>`
+            updatedContent = this.$i18next.t('notif/newDiscussionInComment+', {
+              email: commentAuthor.email,
+              displayName: commentAuthor.displayName,
+              content: comment.content
+            })
+            updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
           } else if (type === 'm') {
-            updatedContent = `<a title="${commentAuthor.email}">${commentAuthor.displayName}</a> 在 <a title="${comment.content}">评论</a> 中 @ 了你。<a href="${atob(pageURL)}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>`
+            updatedContent = this.$i18next.t('notif/newMention+', {
+              email: commentAuthor.email,
+              displayName: commentAuthor.displayName,
+              content: comment.content
+            })
+            updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
           }
           this.notifications[newNotifId] = Object.assign({}, this.notifications[newNotifId], { processedContent: updatedContent })
         })
