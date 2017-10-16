@@ -27,7 +27,7 @@
         <i-button type="text"
           :disabled="shouldDisableButton"
           @click="form.content = ''">
-          {{$i18next.t('button/reset')}}
+          {{$i18next.t('button/clear')}}
         </i-button>
 
         <i-button :type="isPosting ? 'ghost' : 'primary'"
@@ -44,7 +44,7 @@
       <i-button type="text"
         :disabled="shouldDisableButton"
         @click="form.content = ''">
-        {{$i18next.t('button/reset')}}
+        {{$i18next.t('button/clear')}}
       </i-button>
 
       <i-button :type="isPosting ? 'ghost' : 'primary'"
