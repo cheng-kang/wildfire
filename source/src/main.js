@@ -23,8 +23,8 @@ const wildfireConfig = {
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
-  // locale: 'en'
-  locale: 'zh-CN'
+  locale: 'en'
+  // locale: 'zh-CN'
 }
 
 // const wildfireConfig = {
@@ -141,6 +141,8 @@ i18next.init({
         'button/deleteTheComment': 'Delete',
         'button/banThisUser': 'Ban',
         'button/ignore': 'Ignore',
+        'button/read': 'Read',
+        'button/unread': 'Unread',
         'switch/on': 'ON',
         'switch/off': 'OFF',
         'text/loading': 'Loading',
@@ -258,6 +260,8 @@ i18next.init({
         'button/deleteTheComment': '删除评论',
         'button/banThisUser': '封禁用户',
         'button/ignore': '忽略',
+        'button/read': '已读',
+        'button/unread': '未读',
         'switch/on': '开',
         'switch/off': '关',
         'text/loading': '加载中',

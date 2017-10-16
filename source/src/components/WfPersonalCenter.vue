@@ -4,10 +4,13 @@
       <span v-if="Object.keys(notifications).length === 0">{{$i18next.t('notif/noNotification')}}</span>
       <div class="tips" v-else>{{$i18next.t('notif/tips')}}</div>
       <ul class="notification-list">
-        <li v-for="notifId in notifIdsDESC">
+        <li v-for="notifId in notifIdsDESC" :class="{isRead: notifications[notifId].isRead}">
           <span class="meta">{{$moment(notifications[notifId].date).fromNow()}}</span>
           <span class="content" v-html="notifications[notifId].processedContent"></span>
-          <i-button class="del-btn" type="text" style="color: #ed3f14" @click="deleteNotif(notifId)">{{$i18next.t('button/delete')}}</i-button>
+          <div class="buttons">
+            <i-button type="text" @click="toggleRead(notifId)">{{$i18next.t(notifications[notifId].isRead ? 'button/read' : 'button/unread')}}</i-button>
+            <i-button type="text" style="color: #ed3f14" @click="deleteNotif(notifId)">{{$i18next.t('button/delete')}}</i-button>
+          </div>
         </li>
       </ul>
     </TabPane>
@@ -118,6 +121,11 @@ export default {
     deleteNotif (notifId) {
       Vue.delete(this.notifications, notifId)
       this.$database.ref(`notifications/${notifId}`).remove()
+    },
+    toggleRead (notifId) {
+      const newValue = !this.notifications[notifId].isRead
+      this.$database.ref(`notifications/${notifId}`).update({isRead: newValue})
+      this.notifications[notifId] = Object.assign({}, this.notifications[notifId], { isRead: newValue })
     }
   }
 }
@@ -149,12 +157,26 @@ export default {
   flex: 1;
   text-align: left;
 }
-.del-btn {
+.buttons .ivu-btn {
   opacity: 0.7;
   transition: opacity 0.2s ease-out;
-  padding: 0 15px;
+  padding: 0;
 }
-.del-btn:hover {
+.buttons .ivu-btn:hover {
   opacity: 1;
+}
+.isRead {
+  opacity: 0.5;
+}
+
+/* If smaller than or equal to iPhone 6 size */
+@media only screen 
+  and (max-device-width: 375px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+  /* display buttons vertically */
+  .buttons {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>
