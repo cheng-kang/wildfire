@@ -36,8 +36,12 @@
 </template>
 
 <script>
+import 'highlight.js/styles/googlecode.css'
+import hljs from 'highlight.js'
+import marked from 'marked'
 export default {
   name: 'wf-report-management',
+  components: {},
   props: [],
   data () {
     return {
@@ -62,24 +66,48 @@ export default {
           render: (h, params) => {
             return h('div', [
               h('p', this.$i18next.t('text/reportedBy0Users').replace(0, params.row.comment.count)),
-              h('p', params.row.comment.outline),
-              h('a', {
+              h('p', {
+                style: {
+                  'white-space': 'normal',
+                  'word-wrap': 'break-word'
+                }
+              }, params.row.comment.outline),
+              h('Poptip', {
                 props: {
-                  type: 'text',
-                  size: 'small'
-                },
-                on: {
-                  click: () => {
-                    this.showDetail(params.row.comment.content)
-                  }
+                  transfer: true,
+                  showTitle: false
                 }
               }, [
-                h('Icon', {
-                  props: {
-                    type: 'ios-search'
+                h('p', [
+                  h('Button', {
+                    props: {
+                      type: 'text',
+                      size: 'small'
+                    }
+                  }, [
+                    h('Icon', {
+                      props: {
+                        type: 'ios-search'
+                      }
+                    }),
+                    h('span', this.$i18next.t('text/findMoreDetial'))
+                  ])
+                ]),
+                h('div', {
+                  slot: 'content',
+                  style: {
+                    'max-height': '220px',
+                    'max-width': '650px',
+                    'overflow': 'auto',
+                    'white-space': 'normal'
                   }
-                }),
-                h('span', this.$i18next.t('text/findMoreDetial'))
+                }, [
+                  h('div', {
+                    domProps: {
+                      innerHTML: this.markdown(params.row.comment.content)
+                    }
+                  })
+                ])
               ])
             ])
           }
@@ -158,7 +186,7 @@ export default {
                   confirm: true,
                   title: this.$i18next.t('button/sureToIgnore'),
                   transfer: true,
-                  okText: this.$i18next.t('button/delete'),
+                  okText: this.$i18next.t('button/ignore'),
                   cancelText: this.$i18next.t('button/cancel')
                 },
                 on: {
@@ -272,6 +300,30 @@ export default {
     },
     showDetail (params) {
       console.log(params)
+    },
+    markdown (content) {
+      var render = new marked.Renderer()
+      render.link = (href, title, text) => {
+        if (text.indexOf('@') === 0) {
+          return `<strong>${text}[${href}]</strong>`
+        } else {
+          return `<a href="${href}" alt="${title}">${text}</a>`
+        }
+      }
+      marked.setOptions({
+        renderer: render,
+        gfm: true,
+        tables: true,
+        breaks: true,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false,
+        highlight: (code) => {
+          return hljs.highlightAuto(code).value
+        }
+      })
+      return marked(content)
     }
   }
 }
