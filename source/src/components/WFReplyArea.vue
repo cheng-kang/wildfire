@@ -7,7 +7,7 @@
       <i-input
         v-model="form.content"
         type="textarea"
-        @on-click="postComment"
+        @on-focus="contentOnFocus"
         @on-change="contentOnChange"
         :autosize="{ minRows: 3, maxRows: 10 }"
         :placeholder="placeholder"
@@ -409,6 +409,11 @@ export default {
         date,
         isRead: false
       })
+    },
+    contentOnFocus (e) {
+      if (this.isMain) {
+        Bus.$emit('OnlyOneReplyAreaShouldBeActive', 'MainReplyArea')
+      }
     },
     contentOnChange (e) {
       // Forbid anonymous user to use Mention

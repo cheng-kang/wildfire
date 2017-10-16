@@ -99,7 +99,7 @@
           <i-button
             type="text"
             class="wf-reply-button"
-            @click="isShowingReplyArea = !isShowingReplyArea"
+            @click="toggleReplyArea"
             v-if="commentsLoadingState === 'finished'">
             {{isShowingReplyArea ? $i18next.t('button/hide') : $i18next.t('button/reply')}}
           </i-button>
@@ -116,6 +116,7 @@
         <!-- If this is a comment -->
         <wf-reply-area v-if="!parentComment"
           v-show="isShowingReplyArea"
+          ref="replyArea"
           :user="user"
           :reply-to-comment-author-username="author.displayName"
           :reply-to-comment="comment"
@@ -123,6 +124,7 @@
         <!-- If this is a reply (to a comment/reply) -->
         <wf-reply-area v-if="parentComment"
           v-show="isShowingReplyArea"
+          ref="replyArea"
           :user="user"
           :reply-to-comment-author-username="author.displayName"
           :reply-to-comment="comment"
@@ -300,6 +302,11 @@ export default {
       }
     })
 
+    Bus.$on(`OnlyOneReplyAreaShouldBeActive`, activeReplyAreaId => {
+      if (this.$refs.replyArea._uid !== activeReplyAreaId) {
+        this.isShowingReplyArea = false
+      }
+    })
     // Get Voting data
     this.$bindAsObject('votes', this.$database.ref(`votes/${this.comment.commentId}`))
 
@@ -361,6 +368,10 @@ export default {
         return username.slice(0, 10) + '...'
       }
       return username
+    },
+    toggleReplyArea () {
+      this.isShowingReplyArea = !this.isShowingReplyArea
+      Bus.$emit('OnlyOneReplyAreaShouldBeActive', this.$refs.replyArea._uid)
     },
     /**
      * @param  {string='like', 'dislike'} type
