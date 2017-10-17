@@ -74,8 +74,8 @@ export default {
           let commentAuthor = userSnap.val()
           if (!commentAuthor) {
             commentAuthor = {
-              email: this.$i18next.t('text/anonymousUser'),
-              displayName: this.$i18next.t('text/anonymousUser')
+              email: this.$i18next.t('text/anonym'),
+              displayName: this.$i18next.t('text/anonym')
             }
           }
           let updatedContent

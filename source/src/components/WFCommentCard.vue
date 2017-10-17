@@ -253,9 +253,9 @@ export default {
   },
   created () {
     // Init user info as anonymous user
-    this.author.displayName = this.$i18next.t('text/anonymousUser')
+    this.author.displayName = this.$i18next.t('text/anonym')
     this.author.photoURL = this.$config.defaultAvatarURL
-    this.replyToComment.author.displayName = this.$i18next.t('text/anonymousUser')
+    this.replyToComment.author.displayName = this.$i18next.t('text/anonym')
     this.replyToComment.author.photoURL = this.$config.defaultAvatarURL
 
     if (!this.isPostedByAnonymousUser) {

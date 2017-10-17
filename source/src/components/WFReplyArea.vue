@@ -98,7 +98,7 @@ export default {
     },
     username () {
       return this.user
-              ? this.$i18next.t('text/anonymousUser')
+              ? this.$i18next.t('text/anonym')
               : this.user.displayName
     },
     placeholder () {

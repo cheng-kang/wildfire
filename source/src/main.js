@@ -69,7 +69,7 @@ Vue.prototype.$config = {
   pageURL: btoa(pageURL), // encode pageURL with base64
   locale,
   defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
-  anonymousUserId: 'Anonymous'
+  anonymousUserId: 'Anonym'
 }
 Vue.prototype.$i18next = i18next
 Vue.prototype.$moment = moment
@@ -149,9 +149,9 @@ i18next.init({
         'text/loadingComments': 'Loading comments',
         'text/commentDeleted': 'This Comment has been deleted.',
         'textarea/joinTheConversation': 'Join the discusstion...',
-        'textarea/joinTheConversationAnonymously': 'Join the discusstion as Anonymous User',
+        'textarea/joinTheConversationAnonymously': 'Join the discusstion as Anonym',
         'textarea/replyToUserComment': 'reply to {{username}}\'s comment',
-        'text/anonymousUser': 'Anonymous User',
+        'text/anonym': 'Anonym',
         'text/add_wildfire_to_your_site': 'Add Wildfire to your site',
         'text/postTheFirstComment': 'Post the first comment!',
         'text/showMoreDiscussion': 'Show more',
@@ -269,7 +269,7 @@ i18next.init({
         'textarea/joinTheConversation': '一起来发言吧...',
         'textarea/joinTheConversationAnonymously': '以 匿名用户 身份发言...',
         'textarea/replyToUserComment': '回复 {{username}} 的评论',
-        'text/anonymousUser': '匿名用户',
+        'text/anonym': '匿名用户',
         'text/add_wildfire_to_your_site': '在你的网站使用 Wildfire',
         'text/postTheFirstComment': '快来发布第一条评论吧！',
         'text/showMoreDiscussion': '展开更多讨论',

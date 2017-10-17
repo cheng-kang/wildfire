@@ -121,7 +121,7 @@ export default {
     username () {
       return this.user
       ? this.user.displayName
-      : this.$i18next.t('text/anonymousUser')
+      : this.$i18next.t('text/anonym')
     },
     isSiteOwner () {
       return true
