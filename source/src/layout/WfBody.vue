@@ -126,8 +126,9 @@ export default {
       if (!this.mentioningUsername) { return [] }
       return Bus.$data.users.filter(user => {
         const usernameLC = user.displayName.toLowerCase()
+        const emailLC = user.email.toLowerCase()
         const mentioningUsernameLC = this.mentioningUsername.toLowerCase()
-        return usernameLC.indexOf(mentioningUsernameLC) !== -1
+        return usernameLC.indexOf(mentioningUsernameLC) !== -1 || emailLC.indexOf(mentioningUsernameLC)
       })
     }
   },
