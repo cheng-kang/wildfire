@@ -35,7 +35,6 @@
         <template slot="title"></template>
         <i-menu-group :title="$i18next.t('text/personalCenter')">
           <i-menu-item name="3-1">{{$i18next.t('text/notification')}}</i-menu-item>
-          <i-menu-item name="3-2">{{$i18next.t('text/history')}}</i-menu-item>
         </i-menu-group>
         <i-menu-group :title="$i18next.t('text/adminCenter')" v-if="isSiteOwner">
           <i-menu-item name="3-3">{{$i18next.t('text/reportMangement')}}</i-menu-item>

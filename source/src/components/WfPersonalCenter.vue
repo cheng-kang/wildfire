@@ -14,8 +14,6 @@
         </li>
       </ul>
     </TabPane>
-    <TabPane :label="$i18next.t('text/history')" name="history">
-    </TabPane>
   </Tabs>
 </template>
 
