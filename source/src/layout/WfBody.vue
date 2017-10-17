@@ -48,8 +48,8 @@
       :closable="false"
       :footer-hide="true">
       <i-auto-complete
+        ref="mentionAutoComplete"
         v-model="mentioningUsername"
-        :autofocus="true"
         icon="ios-search"
         :placeholder="$i18next.t('text/mentionAutocompletePlaceholder')"
         style="width:300px"
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Bus from '../bus'
 import WfReplyArea from '../components/WFReplyArea'
 import WfCommentCard from '../components/WFCommentCard'
@@ -161,6 +162,9 @@ export default {
     Bus.$on('ShowMentionAutoComplete', id => {
       Bus.$data.currentReplyAreaId = id
       this.shouldShowMentionAutoComplete = true
+      Vue.nextTick(() => {
+        this.$refs.mentionAutoComplete.$refs.input.focus()
+      })
     })
 
     /*
