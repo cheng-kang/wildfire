@@ -146,15 +146,15 @@ export default {
       this.isPosting = true
       const { content } = this.form
       const { user, users, isReply, replyToComment } = this
-      const anonymousUserId = this.$config.anonymousUserId
-      let pageURL = this.$config.pageURL
 
       if (content.trim() !== '') {
         const aDate = new Date()
         const ip = this.$ip
-        const uid = user ? user.uid : anonymousUserId
+        const uid = user ? user.uid : this.$config.anonymousUserId
         const date = aDate.toISOString()
 
+        let pageURL = null
+        let rootCommentPageURL = null
         let parentCommentId = null
         let parentCommentUid = null
         let rootCommentId = null
@@ -166,8 +166,8 @@ export default {
           // As shown in `App.vue`, pageURL` is used as a filter
           // for retrieving comments of a page.
           // If the comment is top-level comment, then it has `pageURL`;
-          // else, `pageURL` should be null.
-          pageURL = null
+          // else, it has `rootCommentPageURL`.
+          rootCommentPageURL = this.$config.pageURL
           parentCommentId = replyToComment.commentId
           parentCommentUid = replyToComment.uid
           if (replyToComment.rootCommentId) {
@@ -177,9 +177,11 @@ export default {
             rootCommentId = replyToComment.commentId
             rootCommentUid = replyToComment.uid
           }
+        } else {
+          pageURL = this.$config.pageURL
         }
 
-        const postData = { uid, content, date, ip, pageURL, parentCommentId, parentCommentUid, rootCommentId, rootCommentUid }
+        const postData = { uid, content, date, ip, pageURL, rootCommentPageURL, parentCommentId, parentCommentUid, rootCommentId, rootCommentUid }
 
         var newNode = this.$database.ref().push()
         /*
@@ -333,6 +335,7 @@ export default {
         isParentCommentAuthorMentioned,
         isRootCommentAuthorMentioned
       } = mentionFlags
+      const pageURL = this.$config.pageURL
       mentionedUids.forEach(mentionedUid => {
         // Incase uid is undefined/null
         if (!mentionedUid) { return }
@@ -358,7 +361,7 @@ export default {
         this.postNotification({
           uid: mentionedUid,
           type: 'm',
-          pageURL: this.pageURL,
+          pageURL: pageURL,
           pageTitle: this.$config.pageTitle,
           commentId
         })
@@ -373,7 +376,7 @@ export default {
                     ? (this.replyToComment.uid === admin.uid
                       ? 'r' : 'd')
                     : 'c'),
-          pageURL: this.pageURL,
+          pageURL: pageURL,
           pageTitle: this.$config.pageTitle,
           commentId
         })
@@ -382,7 +385,7 @@ export default {
         this.postNotification({
           uid: this.replyToComment.uid,
           type: isParentCommentAuthorMentioned ? 'm' : 'r',
-          pageURL: this.pageURL,
+          pageURL: pageURL,
           pageTitle: this.$config.pageTitle,
           commentId
         })
@@ -391,7 +394,7 @@ export default {
         this.postNotification({
           uid: this.replyToComment.rootCommentUid,
           type: isRootCommentAuthorMentioned ? 'm' : 'd',
-          pageURL: this.pageURL,
+          pageURL: pageURL,
           pageTitle: this.$config.pageTitle,
           commentId
         })

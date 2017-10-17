@@ -44,7 +44,7 @@ export default {
       const newNotifId = this.$config.databaseProvider === 'firebase' ? newNotifSnap.key : newNotifSnap.key()
 
       const { type, pageURL, pageTitle, commentId, content = this.$i18next.t('notif/notificationDoesntExist') } = newNotif
-      const decodedPageURL = atob(pageURL)
+      const decodedPageURL = pageURL ? atob(pageURL) : null
       let processedContent
       if (type === 'c') {
         processedContent = this.$i18next.t('notif/newCommentOnPage', { pageTitle, pageURL: decodedPageURL })
