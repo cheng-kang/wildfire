@@ -95,7 +95,7 @@ export default {
       this.commentsLoadingState = 'loading'
       const { pageURL } = this.$config
 
-      this.$database.ref(`pages/${btoa(pageURL)}/comments`).on('value', snapshot => {
+      this.$database.ref(`pages/${pageURL}/comments`).on('value', snapshot => {
         this.pageComments = snapshot.val() || {}
         this.pageCommentsCount = Object.keys(this.pageComments).length
         Promise.all(Object.keys(this.pageComments).map(commentId => {
@@ -108,7 +108,7 @@ export default {
       })
 
       this.$bindAsArray('comments', this.$database
-      .ref(`comments`).orderByChild('pageURL').equalTo(btoa(pageURL)), () => {
+      .ref(`comments`).orderByChild('pageURL').equalTo(pageURL), () => {
         this.commentsLoadingState = 'failed'
         this.pageCommentsCount = 0
       }, () => {

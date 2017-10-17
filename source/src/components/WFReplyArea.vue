@@ -91,9 +91,6 @@ export default {
     }
   },
   computed: {
-    encodedPageURL () {
-      return btoa(this.$config.pageURL)
-    },
     avatarURL () {
       return this.user
         ? this.user.photoURL
@@ -148,8 +145,9 @@ export default {
 
       this.isPosting = true
       const { content } = this.form
-      const { user, users, isReply, encodedPageURL, replyToComment } = this
-      const { anonymousUserId } = this.$config
+      const { user, users, isReply, replyToComment } = this
+      const anonymousUserId = this.$config.anonymousUserId
+      let pageURL = this.$config.pageURL
 
       if (content.trim() !== '') {
         const aDate = new Date()
@@ -157,13 +155,19 @@ export default {
         const uid = user ? user.uid : anonymousUserId
         const date = aDate.toISOString()
 
-        let pageURL = null
         let parentCommentId = null
         let parentCommentUid = null
         let rootCommentId = null
         let rootCommentUid = null
 
         if (isReply) {
+          // The filed `pageURL` of a comment is used to determine
+          // whether it's a top-level comment or not.
+          // As shown in `App.vue`, pageURL` is used as a filter
+          // for retrieving comments of a page.
+          // If the comment is top-level comment, then it has `pageURL`;
+          // else, `pageURL` should be null.
+          pageURL = null
           parentCommentId = replyToComment.commentId
           parentCommentUid = replyToComment.uid
           if (replyToComment.rootCommentId) {
@@ -173,8 +177,6 @@ export default {
             rootCommentId = replyToComment.commentId
             rootCommentUid = replyToComment.uid
           }
-        } else {
-          pageURL = encodedPageURL
         }
 
         const postData = { uid, content, date, ip, pageURL, parentCommentId, parentCommentUid, rootCommentId, rootCommentUid }
@@ -193,7 +195,7 @@ export default {
         if (isReply) {
           updates[`commentReplies/${rootCommentId}/${newKey}`] = date
         } else {
-          updates[`pages/${encodedPageURL}/comments/${newKey}`] = date
+          updates[`pages/${pageURL}/comments/${newKey}`] = date
         }
 
         this.$database.ref().update(updates).then(() => {
@@ -356,7 +358,7 @@ export default {
         this.postNotification({
           uid: mentionedUid,
           type: 'm',
-          pageURL: this.encodedPageURL,
+          pageURL: this.pageURL,
           pageTitle: this.$config.pageTitle,
           commentId
         })
@@ -371,7 +373,7 @@ export default {
                     ? (this.replyToComment.uid === admin.uid
                       ? 'r' : 'd')
                     : 'c'),
-          pageURL: this.encodedPageURL,
+          pageURL: this.pageURL,
           pageTitle: this.$config.pageTitle,
           commentId
         })
@@ -380,7 +382,7 @@ export default {
         this.postNotification({
           uid: this.replyToComment.uid,
           type: isParentCommentAuthorMentioned ? 'm' : 'r',
-          pageURL: this.encodedPageURL,
+          pageURL: this.pageURL,
           pageTitle: this.$config.pageTitle,
           commentId
         })
@@ -389,7 +391,7 @@ export default {
         this.postNotification({
           uid: this.replyToComment.rootCommentUid,
           type: isRootCommentAuthorMentioned ? 'm' : 'd',
-          pageURL: this.encodedPageURL,
+          pageURL: this.pageURL,
           pageTitle: this.$config.pageTitle,
           commentId
         })

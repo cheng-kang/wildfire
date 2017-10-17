@@ -44,23 +44,23 @@ export default {
       const newNotifId = this.$config.databaseProvider === 'firebase' ? newNotifSnap.key : newNotifSnap.key()
 
       const { type, pageURL, pageTitle, commentId, content = this.$i18next.t('notif/notificationDoesntExist') } = newNotif
-      const encodedPageURL = atob(pageURL)
+      const decodedPageURL = atob(pageURL)
       let processedContent
       if (type === 'c') {
-        processedContent = this.$i18next.t('notif/newCommentOnPage', { pageTitle, pageURL: encodedPageURL })
-        processedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+        processedContent = this.$i18next.t('notif/newCommentOnPage', { pageTitle, pageURL: decodedPageURL })
+        processedContent += this.$i18next.t('notif/details', { pageURL: decodedPageURL })
       } else if (type === 'r') {
         processedContent = this.$i18next.t('notif/newReplyToComment')
-        processedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+        processedContent += this.$i18next.t('notif/details', { pageURL: decodedPageURL })
       } else if (type === 'd') {
         processedContent = this.$i18next.t('notif/newDiscussionInComment')
-        processedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+        processedContent += this.$i18next.t('notif/details', { pageURL: decodedPageURL })
       } else if (type === 'm') {
         processedContent = this.$i18next.t('notif/newMention')
-        processedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+        processedContent += this.$i18next.t('notif/details', { pageURL: decodedPageURL })
       } else {
         processedContent = content
-        processedContent += pageURL ? this.$i18next.t('notif/details', { pageURL: encodedPageURL }) : ''
+        processedContent += pageURL ? this.$i18next.t('notif/details', { pageURL: decodedPageURL }) : ''
       }
       Object.assign(newNotif, { processedContent })
       this.notifications = Object.assign({}, this.notifications, { [newNotifId]: newNotif })
@@ -87,30 +87,30 @@ export default {
               displayName: commentAuthor.displayName,
               content: comment.content,
               pageTitle,
-              pageURL: encodedPageURL
+              pageURL: decodedPageURL
             })
-            updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+            updatedContent += this.$i18next.t('notif/details', { pageURL: decodedPageURL })
           } else if (type === 'r') {
             updatedContent = this.$i18next.t('notif/newReplyToComment+', {
               email: commentAuthor.email,
               displayName: commentAuthor.displayName,
               content: comment.content
             })
-            updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+            updatedContent += this.$i18next.t('notif/details', { pageURL: decodedPageURL })
           } else if (type === 'd') {
             updatedContent = this.$i18next.t('notif/newDiscussionInComment+', {
               email: commentAuthor.email,
               displayName: commentAuthor.displayName,
               content: comment.content
             })
-            updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+            updatedContent += this.$i18next.t('notif/details', { pageURL: decodedPageURL })
           } else if (type === 'm') {
             updatedContent = this.$i18next.t('notif/newMention+', {
               email: commentAuthor.email,
               displayName: commentAuthor.displayName,
               content: comment.content
             })
-            updatedContent += this.$i18next.t('notif/details', { pageURL: encodedPageURL })
+            updatedContent += this.$i18next.t('notif/details', { pageURL: decodedPageURL })
           }
           this.notifications[newNotifId] = Object.assign({}, this.notifications[newNotifId], { processedContent: updatedContent })
         })

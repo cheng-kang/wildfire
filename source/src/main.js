@@ -30,12 +30,12 @@ const wildfireConfig = {
 // const wildfireConfig = {
 //   databaseProvider: 'firebase',
 //   databaseConfig: {
-//     apiKey: 'AIzaSyCLsuRlCYjLyetc40v0-yFKHZVhumi85bs',
-//     authDomain: 'wildfirewebsite-35a4f.firebaseapp.com',
-//     databaseURL: 'https://wildfirewebsite-35a4f.firebaseio.com',
-//     projectId: 'wildfirewebsite-35a4f',
-//     storageBucket: '',
-//     messagingSenderId: '911552849262'
+//     apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+//     authDomain: 'wild-fire-ee770.firebaseapp.com',
+//     databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+//     projectId: 'wild-fire-ee770',
+//     storageBucket: 'wild-fire-ee770.appspot.com',
+//     messagingSenderId: '655484997793'
 //   },
 //   pageURL: 'http://chengkang.me/wildfire',
 //   pageTitle: 'Wildfire Demo',
@@ -66,7 +66,7 @@ Vue.prototype.$config = {
   databaseProvider,
   databaseConfig,
   pageTitle,
-  pageURL,
+  pageURL: btoa(pageURL), // encode pageURL with base64
   locale,
   defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
   anonymousUserId: 'Anonymous'
