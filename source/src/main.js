@@ -151,7 +151,7 @@ i18next.init({
         'textarea/joinTheConversation': 'Join the discusstion...',
         'textarea/joinTheConversationAnonymously': 'Join the discusstion as Anonymous User',
         'textarea/replyToUserComment': 'reply to {{username}}\'s comment',
-        'text/anonymousUser': 'Anonymous User',
+        'text/anonymousUser': 'Anonymous',
         'text/add_wildfire_to_your_site': 'Add Wildfire to your site',
         'text/postTheFirstComment': 'Post the first comment!',
         'text/showMoreDiscussion': 'Show more',
