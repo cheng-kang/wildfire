@@ -117,7 +117,7 @@ import {
   langEn,
   langZhCN
 } from './common/translation'
-console.log(langEn)
+
 i18next.init({
   lng: locale,
   fallbackLng: 'en',

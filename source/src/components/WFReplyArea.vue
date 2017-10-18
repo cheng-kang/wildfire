@@ -220,7 +220,9 @@ export default {
           let isRootCommentAuthorMentioned = false
           // If current user is admin,
           // then no notification to `admin`.
-          if (user && user.uid === admin.uid) {
+          if (!admin) {
+            shouldNotifyAdmin = false
+          } if (user && user.uid === admin.uid) {
             shouldNotifyAdmin = false
           }
           // If replying to comment posted by
