@@ -7,7 +7,7 @@ import 'highlight.js/styles/googlecode.css'
 import hljs from 'highlight.js'
 import marked from 'marked'
 import Vue from 'vue'
-import Bus from '../bus'
+import Bus from '../common/bus'
 export default {
   name: 'wf-marked-content',
   props: ['content'],

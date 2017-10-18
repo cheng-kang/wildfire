@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import Bus from '../bus'
+import Bus from '../common/bus'
 import firebase from 'firebase'
 import wilddog from 'wilddog'
 export default {

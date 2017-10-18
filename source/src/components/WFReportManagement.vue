@@ -1,21 +1,3 @@
-<style scoped>
-.form-warp{
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-items: space-between;
-  width: 80%;
-  margin: auto;
-  padding-top: 10px;
-  padding-bottom: 30px
-}
-</style>
-<style>
-  #wildfire .reported-table .ivu-poptip-popper{
-    position: absolute !important;
-  }
-</style>
 <template>
   <i-tabs value="reportUser">
     <i-tab-pane :label="$i18next.t('text/reportedUsers')" name="reportUser" >
@@ -329,3 +311,22 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.form-warp{
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-items: space-between;
+  width: 80%;
+  margin: auto;
+  padding-top: 10px;
+  padding-bottom: 30px
+}
+</style>
+<style>
+  #wildfire .reported-table .ivu-poptip-popper{
+    position: absolute !important;
+  }
+</style>

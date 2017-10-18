@@ -78,7 +78,7 @@
 
 <script>
 import Vue from 'vue'
-import Bus from '../bus'
+import Bus from '../common/bus'
 import WfReplyArea from '../components/WFReplyArea'
 import WfCommentCard from '../components/WFCommentCard'
 import WfCommentUserinfoModal from '../components/WfCommentUserinfoModal'

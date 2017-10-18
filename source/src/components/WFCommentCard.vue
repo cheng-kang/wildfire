@@ -165,7 +165,7 @@
 <script>
 const MAX_CONTENT_HEIGHT = 180
 
-import Bus from '../bus'
+import Bus from '../common/bus'
 import WfReplyArea from './WFReplyArea'
 import WfMarkedContent from './WFMarkedContent'
 

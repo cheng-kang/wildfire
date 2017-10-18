@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Bus from './bus'
+import Bus from './common/bus'
 import WfHeader from './layout/WfHeader'
 import WfBody from './layout/WfBody'
 import WfFooter from './layout/WfFooter'

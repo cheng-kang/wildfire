@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import Bus from '../bus'
+import Bus from '../common/bus'
 export default {
   name: 'wf-reply-area',
   props: [
