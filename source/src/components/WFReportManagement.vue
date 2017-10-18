@@ -249,7 +249,7 @@ export default {
     },
     parseUser (user) {
       if (user.isAnonymousUser) {
-        return [this.$i18next.t('text/anonym'), user.ip]
+        return [this.$i18next.t('text/anonymousUser'), user.ip]
       } else {
         return [user.displayName, user.email, user.ip]
       }
