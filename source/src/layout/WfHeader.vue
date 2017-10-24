@@ -19,12 +19,12 @@
             class="spin-icon"
             :style="{marginRight: '5px'}"></i-icon>
           <div>
-            {{$i18next.t('text/loading')}}
+            {{$i18next.t('Header.text.loading')}}
           </div>
         </i-spin>
 
         <span v-else>
-          {{discussionCount}} {{$i18next.t(discussionCount < 2 ? 'button/comment' : 'button/comments')}}
+          {{discussionCount}} {{$i18next.t(discussionCount < 2 ? 'Header.btn.comment' : 'Header.btn.comments')}}
         </span>
       </i-menu-item>
 
@@ -33,26 +33,26 @@
       </a>
       <i-submenu name="3" v-if="user">
         <template slot="title"></template>
-        <i-menu-group :title="$i18next.t('text/personalCenter')">
-          <i-menu-item name="3-1">{{$i18next.t('text/notification')}}</i-menu-item>
+        <i-menu-group :title="$i18next.t('Header.menu.personal_center')">
+          <i-menu-item name="3-1">{{$i18next.t('Header.menu.notification')}}</i-menu-item>
         </i-menu-group>
-        <i-menu-group :title="$i18next.t('text/adminCenter')" v-if="isSiteOwner">
-          <i-menu-item name="3-3">{{$i18next.t('text/reportMangement')}}</i-menu-item>
+        <i-menu-group :title="$i18next.t('Header.menu.admin_center')" v-if="isSiteOwner">
+          <i-menu-item name="3-3">{{$i18next.t('Header.menu.report_management')}}</i-menu-item>
         </i-menu-group>
       </i-submenu>
       <div class="wf-nav-right">
         <template v-if="!user" >
           <a @click="showSignFormModal('signUp')">
-            {{$i18next.t('button/signUp')}}
+            {{$i18next.t('Header.btn.sign_up')}}
           </a>
           /
           <a @click="showSignFormModal('signIn')">
-            {{$i18next.t('button/signIn')}}
+            {{$i18next.t('Header.btn.sign_in')}}
           </a>
         </template>
 
         <a v-else @click="signOut">
-          {{$i18next.t('button/signOut')}}
+          {{$i18next.t('Header.btn.sign_out')}}
         </a>
       </div>
     </i-menu>
@@ -63,7 +63,7 @@
       :footer-hide="true"
       class-name="vertical-center-modal">
       <div style="text-align:center">
-        <wf-sign-form :init-tab="signFormInitTab"></wf-sign-form>
+        <wf-auth-form :init-tab="signFormInitTab"></wf-auth-form>
       </div>
     </i-modal>
 
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import WfSignForm from '../components/WfSignForm'
+import WfAuthForm from '../components/WfAuthForm'
 import WfUserSetting from '../components/WfUserSetting'
 import WfPersonalCenter from '../components/WfPersonalCenter'
 import WfReportManagement from '../components/WfReportManagement'
@@ -103,7 +103,7 @@ export default {
     'commentsLoadingState'
   ],
   components: {
-    WfSignForm,
+    WfAuthForm,
     WfUserSetting,
     WfPersonalCenter,
     WfReportManagement
@@ -121,7 +121,7 @@ export default {
     username () {
       return this.user
       ? this.user.displayName
-      : this.$i18next.t('text/anonymousUser')
+      : this.$i18next.t('common.anonymous_user')
     },
     isSiteOwner () {
       return true
@@ -136,10 +136,10 @@ export default {
     },
     signOut () {
       this.$Modal.confirm({
-        title: this.$i18next.t('text/signOutTitle'),
-        content: `<p> ${this.$i18next.t('text/signOutConfirmText')} </p>`,
-        okText: this.$i18next.t('text/confirm'),
-        cancelText: this.$i18next.t('button/cancel'),
+        title: this.$i18next.t('Header.text.sign_out_confirm_title'),
+        content: `<p> ${this.$i18next.t('Header.text.sign_out_confirm_content')} </p>`,
+        okText: this.$i18next.t('Header.btn.confirm'),
+        cancelText: this.$i18next.t('Header.btn.cancel'),
         onOk: () => {
           this.$auth.signOut().then(() => {
             console.log('User Sign Out.')
@@ -159,9 +159,9 @@ export default {
         this.userSettingModal = true
       } else {
         this.$Modal.warning({
-          title: this.$i18next.t('text/pleaseSignIn'),
-          content: this.$i18next.t('text/unSignInWarning'),
-          okText: this.$i18next.t('text/confirm')
+          title: this.$i18next.t('Header.text.sign_in_warning_title'),
+          content: this.$i18next.t('Header.text.sign_in_warning_content'),
+          okText: this.$i18next.t('Header.btn.confirm')
         })
       }
     },

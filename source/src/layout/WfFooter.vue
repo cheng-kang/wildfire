@@ -3,7 +3,7 @@
     <a href="https://github.com/cheng-kang/wildfire" 
       target="blank">
       <img src="http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/add-button.svg">
-      {{$i18next.t('text/add_wildfire_to_your_site')}}
+      {{$i18next.t('common.add_wildfire_to_your_site')}}
     </a>
     <img
       class="wf-logo"

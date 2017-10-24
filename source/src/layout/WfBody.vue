@@ -31,13 +31,13 @@
           justifyContent: 'center'
         }">
           <i-icon class="spin-icon" type="load-c" size="18" :style="{marginRight: '5px'}"></i-icon>
-          <div>{{$i18next.t('text/loadingComments')}}</div>
+          <div>{{$i18next.t('Body.text.loading_comments')}}</div>
       </i-spin>
       <span v-if="commentsLoadingState === 'finished'">
-        {{$i18next.t('text/postTheFirstComment')}}
+        {{$i18next.t('Body.text.post_the_first_comment')}}
       </span>
       <span v-if="commentsLoadingState === 'failed'" class="error">
-        {{$i18next.t('error/failedToLoadComments')}}
+        {{$i18next.t('Body.text.loading_comments_failed')}}
       </span>
     </p>
 
@@ -51,7 +51,7 @@
         ref="mentionAutoComplete"
         v-model="mentioningUsername"
         icon="ios-search"
-        :placeholder="$i18next.t('text/mentionAutocompletePlaceholder')"
+        :placeholder="$i18next.t('Body.placeholder.mention_autocomplete')"
         style="width:300px"
         @on-select="mentionAutoCompleteOnSelect">
 
@@ -79,8 +79,8 @@
 <script>
 import Vue from 'vue'
 import Bus from '../common/bus'
-import WfReplyArea from '../components/WFReplyArea'
-import WfCommentCard from '../components/WFCommentCard'
+import WfReplyArea from '../components/WfReplyArea'
+import WfCommentCard from '../components/WfCommentCard'
 import WfCommentUserinfoModal from '../components/WfCommentUserinfoModal'
 export default {
   name: 'wf-body',

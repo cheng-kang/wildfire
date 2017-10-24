@@ -23,8 +23,8 @@ const wildfireConfig = {
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
-  locale: 'en'
-  // locale: 'zh-CN'
+  // locale: 'en'
+  locale: 'zh-CN'
 }
 
 // const wildfireConfig = {

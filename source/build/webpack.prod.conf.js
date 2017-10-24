@@ -8,7 +8,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-var UglifyJsPlugin = require("uglifyjs-webpack-plugin")
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 var env = config.build.env
 

@@ -1,116 +1,224 @@
 export const langZhCN = {
-  'button/reply': '回复',
-  'button/cancel': '取消',
-  'button/hide': '收起',
-  'button/delete': '删除',
-  'button/post': '发送',
-  'button/clear': '清空',
-  'button/comment': '条评论',
-  'button/comments': '条评论',
-  'button/signUp': '注册',
-  'button/signIn': '登录',
-  'button/modify': '修改',
-  'button/signOut': '注销',
-  'button/posting': '发送中',
-  'button/profile': '普通设置',
-  'button/account': '账号设置',
-  'button/showLessText': '收起',
-  'button/showFullText': '展开全部',
-  'button/reportThisComment': '举报此条评论',
-  'button/deleteTheComment': '删除评论',
-  'button/banThisUser': '封禁用户',
-  'button/ignore': '忽略',
-  'button/read': '已读',
-  'button/unread': '未读',
-  'switch/on': '开',
-  'switch/off': '关',
-  'text/loading': '加载中',
-  'text/loadingComments': '评论加载中',
-  'text/commentDeleted': '评论已被删除',
-  'textarea/joinTheConversation': '一起来发言吧...',
-  'textarea/joinTheConversationAnonymously': '以 匿名用户 身份发言...',
-  'textarea/replyToUserComment': '回复 {{username}} 的评论',
-  'text/anonymousUser': '匿名用户',
-  'text/add_wildfire_to_your_site': '在你的网站使用 Wildfire',
-  'text/postTheFirstComment': '快来发布第一条评论吧！',
-  'text/showMoreDiscussion': '展开更多讨论',
-  'text/showLessDiscussion': '收起更多讨论',
-  'text/loadingCommentContent': '加载评论内容中...',
-  'text/loadingUserData': '加载用户数据中...',
-  'text/commentPosted': '评论成功！',
-  'text/areYouSureToDeleteThisComment': '你确定要删除这条评论吗？',
-  'text/email': '电子邮箱',
-  'text/password': '密码',
-  'text/oldPassword': '原始密码',
-  'text/newPassword': '新密码',
-  'text/displayName': '昵称',
-  'text/photoURL': '头像链接',
-  'text/reEnterPassword': '再次输入密码',
-  'text/confirm': '确认',
-  'text/signOutTitle': '注销登录',
-  'text/signOutConfirmText': '是否注销登录？',
-  'text/pleaseSignIn': '请先登录',
-  'text/unSignInWarning': '当前为匿名用户，您需要登录后才能进行个性化设置！',
-  'text/initializingMentionAutocomplete': '初始化提及功能（@）自动补全中...',
-  'text/initializedMentionAutocomplete': '提及功能（@）自动补全已启用',
-  'text/mentionAutocompletePlaceholder': '你要 @ 谁？',
-  'text/unknownIP': '未知 IP 地址',
-  'text/reportedUsers': '被举报用户',
-  'text/reportedComments': '被举报评论',
-  'text/banRules': '禁用规则',
-  'text/usersInfo': '用户信息',
-  'text/commentsContent': '评论内容',
-  'text/reportedBy0Users': '被举报了0次',
-  'text/findMoreDetial': '查看详情',
-  'text/action': '操作',
-  'text/deleteWithAll0Replies': '删除该评论将一并删除0条对其的回复，',
-  'text/sureToDelete': '确认要删除这条评论吗？',
-  'button/sureToIgnore': '确认要忽略这条举报吗？',
-  'error/notValidServiceProvider': '请检查你的配置： "sercive" 应该为 "firebase" 或者 "wilddog"。',
-  'error/noDatabaseConfig': '请检查你的配置： 找不到 "databaseConfig"',
-  'error/failedToLoadComments': '加载评论失败。',
-  'error/failedToPostComment': '发送评论失败。',
-  'error/pleaseEnterEmail': '请输入你的邮箱地址。',
-  'error/invalidEmail': '邮箱格式不正确。',
-  'error/pleaseEnterPassword': '请输入你的密码。',
-  'error/pleaseReEnterPassword': '请再次输入密码。',
-  'error/twoPasswordsDontMatch': '两次输入的密码不一致。',
-  'error/passwordMin': '密码长度不能小于6位。',
-  'error/invalidPhotoURL': '不是有效的图片地址！',
-  'error/wrongPassword': '密码错误！',
-  'error/mentionFuncNotAuthorized': '登录以激活提及（@）功能',
-  'error/deleteFailed': '删除失败。',
-  'message/invalidForm': '表单验证失败，请按要求填写！',
-  'message/signUpSuccess': '注册成功！',
-  'message/signUpFailed': '注册失败，请重试！',
-  'message/signInSuccess': '登录成功！',
-  'message/signInFailed': '登录失败，请重试！',
-  'message/emailAlreadyInUse': '邮箱已经注册，请直接登录！',
-  'message/operationNotAllowed': '邮箱登录被禁止，请联系站主！',
-  'message/updateSuccess': '更新成功',
-  'message/somethingGoesWrong': '发生了未知错误！',
-  'message/passwordChanged': '密码修改成功！',
-  'message/reportCommentSucceeded': '评论举报成功。',
-  'message/reportCommentFailed': '出错了，请稍后再试。',
-  'message/reportRepeatError': '请勿重复举报！',
-  'message/deleteSucceed': '删除成功。',
-  'notif/newCommentOnPage': '有人在 <a href="{{pageURL}}" target="blank">{{pageTitle}}</a> 发布了新评论。',
-  'notif/newCommentOnPage+': '<a title="{{email}}">{{displayName}}</a> 在 <a href="{{pageURL}}" title="点击访问 {{pageTitle}}" target="blank">{{pageTitle}}</a> 发布了 <a title="{{content}}">新评论</a>。',
-  'notif/newReplyToComment': '有人回复了你的评论。 ',
-  'notif/newReplyToComment+': '<a title="{{email}}">{{displayName}}</a> 对你的评论进行了<a title="{{content}}">回复</a>。',
-  'notif/newDiscussionInComment': '有人在你的评论的讨论中进行了回复。',
-  'notif/newDiscussionInComment+': '<a title="{{email}}">{{displayName}}</a> 在你的评论的讨论中进行了 <a title="{{content}}">回复</a> 。',
-  'notif/newMention': '有人在评论中 @ 了你。',
-  'notif/newMention+': '<a title="{{email}}">{{displayName}}</a> 在 <a title="{{content}}">评论</a> 中 @ 了你。',
-  'notif/details': '<a href="{{pageURL}}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>查看详情</a>',
-  'notif/relatedContentNoLongerExists': '相关内容已不存在。',
-  'notif/notificationDoesntExist': '该消息不存在。',
-  'notif/tips': '*小提示：鼠标悬停在高亮文字上可查看更多内容；点击查看详情可跳转到相应网页。',
-  'notif/noNotification': '暂无消息',
-  'text/notification': '系统消息',
-  'text/personalCenter': '个人中心',
-  'text/adminCenter': '站长中心',
-  'text/reportMangement': '举报管理',
-  'text/likeComment': '为这条评论点赞！',
-  'text/dislikeComment': '踩这条评论。'
+  common: {
+    add_wildfire_to_your_site: '在你的网站使用 Wildfire',
+    anonymous_user: '匿名用户',
+    unknown_ip: '未知 IP 地址'
+  },
+  AuthForm: {
+    btn: {
+      cancel: '取消',
+      sign_in: '登录',
+      sign_up: '注册'
+    },
+    error: {
+      email_already_in_use: '邮箱已经占用！',
+      empty_confirm_pwd: '请再次输入密码。',
+      empty_email: '邮箱不能为空。',
+      empty_pwd: '密码不能为空。',
+      invalid_email: '邮箱格式不正确。',
+      invalid_form: '表单验证失败，请按要求填写！',
+      operation_not_allowed: '邮箱登录被禁止，请联系站主！',
+      passwords_dont_match: '两次输入的密码不一致。',
+      password_min_length: '密码长度至少为 6 位。',
+      weak_password: '密码安全性太弱。',
+      signing_in: '登录失败，请重试！',
+      signing_up: '注册失败，请重试！',
+      unknown: '糟糕，出错了。'
+    },
+    label: {
+      confirm_pwd: '确认密码',
+      email: '邮箱',
+      password: '密码'
+    },
+    placeholder: {
+      confirm_pwd: '再次输入你的密码',
+      email: '你的邮箱地址',
+      password: '密码长度至少 6 位'
+    },
+    success: {
+      signing_in: '登录成功！',
+      signing_up: '注册成功！'
+    }
+  },
+  Body: {
+    placeholder: {
+      mention_autocomplete: '你要 @ 谁？'
+    },
+    text: {
+      loading_comments: '评论加载中',
+      loading_comments_failed: '评论加载失败。',
+      post_the_first_comment: '快来发布第一条评论吧！'
+    }
+  },
+  CommentCard: {
+    btn: {
+      delete: '删除',
+      hide: '收起',
+      reply: '回复',
+      report_comment: '举报此评论',
+      show_full_text: '展开全部',
+      show_more_discussion: '展开更多讨论',
+      show_less_discussion: '收起更多讨论',
+      show_less_text: '收起'
+    },
+    confirm: {
+      deleting_comment: '你确定要删除这条评论吗？'
+    },
+    error: {
+      deleting: '删除失败。',
+      repeated_reporting: '你已经举报过这条评论。',
+      reporting_comment: '举报失败，请稍后重试。'
+    },
+    html_title: {
+      dislike_comment: '踩这条评论。',
+      like_comment: '给这条评论点赞！'
+    },
+    success: {
+      deleting: '删除成功。',
+      reporting_comment: '评论举报成功。'
+    },
+    text: {
+      deleted_comment: '该评论已不存在。',
+      loading_comments_content: '加载评论内容中'
+    }
+  },
+  Header: {
+    btn: {
+      cancel: '取消',
+      comment: '评论',
+      comments: '评论',
+      confirm: '确认',
+      sign_in: '登录',
+      sign_out: '注销',
+      sign_up: '注册'
+    },
+    menu: {
+      admin_center: '站长中心',
+      notification: '系统消息',
+      personal_center: '个人中心',
+      report_management: '举报管理'
+    },
+    text: {
+      loading: '加载中',
+      sign_in_warning_title: '请先登录',
+      sign_in_warning_content: '你必须在登录后才能修改个人资料。',
+      sign_out_confirm_title: '注销登录',
+      sign_out_confirm_content: '你确定要登出 Wildfire 吗？'
+    }
+  },
+  PersonalCenter: {
+    btn: {
+      delete: '删除',
+      read: '已读',
+      unread: '未读'
+    },
+    tab: {
+      notification: '系统消息'
+    },
+    text: {
+      details: '查看详情',
+      empty_notif_list: '暂无消息',
+      new_comment_on_page: '有人在 <a href="{{pageURL}}" target="blank">{{pageTitle}}</a> 发布了新评论。',
+      'new_comment_on_page+': '<a title="{{email}}">{{displayName}}</a> 在 <a href="{{pageURL}}" title="点击访问 {{pageTitle}}" target="blank">{{pageTitle}}</a> 发布了 <a title="{{content}}">新评论</a>。',
+      new_reply_to_comment: '有人回复了你的评论。 ',
+      'new_reply_to_comment+': '<a title="{{email}}">{{displayName}}</a> 对你的评论进行了<a title="{{content}}">回复</a>。',
+      new_disc_in_comment: '有人在你的评论的讨论中进行了回复。',
+      'new_disc_in_comment+': '<a title="{{email}}">{{displayName}}</a> 在你的评论的讨论中进行了 <a title="{{content}}">回复</a> 。',
+      new_mention: '有人在评论中 @ 了你。',
+      'new_mention+': '<a title="{{email}}">{{displayName}}</a> 在 <a title="{{content}}">评论</a> 中 @ 了你。',
+      notif_doesnt_exist: '该消息不存在。',
+      related_content_no_longer_exists: '相关内容已不存在。',
+      tips: '*小提示：鼠标悬停在高亮文字上可查看更多内容；点击查看详情可跳转到相应网页。'
+    }
+  },
+  ReplyArea: {
+    btn: {
+      cancel: '取消',
+      clear: '清空',
+      post: '发送',
+      posting: '发送中'
+    },
+    error: {
+      posting_comment: '评论失败。'
+    },
+    placeholder: {
+      join_conversation: '一起来发言吧...',
+      join_conversation_anonymously: '以 匿名用户 身份发言...',
+      reply_to_user_comment: '回复 {{username}} 的评论'
+    },
+    success: {
+      posting_comment: '评论成功！'
+    },
+    text: {
+      initializing_mention_autocomplete: '初始化提及功能（@）自动补全中...',
+      initialized_mention_autocomplete: '提及功能（@）自动补全已启用',
+      mention_func_not_authorized: '登录以激活提及（@）功能'
+    }
+  },
+  ReportManagement: {
+    btn: {
+      ban: '屏蔽',
+      cancel: '取消',
+      delete: '删除',
+      ignore: '忽略',
+      more: 'More'
+    },
+    confirm: {
+      deleting_comment: '确认要删除这条举报吗？',
+      ignoring_report: '确认要忽略这条举报吗？'
+    },
+    tab: {
+      ban_rules: '禁用规则',
+      reported_comments: '被举报评论',
+      reported_users: '被举报用户'
+    },
+    table: {
+      action: '操作',
+      comments: '评论',
+      users: '用户'
+    },
+    text: {
+      reported_by_n_users: '已被 {{count}} 位用户举报',
+      deleting_with_n_replies: '与此评论相关的 {{count}} 条回复会被一同删除。'
+    }
+  },
+  UserSetting: {
+    btn: {
+      cancel: '取消',
+      modify: '修改'
+    },
+    error: {
+      empty_confirm_pwd: '请再次输入你的新密码。',
+      empty_new_pwd: '请输入你的新密码。',
+      empty_old_pwd: '请输入你的旧密码。',
+      invalid_photo_url: '不是有效的图片地址！',
+      password: '密码错误！',
+      password_min_length: '密码长度至少为 6 位。',
+      passwords_dont_match: '两次输入的密码不一致。',
+      invalid_form: '表单验证失败，请按要求填写！',
+      unknown: '糟糕，出错了。'
+    },
+    label: {
+      confirm_pwd: '确认密码',
+      display_name: '昵称',
+      new_pwd: '新密码',
+      old_pwd: '旧密码',
+      photo_url: '头像链接'
+    },
+    placeholder: {
+      confirm_pwd: '再次输入你的新密码',
+      display_name: '设置一个昵称吧',
+      new_pwd: '新的密码',
+      old_pwd: '旧的密码',
+      photo_url: '头像图片链接'
+    },
+    success: {
+      changing_password: '密码修改成功！',
+      updating_profile: '更新成功！'
+    },
+    tab: {
+      account: '账号设置',
+      profile: '个人资料'
+    }
+  }
 }

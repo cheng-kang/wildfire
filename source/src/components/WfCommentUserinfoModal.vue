@@ -26,10 +26,10 @@ export default {
     selectedCommentUserInfo: () => Bus.$data.selectedCommentUserInfo,
     encodedIP () {
       const ip = this.selectedCommentUserInfo.ip
-      if (!ip || (ip.indexOf('unknown') !== -1)) { return this.$i18next.t('text/unknownIP') }
+      if (!ip || (ip.indexOf('unknown') !== -1)) { return this.$i18next.t('common.unknown_ip') }
       const lastDotIdx = ip.lastIndexOf('.')
       const lastSec = ip.slice(lastDotIdx + 1)
-      return lastSec ? `***.**.**.${lastSec}` : this.$i18next.t('text/unknownIP')
+      return lastSec ? `***.**.**.${lastSec}` : this.$i18next.t('common.unknown_ip')
     },
     isAnonymousUser () {
       const { anonymousUserId } = this.$config
