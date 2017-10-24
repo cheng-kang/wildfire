@@ -1,14 +1,18 @@
 <template>
-  <i-tabs value="reportUser">
-    <i-tab-pane :label="$i18next.t('ReportManagement.tab.reported_users')" name="reportUser" >
-      <div class="form-warp">
-        123
-      </div>
+  <i-tabs value="reportedComments">
+    <i-tab-pane
+      name="reportedComments"
+      :label="$i18next.t('ReportManagement.tab.reported_comments')">
+      <i-table
+        class="reported-table"
+        height="300"
+        :columns="commentsTable"
+        :data="reportedCommentsTableData"
+        :border="false"></i-table>
     </i-tab-pane>
-    <i-tab-pane :label="$i18next.t('ReportManagement.tab.reported_comments')" name="reportComment" >
-      <i-table height="300" :columns="commentsTable" :data="computedComments" :border="false" class="reported-table"></i-table>
-    </i-tab-pane>
-    <i-tab-pane :label="$i18next.t('ReportManagement.tab.ban_rules')" name="banRules">
+    <i-tab-pane
+      name="banRules"
+      :label="$i18next.t('ReportManagement.tab.ban_rules')">
       <div class="form-warp">
         ban-rules
       </div>
@@ -18,6 +22,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import 'highlight.js/styles/googlecode.css'
 import hljs from 'highlight.js'
 import marked from 'marked'
@@ -30,13 +35,15 @@ export default {
       commentsTable: [
         {
           title: this.$i18next.t('ReportManagement.table.users'),
-          key: 'account',
+          key: 'author',
           width: 180,
           align: 'center',
           render: (h, params) => {
-            return h('div', params.row.account.map((item) => {
-              return h('p', item)
-            }))
+            return h('div', [
+              h('p', params.row.author.displayName),
+              h('p', params.row.author.email),
+              h('p', params.row.comment.ip)
+            ])
           }
         },
         {
@@ -47,13 +54,13 @@ export default {
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('p', this.$i18next.t('ReportManagement.text.reported_by_n_users', { count: params.row.comment.count })),
+              h('p', this.$i18next.t('ReportManagement.text.reported_by_n_users', { count: params.row.users.length })),
               h('p', {
                 style: {
                   'white-space': 'normal',
                   'word-wrap': 'break-word'
                 }
-              }, params.row.comment.outline),
+              }, this.getAbstract(params.row.comment.content)),
               h('Poptip', {
                 props: {
                   transfer: true,
@@ -103,9 +110,10 @@ export default {
           width: 100,
           render: (h, params) => {
             var attr = ''
-            if (params.row.action.delAction.repliesCount) {
-              attr = this.$i18next.t('ReportManagement.text.deleting_with_n_replies', { count: params.row.action.delAction.repliesCount })
+            if (params.row.repliesCount) {
+              attr = this.$i18next.t('ReportManagement.text.deleting_with_n_replies', { count: params.row.repliesCount })
             }
+            console.log(params)
             return h('div', [
               h('Button', {
                 props: {
@@ -123,34 +131,29 @@ export default {
                 },
                 on: {
                   'on-ok': () => {
-                    /*
-                      Notice:
-                        When you want to delete a reply while the root comment has
-                        been deleted, it will occur a error cause the reply is null.
-                        Be relaxed, it's ok with the logic.
-                    */
-                    let delAction = params.row.action.delAction
-                    // Delete the target comment (or reply).
-                    this.$database.ref(`pages/${delAction.encodedPageURL}/${delAction.commentURL}`)
-                      .remove().then(() => {
-                        if (delAction.replyURL) {
-                          // The target is a root comment, which has some replies. Delete all of them.
-                          this.$database.ref(`pages/${delAction.encodedPageURL}/${delAction.replyURL}`)
-                            .remove()
-                        }
-                        /*
-                          Change the count of comments (or replies).
-                          Sometimes the root comment has been deleted, when you want to handle a reply
-                          of it, it will occur a error cause the target reply is null. it's fine. Then
-                          just set the root comment's repliesCount as null.
-                        */
-                        this.$database.ref(`pages/${delAction.encodedPageURL}/${delAction.countURL}`)
-                          .transaction((currentCount) => {
-                            return currentCount ? currentCount - 1 : null
-                          })
-                        // Finish this report by remove it.
-                        this.$database.ref(`reported/${params.row.action.reportURL}`).remove()
+                    const { comment, commentId, replies } = params.row
+                    Promise.all([
+                      this.$database.ref(`comments/${commentId}`).remove(),
+                      comment.rootCommentId
+                        ? this.$database.ref(`commentReplies/${comment.rootCommentId}/${commentId}`).remove()
+                        : this.$database.ref(`pages/${comment.pageURL}/comments/${commentId}`).remove()
+                    ]).then(() => {
+                      this.$Message.success(this.$i18next.t('ReportManagement.success.deleting_comment'))
+                    }).catch(() => {
+                      this.$Message.error(this.$i18next.t('ReportManagement.error.deleting_comment'))
+                    })
+                    if (replies.length > 0) {
+                      Promise.all([
+                        ...replies.map(replyId => this.$database.ref(`comments/${replyId}`).remove()),
+                        this.$database.ref(`commentReplies/${commentId}`).remove()
+                      ]).then(() => {
+                        this.$Message.success(this.$i18next.t('ReportManagement.success.deleting_related_replies'))
+                      }).catch(() => {
+                        this.$Message.error(this.$i18next.t('ReportManagement.error.deleting_related_replies'))
                       })
+                    }
+                    this.$database.ref(`reported/comments/${commentId}`).remove()
+                    Vue.delete(this.reportedComments, commentId)
                   },
                   'on-cancel': () => {
                     return
@@ -174,7 +177,9 @@ export default {
                 },
                 on: {
                   'on-ok': () => {
-                    this.$database.ref(`reported/${params.row.action.reportURL}`).remove()
+                    const { commentId } = params.row
+                    this.$database.ref(`reported/comments/${commentId}`).remove()
+                    Vue.delete(this.reportedComments, commentId)
                   },
                   'on-cancel': () => {
                     return
@@ -192,97 +197,52 @@ export default {
           }
         }
       ],
-      reportedCommentsRaw: [],
-      reportedUsersRaw: []
+      reportedComments: {}
     }
   },
   created () {
     this.listenToReported()
   },
   computed: {
-    computedComments () {
-      var result = []
-      for (var i = 0; i < this.reportedCommentsRaw.length; i++) {
-        let temp = {}
-        let item = this.reportedCommentsRaw[i]
-
-        temp.account = this.parseUser(item.author)
-        temp.comment = Object.assign({}, this.parseComment(item.comment), {
-          count: Object.keys(item.actionBy).length
-        })
-        temp.action = this.parseAction(item)
-        result.push(temp)
-      }
-      return result
-    },
-    reportedUsers () {
-      return this.reportedUsersRaw.map((user) => {
-        return user
+    reportedCommentsTableData () {
+      return Object.keys(this.reportedComments).map(key => {
+        return Object.assign({}, this.reportedComments[key], {commentId: key})
       })
     }
   },
   methods: {
     listenToReported () {
-      this.$bindAsArray('reportedCommentsRaw',
-        this.$database.ref(`/reported/comments`).orderByChild('order'))
-
-      this.$bindAsArray('reportedUsersRaw',
-        this.$database.ref(`/reported/users`).orderByChild('order'))
+      this.$database.ref('reported/comments').on('child_added', newChild => {
+        const users = newChild.val()
+        const commentId = this.$config.databaseProvider === 'firebase' ? newChild.key : newChild.key()
+        this.$database.ref(`comments/${commentId}`).once('value').then(commentSnap => {
+          const comment = commentSnap.val()
+          if (comment) {
+            Promise.all([
+              this.$database.ref(`users/${comment.uid}`).once('value'),
+              this.$database.ref(`commentReplies/${commentId}`).once('value')
+            ]).then(snaps => {
+              const user = snaps[0].val() || {
+                displayName: this.$i18next.t('common.unknown_user'),
+                email: this.$i18next.t('common.unknown_user')
+              } // Incase the user is deleted
+              const replies = snaps[1].val() || {}
+              this.reportedComments = Object.assign({}, this.reportedComments, {[commentId]: Object.assign({}, {
+                users: Object.keys(users).map(userId => {
+                  return userId
+                }),
+                comment,
+                replies: Object.keys(replies),
+                repliesCount: Object.keys(replies).length,
+                author: user
+              })})
+            })
+          }
+        })
+      })
     },
-    parseUser (user) {
-      if (user.isAnonymousUser) {
-        return [this.$i18next.t('common.anonymous_user'), user.ip]
-      } else {
-        return [user.displayName, user.email, user.ip]
-      }
-    },
-    parseComment (comment) {
-      return {
-        outline: comment.content.length >= 30
-          ? comment.content.slice(0, 27) + '...' : comment.content,
-        content: comment.content,
-        date: comment.date
-      }
-    },
-    parseAction (item) {
-      const reportURL = `comments/${item['.key']}`
-
-      var banAction = {
-        ip: item.author.ip
-      }
-      if (!item.author.isAnonymousUser) {
-        banAction.email = item.author.email
-        banAction.authorUid = item.author.authorUid
-      }
-
-      var delAction = {
-        encodedPageURL: item.comment.pageURL
-      }
-
-      if (item.comment.rootCommentId) {
-        // delete a reply
-        delAction.encodedPageURL = item.comment.pageURL
-        delAction.commentURL = `replies/${item.comment.rootCommentId}/${item.comment.commentId}`
-        delAction.countURL = `comments/${item.comment.rootCommentId}/repliesCount`
-      } else {
-        // delete a normal comment
-        delAction.commentURL = `comments/${item.comment.commentId}`
-        delAction.countURL = `commentsCount`
-        if (item.comment.repliesCount) {
-          // delete a root comment with replies
-          delAction.repliesCount = item.comment.repliesCount
-          delAction.replyURL = `replies/${item.comment.commentId}`
-        }
-      }
-
-      return {
-        reportURL,
-        banAction,
-        delAction
-      }
-    },
-    showDetail (params) {
-      console.log(params)
+    getAbstract (text) {
+      return text.length >= 30 ? text.slice(0, 27) + '...' : text
     },
     markdown (content) {
       var render = new marked.Renderer()

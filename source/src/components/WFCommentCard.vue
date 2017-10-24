@@ -434,60 +434,20 @@ export default {
       if (!this.user) { return }
 
       var now = new Date()
-      this.$database.ref(`reported/comments/${this.comment.commentId}`)
+      this.$database.ref(`reported/comments/${this.comment.commentId}/${this.user.uid}`)
       .once('value').then((snapshot) => {
-        let temp = snapshot.val()
-        if (temp) {
-          var actionBy = temp.actionBy
-          if (this.currentUserId in actionBy) {
-            this.$Message.error(this.$i18next.t('CommentCard.error.repeated_reporting'))
-          } else {
-            actionBy[this.currentUserId] = now.toISOString()
-            this.$database.ref(`reported/comments/${this.comment.commentId}/actionBy`)
-            .update(actionBy).then(() => {
-              this.$Message.success(this.$i18next.t('CommentCard.success.reporting_comment'))
-            }).catch(err => {
-              this.$Message.error(this.$i18next.t('CommentCard.error.reporting_comment'))
-              console.log(err)
-            })
-          }
-        } else {
-          let actionBy = {}
-          actionBy[this.currentUserId] = now.toISOString()
-          const order = -1 * now.getTime()
-
-          let comment = {
-            'pageURL': this.encodedPageURL,
-            'commentId': this.comment.commentId,
-            'content': this.comment.content,
-            'date': this.comment.date
-          }
-
-          var author = {
-            'ip': this.comment.ip
-          }
-          // ！！！author 可简化
-          if (this.isAnonymousUser(this.comment.uid)) {
-            author.isAnonymousUser = true
-          } else {
-            author.isAnonymousUser = false
-            author.authorUid = this.comment.uid
-            author.email = this.author.email
-            author.displayName = this.author.displayName
-          }
-
-          this.$database.ref(`reported/comments/${this.comment.commentId}`).update({
-            actionBy,
-            order,
-            comment,
-            author
-          }).then(() => {
-            this.$Message.success(this.$i18next.t('CommentCard.success.reporting_comment'))
-          }).catch(err => {
-            this.$Message.error(this.$i18next.t('CommentCard.error.reporting_comment'))
-            console.log(err)
-          })
+        if (snapshot.val()) {
+          this.$Message.error(this.$i18next.t('CommentCard.error.repeated_reporting'))
+          return
         }
+
+        this.$database.ref(`reported/comments/${this.comment.commentId}/${this.user.uid}`).set(now.toISOString())
+        .then(() => {
+          this.$Message.success(this.$i18next.t('CommentCard.success.reporting_comment'))
+        }).catch(err => {
+          this.$Message.error(this.$i18next.t('CommentCard.error.reporting_comment'))
+          console.log(err)
+        })
       })
     },
     showUserInfo () {

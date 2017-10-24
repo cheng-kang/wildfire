@@ -2,7 +2,8 @@ export const langZhCN = {
   common: {
     add_wildfire_to_your_site: '在你的网站使用 Wildfire',
     anonymous_user: '匿名用户',
-    unknown_ip: '未知 IP 地址'
+    unknown_ip: '未知 IP 地址',
+    unknown_user: '未知用户'
   },
   AuthForm: {
     btn: {
@@ -85,8 +86,8 @@ export const langZhCN = {
   Header: {
     btn: {
       cancel: '取消',
-      comment: '评论',
-      comments: '评论',
+      comment: '条评论',
+      comments: '条评论',
       confirm: '确认',
       sign_in: '登录',
       sign_out: '注销',

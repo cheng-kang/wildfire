@@ -2,7 +2,8 @@ export const langEn = {
   common: {
     add_wildfire_to_your_site: 'Add Wildfire to your site',
     anonymous_user: 'Anonymous',
-    unknown_ip: 'Unknown IP address'
+    unknown_ip: 'Unknown IP address',
+    unknown_user: 'Unknown User'
   },
   AuthForm: {
     btn: {
@@ -166,6 +167,14 @@ export const langEn = {
     confirm: {
       deleting_comment: 'Sure to delete this comment?',
       ignoring_report: 'Sure to ignore this report?'
+    },
+    error: {
+      deleting_comment: 'Failed to delete comment.',
+      deleting_related_replies: 'Failed to delete related replies'
+    },
+    success: {
+      deleting_comment: 'Comment Deleted.',
+      deleting_related_replies: 'Related replies deleted.'
     },
     tab: {
       ban_rules: 'Ban Rules',
