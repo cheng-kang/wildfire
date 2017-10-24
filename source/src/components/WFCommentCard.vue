@@ -44,6 +44,7 @@
             </span>
           </div>
           <i-dropdown v-if="this.user"
+            trigger="click"
             placement="bottom-end"
             @on-click="handleDropdownClick">
             <a href="javascript:void(0)" class="drowdown-menu-button">
