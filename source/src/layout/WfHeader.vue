@@ -36,7 +36,7 @@
         <i-menu-group :title="$i18next.t('Header.menu.personal_center')">
           <i-menu-item name="3-1">{{$i18next.t('Header.menu.notification')}}</i-menu-item>
         </i-menu-group>
-        <i-menu-group :title="$i18next.t('Header.menu.admin_center')" v-if="isSiteOwner">
+        <i-menu-group :title="$i18next.t('Header.menu.admin_center')" v-if="isAdmin">
           <i-menu-item name="3-3">{{$i18next.t('Header.menu.report_management')}}</i-menu-item>
         </i-menu-group>
       </i-submenu>
@@ -83,7 +83,7 @@
     </i-modal>
     <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true">
       <div style="text-align:center">
-        <wf-report-management :user="user" v-if='isSiteOwner'></wf-report-management>
+        <wf-report-management :user="user" v-if="isAdmin"></wf-report-management>
       </div>
     </i-modal>
   </header>
@@ -114,7 +114,8 @@ export default {
       userSettingModal: false,
       signFormInitTab: 'signIn',
       personalCenterModal: false,
-      reportMangementModal: false
+      reportMangementModal: false,
+      isAdmin: false
     }
   },
   computed: {
@@ -122,9 +123,11 @@ export default {
       return this.user
       ? this.user.displayName
       : this.$i18next.t('common.anonymous_user')
-    },
-    isSiteOwner () {
-      return true
+    }
+  },
+  watch: {
+    user (newValue) {
+      this.isAdmin = newValue && newValue.isAdmin
     }
   },
   methods: {

@@ -66,7 +66,7 @@ export const langEn = {
       deleting_comment: 'Are you sure to delete this comment?'
     },
     error: {
-      deleting: 'Failed to delete.',
+      deleting_comment: 'Failed to delete.',
       repeated_reporting: 'You had already reported this comment!',
       reporting_comment: 'Something went wrong, please try again later.'
     },
@@ -75,7 +75,7 @@ export const langEn = {
       like_comment: 'Like this comment!'
     },
     success: {
-      deleting: 'Deleted.',
+      deleting_comment: 'Deleted.',
       reporting_comment: 'Comment reported.'
     },
     text: {

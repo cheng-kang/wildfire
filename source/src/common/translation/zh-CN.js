@@ -66,7 +66,7 @@ export const langZhCN = {
       deleting_comment: '你确定要删除这条评论吗？'
     },
     error: {
-      deleting: '删除失败。',
+      deleting_comment: '删除失败。',
       repeated_reporting: '你已经举报过这条评论。',
       reporting_comment: '举报失败，请稍后重试。'
     },
@@ -75,7 +75,7 @@ export const langZhCN = {
       like_comment: '给这条评论点赞！'
     },
     success: {
-      deleting: '删除成功。',
+      deleting_comment: '删除成功。',
       reporting_comment: '评论举报成功。'
     },
     text: {

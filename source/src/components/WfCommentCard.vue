@@ -408,20 +408,22 @@ export default {
     },
     confirmDelete () {
       const commentId = this.comment.commentId
-      let updates = {}
-      updates[`comments/${commentId}`] = null
-      updates[`votes/${commentId}`] = null
-      if (this.isTopLevelComment) {
-        updates[`pages/${this.comment.pageURL}/comments/${commentId}`] = null
-        updates[`commentReplies/${commentId}`] = null
-        this.repliesWithId.forEach(reply => {
-          updates[`comments/${reply.commentId}`] = null
-        })
-      } else {
-        updates[`commentReplies/${this.comment.rootCommentId}/${commentId}`] = null
-      }
 
-      this.$database.ref().update(updates).then(() => {
+      Promise.all([
+        this.$database.ref(`comments/${commentId}`).remove(),
+        this.$database.ref(`votes/${commentId}`).remove(),
+        // Note: [todo] should move "deleting votes" outside of
+        //        this batch. "votes" data shouldn't be writable
+        //        by all users, because site owner cannot recover
+        //        "votes" data with other unmutalbe data.
+        ...(this.isTopLevelComment
+          ? [
+            this.$database.ref(`pages/${this.comment.pageURL}/comments/${commentId}`).remove(),
+            this.$database.ref(`commentReplies/${commentId}`).remove(),
+            ...this.repliesWithId.map(reply => this.$database.ref(`comments/${reply.commentId}`).remove())
+          ]
+          : [this.$database.ref(`commentReplies/${this.comment.rootCommentId}/${commentId}`).remove()])
+      ]).then(() => {
         this.$Message.success(this.$i18next.t('CommentCard.success.deleting_comment'))
       }).catch(() => {
         this.$Message.error(this.$i18next.t('CommentCard.error.deleting_comment'))

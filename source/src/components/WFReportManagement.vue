@@ -113,7 +113,6 @@ export default {
             if (params.row.repliesCount) {
               attr = this.$i18next.t('ReportManagement.text.deleting_with_n_replies', { count: params.row.repliesCount })
             }
-            console.log(params)
             return h('div', [
               h('Button', {
                 props: {
