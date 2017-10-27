@@ -1,1 +1,103 @@
-<!DOCTYPE html><html><head><title>Wild Fire - Demo</title><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><link href=/static/css/app.dc9ddf47cf8c021caa5c78c69dc19d52.css rel=stylesheet></head><body><div class=wildfire-thread><div id=wf-loading-modal></div><div id=wildfire v-cloak></div></div><script type=text/javascript src=/static/js/manifest.d855981f6cd68568a15a.js></script><script type=text/javascript src=/static/js/vendor.7b8c1b5cc0e04679419c.js></script><script type=text/javascript src=/static/js/app.76be64fb84c7688d3c23.js></script></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wildfire - From a little spark may burst a flame.</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="static/css/reveal.css">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="static/css/highlight/default.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <div id="slide1" class="wrapper">
+            <div class="logos">
+              <img 
+                src="static/img/wildfire.svg" 
+                class="wildfire-logo"
+                height="140">
+              <span> = </span>
+              <img src="static/img/wilddog.svg" height="40">
+              <span> + </span>
+              <img src="static/img/firebase.png" height="45">
+            </div>
+            <h1 class="title">Wildfire</h1>
+            <h2 class="subtitle">From a little spark may burst a flame.</h2>
+            <div class="buttons">
+              <a class="button">Get Started</a>
+              <a class="button white">GitHub</a>
+            </div>
+            <p class="footnote">
+              *Press <strong>←</strong> or <strong>→</strong> to navigate.
+            </p>
+          </div>
+        </section>
+        <section>
+          <div id="slide2" class="wrapper">
+            <h1>What is Wildfire?</h1>
+            <p>Wildfire is a easy-to-setup comment system. </p>
+          </div>
+        </section>
+        <section>
+          <div id="slide3" class="wrapper">
+            <h1>How to use?</h1>
+            <pre>
+              <code class="html">
+&lt;div class=&quot;wildfire_thread&quot;&gt;&lt;/div&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+var wildfireConfig = () =&gt; ({
+  databaseProvider: 'wilddog',
+  databaseConfig: {
+    siteId: 'wd2231595668ouosqu'
+  },
+  pageURL: 'http://chengkang.me/wildfire',
+  pageTitle: 'Wildfire Demo',
+  locale: 'zh-CN'
+});
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = './wildfire.js';
+(d.head || d.body).appendChild(s);
+})();
+&lt;/script&gt;
+&lt;noscript&gt;Please enable JavaScript to view the &lt;a href=&quot;https://github.com/cheng-kang/wildfire&quot;&gt;comments powered by Wildfire.&lt;/a&gt;&lt;/noscript&gt;
+              </code>
+            </pre>
+          </div>
+        </section>
+        <section>
+          <div id="slide4" class="wrapper">
+            <h1>Get Started</h1>
+          </div>
+        </section>
+      </div>
+    </div>
+  <div class="comments">
+    <div class="wildfire_thread"></div>
+    <script type="text/javascript">
+      var wildfireConfig = () => ({
+        databaseProvider: 'wilddog',
+        databaseConfig: {
+          siteId: 'wd2231595668ouosqu'
+        },
+        pageURL: 'http://chengkang.me/wildfire',
+        pageTitle: 'Wildfire Demo',
+        locale: 'zh-CN'
+      });
+      (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = './static/js/wildfire.js';
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/cheng-kang/wildfire">comments powered by Wildfire.</a></noscript>
+  </div>
+  <script type="text/javascript" src="static/js/reveal.js"></script>
+  <script src="static/js/highlight.js"></script>
+  <script>
+    Reveal.initialize();
+    hljs.initHighlightingOnLoad();
+  </script>
+</body>
+</html>
