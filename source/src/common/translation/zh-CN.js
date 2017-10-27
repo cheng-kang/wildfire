@@ -56,7 +56,9 @@ export const langZhCN = {
       delete: '删除',
       hide: '收起',
       reply: '回复',
+      confirm: '确认',
       report_comment: '举报此评论',
+      ban_user: '封禁该用户',
       show_full_text: '展开全部',
       show_more_discussion: '展开更多讨论',
       show_less_discussion: '收起更多讨论',
@@ -68,7 +70,9 @@ export const langZhCN = {
     error: {
       deleting: '删除失败。',
       repeated_reporting: '你已经举报过这条评论。',
-      reporting_comment: '举报失败，请稍后重试。'
+      reporting_comment: '举报失败，请稍后重试。',
+      banned_title: '禁止操作',
+      banned_content: '你当前已被站长禁言，无法操作！'
     },
     html_title: {
       dislike_comment: '踩这条评论。',
@@ -137,10 +141,13 @@ export const langZhCN = {
       cancel: '取消',
       clear: '清空',
       post: '发送',
-      posting: '发送中'
+      posting: '发送中',
+      confirm: '确认'
     },
     error: {
-      posting_comment: '评论失败。'
+      posting_comment: '评论失败。',
+      banned_title: '禁止评论',
+      banned_content: '您当前已被站长禁言，无法评论！'
     },
     placeholder: {
       join_conversation: '一起来发言吧...',
@@ -162,11 +169,25 @@ export const langZhCN = {
       cancel: '取消',
       delete: '删除',
       ignore: '忽略',
-      more: 'More'
+      more: 'More',
+      unban: '解除'
     },
     confirm: {
       deleting_comment: '确认要删除这条举报吗？',
       ignoring_report: '确认要忽略这条举报吗？'
+    },
+    error: {
+      deleting_comment: '删除失败。',
+      deleting_related_replies: '删除相关回复失败',
+      ban_user: '屏蔽失败。',
+      repeated_ban: '请勿重复屏蔽。',
+      unknown: '未知错误！'
+    },
+    success: {
+      deleting_comment: '删除成功。',
+      deleting_related_replies: '相关回复已被删除。',
+      ban_user: '屏蔽成功！',
+      unban: '已解除屏蔽！'
     },
     tab: {
       ban_rules: '禁用规则',
@@ -176,11 +197,17 @@ export const langZhCN = {
     table: {
       action: '操作',
       comments: '评论',
-      users: '用户'
+      users: '用户',
+      action_time: '操作时间'
     },
     text: {
       reported_by_n_users: '已被 {{count}} 位用户举报',
-      deleting_with_n_replies: '与此评论相关的 {{count}} 条回复会被一同删除。'
+      deleting_with_n_replies: '与此评论相关的 {{count}} 条回复会被一同删除。',
+      sure_to_ban: '确认要屏蔽该用户吗？',
+      can_not_ban_this_user: '该匿名用户无有效IP，无法屏蔽！',
+      ban_this_ip: '该用户为匿名用户，要封禁他的IP吗？',
+      unban_this_user: '解除对该用户的屏蔽吗？',
+      reason: '屏蔽原因： '
     }
   },
   UserSetting: {

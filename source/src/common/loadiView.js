@@ -67,7 +67,7 @@ import Tabs from 'iview/src/components/tabs'
 // import Transfer from 'iview/src/components/transfer'
 // import Tree from 'iview/src/components/tree'
 // import Upload from 'iview/src/components/upload'
-// import { Row, Col } from 'iview/src/components/grid'
+import { Row, Col } from 'iview/src/components/grid'
 import {
   Select,
   // OptionGroup,
@@ -96,8 +96,8 @@ const iview = {
   // Checkbox,
   // CheckboxGroup: Checkbox.Group,
   // iCircle: Circle,
-  // Col,
-  // iCol: Col,
+  Col,
+  iCol: Col,
   // Collapse,
   // ColorPicker,
   // DatePicker,
@@ -140,7 +140,7 @@ const iview = {
   // Radio,
   // RadioGroup: Radio.Group,
   // Rate,
-  // Row,
+  Row,
   Select,
   iSelect: Select,
   // Slider,

@@ -56,7 +56,9 @@ export const langEn = {
       delete: 'Delete',
       hide: 'Hide',
       reply: 'Reply',
+      confirm: 'Confirm',
       report_comment: 'Report this comment',
+      ban_user: 'Ban this user',
       show_full_text: 'Show full text',
       show_more_discussion: 'Show more',
       show_less_discussion: 'Show less',
@@ -68,7 +70,9 @@ export const langEn = {
     error: {
       deleting: 'Failed to delete.',
       repeated_reporting: 'You had already reported this comment!',
-      reporting_comment: 'Something went wrong, please try again later.'
+      reporting_comment: 'Something went wrong, please try again later.',
+      banned_title: 'Banned',
+      banned_content: 'You are currently banned from this action!'
     },
     html_title: {
       dislike_comment: 'Dislike this comment.',
@@ -137,10 +141,13 @@ export const langEn = {
       cancel: 'Cancel',
       clear: 'Clear',
       post: 'Post',
-      posting: 'Posting'
+      posting: 'Posting',
+      confirm: 'Confirm'
     },
     error: {
-      posting_comment: 'Failed to post comment.'
+      posting_comment: 'Failed to post comment.',
+      banned_title: 'Banned',
+      banned_content: 'You are currently banned from making comments'
     },
     placeholder: {
       join_conversation: 'Join the discusstion...',
@@ -162,7 +169,8 @@ export const langEn = {
       cancel: 'Cancel',
       delete: 'Delete',
       ignore: 'Ignore',
-      more: 'More'
+      more: 'More',
+      unban: 'Unban'
     },
     confirm: {
       deleting_comment: 'Sure to delete this comment?',
@@ -170,11 +178,16 @@ export const langEn = {
     },
     error: {
       deleting_comment: 'Failed to delete comment.',
-      deleting_related_replies: 'Failed to delete related replies'
+      deleting_related_replies: 'Failed to delete related replies',
+      ban_user: 'Failed to ban.',
+      repeated_ban: 'Banned already.',
+      unknown: 'Unknown error!'
     },
     success: {
       deleting_comment: 'Comment Deleted.',
-      deleting_related_replies: 'Related replies deleted.'
+      deleting_related_replies: 'Related replies deleted.',
+      ban_user: 'Banned.',
+      unban: 'Unbanned.'
     },
     tab: {
       ban_rules: 'Ban Rules',
@@ -184,11 +197,18 @@ export const langEn = {
     table: {
       action: 'Action',
       comments: 'Comments',
-      users: 'Users'
+      users: 'Users',
+      action_time: 'Time'
     },
     text: {
       reported_by_n_users: 'Reported by {{count}} user(s)',
-      deleting_with_n_replies: '{{count}} replies to this comment will also be deleted. '
+      deleting_with_n_replies: '{{count}} replies to this comment will also be deleted. ',
+      sure_to_ban: 'Sure to ban this user?',
+      can_not_ban_this_user: 'This is an anonymous user with invalid ip, cann\'t ban it.',
+      ban_this_ip: 'This is an anonymous user, sure to ban the ip?',
+      unban_this_user: 'Unban this user?',
+      reason: 'Reason: '
+
     }
   },
   UserSetting: {

@@ -95,14 +95,14 @@ if (databaseProvider === 'wilddog') {
 /*
   Get current client IP address
  */
-Vue.prototype.$ip = 'unknown'
-Vue.http.get('https://api.ipify.org?format=json').then(response => {
-  Vue.prototype.$ip = response.body.ip
-}, response => {
-  // error callback
-  console.log(response)
-  Vue.prototype.$ip = 'unknown-failed'
-})
+Vue.prototype.$ip = {ip: 'unknown', isBanned: false}
+// Vue.http.get('https://api.ipify.org?format=json').then(response => {
+//   Vue.prototype.$ip.ip = response.body.ip
+// }, response => {
+//   // error callback
+//   console.log(response)
+//   Vue.prototype.$ip.ip = 'unknown-failed'
+// })
 
 /*
   Init moment.js locale

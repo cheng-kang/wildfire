@@ -1,19 +1,20 @@
 <template>
   <div class="wildfire">
     <wf-header
-      :user="user" 
+      :user="user"
       :discussion-count="discussionCount"
       :comments-loading-state="commentsLoadingState"></wf-header>
-    <wf-body 
+    <wf-body
       :user="user"
       :page-comments-count="pageCommentsCount"
-      :comments="commentsWithId" 
+      :comments="commentsWithId"
       :comments-loading-state="commentsLoadingState"></wf-body>
     <wf-footer :user="user"></wf-footer>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import Bus from './common/bus'
 import WfHeader from './layout/WfHeader'
 import WfBody from './layout/WfBody'
@@ -32,6 +33,8 @@ export default {
       pageCommentsCount: 0,
       pageComments: [],
       comments: [],
+      banData: [],
+      banList: [],
       discussionCount: 0
     }
   },
@@ -59,10 +62,29 @@ export default {
       this.user.displayName = updates['/displayName']
       this.user.photoURL = updates['/photoURL']
     })
+
+    this.$bindAsArray('banData', this.$database.ref('ban'))
+
+    Vue.http.get('https://api.ipify.org?format=json').then(response => {
+      this.$set(this.$ip, 'ip', response.body.ip)
+      this.$set(this.$ip, 'isBanned', this.banList.indexOf(this.$ip.ip) > -1)
+    }, response => {
+      // error callback
+      console.log(response)
+      this.$set(this.$ip, 'ip', 'unknown-failed')
+    })
   },
   mounted () {
     // hide lodaing modal
     document.getElementById('wf-loading-modal').style.display = 'none'
+  },
+  watch: {
+    banData (newVal, oldVal) {
+      this.banList = newVal.map((item) => {
+        return item['.key'].replace(/-/g, '.')
+      })
+      this.chechBanState()
+    }
   },
   methods: {
     /*
@@ -82,6 +104,7 @@ export default {
           this.user = snapshot.val()
           this.$set(this.user, 'uid', user.uid)
           this.$set(this.user, 'isAdmin', snapshot.val().isAdmin || false)
+          this.$set(this.user, 'isBanned', this.banList.indexOf(this.user.uid) > -1)
         })
       })
     },
@@ -114,6 +137,14 @@ export default {
       }, () => {
         this.commentsLoadingState = 'finished'
       })
+    },
+    chechBanState () {
+      if (this.user) {
+        this.$set(this.user, 'isBanned', this.banList.indexOf(this.user.uid) > -1)
+      }
+      if (this.$ip) {
+        this.$set(this.$ip, 'isBanned', this.banList.indexOf(this.$ip.ip) > -1)
+      }
     }
   }
 }

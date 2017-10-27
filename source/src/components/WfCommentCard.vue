@@ -51,9 +51,13 @@
               <i-icon type="arrow-down-b"></i-icon>
             </a>
             <i-dropdown-menu slot="list">
-              <i-dropdown-item style="color: red"
+              <i-dropdown-item v-if="!user || !user.isAdmin" style="color: red"
                 name="reportCurrentComment">
                 {{$i18next.t('CommentCard.btn.report_comment')}}
+              </i-dropdown-item>
+              <i-dropdown-item v-if="user && user.isAdmin" style="color: red"
+                name="banCurrentUser">
+                {{$i18next.t('CommentCard.btn.ban_user')}}
               </i-dropdown-item>
             </i-dropdown-menu>
           </i-dropdown>
@@ -379,6 +383,14 @@ export default {
      */
     toggleVote (type) {
       if (!this.user) { return }
+      if ((this.user && this.user.isBanned) || (!this.user && this.$ip.isBanned)) {
+        this.$Modal.error({
+          title: this.$i18next.t('CommentCard.error.banned_title'),
+          content: this.$i18next.t('CommentCard.error.banned_content'),
+          okText: this.$i18next.t('CommentCard.btn.confirm')
+        })
+        return
+      }
       const { uid } = this.user
       const now = new Date()
       const commentId = this.comment.commentId
@@ -432,21 +444,55 @@ export default {
     },
     reportCurrentComment () {
       if (!this.user) { return }
+      if ((this.user && this.user.isBanned) || (!this.user && this.$ip.isBanned)) {
+        this.$Modal.error({
+          title: this.$i18next.t('CommentCard.error.banned_title'),
+          content: this.$i18next.t('CommentCard.error.banned_content'),
+          okText: this.$i18next.t('CommentCard.btn.confirm')
+        })
+        return
+      }
 
       var now = new Date()
-      this.$database.ref(`reported/comments/${this.comment.commentId}/${this.user.uid}`)
+      this.$database.ref(`reported/${this.comment.commentId}/${this.user.uid}`)
       .once('value').then((snapshot) => {
         if (snapshot.val()) {
           this.$Message.error(this.$i18next.t('CommentCard.error.repeated_reporting'))
           return
         }
 
-        this.$database.ref(`reported/comments/${this.comment.commentId}/${this.user.uid}`).set(now.toISOString())
+        this.$database.ref(`reported/${this.comment.commentId}/${this.user.uid}`).set(now.toISOString())
         .then(() => {
           this.$Message.success(this.$i18next.t('CommentCard.success.reporting_comment'))
         }).catch(err => {
           this.$Message.error(this.$i18next.t('CommentCard.error.reporting_comment'))
           console.log(err)
+        })
+      })
+    },
+    banCurrentUser () {
+      let key = ''
+      let now = new Date().toISOString()
+      if (this.comment.uid !== this.$config.anonymousUserId) {
+        key = this.comment.uid
+      } else if (/unknow/.test(this.comment.ip)) {
+        this.$Message.error('屏蔽失败')
+        return
+      } else {
+        key = this.comment.ip.replace(/\./g, '-')
+      }
+      this.$database.ref(`ban/${key}`).once('value').then((snapshot) => {
+        if (snapshot.val()) {
+          this.$Message.error('请勿重复屏蔽')
+          return
+        }
+        this.$database.ref(`ban/${key}`).set({
+          date: now,
+          reason: 'comment'
+        }).then(() => {
+          this.$Message.success('屏蔽成功')
+        }).catch(() => {
+          this.$Message.error('屏蔽失败')
         })
       })
     },

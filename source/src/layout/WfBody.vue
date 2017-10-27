@@ -1,14 +1,14 @@
 <template>
   <section>
-    <wf-reply-area 
-      :user="user" 
+    <wf-reply-area
+      :user="user"
       :comments-loading-state="commentsLoadingState"
       style="margin-bottom: 30px;"
       :isMain="true"></wf-reply-area>
 
     <template v-if="comments.length !== 0">
       <ul class="wf-comment-group">
-        <wf-comment-card 
+        <wf-comment-card
           v-for="(comment, idx) in currentPageComments"
           :key="comment.commentId"
           :user="user"
@@ -16,7 +16,7 @@
           :comments-loading-state="commentsLoadingState"
           ></wf-comment-card>
       </ul>
-      <i-page 
+      <i-page
         :total="pageCommentsCount"
         v-if="pageCommentsCount > 10"
         size="small"
@@ -25,9 +25,9 @@
 
     <p v-else class="no-content-tip">
       <i-spin v-if="commentsLoadingState === 'loading'"
-        :default-slot-style="{ 
-          display: 'flex', 
-          alignItems: 'center', 
+        :default-slot-style="{
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center'
         }">
           <i-icon class="spin-icon" type="load-c" size="18" :style="{marginRight: '5px'}"></i-icon>
