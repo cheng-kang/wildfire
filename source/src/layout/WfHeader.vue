@@ -114,7 +114,8 @@ export default {
       userSettingModal: false,
       signFormInitTab: 'signIn',
       personalCenterModal: false,
-      reportMangementModal: false
+      reportMangementModal: false,
+      isAdmin: false
     }
   },
   computed: {

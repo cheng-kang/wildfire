@@ -125,6 +125,8 @@ export default {
     }
   },
   created () {
+  },
+  mounted () {
     /*
       `MentionAutoCompleteSelected` event observer
       Note: update current reply area when recieves the event.
@@ -192,15 +194,20 @@ export default {
          */
         const newKey = this.$config.databaseProvider === 'firebase' ? newNode.key : newNode.key()
 
-        let updates = {}
-        updates[`comments/${newKey}`] = postData
-        if (isReply) {
-          updates[`commentReplies/${rootCommentId}/${newKey}`] = date
-        } else {
-          updates[`pages/${pageURL}/comments/${newKey}`] = date
-        }
+        // let updates = []
+        // updates.push(this.$database.ref(`comments/${newKey}`).update(postData))
+        // if (isReply) {
+        //   updates.push(this.$database.ref(`commentReplies/${rootCommentId}/${newKey}`).update(date))
+        // } else {
+        //   updates.push(this.$database.ref(`pages/${pageURL}/comments/${newKey}`).update(date))
+        // }
 
-        this.$database.ref().update(updates).then(() => {
+        Promise.all([
+          this.$database.ref(`comments/${newKey}`).update(postData),
+          isReply
+            ? this.$database.ref(`commentReplies/${rootCommentId}/${newKey}`).set(date)
+            : this.$database.ref(`pages/${pageURL}/comments/${newKey}`).set(date)
+        ]).then(() => {
           this.isPosting = false
           this.$emit('finished-replying') // When successfully posted reply, hide current reply area
           this.form.content = ''
