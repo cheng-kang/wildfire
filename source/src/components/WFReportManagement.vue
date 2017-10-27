@@ -1,21 +1,24 @@
 <template>
-  <i-tabs value="reportedComments">
+  <i-tabs value="reported">
     <i-tab-pane
-      name="reportedComments"
+      name="reported"
       :label="$i18next.t('ReportManagement.tab.reported_comments')">
       <i-table
         class="reported-table"
         height="300"
-        :columns="commentsTable"
-        :data="reportedCommentsTableData"
+        :columns="reportedTable"
+        :data="reportedTableData"
         :border="false"></i-table>
     </i-tab-pane>
     <i-tab-pane
-      name="banRules"
+      name="ban"
       :label="$i18next.t('ReportManagement.tab.ban_rules')">
-      <div class="form-warp">
-        ban-rules
-      </div>
+      <i-table
+        class="reported-table"
+        height="300"
+        :columns="banTable"
+        :data="banTableData"
+        :border="false"></i-table>
     </i-tab-pane>
   </i-tabs>
 
@@ -32,7 +35,170 @@ export default {
   props: [],
   data () {
     return {
-      commentsTable: [
+      reportedTable: [
+        {
+          type: 'expand',
+          width: 50,
+          render: (h, params) => {
+            var deleteAttr = ''
+            if (params.row.repliesCount) {
+              deleteAttr = this.$i18next.t('ReportManagement.text.deleting_with_n_replies', { count: params.row.repliesCount })
+            }
+            var banTip = ''
+            if (params.row.comment.uid) {
+              banTip = this.$i18next.t('ReportManagement.text.sure_to_ban')
+            } else if (/unknow/.test(params.row.comment.ip)) {
+              banTip = this.$i18next.t('ReportManagement.text.can_not_ban_this_user')
+            } else {
+              banTip = this.$i18next.t('ReportManagement.text.ban_this_ip')
+            }
+            return [
+              h('Col', {
+                props: {
+                  span: 12
+                }
+              }, [
+                h('p', `IP: ${params.row.comment.ip}`),
+                h('p', this.$i18next.t('ReportManagement.text.reported_by_n_users', { count: params.row.userList.length }))
+              ]),
+              h('Col', {
+                props: {
+                  span: 12
+                }
+              }, [
+                h('Poptip', {
+                  props: {
+                    confirm: true,
+                    title: banTip,
+                    transfer: true,
+                    okText: this.$i18next.t('ReportManagement.btn.ban'),
+                    cancelText: this.$i18next.t('ReportManagement.btn.cancel')
+                  },
+                  on: {
+                    'on-ok': () => {
+                      // console.log(params.row)
+                      let key = ''
+                      let now = new Date().toISOString()
+                      if (params.row.comment.uid) {
+                        key = params.row.comment.uid
+                      } else if (/unknow/.test(params.row.comment.ip)) {
+                        this.$Message.error(this.$i18next.t('ReportManagement.error.ban_user'))
+                        return
+                      } else {
+                        key = params.row.comment.ip.replace(/\./g, '-')
+                      }
+                      this.$database.ref(`ban/${key}`).once('value').then((snapshot) => {
+                        if (snapshot.val()) {
+                          this.$Message.error(this.$i18next.t('ReportManagement.error.repeated_ban'))
+                          return
+                        }
+                        this.$database.ref(`ban/${key}`).set({
+                          date: now,
+                          reason: 'reported'
+                        }).then(() => {
+                          this.$Message.success(this.$i18next.t('ReportManagement.success.ban_user'))
+                        }).catch(() => {
+                          this.$Message.error(this.$i18next.t('ReportManagement.error.ban_user'))
+                        })
+                      })
+                    },
+                    'on-cancel': () => {
+                      return
+                    }
+                  }
+                }, [
+                  h('Button', {
+                    props: {
+                      type: 'warning',
+                      size: 'small'
+                    },
+                    style: {
+                      'margin-left': '5px'
+                    }
+                  }, this.$i18next.t('ReportManagement.btn.ban'))
+                ]),
+                h('Poptip', {
+                  props: {
+                    confirm: true,
+                    title: deleteAttr + this.$i18next.t('ReportManagement.confirm.deleting_comment'),
+                    transfer: true,
+                    okText: this.$i18next.t('ReportManagement.btn.delete'),
+                    cancelText: this.$i18next.t('ReportManagement.btn.cancel')
+                  },
+                  on: {
+                    'on-ok': () => {
+                      const { comment, commentId, replies } = params.row
+                      Promise.all([
+                        this.$database.ref(`comments/${commentId}`).remove(),
+                        comment.rootCommentId
+                          ? this.$database.ref(`commentReplies/${comment.rootCommentId}/${commentId}`).remove()
+                          : this.$database.ref(`pages/${comment.pageURL}/comments/${commentId}`).remove()
+                      ]).then(() => {
+                        this.$Message.success(this.$i18next.t('ReportManagement.success.deleting_comment'))
+                      }).catch(() => {
+                        this.$Message.error(this.$i18next.t('ReportManagement.error.deleting_comment'))
+                      })
+                      if (replies.length > 0) {
+                        Promise.all([
+                          ...replies.map(replyId => this.$database.ref(`comments/${replyId}`).remove()),
+                          this.$database.ref(`commentReplies/${commentId}`).remove()
+                        ]).then(() => {
+                          this.$Message.success(this.$i18next.t('ReportManagement.success.deleting_related_replies'))
+                        }).catch(() => {
+                          this.$Message.error(this.$i18next.t('ReportManagement.error.deleting_related_replies'))
+                        })
+                      }
+                      this.$database.ref(`reported/${commentId}`).remove()
+                      Vue.delete(this.reportedList, commentId)
+                    },
+                    'on-cancel': () => {
+                      return
+                    }
+                  }
+                }, [
+                  h('Button', {
+                    props: {
+                      type: 'error',
+                      size: 'small'
+                    },
+                    style: {
+                      'margin-left': '5px'
+                    }
+                  }, this.$i18next.t('ReportManagement.btn.delete'))
+                ]),
+                h('Poptip', {
+                  props: {
+                    confirm: true,
+                    title: this.$i18next.t('ReportManagement.confirm.ignoring_report'),
+                    transfer: true,
+                    okText: this.$i18next.t('ReportManagement.btn.ignore'),
+                    cancelText: this.$i18next.t('ReportManagement.btn.cancel')
+                  },
+                  on: {
+                    'on-ok': () => {
+                      const { commentId } = params.row
+                      this.$database.ref(`reported/${commentId}`).remove()
+                      Vue.delete(this.reportedList, commentId)
+                    },
+                    'on-cancel': () => {
+                      return
+                    }
+                  }
+                }, [
+                  h('Button', {
+                    props: {
+                      type: 'ghost',
+                      size: 'small'
+                    },
+                    style: {
+                      'margin-left': '5px'
+                    }
+                  }, this.$i18next.t('ReportManagement.btn.ignore'))
+                ])
+              ])
+            ]
+          }
+        },
         {
           title: this.$i18next.t('ReportManagement.table.users'),
           key: 'author',
@@ -41,20 +207,17 @@ export default {
           render: (h, params) => {
             return h('div', [
               h('p', params.row.author.displayName),
-              h('p', params.row.author.email),
-              h('p', params.row.comment.ip)
+              h('p', params.row.author.email)
             ])
           }
         },
         {
           title: this.$i18next.t('ReportManagement.table.comments'),
           key: 'comment',
-          width: 300,
           ellipsis: true,
           align: 'center',
           render: (h, params) => {
             return h('div', [
-              h('p', this.$i18next.t('ReportManagement.text.reported_by_n_users', { count: params.row.users.length })),
               h('p', {
                 style: {
                   'white-space': 'normal',
@@ -101,118 +264,114 @@ export default {
               ])
             ])
           }
-        },
+        }
+      ],
+      banTable: [
         {
-          title: this.$i18next.t('ReportManagement.table.action'),
-          key: 'action',
+          type: 'expand',
+          width: 50,
           align: 'center',
-          fixed: 'right',
-          width: 100,
           render: (h, params) => {
-            var attr = ''
-            if (params.row.repliesCount) {
-              attr = this.$i18next.t('ReportManagement.text.deleting_with_n_replies', { count: params.row.repliesCount })
-            }
-            console.log(params)
-            return h('div', [
-              h('Button', {
+            return h('div', {
+              style: {
+                'margin-right': '-50px',
+                'text-align': 'center'
+              }
+            }, [
+              h('Col', {
                 props: {
-                  type: 'text',
-                  size: 'small'
+                  span: 12
                 }
-              }, this.$i18next.t('ReportManagement.btn.ban')),
-              h('Poptip', {
+              }, [h('p', `${this.$i18next.t('ReportManagement.text.reason')}${params.row.reason}`)]),
+              h('Col', {
                 props: {
-                  confirm: true,
-                  title: attr + this.$i18next.t('ReportManagement.confirm.deleting_comment'),
-                  transfer: true,
-                  okText: this.$i18next.t('ReportManagement.btn.delete'),
-                  cancelText: this.$i18next.t('ReportManagement.btn.cancel')
-                },
-                on: {
-                  'on-ok': () => {
-                    const { comment, commentId, replies } = params.row
-                    Promise.all([
-                      this.$database.ref(`comments/${commentId}`).remove(),
-                      comment.rootCommentId
-                        ? this.$database.ref(`commentReplies/${comment.rootCommentId}/${commentId}`).remove()
-                        : this.$database.ref(`pages/${comment.pageURL}/comments/${commentId}`).remove()
-                    ]).then(() => {
-                      this.$Message.success(this.$i18next.t('ReportManagement.success.deleting_comment'))
-                    }).catch(() => {
-                      this.$Message.error(this.$i18next.t('ReportManagement.error.deleting_comment'))
-                    })
-                    if (replies.length > 0) {
-                      Promise.all([
-                        ...replies.map(replyId => this.$database.ref(`comments/${replyId}`).remove()),
-                        this.$database.ref(`commentReplies/${commentId}`).remove()
-                      ]).then(() => {
-                        this.$Message.success(this.$i18next.t('ReportManagement.success.deleting_related_replies'))
+                  span: 12
+                }
+              }, [
+                h('Poptip', {
+                  props: {
+                    confirm: true,
+                    title: this.$i18next.t('ReportManagement.text.unban_this_user'),
+                    transfer: true,
+                    okText: this.$i18next.t('ReportManagement.btn.unban'),
+                    cancelText: this.$i18next.t('ReportManagement.btn.cancel')
+                  },
+                  on: {
+                    'on-ok': () => {
+                      this.$database.ref(`ban/${params.row.key}`)
+                      .remove().then(() => {
+                        this.$Message.info(this.$i18next.t('ReportManagement.success.unban'))
+                        this.listenToBan()
                       }).catch(() => {
-                        this.$Message.error(this.$i18next.t('ReportManagement.error.deleting_related_replies'))
+                        this.$Message.error(this.$i18next.t('ReportManagement.error.unknow'))
                       })
+                      // console.log(params.row)
+                    },
+                    'on-cancel': () => {
+                      return
                     }
-                    this.$database.ref(`reported/comments/${commentId}`).remove()
-                    Vue.delete(this.reportedComments, commentId)
-                  },
-                  'on-cancel': () => {
-                    return
                   }
-                }
-              }, [
-                h('Button', {
-                  props: {
-                    type: 'text',
-                    size: 'small'
-                  }
-                }, this.$i18next.t('ReportManagement.btn.delete'))
-              ]),
-              h('Poptip', {
-                props: {
-                  confirm: true,
-                  title: this.$i18next.t('ReportManagement.confirm.ignoring_report'),
-                  transfer: true,
-                  okText: this.$i18next.t('ReportManagement.btn.ignore'),
-                  cancelText: this.$i18next.t('ReportManagement.btn.cancel')
-                },
-                on: {
-                  'on-ok': () => {
-                    const { commentId } = params.row
-                    this.$database.ref(`reported/comments/${commentId}`).remove()
-                    Vue.delete(this.reportedComments, commentId)
-                  },
-                  'on-cancel': () => {
-                    return
-                  }
-                }
-              }, [
-                h('Button', {
-                  props: {
-                    type: 'text',
-                    size: 'small'
-                  }
-                }, this.$i18next.t('ReportManagement.btn.ignore'))
+                }, [
+                  h('Button', {
+                    props: {
+                      type: 'ghost',
+                      size: 'small'
+                    },
+                    style: {
+                      'margin-left': '5px'
+                    }
+                  }, this.$i18next.t('ReportManagement.btn.unban'))
+                ])
               ])
             ])
           }
+        },
+        {
+          title: this.$i18next.t('ReportManagement.table.users'),
+          key: 'users',
+          align: 'center',
+          render: (h, params) => {
+            return [
+              h('p', params.row.displayName),
+              h('p', params.row.info)
+            ]
+          }
+        },
+        {
+          title: this.$i18next.t('ReportManagement.table.action_time'),
+          key: 'date',
+          align: 'center',
+          render: (h, params) => {
+            return h('p', this.$moment(params.row.date).fromNow())
+          }
         }
       ],
-      reportedComments: {}
+      reportedList: {},
+
+      banList: {}
     }
   },
   created () {
     this.listenToReported()
+    this.listenToBan()
   },
   computed: {
-    reportedCommentsTableData () {
-      return Object.keys(this.reportedComments).map(key => {
-        return Object.assign({}, this.reportedComments[key], {commentId: key})
+    reportedTableData () {
+      return Object.keys(this.reportedList).map(key => {
+        return Object.assign({}, this.reportedList[key], {commentId: key})
+      })
+    },
+    banTableData () {
+      return Object.keys(this.banList).map(key => {
+        return Object.assign({}, this.banList[key], { key })
+      }).sort((a, b) => {
+        return a.date < b.date
       })
     }
   },
   methods: {
     listenToReported () {
-      this.$database.ref('reported/comments').on('child_added', newChild => {
+      this.$database.ref('reported').on('child_added', newChild => {
         const users = newChild.val()
         const commentId = this.$config.databaseProvider === 'firebase' ? newChild.key : newChild.key()
         this.$database.ref(`comments/${commentId}`).once('value').then(commentSnap => {
@@ -227,8 +386,8 @@ export default {
                 email: this.$i18next.t('common.unknown_user')
               } // Incase the user is deleted
               const replies = snaps[1].val() || {}
-              this.reportedComments = Object.assign({}, this.reportedComments, {[commentId]: Object.assign({}, {
-                users: Object.keys(users).map(userId => {
+              this.reportedList = Object.assign({}, this.reportedList, {[commentId]: Object.assign({}, {
+                userList: Object.keys(users).map(userId => {
                   return userId
                 }),
                 comment,
@@ -243,6 +402,26 @@ export default {
     },
     getAbstract (text) {
       return text.length >= 30 ? text.slice(0, 27) + '...' : text
+    },
+    listenToBan () {
+      this.banList = {}
+      this.$database.ref(`ban`).on('child_added', banItem => {
+        const key = this.$config.databaseProvider === 'firebase' ? banItem.key : banItem.key()
+        // console.log(banItem.val())
+        if (/(\d{1,3}-){3}\d{1,3}/.test(key)) {
+          const displayName = this.$i18next.t('common.anonymous_user')
+          const ip = key.replace(/-/g, '.')
+          this.banList = Object.assign({}, this.banList,
+            {[key]: Object.assign(banItem.val(), {displayName, info: ip})})
+        } else {
+          const uid = key
+          this.$database.ref(`users/${uid}`).once('value').then((snapshot) => {
+            const {displayName, email} = snapshot.val()
+            this.banList = Object.assign({}, this.banList,
+              {[key]: Object.assign(banItem.val(), {displayName, info: email})})
+          })
+        }
+      })
     },
     markdown (content) {
       var render = new marked.Renderer()
@@ -273,20 +452,4 @@ export default {
 </script>
 
 <style scoped>
-.form-warp{
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-items: space-between;
-  width: 80%;
-  margin: auto;
-  padding-top: 10px;
-  padding-bottom: 30px
-}
-</style>
-<style>
-  #wildfire .reported-table .ivu-poptip-popper{
-    position: absolute !important;
-  }
 </style>

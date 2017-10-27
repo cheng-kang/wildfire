@@ -149,7 +149,7 @@ export default {
 
       if (content.trim() !== '') {
         const aDate = new Date()
-        const ip = this.$ip
+        const ip = this.$ip.ip
         const uid = user ? user.uid : this.$config.anonymousUserId
         const date = aDate.toISOString()
 
@@ -418,6 +418,14 @@ export default {
       })
     },
     contentOnFocus (e) {
+      if ((this.user && this.user.isBanned) || (!this.user && this.$ip.isBanned)) {
+        this.$Modal.error({
+          title: this.$i18next.t('ReplyArea.error.banned_title'),
+          content: this.$i18next.t('ReplyArea.error.banned_content'),
+          okText: this.$i18next.t('ReplyArea.btn.confirm')
+        })
+        return
+      }
       if (this.isMain) {
         Bus.$emit('OnlyOneReplyAreaShouldBeActive', 'MainReplyArea')
       }
