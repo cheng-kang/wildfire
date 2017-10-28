@@ -70,8 +70,7 @@ export default {
       this.$set(this.$ip, 'isBanned', this.banList.indexOf(this.$ip.ip) > -1)
     }, response => {
       // error callback
-      console.log(response)
-      this.$set(this.$ip, 'ip', 'unknown-failed')
+      this.$set(this.$ip, 'ip', 'unknown')
     })
   },
   mounted () {
@@ -83,7 +82,10 @@ export default {
       this.banList = newVal.map((item) => {
         return item['.key'].replace(/-/g, '.')
       })
-      this.chechBanState()
+      this.checkBanState()
+    },
+    user () {
+      this.checkBanState()
     }
   },
   methods: {
@@ -138,13 +140,11 @@ export default {
         this.commentsLoadingState = 'finished'
       })
     },
-    chechBanState () {
+    checkBanState () {
       if (this.user) {
         this.$set(this.user, 'isBanned', this.banList.indexOf(this.user.uid) > -1)
       }
-      if (this.$ip) {
-        this.$set(this.$ip, 'isBanned', this.banList.indexOf(this.$ip.ip) > -1)
-      }
+      this.$set(this.$ip, 'isBanned', this.banList.indexOf(this.$ip.ip) > -1)
     }
   }
 }

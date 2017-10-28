@@ -152,7 +152,8 @@ export const langZhCN = {
     placeholder: {
       join_conversation: '一起来发言吧...',
       join_conversation_anonymously: '以 匿名用户 身份发言...',
-      reply_to_user_comment: '回复 {{username}} 的评论'
+      reply_to_user_comment: '回复 {{username}} 的评论',
+      user_is_banned: '你现在处于被站长禁言状态。'
     },
     success: {
       posting_comment: '评论成功！'
@@ -173,24 +174,28 @@ export const langZhCN = {
       unban: '解除'
     },
     confirm: {
-      deleting_comment: '确认要删除这条举报吗？',
-      ignoring_report: '确认要忽略这条举报吗？'
+      banning_user: '确认要屏蔽该用户吗？',
+      banning_user_anonymous: '该用户为匿名用户，确认要封禁其 IP 吗？',
+      deleting_comment: '确认要删除这条被举报的评论吗？',
+      ignoring_report: '确认要忽略这条举报吗？',
+      unbanning_user: '确认要解除对该用户的屏蔽吗？'
     },
     error: {
       deleting_comment: '删除失败。',
       deleting_related_replies: '删除相关回复失败',
-      ban_user: '屏蔽失败。',
-      repeated_ban: '请勿重复屏蔽。',
+      banning_user: '屏蔽失败。',
+      banning_user_invalid_ip: '该匿名用户无有效 IP，无法屏蔽！',
+      banning_user_repeated: '请勿重复屏蔽。',
       unknown: '未知错误！'
     },
     success: {
       deleting_comment: '删除成功。',
       deleting_related_replies: '相关回复已被删除。',
-      ban_user: '屏蔽成功！',
-      unban: '已解除屏蔽！'
+      banning_user: '屏蔽成功！',
+      unbanning_user: '已解除屏蔽！'
     },
     tab: {
-      ban_rules: '禁用规则',
+      ban_list: '禁用列表',
       reported_comments: '被举报评论',
       reported_users: '被举报用户'
     },
@@ -203,10 +208,6 @@ export const langZhCN = {
     text: {
       reported_by_n_users: '已被 {{count}} 位用户举报',
       deleting_with_n_replies: '与此评论相关的 {{count}} 条回复会被一同删除。',
-      sure_to_ban: '确认要屏蔽该用户吗？',
-      can_not_ban_this_user: '该匿名用户无有效IP，无法屏蔽！',
-      ban_this_ip: '该用户为匿名用户，要封禁他的IP吗？',
-      unban_this_user: '解除对该用户的屏蔽吗？',
       reason: '屏蔽原因： '
     }
   },

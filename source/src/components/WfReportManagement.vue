@@ -12,7 +12,7 @@
     </i-tab-pane>
     <i-tab-pane
       name="ban"
-      :label="$i18next.t('ReportManagement.tab.ban_rules')">
+      :label="$i18next.t('ReportManagement.tab.ban_list')">
       <i-table
         class="reported-table"
         height="300"
@@ -40,17 +40,19 @@ export default {
           type: 'expand',
           width: 50,
           render: (h, params) => {
-            var deleteAttr = ''
-            if (params.row.repliesCount) {
-              deleteAttr = this.$i18next.t('ReportManagement.text.deleting_with_n_replies', { count: params.row.repliesCount })
+            const { repliesCount, userList } = params.row
+            const { uid: commentUid, ip: commentIp } = params.row.comment
+            let deleteAttr = ''
+            if (repliesCount) {
+              deleteAttr = this.$i18next.t('ReportManagement.text.deleting_with_n_replies', { count: repliesCount })
             }
-            var banTip = ''
-            if (params.row.comment.uid) {
-              banTip = this.$i18next.t('ReportManagement.text.sure_to_ban')
-            } else if (/unknow/.test(params.row.comment.ip)) {
-              banTip = this.$i18next.t('ReportManagement.text.can_not_ban_this_user')
+            let banTip = ''
+            if (!this.isAnonymousUser(commentUid)) {
+              banTip = this.$i18next.t('ReportManagement.confirm.banning_user')
+            } else if (/unknown/.test(commentIp)) {
+              banTip = this.$i18next.t('ReportManagement.error.banning_user_invalid_ip')
             } else {
-              banTip = this.$i18next.t('ReportManagement.text.ban_this_ip')
+              banTip = this.$i18next.t('ReportManagement.confirm.banning_user_anonymous')
             }
             return [
               h('Col', {
@@ -58,8 +60,8 @@ export default {
                   span: 12
                 }
               }, [
-                h('p', `IP: ${params.row.comment.ip}`),
-                h('p', this.$i18next.t('ReportManagement.text.reported_by_n_users', { count: params.row.userList.length }))
+                h('p', `IP: ${commentIp}`),
+                h('p', this.$i18next.t('ReportManagement.text.reported_by_n_users', { count: userList.length }))
               ]),
               h('Col', {
                 props: {
@@ -76,29 +78,28 @@ export default {
                   },
                   on: {
                     'on-ok': () => {
-                      // console.log(params.row)
                       let key = ''
                       let now = new Date().toISOString()
-                      if (params.row.comment.uid) {
-                        key = params.row.comment.uid
-                      } else if (/unknow/.test(params.row.comment.ip)) {
-                        this.$Message.error(this.$i18next.t('ReportManagement.error.ban_user'))
+                      if (!this.isAnonymousUser(commentUid)) {
+                        key = commentUid
+                      } else if (/unknown/.test(commentIp)) {
+                        this.$Message.error(this.$i18next.t('ReportManagement.error.banning_user_invalid_ip'))
                         return
                       } else {
-                        key = params.row.comment.ip.replace(/\./g, '-')
+                        key = commentIp.replace(/\./g, '-')
                       }
                       this.$database.ref(`ban/${key}`).once('value').then((snapshot) => {
                         if (snapshot.val()) {
-                          this.$Message.error(this.$i18next.t('ReportManagement.error.repeated_ban'))
+                          this.$Message.error(this.$i18next.t('ReportManagement.error.banning_user_repeated'))
                           return
                         }
                         this.$database.ref(`ban/${key}`).set({
                           date: now,
                           reason: 'reported'
                         }).then(() => {
-                          this.$Message.success(this.$i18next.t('ReportManagement.success.ban_user'))
+                          this.$Message.success(this.$i18next.t('ReportManagement.success.banning_user'))
                         }).catch(() => {
-                          this.$Message.error(this.$i18next.t('ReportManagement.error.ban_user'))
+                          this.$Message.error(this.$i18next.t('ReportManagement.error.banning_user'))
                         })
                       })
                     },
@@ -291,7 +292,7 @@ export default {
                 h('Poptip', {
                   props: {
                     confirm: true,
-                    title: this.$i18next.t('ReportManagement.text.unban_this_user'),
+                    title: this.$i18next.t('ReportManagement.confirm.unbanning_user'),
                     transfer: true,
                     okText: this.$i18next.t('ReportManagement.btn.unban'),
                     cancelText: this.$i18next.t('ReportManagement.btn.cancel')
@@ -300,10 +301,10 @@ export default {
                     'on-ok': () => {
                       this.$database.ref(`ban/${params.row.key}`)
                       .remove().then(() => {
-                        this.$Message.info(this.$i18next.t('ReportManagement.success.unban'))
+                        this.$Message.info(this.$i18next.t('ReportManagement.success.unbanning_user'))
                         this.listenToBan()
                       }).catch(() => {
-                        this.$Message.error(this.$i18next.t('ReportManagement.error.unknow'))
+                        this.$Message.error(this.$i18next.t('ReportManagement.error.unknown'))
                       })
                       // console.log(params.row)
                     },
@@ -370,6 +371,10 @@ export default {
     }
   },
   methods: {
+    isAnonymousUser (uid) {
+      const { anonymousUserId } = this.$config
+      return !uid || uid === anonymousUserId
+    },
     listenToReported () {
       this.$database.ref('reported').on('child_added', newChild => {
         const users = newChild.val()
@@ -383,8 +388,8 @@ export default {
             ]).then(snaps => {
               const user = snaps[0].val() || {
                 displayName: this.$i18next.t('common.unknown_user'),
-                email: this.$i18next.t('common.unknown_user')
-              } // Incase the user is deleted
+                email: ''
+              } // Unknown user includes 1. anonymous user, and 2. deleted user.
               const replies = snaps[1].val() || {}
               this.reportedList = Object.assign({}, this.reportedList, {[commentId]: Object.assign({}, {
                 userList: Object.keys(users).map(userId => {

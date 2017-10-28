@@ -39,7 +39,8 @@ const wildfireConfig = {
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
-  locale: 'zh-CN'
+  locale: 'en'
+  // locale: 'zh-CN'
 }
 
 const {
@@ -96,13 +97,6 @@ if (databaseProvider === 'wilddog') {
   Get current client IP address
  */
 Vue.prototype.$ip = {ip: 'unknown', isBanned: false}
-// Vue.http.get('https://api.ipify.org?format=json').then(response => {
-//   Vue.prototype.$ip.ip = response.body.ip
-// }, response => {
-//   // error callback
-//   console.log(response)
-//   Vue.prototype.$ip.ip = 'unknown-failed'
-// })
 
 /*
   Init moment.js locale

@@ -102,26 +102,31 @@ export default {
               : this.user.displayName
     },
     placeholder () {
-      return this.isReply
-      ? this.$i18next.t('ReplyArea.placeholder.reply_to_user_comment', { username: this.replyToCommentAuthorUsername })
-      : (this.user
-          ? this.$i18next.t('ReplyArea.placeholder.join_conversation')
-          : this.$i18next.t('ReplyArea.placeholder.join_conversation_anonymously'))
+      return this.isCurrentUserBanned
+      ? this.$i18next.t('ReplyArea.placeholder.user_is_banned')
+      : this.isReply
+        ? this.$i18next.t('ReplyArea.placeholder.reply_to_user_comment', { username: this.replyToCommentAuthorUsername })
+        : (this.user
+            ? this.$i18next.t('ReplyArea.placeholder.join_conversation')
+            : this.$i18next.t('ReplyArea.placeholder.join_conversation_anonymously'))
     },
     isReply () {
       return !!this.replyToComment
     },
     shouldDisableInput () {
-      return this.isPosting || this.commentsLoadingState === 'loading'
+      return this.isPosting || this.commentsLoadingState === 'loading' || this.isCurrentUserBanned
     },
     shouldDisableButton () {
-      return this.form.content.trim() === '' || this.isPosting
+      return this.form.content.trim() === '' || this.isPosting || this.isCurrentUserBanned
     },
     isLoadingUserData () {
       return Bus.$data.isLoadingUserData
     },
     isMentionEnabled () {
       return !this.isLoadingUserData
+    },
+    isCurrentUserBanned () {
+      return (this.user && this.user.isBanned) || (!this.user && this.$ip.isBanned)
     }
   },
   mounted () {
@@ -147,6 +152,17 @@ export default {
     postComment () {
       if (this.isPosting) { return }
 
+      // If user manage to activate the reply area,
+      // and try to post new comment :-D
+      if (this.isCurrentUserBanned) {
+        this.$Modal.error({
+          title: this.$i18next.t('ReplyArea.error.banned_title'),
+          content: this.$i18next.t('ReplyArea.error.banned_content'),
+          okText: this.$i18next.t('ReplyArea.btn.confirm')
+        })
+        return
+      }
+
       this.isPosting = true
       const { content } = this.form
       const { user, users, isReply, replyToComment } = this
@@ -165,7 +181,7 @@ export default {
         let rootCommentUid = null
 
         if (isReply) {
-          // The filed `pageURL` of a comment is used to determine
+          // The field `pageURL` of a comment is used to determine
           // whether it's a top-level comment or not.
           // As shown in `App.vue`, pageURL` is used as a filter
           // for retrieving comments of a page.
@@ -264,61 +280,32 @@ export default {
             shouldNotifyRootCommentAuthor = false
           }
 
+          const notifyFlags = {
+            shouldNotifyAdmin,
+            shouldNotifyParentCommentAuthor,
+            shouldNotifyRootCommentAuthor
+          }
+          const mentionFlags = {
+            isAdminMentioned,
+            isParentCommentAuthorMentioned,
+            isRootCommentAuthorMentioned
+          }
           // Forbid anonymous user to use Mention
           if (!this.user) {
-            this.handleNotifications(
-              [],
-              newKey,
-              {
-                shouldNotifyAdmin,
-                shouldNotifyParentCommentAuthor,
-                shouldNotifyRootCommentAuthor
-              },
-              {
-                isAdminMentioned,
-                isParentCommentAuthorMentioned,
-                isRootCommentAuthorMentioned
-              }
-              )
+            this.handleNotifications([], newKey, notifyFlags, mentionFlags)
             return
           }
           const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || []
           if (users.length !== 0) {
             const mentionedUids = mentions.map(mention => this.users.find(user => user.email === mention.slice(mention.indexOf('(') + 1, -1)).id)
-            this.handleNotifications(
-              mentionedUids,
-              newKey,
-              {
-                shouldNotifyAdmin,
-                shouldNotifyParentCommentAuthor,
-                shouldNotifyRootCommentAuthor
-              },
-              {
-                isAdminMentioned,
-                isParentCommentAuthorMentioned,
-                isRootCommentAuthorMentioned
-              }
-              )
+            this.handleNotifications(mentionedUids, newKey, notifyFlags, mentionFlags)
           } else {
             Promise.all(mentions.map(mention => {
               const email = mention.slice(mention.indexOf('(') + 1, -1)
               return this.$database.ref(`users`).orderByChild('email').equalTo(email).once('value')
             })).then(snaps => {
               const mentionedUids = snaps.map(snap => snap.val() ? Object.keys(snap.val())[0] : undefined)
-              this.handleNotifications(
-                mentionedUids,
-                newKey,
-                {
-                  shouldNotifyAdmin,
-                  shouldNotifyParentCommentAuthor,
-                  shouldNotifyRootCommentAuthor
-                },
-                {
-                  isAdminMentioned,
-                  isParentCommentAuthorMentioned,
-                  isRootCommentAuthorMentioned
-                }
-                )
+              this.handleNotifications(mentionedUids, newKey, notifyFlags, mentionFlags)
             })
           }
           /*
@@ -427,14 +414,6 @@ export default {
       })
     },
     contentOnFocus (e) {
-      if ((this.user && this.user.isBanned) || (!this.user && this.$ip.isBanned)) {
-        this.$Modal.error({
-          title: this.$i18next.t('ReplyArea.error.banned_title'),
-          content: this.$i18next.t('ReplyArea.error.banned_content'),
-          okText: this.$i18next.t('ReplyArea.btn.confirm')
-        })
-        return
-      }
       if (this.isMain) {
         Bus.$emit('OnlyOneReplyAreaShouldBeActive', 'MainReplyArea')
       }

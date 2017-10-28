@@ -152,7 +152,8 @@ export const langEn = {
     placeholder: {
       join_conversation: 'Join the discusstion...',
       join_conversation_anonymously: 'Join the discusstion as Anonymous User',
-      reply_to_user_comment: 'reply to {{username}}\'s comment'
+      reply_to_user_comment: 'reply to {{username}}\'s comment',
+      user_is_banned: 'You are currently banned by the site owner.'
     },
     success: {
       posting_comment: 'Comment posted!'
@@ -173,24 +174,28 @@ export const langEn = {
       unban: 'Unban'
     },
     confirm: {
-      deleting_comment: 'Sure to delete this comment?',
-      ignoring_report: 'Sure to ignore this report?'
+      banning_user: 'Sure to ban this user?',
+      banning_user_anonymous: 'This is an anonymous user, ban the IP?',
+      deleting_comment: 'Sure to delete this reported comment?',
+      ignoring_report: 'Sure to ignore this report?',
+      unbanning_user: 'Sure to unban this user?'
     },
     error: {
       deleting_comment: 'Failed to delete comment.',
       deleting_related_replies: 'Failed to delete related replies',
-      ban_user: 'Failed to ban.',
-      repeated_ban: 'Banned already.',
+      banning_user: 'Failed to ban.',
+      banning_user_invalid_ip: 'Invalid IP address, cannot be banned!',
+      banning_user_repeated: 'Banned already.',
       unknown: 'Unknown error!'
     },
     success: {
       deleting_comment: 'Comment Deleted.',
       deleting_related_replies: 'Related replies deleted.',
-      ban_user: 'Banned.',
-      unban: 'Unbanned.'
+      banning_user: 'Banned.',
+      unbanning_user: 'Unbanned.'
     },
     tab: {
-      ban_rules: 'Ban Rules',
+      ban_list: 'Ban List',
       reported_comments: 'Reported Comments',
       reported_users: 'Reported Users'
     },
@@ -203,10 +208,6 @@ export const langEn = {
     text: {
       reported_by_n_users: 'Reported by {{count}} user(s)',
       deleting_with_n_replies: '{{count}} replies to this comment will also be deleted. ',
-      sure_to_ban: 'Sure to ban this user?',
-      can_not_ban_this_user: 'This is an anonymous user with invalid ip, cann\'t ban it.',
-      ban_this_ip: 'This is an anonymous user, sure to ban the ip?',
-      unban_this_user: 'Unban this user?',
       reason: 'Reason: '
 
     }
