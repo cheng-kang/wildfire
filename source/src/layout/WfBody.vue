@@ -160,7 +160,7 @@ export default {
             area for later use (to specify reciever of
             `MentionAutoCompleteSelected-${id}` event)
      */
-    Bus.$on('ShowMentionAutoComplete', id => {
+    Bus.listenTo('ShowMentionAutoComplete', id => {
       Bus.$data.currentReplyAreaId = id
       this.shouldShowMentionAutoComplete = true
       Vue.nextTick(() => {
@@ -175,7 +175,7 @@ export default {
             retrieve user data with the passed param (which
             should be the email of the user).
      */
-    Bus.$on('ShowUserInfo', data => {
+    Bus.listenTo('ShowUserInfo', data => {
       if (typeof data === 'object') {
         this.$set(Bus.$data, 'selectedCommentUserInfo', data)
       } else {
