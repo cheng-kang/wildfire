@@ -16,31 +16,31 @@ Vue.config.productionTip = true
 /*
   Testing configs
  */
-const wildfireConfig = {
-  databaseProvider: 'wilddog',
-  databaseConfig: {
-    siteId: 'wd2168973289ifdmcg'
-  },
-  pageURL: 'http://chengkang.me/wildfire',
-  pageTitle: 'Wildfire Demo',
-  // locale: 'en'
-  locale: 'zh-CN'
-}
-
 // const wildfireConfig = {
-//   databaseProvider: 'firebase',
+//   databaseProvider: 'wilddog',
 //   databaseConfig: {
-//     apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
-//     authDomain: 'wild-fire-ee770.firebaseapp.com',
-//     databaseURL: 'https://wild-fire-ee770.firebaseio.com',
-//     projectId: 'wild-fire-ee770',
-//     storageBucket: 'wild-fire-ee770.appspot.com',
-//     messagingSenderId: '655484997793'
+//     siteId: 'wd2168973289ifdmcg'
 //   },
 //   pageURL: 'http://chengkang.me/wildfire',
 //   pageTitle: 'Wildfire Demo',
+//   // locale: 'en'
 //   locale: 'zh-CN'
 // }
+
+const wildfireConfig = {
+  databaseProvider: 'firebase',
+  databaseConfig: {
+    apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+    authDomain: 'wild-fire-ee770.firebaseapp.com',
+    databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+    projectId: 'wild-fire-ee770',
+    storageBucket: 'wild-fire-ee770.appspot.com',
+    messagingSenderId: '655484997793'
+  },
+  pageURL: 'http://chengkang.me/wildfire',
+  pageTitle: 'Wildfire Demo',
+  locale: 'zh-CN'
+}
 
 const {
   databaseProvider,

@@ -124,8 +124,6 @@ export default {
       return !this.isLoadingUserData
     }
   },
-  created () {
-  },
   mounted () {
     /*
       `MentionAutoCompleteSelected` event observer
@@ -136,6 +134,10 @@ export default {
       // replace the '@' symbol with formatted text
       this.form.content = [content.slice(0, this.atPosition - 1), formattedMentionText, content.slice(this.atPosition)].join('')
     })
+  },
+  beforeDestroy () {
+    Bus.enough('OnlyOneReplyAreaShouldBeActive', null, this._uid)
+    Bus.enough(`MentionAutoCompleteSelected-${this._uid}`)
   },
   methods: {
     isAnonymousUser (uid) {

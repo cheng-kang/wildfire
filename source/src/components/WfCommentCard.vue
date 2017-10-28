@@ -295,23 +295,6 @@ export default {
       }
     }
 
-    /*
-      `CurrentUserInfoUpdated` event observer
-      Note: if this comment/reply is posted by the current
-            user, update user info when recieves this event.
-     */
-    Bus.$on('CurrentUserInfoUpdated', updates => {
-      if (this.user && this.comment.uid === this.user.uid) {
-        this.author.displayName = updates['/displayName']
-        this.author.photoURL = updates['/photoURL']
-      }
-    })
-
-    Bus.$on(`OnlyOneReplyAreaShouldBeActive`, activeReplyAreaId => {
-      if (this.$refs.replyArea._uid !== activeReplyAreaId) {
-        this.isShowingReplyArea = false
-      }
-    })
     // Get Voting data
     this.$bindAsObject('votes', this.$database.ref(`votes/${this.comment.commentId}`))
 
@@ -362,6 +345,27 @@ export default {
       this.isContentTooLong = true
       this.isShowingFullText = false
     }
+
+    /*
+      `CurrentUserInfoUpdated` event observer
+      Note: if this comment/reply is posted by the current
+            user, update user info when recieves this event.
+     */
+    Bus.listenTo('CurrentUserInfoUpdated', updates => {
+      if (this.user && this.comment.uid === this.user.uid) {
+        this.author.displayName = updates['/displayName']
+        this.author.photoURL = updates['/photoURL']
+      }
+    }, this._uid)
+
+    Bus.listenTo('OnlyOneReplyAreaShouldBeActive', activeReplyAreaId => {
+      if (this.$refs.replyArea._uid !== activeReplyAreaId) {
+        this.isShowingReplyArea = false
+      }
+    }, this.$refs.replyArea._uid)
+  },
+  beforeDestroy () {
+    Bus.enough('CurrentUserInfoUpdated', null, this._uid)
   },
   methods: {
     isAnonymousUser (uid) {
