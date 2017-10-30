@@ -83,9 +83,6 @@ export default {
         return item['.key'].replace(/-/g, '.')
       })
       this.checkBanState()
-    },
-    user () {
-      this.checkBanState()
     }
   },
   methods: {
