@@ -196,8 +196,7 @@ export const langEn = {
     },
     tab: {
       ban_list: 'Ban List',
-      reported_comments: 'Reported Comments',
-      reported_users: 'Reported Users'
+      reported_comments: 'Reported Comments'
     },
     table: {
       action: 'Action',

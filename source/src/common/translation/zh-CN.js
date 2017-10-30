@@ -196,8 +196,7 @@ export const langZhCN = {
     },
     tab: {
       ban_list: '禁用列表',
-      reported_comments: '被举报评论',
-      reported_users: '被举报用户'
+      reported_comments: '被举报评论'
     },
     table: {
       action: '操作',

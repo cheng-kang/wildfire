@@ -52,7 +52,7 @@ const Bus = new Vue({
   methods: {
     /**
      * listenTo:
-     *   a replacement for `vm.$of`
+     *   a replacement for `vm.$on`
      * @param  {String|[String]}   event
      *         name(s) of new event listener(s)
      * @param  {Function} callback
