@@ -1,7 +1,8 @@
 <template>
   <i-form :model="form"
     :label-width="60"
-    :class="{ 'wf-reply': isReply }">
+    class="wf-reply-form"
+    :class="{ 'wf-is-reply': isReply }">
     <i-form-item class="no-bottom-margin">
       <img slot="label" :src="avatarURL" :class="{ anonymous: user === null }">
       <i-input
@@ -25,12 +26,14 @@
       </div>
       <div>
         <i-button type="text"
+          class="wf-clear-btn"
           :disabled="shouldDisableButton"
           @click="form.content = ''">
           {{$i18next.t('ReplyArea.btn.clear')}}
         </i-button>
 
         <i-button :type="isPosting ? 'ghost' : 'primary'"
+          class="wf-post-btn"
           style="margin-left: 8px"
           @click="postComment"
           :disabled="shouldDisableButton"
@@ -211,14 +214,6 @@ export default {
             - wilddog: ref.key()
          */
         const newKey = this.$config.databaseProvider === 'firebase' ? newNode.key : newNode.key()
-
-        // let updates = []
-        // updates.push(this.$database.ref(`comments/${newKey}`).update(postData))
-        // if (isReply) {
-        //   updates.push(this.$database.ref(`commentReplies/${rootCommentId}/${newKey}`).update(date))
-        // } else {
-        //   updates.push(this.$database.ref(`pages/${pageURL}/comments/${newKey}`).update(date))
-        // }
 
         Promise.all([
           this.$database.ref(`comments/${newKey}`).update(postData),
@@ -434,7 +429,7 @@ export default {
 
 <style scoped>
 img { width: 48px; height: 48px; }
-.wf-reply img { width: 36px; height: 36px; }
+.wf-is-reply img { width: 36px; height: 36px; }
 .no-bottom-margin {    /*margin-bottom: 0;*/ }
 .float-to-right { text-align: right; }
 .ivu-form .ivu-form-item-label { padding: 0; text-align: left; }

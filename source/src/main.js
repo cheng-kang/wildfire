@@ -9,6 +9,7 @@ import i18next from 'i18next'
 import iView from './common/loadiView'
 import App from './App'
 import './assets/style.css'
+import './assets/style.dark.css'
 
 // ↓Should be `false` in production
 Vue.config.productionTip = true
@@ -23,6 +24,7 @@ Vue.config.productionTip = true
 //   },
 //   pageURL: 'http://chengkang.me/wildfire',
 //   pageTitle: 'Wildfire Demo',
+//   theme: 'dark',
 //   // locale: 'en'
 //   locale: 'zh-CN'
 // }
@@ -39,6 +41,7 @@ const wildfireConfig = {
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
+  theme: 'wf-theme-dark',
   locale: 'en'
   // locale: 'zh-CN'
 }
@@ -48,6 +51,7 @@ const {
   databaseConfig, // required
   pageTitle = document.title,
   pageURL = window.location.href,
+  theme = 'wf-theme-light',
   locale = 'en'
 } = wildfireConfig
 /*
@@ -69,6 +73,7 @@ Vue.prototype.$config = {
   pageTitle,
   pageURL: btoa(pageURL), // encode pageURL with base64
   locale,
+  theme,
   defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
   anonymousUserId: 'Anonymous'
 }

@@ -1,5 +1,5 @@
 <template> 
-  <i-tabs value="profile">
+  <i-tabs>
     <i-tab-pane :label="$i18next.t('UserSetting.tab.profile')" name="profile" :disabled="sendingAccount">
       <div class="form-warp">
         <i-form ref="profileForm" :model="profileForm" :rules="rule" :label-width="80">

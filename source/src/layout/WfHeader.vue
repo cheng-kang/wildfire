@@ -3,7 +3,6 @@
     <i-menu
       ref="statusMenu"
       mode="horizontal"
-      theme="light"
       active-name="1"
       @on-select="menuOnSelect">
       <i-menu-item name="1">
@@ -61,7 +60,7 @@
       v-model="signFormModal"
       :closable="false"
       :footer-hide="true"
-      class-name="vertical-center-modal">
+      :class-name="$config.theme">
       <div style="text-align:center">
         <wf-auth-form :init-tab="signFormInitTab"></wf-auth-form>
       </div>
@@ -71,17 +70,17 @@
       v-model="userSettingModal"
       :closable="false"
       :footer-hide="true"
-      class-name="vertical-center-modal">
+      :class-name="$config.theme">
       <div style="text-align:center">
         <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
       </div>
     </i-modal>
-    <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true">
+    <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true" :class-name="$config.theme">
       <div style="text-align:center">
         <wf-personal-center :user="user" v-if="user"></wf-personal-center>
       </div>
     </i-modal>
-    <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true">
+    <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true" :class-name="$config.theme">
       <div style="text-align:center">
         <wf-report-management :user="user" v-if='user && user.isAdmin'></wf-report-management>
       </div>
@@ -176,6 +175,7 @@ export default {
 
 <style scoped>
 header { margin-bottom: 30px; }
+.ivu-menu { background-color: transparent; }
 .wf-nav-right { float: right; }
 .wf-nav-username { display: inline-block; margin: 0 20px; padding: 0 20px; float: left;}
 </style>

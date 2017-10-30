@@ -121,6 +121,10 @@
       ])
   }
 
+  function handleTheme(theme) {
+    document.getElementByClassName('wildfire_thread')[0].className = `wildfire_thread wf-theme-${theme}`
+  }
+
   function initDom() {
     const initialCSS = `.wildfire_thread{font-family:'Helvetica Neue',arial,sans-serif;font-size:15px;max-width:39rem;margin:0 auto}[v-cloak]{display:none}.wf-loading-modal{font-size:12px;display:flex;flex-direction:column;height:300px;color:#656c7a;justify-content:center;align-items:center}.wf-loading-modal img{width:66px;height:66px}@keyframes flickerAnimation{0%{opacity:1}40%{opacity:0}100%{opacity:1}}@-o-keyframes flickerAnimation{0%{opacity:1}40%{opacity:0}100%{opacity:1}}@-moz-keyframes flickerAnimation{0%{opacity:1}40%{opacity:0}100%{opacity:1}}@-webkit-keyframes flickerAnimation{0%{opacity:1}40%{opacity:0}100%{opacity:1}}.animate-flicker{-webkit-animation:flickerAnimation 1.5s infinite;-moz-animation:flickerAnimation 1.5s infinite;-o-animation:flickerAnimation 1.5s infinite;animation:flickerAnimation 1.5s infinite}`
     let initialStyle = document.createElement('style')
@@ -177,7 +181,8 @@
     databaseConfig, // required
     pageTitle = document.title,
     pageURL = window.location.href,
-    locale = 'en'
+    locale = 'en',
+    theme = 'light'
   } = window.wildfireConfig()
 
   // load & init i18next
@@ -211,6 +216,8 @@
           console.error(err) 
         } else {
           console.log('i18next Initialized!')
+          // handle theme
+          handleTheme(theme)
           initDom()
           // Forcing a 1s loading animation
           setTimeout(checkConfigs, 1000)

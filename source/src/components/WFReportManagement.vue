@@ -1,5 +1,5 @@
 <template>
-  <i-tabs value="reported">
+  <i-tabs>
     <i-tab-pane
       name="reported"
       :label="$i18next.t('ReportManagement.tab.reported_comments')">
@@ -412,7 +412,6 @@ export default {
       this.banList = {}
       this.$database.ref(`ban`).on('child_added', banItem => {
         const key = this.$config.databaseProvider === 'firebase' ? banItem.key : banItem.key()
-        // console.log(banItem.val())
         if (/(\d{1,3}-){3}\d{1,3}/.test(key)) {
           const displayName = this.$i18next.t('common.anonymous_user')
           const ip = key.replace(/-/g, '.')
