@@ -12,6 +12,14 @@
   filter: grayscale(70%)
 }
 
+.wildfire .float-right {
+  float: right;
+}
+
+.wildfire .wf-header .ivu-menu-submenu-title i {
+  margin-right: unset;
+}
+
 .wildfire .wf-comment-content pre {
 
   /* 60px for avatar, 20px for padding */ width: calc(39rem - 60px - 20px);

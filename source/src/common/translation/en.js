@@ -98,10 +98,15 @@ export const langEn = {
       sign_up: 'Sign Up'
     },
     menu: {
+      actions: 'Actions',
       admin_center: 'Admin',
+      more: 'More',
       notification: 'Notification',
       personal_center: 'Personal',
-      report_management: 'Reports'
+      report_management: 'Reports',
+      sign_in: 'Sign In',
+      sign_out: 'Sign Out',
+      sign_up: 'Sign Up'
     },
     text: {
       loading: 'Loading',

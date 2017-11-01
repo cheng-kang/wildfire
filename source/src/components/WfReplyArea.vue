@@ -43,7 +43,7 @@
       </div>
     </section>
 
-    <i-form-item class="float-to-right" v-else>
+    <i-form-item class="float-right" v-else>
       <i-button type="text"
         :disabled="shouldDisableButton"
         @click="form.content = ''">
@@ -431,7 +431,7 @@ export default {
 img { width: 48px; height: 48px; }
 .wf-is-reply img { width: 36px; height: 36px; }
 .no-bottom-margin {    /*margin-bottom: 0;*/ }
-.float-to-right { text-align: right; }
+.float-right { text-align: right; }
 .ivu-form .ivu-form-item-label { padding: 0; text-align: left; }
 .ivu-form { margin-top: 10px; }
 .ivu-form-item { margin-bottom: 12px; }

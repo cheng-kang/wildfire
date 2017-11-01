@@ -98,10 +98,15 @@ export const langZhCN = {
       sign_up: '注册'
     },
     menu: {
+      actions: '更多操作',
       admin_center: '站长中心',
+      more: '更多操作',
       notification: '系统消息',
       personal_center: '个人中心',
-      report_management: '举报管理'
+      report_management: '举报管理',
+      sign_in: '登录',
+      sign_out: '注销',
+      sign_up: '注册'
     },
     text: {
       loading: '加载中',

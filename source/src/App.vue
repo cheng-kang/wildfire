@@ -72,6 +72,10 @@ export default {
       // error callback
       this.$set(this.$ip, 'ip', 'unknown')
     })
+
+    window.addEventListener('resize', this.handleResize)
+    Bus.$data.windowWidth = window.innerWidth
+    Bus.$data.windowHeight = window.innerHeight
   },
   mounted () {
     // hide lodaing modal
@@ -142,6 +146,10 @@ export default {
         this.$set(this.user, 'isBanned', this.banList.indexOf(this.user.uid) > -1)
       }
       this.$set(this.$ip, 'isBanned', this.banList.indexOf(this.$ip.ip) > -1)
+    },
+    handleResize (e) {
+      Bus.$data.windowWidth = e.currentTarget.innerWidth
+      Bus.$data.windowHeight = e.currentTarget.innerHeight
     }
   }
 }

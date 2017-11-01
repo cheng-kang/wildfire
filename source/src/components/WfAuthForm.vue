@@ -1,6 +1,6 @@
 <template> 
   <i-tabs :value="initTab">
-        <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_up')" name="signUp" :disabled="loadingSignIn">
+    <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_up')" name="sign_up" :disabled="loadingSignIn">
       <div class="form-warp">
         <i-form ref="signUpForm" :model="signUpForm" :rules="rule" :label-width="80">
           <i-form-item :label="$i18next.t('AuthForm.label.email')" prop="email">
@@ -34,7 +34,7 @@
       </div>
     </i-tab-pane>
 
-    <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_in')" name="signIn" :disabled="loadingSignUp">
+    <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_in')" name="sign_in" :disabled="loadingSignUp">
       <div class="form-warp">
         <i-form ref="signInForm" :model="signInForm" :rules="rule" :label-width="80">
           <i-form-item :label="$i18next.t('AuthForm.label.email')" prop="email">

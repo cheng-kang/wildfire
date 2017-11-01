@@ -27,6 +27,8 @@ import Vue from 'vue'
 const Bus = new Vue({
   data () {
     return {
+      windowWidth: 0,
+      windowHeight: 0,
       /*
         Mention
        */
