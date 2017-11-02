@@ -101,6 +101,14 @@
   background-color: unset
 }
 
+.wf-form .ivu-form-item {
+  margin-bottom: 16px;
+}
+.wf-form .ivu-form-label-top .ivu-form-item-label {
+  float: left;
+  padding: 0 0 8px 0;
+}
+
 .wildfire .spin-icon {
   animation: ani-demo-spin 1s linear infinite
 }

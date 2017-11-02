@@ -2,7 +2,7 @@
   <Tabs value="notification-box">
     <TabPane :label="$i18next.t('PersonalCenter.tab.notification')" name="notification-box">
       <span v-if="Object.keys(notifications).length === 0">{{$i18next.t('PersonalCenter.text.empty_notif_list')}}</span>
-      <div class="tips" v-else>{{$i18next.t('PersonalCenter.text.tips')}}</div>
+      <wf-tip v-else>{{$i18next.t('PersonalCenter.text.tips')}}</wf-tip>
       <ul class="notification-list">
         <li v-for="notifId in notifIdsDESC" :class="{isRead: notifications[notifId].isRead}">
           <span class="meta">{{$moment(notifications[notifId].date).fromNow()}}</span>
@@ -19,8 +19,10 @@
 
 <script>
 import Vue from 'vue'
+import WfTip from './WfTip'
 export default {
   name: 'wf-personal-center',
+  components: { WfTip },
   props: ['user'],
   data () {
     return {
@@ -129,12 +131,6 @@ export default {
 </script>
 
 <style scoped>
-.tips {
-  padding: 0 16px 8px 16px;
-  font-size: 0.7em;
-  color: #656c7a;
-  text-align: left;
-}
 .notification-list li {
   display: flex;
   flex-direction: row;

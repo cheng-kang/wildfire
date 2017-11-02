@@ -2,7 +2,7 @@
   <i-tabs :value="initTab">
     <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_up')" name="sign_up" :disabled="loadingSignIn">
       <div class="form-warp">
-        <i-form ref="signUpForm" :model="signUpForm" :rules="rule" :label-width="80">
+        <i-form ref="signUpForm" :model="signUpForm" :rules="rule" label-position="top">
           <i-form-item :label="$i18next.t('AuthForm.label.email')" prop="email">
             <i-input type="text" v-model="signUpForm.email" :placeholder="$i18next.t('AuthForm.placeholder.email')">
             </i-input>
@@ -36,7 +36,7 @@
 
     <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_in')" name="sign_in" :disabled="loadingSignUp">
       <div class="form-warp">
-        <i-form ref="signInForm" :model="signInForm" :rules="rule" :label-width="80">
+        <i-form ref="signInForm" :model="signInForm" :rules="rule" label-position="top">
           <i-form-item :label="$i18next.t('AuthForm.label.email')" prop="email">
             <i-input type="text" v-model="signInForm.email" :placeholder="$i18next.t('AuthForm.placeholder.email')">
             </i-input>
@@ -196,6 +196,6 @@ export default {
 </script>
 
 <style scoped>
-.form-warp { display: flex; flex-direction: column; height: 100%; padding: 10px 50px 30px 50px; justify-content: center; }
-.form-itme-button button { width: 25%; margin: 0 10px; }
+.form-warp { display: flex; flex-direction: column; height: 100%; padding: 10px 20px 20px 20px; justify-content: center; }
+.form-itme-button button { margin: 0 10px; }
 </style>

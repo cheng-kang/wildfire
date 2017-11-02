@@ -2,6 +2,7 @@ export const langZhCN = {
   common: {
     add_wildfire_to_your_site: '在你的网站使用 Wildfire',
     anonymous_user: '匿名用户',
+    tip_prefix: '*小提示：',
     unknown_ip: '未知 IP 地址',
     unknown_user: '未知用户'
   },
@@ -138,7 +139,7 @@ export const langZhCN = {
       'new_mention+': '<a title="{{email}}">{{displayName}}</a> 在 <a title="{{content}}">评论</a> 中 @ 了你。',
       notif_doesnt_exist: '该消息不存在。',
       related_content_no_longer_exists: '相关内容已不存在。',
-      tips: '*小提示：鼠标悬停在高亮文字上可查看更多内容；点击查看详情可跳转到相应网页。'
+      tips: '鼠标悬停在高亮文字上可查看更多内容；点击查看详情可跳转到相应网页。'
     }
   },
   ReplyArea: {
@@ -218,7 +219,7 @@ export const langZhCN = {
   UserSetting: {
     btn: {
       cancel: '取消',
-      modify: '修改'
+      update: '更新'
     },
     error: {
       empty_confirm_pwd: '请再次输入你的新密码。',

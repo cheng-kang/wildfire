@@ -2,6 +2,7 @@ export const langEn = {
   common: {
     add_wildfire_to_your_site: 'Add Wildfire to your site',
     anonymous_user: 'Anonymous',
+    tip_prefix: '*Tips: ',
     unknown_ip: 'Unknown IP address',
     unknown_user: 'Unknown User'
   },
@@ -138,7 +139,7 @@ export const langEn = {
       'new_mention+': '<a title="{{email}}">{{displayName}}</a> mentioned you in <a title="{{content}}">comment</a>.',
       notif_doesnt_exist: 'Notification doesn\'t exist.',
       related_content_no_longer_exists: 'Related content no longer exists.',
-      tips: '*Tips: view more information by hovering your mouse on the highlighted text; open related webpage by clicking Details button.'
+      tips: 'view more information by hovering your mouse on the highlighted text; open related webpage by clicking Details button.'
     }
   },
   ReplyArea: {
@@ -219,7 +220,7 @@ export const langEn = {
   UserSetting: {
     btn: {
       cancel: 'Cancel',
-      modify: 'Modify'
+      update: 'Update'
     },
     error: {
       empty_confirm_pwd: 'Please enter your new password again.',

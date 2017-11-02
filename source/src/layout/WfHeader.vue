@@ -77,7 +77,7 @@
       v-model="authFormModal"
       :closable="false"
       :footer-hide="true"
-      :class-name="$config.theme">
+      :class-name="$config.theme + ' wf-form'">
       <div style="text-align:center">
         <wf-auth-form :init-tab="authFormInitTab"></wf-auth-form>
       </div>
@@ -87,7 +87,7 @@
       v-model="userSettingModal"
       :closable="false"
       :footer-hide="true"
-      :class-name="$config.theme">
+      :class-name="$config.theme + ' wf-form'">
       <div style="text-align:center">
         <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
       </div>

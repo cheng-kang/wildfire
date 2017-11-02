@@ -1,8 +1,8 @@
 <template> 
   <i-tabs>
-    <i-tab-pane :label="$i18next.t('UserSetting.tab.profile')" name="profile" :disabled="sendingAccount">
-      <div class="form-warp">
-        <i-form ref="profileForm" :model="profileForm" :rules="rule" :label-width="80">
+    <i-tab-pane :label="$i18next.t('UserSetting.tab.profile')" name="profile" :disabled="updatingAccount">
+      <div class="form-warp" :class="{ 'small-screen': isSmallScreen }">
+        <i-form ref="profileForm" :model="profileForm" :rules="rule" label-position="top">
           <i-form-item :label="$i18next.t('UserSetting.label.display_name')" prop="displayName">
             <i-input type="text" v-model="profileForm.displayName" :placeholder="$i18next.t('UserSetting.placeholder.display_name')">
             </i-input>
@@ -16,14 +16,14 @@
             <i-button 
             type="primary" 
             @click="handleChangeProfile()" 
-            :disabled="sendingProfile || avatarTesting" 
-            :loading="sendingProfile">
-              {{ $i18next.t('UserSetting.btn.modify') }}
+            :disabled="updatingProfile || avatarTesting" 
+            :loading="updatingProfile">
+              {{ $i18next.t('UserSetting.btn.update') }}
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
-            :disabled="sendingProfile">
+            :disabled="updatingProfile">
               {{ $i18next.t('UserSetting.btn.cancel') }}
             </i-button>
           </div>
@@ -34,9 +34,9 @@
       </div>
     </i-tab-pane>
 
-    <i-tab-pane :label="$i18next.t('UserSetting.tab.account')" name="account" :disabled="sendingProfile">
+    <i-tab-pane :label="$i18next.t('UserSetting.tab.account')" name="account" :disabled="updatingProfile">
       <div class="form-warp">
-        <i-form ref="accountForm" :model="accountForm" :rules="rule" :label-width="80">
+        <i-form ref="accountForm" :model="accountForm" :rules="rule" label-position="top">
           <i-form-item :label="$i18next.t('UserSetting.label.old_pwd')" prop="oldPassword">
             <i-input type="password" v-model="accountForm.oldPassword" :placeholder="$i18next.t('UserSetting.placeholder.old_pwd')">
             </i-input>
@@ -53,14 +53,14 @@
             <i-button
             type="primary" 
             @click="handleChangeAccount()" 
-            :disabled="sendingAccount || passwordTesting" 
-            :loading="sendingAccount">
-              {{ $i18next.t('UserSetting.btn.modify') }} 
+            :disabled="updatingAccount || passwordTesting" 
+            :loading="updatingAccount">
+              {{ $i18next.t('UserSetting.btn.update') }} 
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
-            :disabled="sendingAccount">
+            :disabled="updatingAccount">
               {{ $i18next.t('UserSetting.btn.cancel') }}
             </i-button>
           </div>
@@ -72,11 +72,13 @@
 </template>
 
 <script>
-import Bus from '../common/bus'
 import firebase from 'firebase'
 import wilddog from 'wilddog'
+import Bus from '../common/bus'
+import WfTip from './WfTip'
 export default {
   name: 'wf-user-setting',
+  components: { WfTip },
   props: ['user'],
   data () {
     const _this = this
@@ -136,8 +138,8 @@ export default {
     return {
       avatarTesting: false,
       passwordTesting: false,
-      sendingProfile: false,
-      sendingAccount: false,
+      updatingProfile: false,
+      updatingAccount: false,
       avatarTestURL: this.user.photoURL,
       profileForm: {
         displayName: this.user.displayName,
@@ -174,6 +176,13 @@ export default {
       shouldShowPassword: true
     }
   },
+  computed: {
+    windowWidth: () => Bus.$data.windowWidth,
+    isSmallScreen () {
+      // <= screen width of iPhone 6 plus
+      return this.windowWidth <= 414
+    }
+  },
   created () {
     Bus.$on('CurrentUserInfoUpdated', updates => {
       this.user.displayName = updates['/displayName']
@@ -184,7 +193,7 @@ export default {
     handleChangeProfile () {
       this.$refs['profileForm'].validate((valid) => {
         if (valid) {
-          // this.sendingProfile = true
+          // this.updatingProfile = true
           const { displayName, photoURL } = this.profileForm
           const updates = {
             '/displayName': displayName,
@@ -195,13 +204,13 @@ export default {
               this.user.displayName = displayName
               this.user.photoURL = photoURL
 
-              this.sendingProfile = false
+              this.updatingProfile = false
               this.$Message.info(this.$i18next.t('UserSetting.success.updating_profile'))
 
               // Broadcast 'CurrentUserInfoUpdated' event
               Bus.$emit('CurrentUserInfoUpdated', updates)
             }).catch((error) => {
-              this.sendingProfile = false
+              this.updatingProfile = false
               console.log(error.code, error.message)
               this.$Message.error(this.$i18next.t('UserSetting.error.unknown'))
             })
@@ -213,14 +222,14 @@ export default {
     handleChangeAccount () {
       this.$refs['accountForm'].validate((valid) => {
         if (valid) {
-          this.sendingAccount = true
+          this.updatingAccount = true
           const password = this.accountForm.newPassword
           this.$auth.currentUser.updatePassword(password).then(() => {
-            this.sendingAccount = false
+            this.updatingAccount = false
             this.$refs['accountForm'].resetFields()
             this.$Message.info(this.$i18next.t('UserSetting.success.changing_password'))
           }).catch((error) => {
-            this.sendingAccount = false
+            this.updatingAccount = false
             console.log(error.code, error.message)
             this.$refs['accountForm'].resetFields()
           })
@@ -246,9 +255,12 @@ export default {
 <style scoped>
 .form-warp { display: flex; flex-direction: row; width: 80%; height: 100%; margin: auto; padding-top: 10px; padding-bottom: 30px; align-items: center; align-items: space-between; }
 .form-warp form { flex: 1 1 100%; }
-.form-warp .avatar { position: relative; top: -16px; left: 10px; height: 100px; flex: 0 0 100px; }
-.form-warp .avatar .ivu-avatar { width: 70px; height: 70px; border: 1px solid rgba(0, 0, 0, .2); }
-.form-itme-button button { width: 25%; margin: 0 10px; }
+.form-warp .avatar { position: relative; top: -16px; left: 10px; height: 100%; flex: 0 0 100px;display: flex; justify-content: center; align-items: center; }
+.form-warp .avatar .ivu-avatar { width: 75px; height: 75px; border: 1px solid rgba(0, 0, 0, .2); }
+.form-warp.small-screen .avatar { flex: 0 0 60px; }
+.form-warp.small-screen .avatar .ivu-avatar { width: 60px; height: 60px; }
+.form-itme-button button { margin: 0 10px; }
+.ivu-tabs-tabpane { display: flex; flex-direction: column; }
 .ivu-input-group-append .ivu-btn, .ivu-input-group-prepend .ivu-btn { margin: -7px; }
 .align-for-profile { margin-right: -100px; }
 </style>
