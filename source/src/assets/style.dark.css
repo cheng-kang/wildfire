@@ -48,14 +48,14 @@
   color: white;
 }
 .wf-theme-dark .wildfire .wf-post-btn {
-  color: rgba(0,0,0,.5);
-  background-color: #bbbec4;
-  border-color: #bbbec4;
-}
-.wf-theme-dark .wildfire .wf-post-btn:hover {
   color: black;
   background-color: white;
   border-color: white;
+}
+.wf-theme-dark .wildfire .wf-post-btn:hover {
+  color: black;
+  background-color: #bbbec4;
+  border-color: #bbbec4;
 }
 .wf-theme-dark .wildfire .wf-post-btn[disabled], .wf-theme-dark .wildfire .wf-post-btn[disabled]:hover {
   color: rgba(0,0,0,.3);
