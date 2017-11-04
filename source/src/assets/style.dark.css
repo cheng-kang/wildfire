@@ -28,7 +28,7 @@
 .wf-theme-dark:-ms-input-placeholder { color: rgba(255, 255, 255, .1) }
 .wf-theme-dark::-moz-placeholder { opacity: .1; color: black }
 .wf-theme-dark:-moz-placeholder { opacity: .1; color: black }
-.wf-theme-dark .ivu-page-prev, .wf-theme-dark .ivu-page-next { background-color: #212326 }
+.wf-theme-dark .ivu-page-prev, .wf-theme-dark .ivu-page-next, .wf-theme-dark .ivu-page-item { background-color: #212326 }
 .wf-theme-dark .ivu-page-disabled a, .wf-theme-dark .ivu-page-disabled:hover a { color: #ccc !important }
 .wf-theme-dark .ivu-page-item-active a, .wf-theme-dark .ivu-page-item-active:hover a { color: #fff !important }
 .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu { color: #eee }
