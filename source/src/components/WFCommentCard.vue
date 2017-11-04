@@ -69,6 +69,7 @@
             <wf-marked-content :content="comment.content"></wf-marked-content>
           </div>
           <i-button v-if="isContentTooLong"
+            class="wf-toggle-content-btn"
             @click="isShowingFullText = !isShowingFullText"
             type="text" long>
             <template v-if="isShowingFullText">

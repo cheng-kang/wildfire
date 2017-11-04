@@ -1,96 +1,40 @@
-.wf-theme-dark .wildfire {
-  background-color: transparent;
-  color: white;
-}
-
-.wf-theme-dark .wildfire .wf-comment-content {
-  color: white !important;
-}
-.wf-theme-dark .wildfire .wf-reply-button {
-  color: rgba(255,255,255,.5);
-}
-.wf-theme-dark .wildfire a {
-  color: rgba(255,255,255,.5) !important;
-}
-.wf-theme-dark .wildfire a:active, .wf-theme-dark .wildfire a:hover {
-  color: #eee !important;
-}
-.wf-theme-dark .wildfire .wf-comment-body footer a {
-  color: rgba(237, 63, 20, .8) !important;
-}
-.wf-theme-dark .wildfire .wf-comment-body footer .separator {
-  color: rgba(237, 63, 20, .8) !important;
-  filter: grayscale(100%);
-}
-
-.wf-theme-dark .wildfire .wf-use-wildfire path {
-  fill: rgba(255,255,255,.5) !important;
-}
-.wf-theme-dark .wildfire .wf-use-wildfire span {
-  color: rgba(255,255,255,.5) !important;
-}
-.wf-theme-dark .wildfire .wf-use-wildfire:hover path {
-  fill: #eee !important;
-}
-.wf-theme-dark .wildfire .wf-use-wildfire:hover span {
-  color: #eee !important;
-}
-.wf-theme-dark .wildfire > footer {
-  border-top-color: rgba(255,255,255,.5);
-}
-.wf-theme-dark .wildfire .wf-reply-button:hover {
-  color: #eee;
-}
-.wf-theme-dark .wildfire .wf-clear-btn {
-  color: rgba(255,255,255,.5);
-}
-.wf-theme-dark .wildfire .wf-clear-btn:hover {
-  color: white;
-}
-.wf-theme-dark .wildfire .wf-post-btn {
-  color: black;
-  background-color: white;
-  border-color: white;
-}
-.wf-theme-dark .wildfire .wf-post-btn:hover {
-  color: black;
-  background-color: #bbbec4;
-  border-color: #bbbec4;
-}
-.wf-theme-dark .wildfire .wf-post-btn[disabled], .wf-theme-dark .wildfire .wf-post-btn[disabled]:hover {
-  color: rgba(0,0,0,.3);
-  background-color: #9c9ea4;
-  border-color: #9c9ea4;
-}
-.wf-theme-dark .wildfire .wf-comment-body header .header-content .parent-link[data-v-748722f0]:hover{
-  color: #eee;
-}
-
-.wf-theme-dark .ivu-spin-text {
-  color: #eee;
-}
-.wf-theme-dark .wf-reply-form .ivu-input:hover, .wf-theme-dark .wf-reply-form .ivu-input:focus {
-  border-color: white;
-}
-.wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu {
-  color: #eee;
-}
-.wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover {
-  color: #eee;
-  border-bottom-color: rgb(201, 202, 204) !important;
-}
-.wf-theme-dark .ivu-menu-horizontal.ivu-menu-light:after {
-  background-color: rgba(255,255,255,.2);
-}
-.wf-theme-dark .ivu-menu-horizontal .ivu-menu-submenu .ivu-select-dropdown .ivu-menu-item {
-  color: #495060;
-}
-.wf-theme-dark .ivu-tabs-nav .ivu-tabs-tab-active, .wf-theme-dark .ivu-tabs-nav .ivu-tabs-tab:hover {
-  color: black !important;
-}
-.wf-theme-dark .ivu-tabs-ink-bar {
-  background-color: black !important;
-}
-.wf-theme-dark .ivu-btn-text.disabled, .wf-theme-dark .ivu-btn-text.disabled.active, .wf-theme-dark .ivu-btn-text.disabled:active, .wf-theme-dark .ivu-btn-text.disabled:focus, .wf-theme-dark .ivu-btn-text.disabled:hover, .wf-theme-dark .ivu-btn-text[disabled], .wf-theme-dark .ivu-btn-text[disabled].active, .wf-theme-dark .ivu-btn-text[disabled]:active, .wf-theme-dark .ivu-btn-text[disabled]:focus, .wf-theme-dark .ivu-btn-text[disabled]:hover, .wf-theme-dark fieldset[disabled] .ivu-btn-text, .wf-theme-dark fieldset[disabled] .ivu-btn-text.active, .wf-theme-dark fieldset[disabled] .ivu-btn-text:active, .wf-theme-dark fieldset[disabled] .ivu-btn-text:focus, .wf-theme-dark fieldset[disabled] .ivu-btn-text:hover {
-  color: #495060;
-}
+.wf-theme-dark .wildfire { color: white; background-color: transparent }
+.wf-theme-dark .wildfire .wf-comment-content { color: white !important }
+.wf-theme-dark .wildfire .wf-reply-button { color: rgba(255, 255, 255, .5) }
+.wf-theme-dark .wildfire a { color: rgba(255, 255, 255, .5) !important }
+.wf-theme-dark .wildfire a:active, .wf-theme-dark .wildfire a:hover { color: #eee !important }
+.wf-theme-dark .wildfire .wf-comment-body footer a { color: rgba(237, 63, 20, .8) !important }
+.wf-theme-dark .wildfire .wf-comment-body footer .separator { color: rgba(237, 63, 20, .8) !important; filter: grayscale(100%) }
+.wf-theme-dark .wildfire .wf-comment-content pre { background-color: #212326 }
+.wf-theme-dark .wildfire .wf-use-wildfire path { fill: rgba(255, 255, 255, .5) !important }
+.wf-theme-dark .wildfire .wf-use-wildfire span { color: rgba(255, 255, 255, .5) !important }
+.wf-theme-dark .wildfire .wf-use-wildfire:hover path { fill: #eee !important }
+.wf-theme-dark .wildfire .wf-use-wildfire:hover span { color: #eee !important }
+.wf-theme-dark .wildfire > footer { border-top-color: rgba(255, 255, 255, .5) }
+.wf-theme-dark .wildfire .wf-reply-button:hover { color: #eee }
+.wf-theme-dark .wildfire .wf-clear-btn, .wf-theme-dark .wildfire .wf-toggle-content-btn { color: rgba(255, 255, 255, .5) }
+.wf-theme-dark .wildfire .wf-clear-btn:hover, .wf-theme-dark .wildfire .wf-toggle-content-btn:hover { color: white }
+.wf-theme-dark .wildfire .wf-post-btn { color: black; border-color: #cacbce; background-color: #cacbce }
+.wf-theme-dark .wildfire .wf-post-btn:hover { color: black; border-color: white; background-color: white }
+.wf-theme-dark .wildfire .wf-post-btn[disabled], .wf-theme-dark .wildfire .wf-post-btn[disabled]:hover { color: rgba(0, 0, 0, .3); border-color: #9c9ea4; background-color: #9c9ea4 }
+.wf-theme-dark .wildfire .wf-comment-body header .header-content .parent-link[data-v-748722f0]:hover { color: #eee }
+.wf-theme-dark .ivu-poptip-body-message { color: #495060 }
+.wf-theme-dark .ivu-spin-text { color: #eee }
+.wf-theme-dark .ivu-input { border-color: rgba(255, 255, 255, .2) }
+.wf-theme-dark textarea.ivu-input { color: white; background-color: #212326 !important }
+.wf-theme-dark .wf-reply-form .ivu-input:hover, .wf-theme-dark .wf-reply-form .ivu-input:focus { border-color: rgba(255, 255, 255, .4) }
+.wf-theme-dark .wf-reply-form .ivu-input:focus { box-shadow: none }
+.wf-theme-dark::-webkit-input-placeholder { color: rgba(255, 255, 255, .1) }
+.wf-theme-dark:-ms-input-placeholder { color: rgba(255, 255, 255, .1) }
+.wf-theme-dark::-moz-placeholder { opacity: .1; color: black }
+.wf-theme-dark:-moz-placeholder { opacity: .1; color: black }
+.wf-theme-dark .ivu-page-prev, .wf-theme-dark .ivu-page-next { background-color: #212326 }
+.wf-theme-dark .ivu-page-disabled a, .wf-theme-dark .ivu-page-disabled:hover a { color: #ccc !important }
+.wf-theme-dark .ivu-page-item-active a, .wf-theme-dark .ivu-page-item-active:hover a { color: #fff !important }
+.wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu { color: #eee }
+.wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active, .wf-theme-dark .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover { color: #eee; border-bottom-color: rgb(201, 202, 204) !important }
+.wf-theme-dark .ivu-menu-horizontal.ivu-menu-light:after { background-color: rgba(255, 255, 255, .2) }
+.wf-theme-dark .ivu-menu-horizontal .ivu-menu-submenu .ivu-select-dropdown .ivu-menu-item { color: #495060 }
+.wf-theme-dark .ivu-tabs-nav .ivu-tabs-tab-active, .wf-theme-dark .ivu-tabs-nav .ivu-tabs-tab:hover { color: black !important }
+.wf-theme-dark .ivu-tabs-ink-bar { background-color: black !important }
+.wf-theme-dark .ivu-btn-text.disabled, .wf-theme-dark .ivu-btn-text.disabled.active, .wf-theme-dark .ivu-btn-text.disabled:active, .wf-theme-dark .ivu-btn-text.disabled:focus, .wf-theme-dark .ivu-btn-text.disabled:hover, .wf-theme-dark .ivu-btn-text[disabled], .wf-theme-dark .ivu-btn-text[disabled].active, .wf-theme-dark .ivu-btn-text[disabled]:active, .wf-theme-dark .ivu-btn-text[disabled]:focus, .wf-theme-dark .ivu-btn-text[disabled]:hover, .wf-theme-dark fieldset[disabled] .ivu-btn-text, .wf-theme-dark fieldset[disabled] .ivu-btn-text.active, .wf-theme-dark fieldset[disabled] .ivu-btn-text:active, .wf-theme-dark fieldset[disabled] .ivu-btn-text:focus, .wf-theme-dark fieldset[disabled] .ivu-btn-text:hover { color: #495060 }
