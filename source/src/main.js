@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import wilddog from 'wilddog'
 import VueWild from 'vuewild'
-import firebase from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/database'
 import VueFire from 'vuefire'
 import moment from 'moment'
 import i18next from 'i18next'
@@ -41,7 +43,8 @@ const wildfireConfig = {
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
-  theme: 'wf-theme-dark',
+  theme: 'light',
+  // theme: 'dark',
   locale: 'en'
   // locale: 'zh-CN'
 }
@@ -51,7 +54,7 @@ const {
   databaseConfig, // required
   pageTitle = document.title,
   pageURL = window.location.href,
-  theme = 'wf-theme-light',
+  theme = 'light',
   locale = 'en'
 } = wildfireConfig
 /*
