@@ -3,7 +3,15 @@
  * Author : CHENG KANG
  */
 
-.wf-theme-dark .hljs-string,
+.wf-theme-dark .hljs-string {
+  color: #dedc6d;
+}
+.wf-theme-dark .hljs-attr {
+  color: #fff;
+}
+.wf-theme-dark .hljs-tag {
+  color: #fff;
+}
 .wf-theme-dark .hljs-variable,
 .wf-theme-dark .hljs-template-variable,
 .wf-theme-dark .hljs-strong,
@@ -14,5 +22,13 @@
 
 .wf-theme-dark .hljs-section,
 .wf-theme-dark .hljs-name {
-  color: #eee;
+  color: #fa1e70;
+}
+
+.wf-theme-dark .hljs-keyword,
+.wf-theme-dark .hljs-built_in {
+  color: #60d9f1;
+}
+.wf-theme-dark .hljs-params {
+  color: #fff;
 }

@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import '../assets/github-gist.css'
-import '../assets/github-gist-dark.css'
+import '../assets/highlight.css'
+import '../assets/highlight.dark.css'
 import hljs from '../common/loadHighlightjs'
 import marked from 'marked'
 import Vue from 'vue'
