@@ -530,7 +530,7 @@ export default {
 .wf-comment-item section.comment:hover .drowdown-menu-button { opacity: 1; }
 .wf-comment-avatar { margin-right: 12px; }
 .wf-comment-avatar img { width: 48px; height: 48px; border-radius: 4px; }
-.wf-comment-body { line-height: 21px; position: relative; flex: 1; }
+.wf-comment-body { line-height: 21px; position: relative; flex: 1; width: calc(100% - 60px); }
 .wf-comment-body header { display: flex; color: #656c7a; justify-content: space-between; }
 .wf-comment-body header .header-content a.username { font-size: 13px; font-weight: 700; text-decoration: none; color: rgba(40, 140, 228, .85); }
 .wf-comment-body header .header-content a.username:hover { color: #288ce4; }

@@ -20,10 +20,10 @@
 .wf-theme-dark .wildfire .wf-comment-body header .header-content .parent-link[data-v-748722f0]:hover { color: #eee }
 .wf-theme-dark .ivu-poptip-body-message { color: #495060 }
 .wf-theme-dark .ivu-spin-text { color: #eee }
-.wf-theme-dark .ivu-input { border-color: rgba(255, 255, 255, .2) }
-.wf-theme-dark textarea.ivu-input { color: white; background-color: #212326 !important }
-.wf-theme-dark .wf-reply-form .ivu-input:hover, .wf-theme-dark .wf-reply-form .ivu-input:focus { border-color: rgba(255, 255, 255, .4) }
-.wf-theme-dark .wf-reply-form .ivu-input:focus { box-shadow: none }
+.wf-theme-dark:not(.ivu-modal-wrap) .ivu-input { border-color: rgba(255, 255, 255, .2) }
+.wf-theme-dark:not(.ivu-modal-wrap) textarea.ivu-input { color: white; background-color: #212326 !important }
+.wf-theme-dark:not(.ivu-modal-wrap) .wf-reply-form .ivu-input:hover, .wf-theme-dark:not(.ivu-modal-wrap) .wf-reply-form .ivu-input:focus { border-color: rgba(255, 255, 255, .4) }
+.wf-theme-dark:not(.ivu-modal-wrap) .wf-reply-form .ivu-input:focus { box-shadow: none }
 .wf-theme-dark::-webkit-input-placeholder { color: rgba(255, 255, 255, .1) }
 .wf-theme-dark:-ms-input-placeholder { color: rgba(255, 255, 255, .1) }
 .wf-theme-dark::-moz-placeholder { opacity: .1; color: black }
