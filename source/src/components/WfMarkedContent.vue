@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import 'highlight.js/styles/github-gist.css'
+import '../assets/github-gist.css'
+import '../assets/github-gist-dark.css'
 import hljs from '../common/loadHighlightjs'
 import marked from 'marked'
 import Vue from 'vue'
@@ -137,10 +138,6 @@ export default {
     },
     markdown (content) {
       var render = new marked.Renderer()
-      // render.image = (href, title, text) => {
-      //   // ![text](href "title")
-      //   return `<div @click="showFullImage('${href}', '${title}', '${text}')" class="thumbnail" style="background-image: url(${href})" alt="${title}"> </div>`
-      // }
       render.link = (href, title, text) => {
         if (text.indexOf('@') === 0) {
           const email = href

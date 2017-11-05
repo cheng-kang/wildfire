@@ -1,0 +1,18 @@
+/**
+ * GitHub Gist Theme
+ * Author : CHENG KANG
+ */
+
+.wf-theme-dark .hljs-string,
+.wf-theme-dark .hljs-variable,
+.wf-theme-dark .hljs-template-variable,
+.wf-theme-dark .hljs-strong,
+.wf-theme-dark .hljs-emphasis,
+.wf-theme-dark .hljs-quote {
+  color: #2196f3;
+}
+
+.wf-theme-dark .hljs-section,
+.wf-theme-dark .hljs-name {
+  color: #eee;
+}

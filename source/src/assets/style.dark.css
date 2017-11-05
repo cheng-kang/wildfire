@@ -5,7 +5,7 @@
 .wf-theme-dark .wildfire a:active, .wf-theme-dark .wildfire a:hover { color: #eee !important }
 .wf-theme-dark .wildfire .wf-comment-body footer a { color: rgba(237, 63, 20, .8) !important }
 .wf-theme-dark .wildfire .wf-comment-body footer .separator { color: rgba(237, 63, 20, .8) !important; filter: grayscale(100%) }
-.wf-theme-dark .wildfire .wf-comment-content pre { background-color: #212326 }
+.wf-theme-dark .wildfire .wf-comment-content pre { background-color: #212326; border: unset; }
 .wf-theme-dark .wildfire .wf-use-wildfire path { fill: rgba(255, 255, 255, .5) !important }
 .wf-theme-dark .wildfire .wf-use-wildfire span { color: rgba(255, 255, 255, .5) !important }
 .wf-theme-dark .wildfire .wf-use-wildfire:hover path { fill: #eee !important }

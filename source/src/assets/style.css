@@ -5,8 +5,8 @@
 .wildfire textarea { transition: border .2s ease !important; }
 .wildfire .float-right { float: right; }
 .wildfire .wf-header .ivu-menu-submenu-title i { margin-right: unset; }
-.wildfire .wf-comment-content pre { padding: 10px 15px; background: #f6f8fa; }
-.wildfire .wf-comment-content pre code { display: inline-block; overflow: auto; width: 100%; max-height: 300px; }
+.wildfire .wf-comment-content pre { padding: 10px 15px; background: #fff; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px;}
+.wildfire .wf-comment-content pre code { display: inline-block; overflow: auto; width: 100%; max-height: 300px; line-height: 20px; vertical-align: middle; }
 .wildfire .wf-comment-content img { max-width: 100% !important; }
 .wildfire .code-overflow-hidden pre code { overflow: hidden !important; }
 .wildfire .thumbnail { line-height: 150px; display: inline-block; overflow: hidden; width: 150px; height: 150px; cursor: pointer; border: 1px solid #fff; border-radius: 4px; background: 0 0; background-repeat: no-repeat; background-position: 50%; background-size: 100%; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }
