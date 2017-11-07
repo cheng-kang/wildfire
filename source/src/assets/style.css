@@ -2,10 +2,10 @@
 .wildfire img.anonymous { opacity: .9; -webkit-filter: grayscale(70%); filter: grayscale(70%); }
 .wildfire path { transition: fill .2s ease; }
 .wildfire span { transition: color .2s ease; }
-.wildfire textarea { transition: border .2s ease !important; }
+.wildfire textarea { transition: border .2s ease !important; background-color: transparent; }
 .wildfire .float-right { float: right; }
 .wildfire .wf-header .ivu-menu-submenu-title i { margin-right: unset; }
-.wildfire .wf-comment-content pre { padding: 10px 15px; background: #fff; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px;}
+.wildfire .wf-comment-content pre { padding: 10px 15px; background: rgba(240,240,240,0.7); font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px;}
 .wildfire .wf-comment-content pre code { display: inline-block; overflow: auto; width: 100%; max-height: 300px; line-height: 20px; vertical-align: middle; }
 .wildfire .wf-comment-content img { max-width: 100% !important; }
 .wildfire .code-overflow-hidden pre code { overflow: hidden !important; }

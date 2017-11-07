@@ -204,13 +204,9 @@ export const langEn = {
       ban_list: 'Ban List',
       reported_comments: 'Reported Comments'
     },
-    table: {
-      action: 'Action',
-      comments: 'Comments',
-      users: 'Users',
-      action_time: 'Time'
-    },
     text: {
+      empty_reported_comment: 'No reported comment',
+      empty_banned_user: 'No banned user',
       reported_by_n_users: 'Reported by {{count}} user(s)',
       deleting_with_n_replies: '{{count}} replies to this comment will also be deleted. ',
       reason: 'Reason: '

@@ -13,11 +13,11 @@
   "dependencies": {
     "firebase": "^4.6.1",
     "highlight.js": "^9.12.0",
-    "hyperdown": "^2.3.1",
     "i18next": "^9.0.0",
     "iview": "^2.6.0",
     "marked": "^0.3.6",
     "moment": "^2.18.1",
+    "promise-polyfill": "^6.0.2",
     "vue": "^2.4.2",
     "vue-resource": "^1.3.4",
     "vuefire": "^1.4.3",

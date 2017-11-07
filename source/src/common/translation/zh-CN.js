@@ -204,13 +204,9 @@ export const langZhCN = {
       ban_list: '禁用列表',
       reported_comments: '被举报评论'
     },
-    table: {
-      action: '操作',
-      comments: '评论',
-      users: '用户',
-      action_time: '操作时间'
-    },
     text: {
+      empty_reported_comment: '暂无被举报的评论',
+      empty_banned_user: '暂无被屏蔽的用户',
       reported_by_n_users: '已被 {{count}} 位用户举报',
       deleting_with_n_replies: '与此评论相关的 {{count}} 条回复会被一同删除。',
       reason: '屏蔽原因： '
