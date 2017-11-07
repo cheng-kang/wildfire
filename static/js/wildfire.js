@@ -1,7 +1,7 @@
 (() => {
 
   function loadCSS(item) {
-    if (item === undefined || item === null) { return }
+    if (!item) { return }
 
     let url = null
     let loaded = null
@@ -34,9 +34,9 @@
    * @param {function} item.shouldLoad Checking function before loading the file. 
    */
   function loadJS(item) {
-    if (item === undefined || item === null) { return }
+    if (!item) { return }
 
-    let newScript = document.createElement('script')
+    let newScript = document.createElement('script') // memory leak!!!
 
     let url = null, shouldLoad = null, loaded = null
 
@@ -50,6 +50,13 @@
             loaded()
           }
         }
+      } else {
+        console.log('Canceled loading:', url)
+        console.timeEnd(`\tLoading time of "${url}"\n\t`)
+        if (loaded) {
+          loaded()
+        }
+        return
       }
     } else if (typeof item === 'string') {
       url = item
@@ -85,11 +92,10 @@
 
     if (typeof item === 'object') {
       ({ url, shouldLoad, loaded } = item)
-      console.log(url, shouldLoad, loaded )
-      console.log(!shouldLoad || (shouldLoad && shouldLoad()))
-      if (!shouldLoad || (shouldLoad && shouldLoad())) {
+      if (!shouldLoad || shouldLoad()) {
         newScript.onload = () => {
           console.log('Loaded:', url)
+          console.timeEnd(`\tLoading time of "${url}"\n\t`)
           if (loaded) {
             loaded()
           }
@@ -111,14 +117,35 @@
     console.time(`\tLoading time of "${url}"\n\t`)
   }
 
-  function startWildfire() {
-    console.log('Starting Wildfire...')
-    loadCSS('./static/css/app.css')
+  function loadWildfireMain() {
+    console.log('Loading Wildfire main...')
     loadJSSequentially([
         './static/js/manifest.js',
         './static/js/vendor.js',
         './static/js/app.js'
       ])
+  }
+
+  function startWildfire() {
+    console.log('Starting Wildfire...')
+    loadCSS('./static/css/app.css')
+    if (window.Vue === undefined) {
+      loadJS({
+        url: 'https://unpkg.com/vue',
+        shouldLoad: () => {
+          return window.Vue === undefined
+        },
+        loaded: () => {
+          loadWildfireMain()
+        }
+      })
+    } else {
+      loadWildfireMain()
+    }
+  }
+
+  function handleTheme(theme) {
+    document.getElementsByClassName('wildfire_thread')[0].className = `wildfire_thread wf-theme-${theme}`
   }
 
   function initDom() {
@@ -177,13 +204,13 @@
     databaseConfig, // required
     pageTitle = document.title,
     pageURL = window.location.href,
-    locale = 'en'
+    locale = 'en',
+    theme = 'light'
   } = window.wildfireConfig()
 
   // load & init i18next
   loadJS({
-    // url: 'https://unpkg.com/i18next/i18next.min.js',
-    url: './static/js/i18next.min.js',
+    url: 'https://unpkg.com/i18next/i18next.min.js',
     shouldLoad: () => {
       return window.i18next === undefined
     },
@@ -212,6 +239,8 @@
           console.error(err) 
         } else {
           console.log('i18next Initialized!')
+          // handle theme
+          handleTheme(theme)
           initDom()
           // Forcing a 1s loading animation
           setTimeout(checkConfigs, 1000)

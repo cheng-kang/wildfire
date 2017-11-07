@@ -1,103 +1,183 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Wildfire - From a little spark may burst a flame.</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="static/css/reveal.css">
+    <link rel="stylesheet" type="text/css" href="static/css/normalize.css">
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
     <link rel="stylesheet" type="text/css" href="static/css/highlight/default.css">
   </head>
   <body>
-    <div class="reveal">
-      <div class="slides">
-        <section>
-          <div id="slide1" class="wrapper">
-            <div class="logos">
-              <img 
-                src="static/img/wildfire.svg" 
-                class="wildfire-logo"
-                height="140">
-              <span> = </span>
-              <img src="static/img/wilddog.svg" height="40">
-              <span> + </span>
-              <img src="static/img/firebase.png" height="45">
-            </div>
-            <h1 class="title">Wildfire</h1>
-            <h2 class="subtitle">From a little spark may burst a flame.</h2>
-            <div class="buttons">
-              <a class="button">Get Started</a>
-              <a class="button white">GitHub</a>
-            </div>
-            <p class="footnote">
-              *Press <strong>←</strong> or <strong>→</strong> to navigate.
-            </p>
-          </div>
-        </section>
-        <section>
-          <div id="slide2" class="wrapper">
-            <h1>What is Wildfire?</h1>
-            <p>Wildfire is a easy-to-setup comment system. </p>
-          </div>
-        </section>
-        <section>
-          <div id="slide3" class="wrapper">
-            <h1>How to use?</h1>
-            <pre>
-              <code class="html">
-&lt;div class=&quot;wildfire_thread&quot;&gt;&lt;/div&gt;
-&lt;script type=&quot;text/javascript&quot;&gt;
-var wildfireConfig = () =&gt; ({
-  databaseProvider: 'wilddog',
-  databaseConfig: {
-    siteId: 'wd2231595668ouosqu'
-  },
-  pageURL: 'http://chengkang.me/wildfire',
-  pageTitle: 'Wildfire Demo',
-  locale: 'zh-CN'
-});
-(function() { // DON'T EDIT BELOW THIS LINE
-var d = document, s = d.createElement('script');
-s.src = './wildfire.js';
-(d.head || d.body).appendChild(s);
-})();
-&lt;/script&gt;
-&lt;noscript&gt;Please enable JavaScript to view the &lt;a href=&quot;https://github.com/cheng-kang/wildfire&quot;&gt;comments powered by Wildfire.&lt;/a&gt;&lt;/noscript&gt;
-              </code>
-            </pre>
-          </div>
-        </section>
-        <section>
-          <div id="slide4" class="wrapper">
-            <h1>Get Started</h1>
-          </div>
-        </section>
+    <nav>
+      <div class="logos">
+        <div class="wf">
+          <img 
+            src="static/img/wildfire.svg" 
+            class="wildfire-logo"
+            height="30">
+          <span>Wildfire</span>
+        </div>
+        <span> = </span>
+        <img src="static/img/wilddog.svg" height="23">
+        <span> + </span>
+        <img src="static/img/firebase.png" height="25">
       </div>
-    </div>
-  <div class="comments">
-    <div class="wildfire_thread"></div>
-    <script type="text/javascript">
-      var wildfireConfig = () => ({
-        databaseProvider: 'wilddog',
-        databaseConfig: {
-          siteId: 'wd2231595668ouosqu'
-        },
-        pageURL: 'http://chengkang.me/wildfire',
-        pageTitle: 'Wildfire Demo',
-        locale: 'zh-CN'
-      });
-      (function() { // DON'T EDIT BELOW THIS LINE
-      var d = document, s = d.createElement('script');
-      s.src = './static/js/wildfire.js';
-      (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://github.com/cheng-kang/wildfire">comments powered by Wildfire.</a></noscript>
-  </div>
-  <script type="text/javascript" src="static/js/reveal.js"></script>
+    </nav>
+    <main>
+      <section class="main">
+        <h1>Wildfire</h1>
+        <h2 class="subtitle">A drop-in replacement for other comment systems.</h2>
+        <h3><em>“From a little spark may burst a flame.” <br>— Dante Alighieri, Paradiso</em></h3>
+        <div class="buttons">
+          <a class="button">Get Started</a>
+          <a class="button white">GitHub</a>
+        </div>
+        <p class="tip">
+          *Sroll down to bottom to view a live demo.
+        </p>
+      </section>
+      <section class="how-to-use">
+        <h2 class="section-title">
+          <a href="#how-to-use">How to use?</a>
+        </h2>
+        <script src="https://gist.github.com/cheng-kang/e1640ee28828052ee681ed276c37df54.js"></script>
+      </section>
+      <section class="config-generater" id="app">
+        <h2 class="section-title">
+          <a href="#config-generater">Config Generator</a>
+        </h2>
+        <form>
+          <div class="form-item" id="database-provider">
+            <span>Database Provider:</span>
+            <div>
+              <input type="radio" value="firebase" v-model="databaseProvider">
+              <label for="firebase">Firebase</label>
+              <input type="radio" value="wilddog" v-model="databaseProvider">
+              <label for="wilddog">Wilddog</label>
+            </div>
+          </div>
+          <div class="form-item vertical">
+            <span>Database Config:</span>
+            <textarea v-model="databaseConfig" placeholder="Copy & Paste your database config here."></textarea>
+          </div>
+          <div class="form-item">
+            <span>Theme:</span>
+            <div class="select">
+              <select v-model="theme">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-item">
+            <span>Locale:</span>
+            <div class="select">
+              <select v-model="locale">
+                <option value="zh-CN">中文</option>
+                <option value="en">English</option>
+            </select>
+            </div>
+          </div>
+          <div class="form-item">
+            <a class="button white" @click="generateConfig">Generate</a>
+          </div>
+        </form>
+        <transition name="bounce">
+          <div v-show="generatedConfig !== ''" class="generation-result">
+            <h3>Here you are!</h3>
+            <div class="form-item vertical">
+              <textarea id="generated-config" v-model="generatedConfig" @focus="copyConfig"></textarea>
+              <transition name="fade">
+                <p v-if="shouldShowCopiedMsg" class="copy-msg">
+                  Config copied!
+                </p>
+              </transition>
+              <p class="tip">
+                *Now copy & paste your Wildfire config to your... Emm, whatever it is. And, enjoy!
+              </p>
+            </div>
+          </div>
+        </transition>
+      </section>
+      <section class="demo">
+        <h2 class="section-title">
+          <a href="#demo">Demo</a>
+        </h2>
+        <div class="wildfire_thread"></div>
+      </section>
+    </main>
   <script src="static/js/highlight.js"></script>
+  <script src="https://unpkg.com/vue"></script>
   <script>
-    Reveal.initialize();
     hljs.initHighlightingOnLoad();
+    var wildfireConfig = () => ({
+      databaseProvider: 'firebase',
+      databaseConfig: {
+        apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+        authDomain: 'wild-fire-ee770.firebaseapp.com',
+        databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+        projectId: 'wild-fire-ee770',
+        storageBucket: 'wild-fire-ee770.appspot.com',
+        messagingSenderId: '655484997793'
+      },
+      pageURL: 'http://chengkang.me/wildfire',
+      pageTitle: 'Wildfire Demo',
+      theme: 'light',
+      locale: 'zh-CN'
+    });
+    new Vue({
+      el: '#app',
+      data () {
+        return {
+          databaseProvider: 'firebase',
+          databaseConfig: '',
+          theme: 'light',
+          locale: 'en',
+          generatedConfig: 'w',
+          shouldShowCopiedMsg: false
+        }
+      },
+      methods: {
+        generateConfig () {
+          console.log('-----')
+          console.log(this.databaseConfig)
+          let dbCfg
+          try {
+            dbCfg = JSON.parse(this.databaseConfig)
+          } catch (err) {
+            console.log(err)
+            dbCfg = { 'error': 'Parsing error, please check your input.'}
+          }
+          this.generatedConfig = `
+<div class="wildfire_thread"></div>
+<script type="text/javascript">
+  var wildfireConfig = () => ({
+    databaseProvider: '${this.databaseProvider}',
+    databaseConfig: ${JSON.stringify(dbCfg, null, "\t")},
+    /* 
+      Delete the following two properties if you don't need them.
+     */
+    // pageURL: 'your-page-url', // default is \`window.location.href\`
+    // pageTitle: 'your-page-title', // default is \`document.title\`
+    theme: '${this.theme}',
+    locale: '${this.locale}'
+  });
+<\/script>
+<script src="https://unpkg.com/wildfire"><\/script>
+`
+        },
+        copyConfig () {
+          document.getElementById('generated-config').select()
+          document.execCommand('copy')
+          this.shouldShowCopiedMsg = true
+          setTimeout(() => {
+            this.shouldShowCopiedMsg = false
+          }, 2000)
+        }
+      }
+    })
   </script>
+  <script src="static/js/wildfire.js"></script>
 </body>
 </html>
