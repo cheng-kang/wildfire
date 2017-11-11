@@ -44,6 +44,7 @@ import {
   Select,
   Option
 } from 'iview/src/components/select'
+import Tooltip from 'iview/src/components/tooltip'
 
 const iview = {
   AutoComplete,
@@ -95,7 +96,8 @@ const iview = {
   Tabs: Tabs,
   TabPane: Tabs.Pane,
   iTabs: Tabs,
-  iTabPane: Tabs.Pane
+  iTabPane: Tabs.Pane,
+  Tooltip
 }
 
 const install = function (Vue, opts = {}) {
