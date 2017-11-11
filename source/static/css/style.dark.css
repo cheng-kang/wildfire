@@ -1,0 +1,10 @@
+body.dark {
+  color: #fff;
+  background-color: #1d1f21;
+}
+.dark nav {
+  color: #000;
+}
+.dark a {
+  color: #fff;
+}

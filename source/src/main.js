@@ -1,4 +1,8 @@
 import Vue from 'vue'
+console.log(Vue)
+console.log(window)
+console.log(window.Vue === Vue)
+console.log('aaa')
 import VueResource from 'vue-resource'
 import wilddog from 'wilddog'
 import VueWild from 'vuewild'
@@ -26,29 +30,43 @@ Vue.config.productionTip = true
 //   },
 //   pageURL: 'http://chengkang.me/wildfire',
 //   pageTitle: 'Wildfire Demo',
+//   // theme: 'light',
 //   theme: 'dark',
 //   // locale: 'en'
 //   locale: 'zh-CN'
 // }
 
-const wildfireConfig = {
-  databaseProvider: 'firebase',
-  databaseConfig: {
-    apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
-    authDomain: 'wild-fire-ee770.firebaseapp.com',
-    databaseURL: 'https://wild-fire-ee770.firebaseio.com',
-    projectId: 'wild-fire-ee770',
-    storageBucket: 'wild-fire-ee770.appspot.com',
-    messagingSenderId: '655484997793'
-  },
-  pageURL: 'http://chengkang.me/wildfire',
-  pageTitle: 'Wildfire Demo',
-  theme: 'light',
-  // theme: 'dark',
-  locale: 'en'
-  // locale: 'zh-CN'
-}
+// const wildfireConfig = {
+//   databaseProvider: 'firebase',
+//   databaseConfig: {
+//     apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+//     authDomain: 'wild-fire-ee770.firebaseapp.com',
+//     databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+//     projectId: 'wild-fire-ee770',
+//     storageBucket: 'wild-fire-ee770.appspot.com',
+//     messagingSenderId: '655484997793'
+//   },
+//   pageURL: 'http://chengkang.me/wildfire',
+//   pageTitle: 'Wildfire Demo',
+//   theme: 'light',
+//   // theme: 'dark',
+//   locale: 'en'
+//   // locale: 'zh-CN'
+// }
 
+// const {
+//   databaseProvider,
+//   databaseConfig, // required
+//   pageTitle = document.title,
+//   pageURL = window.location.href,
+//   theme = 'light',
+//   locale = 'en'
+// } = wildfireConfig
+/*
+  End of: Testing configs
+ */
+
+// Init configs from global configuration object
 const {
   databaseProvider,
   databaseConfig, // required
@@ -56,19 +74,7 @@ const {
   pageURL = window.location.href,
   theme = 'light',
   locale = 'en'
-} = wildfireConfig
-/*
-  End of: Testing configs
- */
-
-// Init configs from global configuration object
-// const {
-//   databaseProvider,
-//   databaseConfig, // required
-//   pageTitle = document.title,
-//   pageURL = window.location.href,
-//   locale = 'en'
-// } = window.wildfireConfig()
+} = window.wildfireConfig()
 
 Vue.prototype.$config = {
   databaseProvider,
@@ -133,6 +139,7 @@ i18next.init({
     }
   }
 }, (err, t) => {
+  console.log(i18next)
   if (err) {
     console.error(err)
   } else {
@@ -146,7 +153,7 @@ i18next.init({
  */
 /* eslint-disable no-new */
 new Vue({
-  el: '#wildfire',
+  el: '#wildfire-website',
   template: '<App/>',
   components: { App }
 })

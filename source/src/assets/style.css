@@ -1,25 +1,25 @@
-.wildfire { font-family: 'Helvetica Neue', arial, sans-serif; font-size: 15px; width: 100%; margin: 0 auto; padding: 10px; }
-.wildfire img.anonymous { opacity: .9; -webkit-filter: grayscale(70%); filter: grayscale(70%); }
-.wildfire path { transition: fill .2s ease; }
-.wildfire span { transition: color .2s ease; }
-.wildfire textarea { transition: border .2s ease !important; }
-.wildfire .float-right { float: right; }
-.wildfire .wf-header .ivu-menu-submenu-title i { margin-right: unset; }
-.wildfire .wf-comment-content pre { padding: 10px 15px; background: #fff; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px;}
-.wildfire .wf-comment-content pre code { display: inline-block; overflow: auto; width: 100%; max-height: 300px; line-height: 20px; vertical-align: middle; }
-.wildfire .wf-comment-content img { max-width: 100% !important; }
-.wildfire .code-overflow-hidden pre code { overflow: hidden !important; }
-.wildfire .thumbnail { line-height: 150px; display: inline-block; overflow: hidden; width: 150px; height: 150px; cursor: pointer; border: 1px solid #fff; border-radius: 4px; background: 0 0; background-repeat: no-repeat; background-position: 50%; background-size: 100%; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }
-.wildfire .top-reply-area { display: flex; flex-direction: row; margin-left: 60px; justify-content: space-between; }
-.wildfire .top-reply-area div { font-size: 10px; display: flex; }
-.wildfire .top-reply-area .tool-bar { margin-right: 10px; flex: 1; }
-.wildfire .ivu-spin-text div { display: inline-block; }
-.wildfire .ivu-switch-checked .ivu-switch-inner { font-size: 8px; left: 4px; }
-.wildfire .ivu-switch-inner { font-size: 8px; left: 12.5px; }
-.wildfire .ivu-modal-confirm-body { overflow: hidden; max-height: 400px; text-align: center; }
-.wildfire .ivu-spin { position: unset; background-color: unset; }
+.wf { font-family: 'Helvetica Neue', arial, sans-serif; font-size: 15px; width: 100%; margin: 0 auto; }
+.wf img.anonymous { opacity: .9; -webkit-filter: grayscale(70%); filter: grayscale(70%); }
+.wf path { transition: fill .2s ease; }
+.wf span { transition: color .2s ease; }
+.wf textarea { transition: border .2s ease !important; }
+.wf .float-right { float: right; }
+.wf .wf-header .ivu-menu-submenu-title i { margin-right: unset; }
+.wf .wf-comment-content pre { padding: 8px 12px; background: #fff; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px;}
+.wf .wf-comment-content pre code { display: inline-block; overflow: auto; width: 100%; max-height: 300px; line-height: 20px; vertical-align: middle; }
+.wf .wf-comment-content img { max-width: 100% !important; }
+.wf .code-overflow-hidden pre code { overflow: hidden !important; }
+.wf .thumbnail { line-height: 150px; display: inline-block; overflow: hidden; width: 150px; height: 150px; cursor: pointer; border: 1px solid #fff; border-radius: 4px; background: 0 0; background-repeat: no-repeat; background-position: 50%; background-size: 100%; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }
+.wf .top-reply-area { display: flex; flex-direction: row; margin-left: 60px; justify-content: space-between; }
+.wf .top-reply-area div { font-size: 10px; display: flex; }
+.wf .top-reply-area .tool-bar { margin-right: 10px; flex: 1; }
+.wf .ivu-spin-text div { display: inline-block; }
+.wf .ivu-switch-checked .ivu-switch-inner { font-size: 8px; left: 4px; }
+.wf .ivu-switch-inner { font-size: 8px; left: 12.5px; }
+.wf .ivu-modal-confirm-body { overflow: hidden; max-height: 400px; text-align: center; }
+.wf .ivu-spin { position: unset; background-color: unset; }
 .wf-form .ivu-form-label-top .ivu-form-item-label { float: left; padding: 0 0 8px 0; }
-.wildfire .spin-icon { animation: ani-demo-spin 1s linear infinite; }
+.wf .spin-icon { animation: ani-demo-spin 1s linear infinite; }
 @keyframes ani-demo-spin {
   from { transform: rotate(0); }
   50% { transform: rotate(180deg); }

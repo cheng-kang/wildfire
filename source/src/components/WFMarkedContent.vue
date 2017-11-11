@@ -3,11 +3,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import '../assets/highlight.css'
 import '../assets/highlight.dark.css'
 import hljs from '../common/loadHighlightjs'
 import marked from 'marked'
-import Vue from 'vue'
 import Bus from '../common/bus'
 export default {
   name: 'wf-marked-content',

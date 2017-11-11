@@ -7,7 +7,7 @@ import 'core-js/fn/array/find'
 import 'core-js/fn/array/find-index'
 
 import locale from 'iview/src/locale'
-import 'iview/src/styles/index.less'
+import '../assets/iview.css'
 
 /*
  * Select the components blow you want to use globally in Vue

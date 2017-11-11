@@ -77,7 +77,8 @@
       v-model="authFormModal"
       :closable="false"
       :footer-hide="true"
-      :class-name="modalBaseClassName + ' wf-form'">
+      :theme="$config.theme"
+      class-name="wf-form">
       <div style="text-align:center">
         <wf-auth-form :init-tab="authFormInitTab"></wf-auth-form>
       </div>
@@ -87,17 +88,18 @@
       v-model="userSettingModal"
       :closable="false"
       :footer-hide="true"
-      :class-name="modalBaseClassName + ' wf-form'">
+      :theme="$config.theme"
+      class-name="wf-form">
       <div style="text-align:center">
         <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
       </div>
     </i-modal>
-    <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true" :class-name="modalBaseClassName">
+    <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true" :theme="$config.theme">
       <div style="text-align:center">
         <wf-personal-center :user="user" v-if="user"></wf-personal-center>
       </div>
     </i-modal>
-    <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true" :class-name="modalBaseClassName">
+    <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true" :theme="$config.theme">
       <div style="text-align:center">
         <wf-report-management :user="user" v-if='user && user.isAdmin'></wf-report-management>
       </div>
@@ -150,9 +152,6 @@ export default {
     isSmallerScreen () {
       // screen width not wide enough for username to display
       return this.windowWidth <= 355
-    },
-    modalBaseClassName () {
-      return `wildfire wf-theme-${this.$config.theme}`
     }
   },
   methods: {
