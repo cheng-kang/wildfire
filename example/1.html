@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wildfire Example</title>
+  <style type="text/css">
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Wildfire Example</h1>
+      <h3>wildfire.auto.js</h3>
+    </header>
+    <main>
+      <div class="wildfire_thread"></div>
+      <script type="text/javascript">
+        var wildfireConfig = () => ({
+          databaseProvider: 'firebase',
+          databaseConfig: {
+            apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+            authDomain: 'wild-fire-ee770.firebaseapp.com',
+            databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+            projectId: 'wild-fire-ee770',
+            storageBucket: 'wild-fire-ee770.appspot.com',
+            messagingSenderId: '655484997793'
+          },
+          pageURL: 'http://chengkang.me/wildfire',
+          pageTitle: 'Wildfire Demo',
+          theme: 'light',
+          locale: 'zh-CN'
+        })
+      </script>
+      <script src="../dist/wildfire.auto.js"></script>
+    </main>
+  </div>
+</body>
+</html>

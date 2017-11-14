@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wildfire Example - 2</title>
+  <style type="text/css">
+    #app {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Wildfire Example</h1>
+      <h3>Use Wildfire with `script` tag.</h3>
+    </header>
+    <wildfire></wildfire>
+  </div>
+  <script src="https://unpkg.com/vue"></script>
+  <!-- <script src="https://cdn.wilddog.com/sdk/js/2.5.17/wilddog.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+  <script src="../dist/firebase/wildfire.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../dist/firebase/static/wildfire.css">
+  <script type="text/javascript">
+    wildfire.default.install(Vue, {
+      // databaseProvider: 'firebase',
+      databaseConfig: {
+        apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+        authDomain: 'wild-fire-ee770.firebaseapp.com',
+        databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+        projectId: 'wild-fire-ee770',
+        storageBucket: 'wild-fire-ee770.appspot.com',
+        messagingSenderId: '655484997793'
+      },
+      pageURL: 'http://chengkang.me/wildfire',
+      pageTitle: 'Wildfire Demo',
+      theme: 'light',
+      // theme: 'dark',
+      // locale: 'en'
+      locale: 'zh-CN'
+    })
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!'
+      }
+    })
+  </script>
+</body>
+</html>

@@ -28,6 +28,13 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
 ### Node ###
 # Logs
 logs

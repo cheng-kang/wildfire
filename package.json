@@ -1,0 +1,111 @@
+{
+  "name": "wildfire",
+  "version": "0.2.0",
+  "description": "A comment service powered by Wilddog and Firebase. Wilddog is mainly for users from mainland China; Firebase for other regions and countries.",
+  "author": "Kang Cheng <me@chengkang.pw>",
+  "contributors": [
+    {
+      "name": "Kang Cheng",
+      "email": "me@chengkang.pw",
+      "role": "Author"
+    },
+    {
+      "name": "Rongsen Liao",
+      "email": "hi@mrliao.cn",
+      "role": "Author"
+    }
+  ],
+  "homepage": "http://lahk.tech/wildfire",
+  "keywords": [
+    "wildfire",
+    "comment system",
+    "firebase",
+    "wilddog",
+    "vue"
+  ],
+  "main": "./src/aio.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cheng-kang/wildfire.git"
+  },
+  "scripts": {
+    "build": "node build/build.js",
+    "build:aio": "webpack --config build/wpcfg.aio.js",
+    "build:auto": "webpack --config build/wpcfg.auto.js",
+    "build:firebase": "webpack --config build/wpcfg.firebase.js",
+    "build:wilddog": "webpack --config build/wpcfg.wilddog.js",
+    "lint": "eslint --ext .js,.vue src"
+  },
+  "dependencies": {
+    "firebase": "^4.6.1",
+    "highlight.js": "^9.12.0",
+    "i18next": "^9.0.0",
+    "iview": "^2.6.0",
+    "marked": "^0.3.6",
+    "moment": "^2.18.1",
+    "vue": "^2.4.2",
+    "vue-resource": "^1.3.4",
+    "vuefire": "^1.4.3",
+    "vuewild": "^1.0.1",
+    "wilddog": "^2.5.15"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.22.1",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-runtime": "^6.22.0",
+    "babel-preset-env": "^1.3.2",
+    "babel-preset-stage-2": "^6.22.0",
+    "babel-register": "^6.22.0",
+    "chalk": "^2.0.1",
+    "compression-webpack-plugin": "^1.0.1",
+    "connect-history-api-fallback": "^1.3.0",
+    "copy-webpack-plugin": "^4.0.1",
+    "css-loader": "^0.28.0",
+    "cssnano": "^3.10.0",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-html": "^3.0.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "eventsource-polyfill": "^0.9.6",
+    "express": "^4.14.1",
+    "extract-text-webpack-plugin": "^2.0.0",
+    "file-loader": "^0.11.1",
+    "friendly-errors-webpack-plugin": "^1.1.3",
+    "hard-source-webpack-plugin": "^0.4.11",
+    "html-webpack-plugin": "^2.28.0",
+    "http-proxy-middleware": "^0.17.3",
+    "iview-loader": "^1.0.0-beta.4",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "opn": "^5.1.0",
+    "optimize-css-assets-webpack-plugin": "^2.0.0",
+    "ora": "^1.2.0",
+    "rimraf": "^2.6.0",
+    "semver": "^5.3.0",
+    "shelljs": "^0.7.6",
+    "uglifyjs-webpack-plugin": "^1.0.0-beta.2",
+    "url-loader": "^0.5.8",
+    "vue-loader": "^13.0.4",
+    "vue-style-loader": "^3.0.1",
+    "vue-template-compiler": "^2.4.4",
+    "webpack": "^2.6.1",
+    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-dev-middleware": "^1.10.0",
+    "webpack-hot-middleware": "^2.18.0",
+    "webpack-merge": "^4.1.0"
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
