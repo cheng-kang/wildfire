@@ -5,7 +5,8 @@
 .wf textarea { transition: border .2s ease !important; background-color: transparent; }
 .wf .float-right { float: right; }
 .wf .wf-header .ivu-menu-submenu-title i { margin-right: unset; }
-.wf .wf-comment-content pre { padding: 8px 12px; background: rgba(240,240,240,0.7); font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px;}
+.wf textarea.ivu-input { background-color: rgba(255, 255, 255, 0.8); }
+.wf .wf-comment-content pre { padding: 8px 12px; background-color: rgba(255, 255, 255, 0.8); font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px;}
 .wf .wf-comment-content pre code { display: inline-block; overflow: auto; width: 100%; max-height: 300px; line-height: 20px; vertical-align: middle; }
 .wf .wf-comment-content img { max-width: 100% !important; }
 .wf .code-overflow-hidden pre code { overflow: hidden !important; }

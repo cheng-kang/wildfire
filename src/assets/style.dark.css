@@ -20,7 +20,7 @@
 .wf-theme-dark .wf-comment-body header .header-content .parent-link[data-v-748722f0]:hover { color: #eee }
 .wf-theme-dark .wf-comment-body .meta {color: rgba(170,170,170,0.5);}
 .wf-theme-dark:not(.v-transfer-dom) .ivu-input { border-color: rgba(255, 255, 255, .2) }
-.wf-theme-dark:not(.v-transfer-dom) textarea.ivu-input { color: white; background-color: #212326 !important }
+.wf-theme-dark:not(.v-transfer-dom) textarea.ivu-input { color: white; background-color: rgba(255, 255, 255, .2) }
 .wf-theme-dark:not(.v-transfer-dom) .wf-reply-form .ivu-input:hover, .wf-theme-dark:not(.ivu-modal-wrap) .wf-reply-form .ivu-input:focus { border-color: rgba(255, 255, 255, .4) }
 .wf-theme-dark:not(.v-transfer-dom) .wf-reply-form .ivu-input:focus { box-shadow: none }
 .wf-theme-dark .ivu-poptip-body-message { color: #495060 }
