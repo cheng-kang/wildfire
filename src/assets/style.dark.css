@@ -17,7 +17,7 @@
 .wf-theme-dark .wf-post-btn { color: black; border-color: #cacbce; background-color: rgba(255,255,255,0.5) }
 .wf-theme-dark .wf-post-btn:hover { color: black; border-color: white; background-color: rgba(255,255,255,0.8) }
 .wf-theme-dark .wf-post-btn[disabled], .wf-theme-dark .wf-post-btn[disabled]:hover { color: rgba(0, 0, 0, .3); border-color: #9c9ea4; background-color: rgba(255,255,255,0.5) }
-.wf-theme-dark .wf-comment-body header .header-content .parent-link[data-v-748722f0]:hover { color: #eee }
+.wf-theme-dark .wf-comment-body header .header-content .parent-link:hover { color: #eee }
 .wf-theme-dark .wf-comment-body .meta {color: rgba(170,170,170,0.5);}
 .wf-theme-dark:not(.v-transfer-dom) .ivu-input { border-color: rgba(255, 255, 255, .2) }
 .wf-theme-dark:not(.v-transfer-dom) textarea.ivu-input { color: white; background-color: rgba(255, 255, 255, .2) }
