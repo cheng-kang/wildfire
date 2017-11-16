@@ -15,6 +15,7 @@
 
 <script>
 import Vue from 'vue'
+import elementResizeDetectorMaker from 'element-resize-detector'
 import Bus from './common/bus'
 import WfHeader from './layout/WfHeader'
 import WfBody from './layout/WfBody'
@@ -87,10 +88,6 @@ export default {
       // error callback
       this.$set(this.$_wf.info, 'ip', 'unknown')
     })
-
-    window.addEventListener('resize', this.handleResize)
-    Bus.$data.windowWidth = window.innerWidth
-    Bus.$data.windowHeight = window.innerHeight
   },
   mounted () {
     // hide lodaing modal
@@ -98,6 +95,14 @@ export default {
     if (wfLoadingModalEle) {
       wfLoadingModalEle.style.display = 'none'
     }
+    Bus.$data.windowWidth = this.$el.offsetWidth
+    this.observer = elementResizeDetectorMaker()
+    this.observer.listenTo(this.$el, () => {
+      Bus.$data.windowWidth = this.$el.offsetWidth
+    })
+  },
+  beforeDestroy () {
+    this.observer.removeListener(this.$refs.navWrap, this.handleResize)
   },
   watch: {
     banData (newVal, oldVal) {
@@ -164,10 +169,6 @@ export default {
         this.$set(this.user, 'isBanned', this.banList.indexOf(this.user.uid) > -1)
       }
       this.$set(this.$_wf.info, 'isBanned', this.banList.indexOf(this.$_wf.info.ip) > -1)
-    },
-    handleResize (e) {
-      Bus.$data.windowWidth = e.currentTarget.innerWidth
-      Bus.$data.windowHeight = e.currentTarget.innerHeight
     }
   }
 }
