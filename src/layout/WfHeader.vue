@@ -33,11 +33,11 @@
         <div v-if="isSmallerScreen && user">
           <img :src="user.photoURL">
         </div>
-        <a v-if="!isSmallerScreen && user">
+        <a v-if="!isSmallerScreen">
           {{shortenedUsername(username)}}
         </a>
       </li>
-      <i-submenu name="more" v-if="user || isSmallScreen" :class="{ 'float-right': isSmallScreen}" class="no-border-bottom">
+      <i-submenu name="more" v-if="user" :class="{ 'float-right': !isLargeScreen}" class="no-border-bottom">
         <template slot="title"></template>
         <template v-if="user">
           <i-menu-group :title="$i18next.t('Header.menu.personal_center')">
@@ -46,7 +46,7 @@
           <i-menu-group :title="$i18next.t('Header.menu.admin_center')" v-if="user && user.isAdmin">
             <i-menu-item name="report_management">{{$i18next.t('Header.menu.report_management')}}</i-menu-item>
           </i-menu-group>
-          <i-menu-group :title="$i18next.t('Header.menu.more')">
+          <i-menu-group :title="$i18next.t('Header.menu.more')" v-if="isSmallScreen">
             <i-menu-item name="sign_out">{{$i18next.t('Header.menu.sign_out')}}</i-menu-item>
           </i-menu-group>
         </template>
@@ -161,6 +161,9 @@ export default {
     isSmallerScreen () {
       // screen width not wide enough for username to display
       return this.windowWidth <= 355
+    },
+    isLargeScreen () {
+      return !this.isSmallScreen && !this.isSmallerScreen
     }
   },
   methods: {
