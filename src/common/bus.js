@@ -28,6 +28,7 @@ const Bus = new Vue({
   data () {
     return {
       windowWidth: 0,
+      discussionCount: 0,
       /*
         Mention
        */

@@ -118,7 +118,6 @@ export default {
   name: 'wf-header',
   props: [
     'user',
-    'discussionCount',
     'commentsLoadingState'
   ],
   components: {
@@ -153,6 +152,7 @@ export default {
       ? this.user.displayName
       : this.$i18next.t('common.anonymous_user')
     },
+    discussionCount: () => Bus.$data.discussionCount,
     windowWidth: () => Bus.$data.windowWidth,
     isSmallScreen () {
       // <= screen width of iPhone 6 plus

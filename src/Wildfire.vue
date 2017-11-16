@@ -2,7 +2,6 @@
   <div :class="classes">
     <wf-header
       :user="user"
-      :discussion-count="discussionCount"
       :comments-loading-state="commentsLoadingState"></wf-header>
     <wf-body
       :user="user"
@@ -35,8 +34,7 @@ export default {
       pageComments: [],
       comments: [],
       banData: [],
-      banList: [],
-      discussionCount: 0
+      banList: []
     }
   },
   computed: {
@@ -150,7 +148,7 @@ export default {
         Promise.all(Object.keys(this.pageComments).map(commentId => {
           return this.$db.ref(`commentReplies/${commentId}`).once('value')
         })).then(snaps => {
-          this.discussionCount = this.pageCommentsCount + snaps.reduce((repliesCount, snap) => {
+          Bus.$data.discussionCount = this.pageCommentsCount + snaps.reduce((repliesCount, snap) => {
             return repliesCount + Object.keys(snap.val() || {}).length
           }, 0)
         })
@@ -160,6 +158,7 @@ export default {
       .ref(`comments`).orderByChild('pageURL').equalTo(pageURL), () => {
         this.commentsLoadingState = 'failed'
         this.pageCommentsCount = 0
+        Bus.$data.discussionCount = 0
       }, () => {
         this.commentsLoadingState = 'finished'
       })

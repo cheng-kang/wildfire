@@ -141,7 +141,7 @@
     <section class="replies">
       <ul class="wf-reply-group" v-if="isTopLevelComment">
         <wf-comment-card
-          v-for="(reply, idx) in repliesWithId"
+          v-for="(reply, idx) in replies"
           v-show="!isShowingLessReplies ||
                   (isShowingLessReplies && idx < numberOfRepliesWhenShowingLess)"
           :key="reply.commentId"
@@ -151,7 +151,7 @@
           :comments-loading-state="commentsLoadingState"
           ></wf-comment-card>
         <i-button type="text"
-          v-show="repliesWithId.length > numberOfRepliesWhenShowingLess"
+          v-show="replies.length > numberOfRepliesWhenShowingLess"
           @click="isShowingLessReplies = !isShowingLessReplies"
           long>
           <template v-if="isShowingLessReplies">
@@ -221,6 +221,7 @@ export default {
         dislikes: {}
       },
       replies: [],
+      _repliesCount: 0,
       isShowingLessReplies: true,
       numberOfRepliesWhenShowingLess: 4
     }
@@ -237,15 +238,6 @@ export default {
     },
     $moment () {
       return this.$_wf.moment
-    },
-    repliesWithId () {
-      return this.replies.map(reply => {
-        return Object.assign(
-          {},
-          reply,
-          { commentId: reply['.key'] }
-          )
-      })
     },
     isTopLevelComment () {
       return !this.comment.parentCommentId
@@ -295,15 +287,9 @@ export default {
            */
           if (!author) { return }
 
-          if (author.photoURL) {
-            this.author.photoURL = author.photoURL
-          }
-          if (author.displayName) {
-            this.author.displayName = author.displayName
-          }
-          if (author.email) {
-            this.author.email = author.email
-          }
+          if (author.photoURL) { this.author.photoURL = author.photoURL }
+          if (author.displayName) { this.author.displayName = author.displayName }
+          if (author.email) { this.author.email = author.email }
         })
       }
     }
@@ -323,28 +309,36 @@ export default {
         this.replyToComment.content = comment.content
         const replyToCommentAuthorUid = comment.uid
         if (!this.isAnonymousUser(replyToCommentAuthorUid)) {
-          this.$db.ref(`users/${replyToCommentAuthorUid}`).once('value')
-          .then((snapshot) => {
+          this.$db.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
             let author = snapshot.val()
             /*
               Assign value only when the value exists,
               otherwise use default anonymous user info value.
              */
             if (!author) { return }
-            if (author.displayName) {
-              this.replyToComment.author.displayName = author.displayName
-            }
-            if (author.photoURL) {
-              this.replyToComment.author.photoURL = author.photoURL
-            }
+            if (author.displayName) { this.replyToComment.author.displayName = author.displayName }
+            if (author.photoURL) { this.replyToComment.author.photoURL = author.photoURL }
           })
         }
       })
     } else {
     // If the comment is top-level comment,
     // get its replies.
-      const commentKey = this.comment.commentId
-      this.$bindAsArray('replies', this.$db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentKey))
+      const commentId = this.comment.commentId
+      this.$db.ref(`commentReplies/${commentId}`).once('value').then((snap) => {
+        this._repliesCount = Object.keys(snap.val() || {}).length
+        this.$db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_added', (snap) => {
+          const child = snap.val()
+          this.replies.push(Object.assign(child, {commentId: this.$config.databaseProvider === 'firebase' ? snap.key : snap.key()}))
+          if (this._repliesCount-- <= 0) { Bus.$data.discussionCount += 1 }
+        })
+      })
+      this.$db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_removed', (snap) => {
+        const key = this.$config.databaseProvider === 'firebase' ? snap.key : snap.key()
+        const idx = this.replies.findIndex(reply => reply.commentId === key)
+        this.replies.splice(idx, 1)
+        Bus.$data.discussionCount -= 1
+      })
     }
   },
   mounted () {
@@ -386,9 +380,7 @@ export default {
       return !uid || uid === anonymousUserId
     },
     shortenedUsername (username) {
-      if (username.length > 10) {
-        return username.slice(0, 10) + '...'
-      }
+      if (username.length > 10) { return username.slice(0, 10) + '...' }
       return username
     },
     toggleReplyArea () {
@@ -449,7 +441,7 @@ export default {
           ? [
             this.$db.ref(`pages/${this.comment.pageURL}/comments/${commentId}`).remove(),
             this.$db.ref(`commentReplies/${commentId}`).remove(),
-            ...this.repliesWithId.map(reply => this.$db.ref(`comments/${reply.commentId}`).remove())
+            ...this.replies.map(reply => this.$db.ref(`comments/${reply.commentId}`).remove())
           ]
           : [this.$db.ref(`commentReplies/${this.comment.rootCommentId}/${commentId}`).remove()])
       ]).then(() => {
