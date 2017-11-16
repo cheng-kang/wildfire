@@ -1,11 +1,11 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <!--
-2017-11-16: Created with FontForge (http://fontforge.org)
+2017-11-17: Created with FontForge (http://fontforge.org)
 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 <metadata>
-Created by FontForge 20170925 at Thu Nov 16 23:38:11 2017
+Created by FontForge 20170925 at Fri Nov 17 00:00:26 2017
  By LIAO
 Copyright (c) 2017, LIAO
 </metadata>
@@ -25,6 +25,8 @@ Copyright (c) 2017, LIAO
     unicode-range="U+F104-F4A5"
   />
     <missing-glyph />
+    <glyph glyph-name="ion-android-alert" unicode="&#xf35b;" horiz-adv-x="416" 
+d="M208 400c114 0 208 -94 208 -208s-94 -208 -208 -208s-208 94 -208 208s94 208 208 208zM232 88v40h-48v-40h48zM232 176v128h-48v-128h48z" />
     <glyph glyph-name="ion-arrow-down-b" unicode="&#xf104;" horiz-adv-x="320" 
 d="M3 263c-2 2 -3 6 -3 9c0 9 8 16 17 16v0h286v0c9 0 17 -7 17 -16c0 -3 -1 -6 -3 -8l-2 -3l-136 -156c-5 -5 -11 -9 -19 -9s-14 4 -19 9l-136 156z" />
     <glyph glyph-name="ion-checkmark-circled" unicode="&#xf120;" 

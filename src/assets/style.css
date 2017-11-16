@@ -17,7 +17,7 @@
 .wf .ivu-spin-text div { display: inline-block; }
 .wf .ivu-switch-checked .ivu-switch-inner { font-size: 8px; left: 4px; }
 .wf .ivu-switch-inner { font-size: 8px; left: 12.5px; }
-.wf .ivu-modal-confirm-body { overflow: hidden; max-height: 400px; text-align: center; }
+.wf .ivu-modal-confirm-body { overflow: hidden; max-height: 400px; min-height: 45px; text-align: center; }
 .wf .ivu-spin { position: unset; background-color: unset; }
 .wf-form .ivu-form-label-top .ivu-form-item-label { float: left; padding: 0 0 8px 0; }
 .wf .spin-icon { animation: ani-demo-spin 1s linear infinite; }
