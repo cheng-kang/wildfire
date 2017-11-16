@@ -1,8 +1,8 @@
 .wf-theme-dark { color: white; background-color: transparent }
 .wf-theme-dark .wf-comment-content { color: white !important }
 .wf-theme-dark .wf-reply-button { color: rgba(255, 255, 255, .5) }
-.wf-theme-dark a { color: rgba(255, 255, 255, .5) !important }
-.wf-theme-dark a:active, .wf-theme-dark a:hover { color: #eee !important }
+.wf-theme-dark:not(.v-transfer-dom) a { color: rgba(255, 255, 255, .5) !important }
+.wf-theme-dark:not(.v-transfer-dom) a:active, .wf-theme-dark:not(.v-transfer-dom) a:hover { color: #eee !important }
 .wf-theme-dark .wf-comment-body footer a { color: rgba(237, 63, 20, .8) !important }
 .wf-theme-dark .wf-comment-body footer .separator { color: rgba(237, 63, 20, .8) !important; filter: grayscale(100%) }
 .wf-theme-dark .wf-comment-content pre { background-color: rgba(255,255,255,0.05); border: unset; }
