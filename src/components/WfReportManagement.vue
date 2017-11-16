@@ -232,7 +232,6 @@ export default {
       return deleteAttr + this.$i18next.t('ReportManagement.confirm.deleting_comment')
     },
     getAbstract (text) {
-      console.log(this.banTableData)
       return text.length >= 20 ? text.slice(0, 17) + '...' : text
     },
     banUser (commentUid, commentIp) {
