@@ -122,8 +122,8 @@ let webpackConfig = {
     // copy custom static assets
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, '../static'),
-        to: 'static',
+        from: path.resolve(__dirname, '../src/assets/fonts'),
+        to: 'static/fonts',
         ignore: ['.*']
       }
     ])
