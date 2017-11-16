@@ -34,7 +34,6 @@ import Input from 'iview/src/components/input'
 import Menu from 'iview/src/components/menu'
 import Page from 'iview/src/components/page'
 import Spin from 'iview/src/components/spin'
-import Table from 'iview/src/components/table'
 import { Row, Col } from 'iview/src/components/grid'
 import {
   Select,
@@ -88,8 +87,6 @@ const iview = {
   iSelect: Select,
   Spin,
   iSpin: Spin,
-  iTable: Table,
-  Table,
   TabPane: Tabs.Pane,
   iTabPane: Tabs.Pane,
   Tooltip
