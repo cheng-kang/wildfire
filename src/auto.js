@@ -114,7 +114,7 @@
   function WfI18n (translation = {}, fallback = null, locale = 'en') {
     this.translation = translation
     this.locale = locale
-    this.fallback = null
+    this.fallback = fallback
 
     this.t = (key) => {
       let result = this.translation[this.locale]
