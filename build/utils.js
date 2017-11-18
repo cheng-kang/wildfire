@@ -1,9 +1,13 @@
+'use strict'
 var path = require('path')
 var config = require('../config')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+const isProduction = process.env.NODE_ENV === 'production'
 
 exports.assetsPath = function (_path) {
-  var assetsSubDirectory = config.build.assetsSubDirectory
+  const assetsSubDirectory = process.env.NODE_ENV === 'production'
+    ? config.build.assetsSubDirectory
+    : config.dev.assetsSubDirectory
   return path.posix.join(assetsSubDirectory, _path)
 }
 
@@ -13,9 +17,9 @@ exports.cssLoaders = function (options) {
   var cssLoader = {
     loader: 'css-loader',
     options: {
-      minimize: true,
+      minimize: process.env.NODE_ENV === 'production',
       sourceMap: options.sourceMap,
-      url: false
+      url: !isProduction
     }
   }
 
