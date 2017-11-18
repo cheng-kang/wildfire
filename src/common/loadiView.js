@@ -74,9 +74,11 @@ const iview = {
   Menu,
   iMenu: Menu,
   MenuGroup: Menu.Group,
+  iMenuGroup: Menu.Group,
   MenuItem: Menu.Item,
   iMenuItem: Menu.Item,
   Submenu: Menu.Sub,
+  iSubmenu: Menu.Sub,
   Message,
   Option,
   iOption: Option,
@@ -89,7 +91,8 @@ const iview = {
   iSpin: Spin,
   TabPane: Tabs.Pane,
   iTabPane: Tabs.Pane,
-  Tooltip
+  Tooltip,
+  iTooltip: Tooltip
 }
 
 const _iview = {
