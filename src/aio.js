@@ -65,6 +65,12 @@ const install = (_Vue, config) => {
 
   _Vue.prototype.$_wf = wf
 
+  // Dynamically update `pageTitle` & `pageURL`
+  _Vue.prototype.$_updateWildfirePageInfo = function ({ pageTitle, pageURL }) {
+    if (pageTitle) { this.$_wf.config.pageTitle = pageTitle }
+    if (pageURL) { this.$_wf.config.pageURL = btoa(pageURL) }
+  }
+
   moment.locale(locale.toLowerCase())
 
   i18next.init({
