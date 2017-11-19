@@ -57,7 +57,7 @@
           </i-menu-group>
         </template>
       </i-submenu>
-      <li class="float-right" v-if="!isSmallScreen">
+      <li class="float-right" v-if="!isSmallScreen || !user">
         <template v-if="!user" >
           <a @click="showAuthFormModal('sign_up')">
             {{$i18next.t('Header.btn.sign_up')}}
