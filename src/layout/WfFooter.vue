@@ -8,7 +8,7 @@
     </a>
     <img
       class="wf-logo"
-      src="http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/wildfire-logo.svg"
+      src="https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-logo.svg"
       title="Wildfire - Provided by Lahk">
   </footer>
 </template>
