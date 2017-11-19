@@ -20,7 +20,8 @@ let webpackConfig = {
           beautify: false
         },
         compress: {
-          warnings: false
+          warnings: false,
+          drop_console: true
         },
         warnings: false,
         sourceMap: true
