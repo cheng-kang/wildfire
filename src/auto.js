@@ -153,7 +153,8 @@
         pageURL,
         pageTitle,
         theme,
-        locale
+        locale,
+        defaultAvatarURL
       })
 
       /* eslint-disable no-new */
@@ -221,7 +222,8 @@
     pageTitle = document.title,
     pageURL = window.location.href,
     locale = 'en',
-    theme = 'light'
+    theme = 'light',
+    defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg'
   } = window.wildfireConfig()
 
   // Set up custom translator for loading text & error message

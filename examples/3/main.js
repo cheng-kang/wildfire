@@ -17,6 +17,7 @@ Vue.use(wildfire, {
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',
+  // defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg',
   theme: 'light',
   // theme: 'dark',
   // locale: 'en'

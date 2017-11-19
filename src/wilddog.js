@@ -20,7 +20,8 @@ const install = (_Vue, config) => {
     pageTitle = document.title,
     pageURL = window.location.href,
     theme = 'light',
-    locale = 'en'
+    locale = 'en',
+    defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg'
   } = config
 
   const wf = {
@@ -31,7 +32,7 @@ const install = (_Vue, config) => {
       pageURL: btoa(pageURL), // encode pageURL with base64
       locale,
       theme,
-      defaultAvatarURL: 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg',
+      defaultAvatarURL,
       anonymousUserId: 'Anonymous'
     },
     info: {ip: 'unknown', isBanned: false},
