@@ -23,9 +23,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-footer.wf-footer { font-weight: 500; display: flex; height: 45px; margin-top: 30px; color: #656c7a; border-top: 2px solid #d4d4d4; justify-content: space-between; align-items: center; }
-.wf-footer a { font-size: 12px; display: flex; align-items: center; }
-.wf-use-wildfire svg, .wf-logo { width: 18px; height: 18px; margin-right: 10px; }
-</style>

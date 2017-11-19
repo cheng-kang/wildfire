@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="wf-body">
     <wf-reply-area
       :user="user"
       :comments-loading-state="commentsLoadingState"
@@ -223,14 +223,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-ul.wf-reply-group { padding-left: 60px; }
-.no-content-tip { display: flex; justify-content: center; align-items: center; }
-.error { color: #ed3f14; }
-.ivu-page { text-align: center; }
-.mention-option { display: flex; flex-direction: row; align-items: center; }
-.mention-option img { width: 18px; height: 18px; margin-right: 10px; }
-.mention-option span:nth-of-type(1) { overflow: hidden; max-width: 120px; text-overflow: ellipsis; }
-.mention-option span:nth-of-type(2) { font-style: italic; margin-left: 20px; }
-</style>

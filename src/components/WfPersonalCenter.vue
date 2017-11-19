@@ -1,5 +1,5 @@
 <template >
-  <Tabs value="notification-box">
+  <Tabs value="notification-box" class="wf-personal-center">
     <TabPane :label="$i18next.t('PersonalCenter.tab.notification')" name="notification-box">
       <span v-if="Object.keys(notifications).length === 0">{{$i18next.t('PersonalCenter.text.empty_notif_list')}}</span>
       <wf-tip v-else>{{$i18next.t('PersonalCenter.text.tips')}}</wf-tip>
@@ -141,47 +141,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.notification-list li {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  padding: 0 16px;
-}
-.notification-list li span.meta {
-  line-height: 2em;
-  font-size: 0.8em;
-  margin-right: 16px;
-  color: #656c7a;
-  width: 60px;
-  text-align: left;
-}
-.notification-list li span.content {
-  flex: 1;
-  text-align: left;
-}
-.buttons .ivu-btn {
-  opacity: 0.7;
-  transition: opacity 0.2s ease-out;
-  padding: 0;
-}
-.buttons .ivu-btn:hover {
-  opacity: 1;
-}
-.isRead {
-  opacity: 0.5;
-}
-
-/* If smaller than or equal to iPhone 6 size */
-@media only screen 
-  and (max-device-width: 375px) 
-  and (-webkit-min-device-pixel-ratio: 2) { 
-  /* display buttons vertically */
-  .buttons {
-    display: flex;
-    flex-direction: column;
-  }
-}
-</style>

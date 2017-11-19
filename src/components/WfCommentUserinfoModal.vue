@@ -44,10 +44,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.comment-user-modal { display: flex; flex-direction: row; align-items: center; }
-.comment-user-modal > img { width: 60px; height: 60px; margin-right: 30px; }
-.comment-user-modal > div > h3 { margin-bottom: 10px; }
-.comment-user-modal > div > p > span { margin-right: 12px; }
-</style>

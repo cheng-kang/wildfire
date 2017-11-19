@@ -1,5 +1,5 @@
 <template>
-  <i-tabs>
+  <i-tabs class="wf-report-management">
     <i-tab-pane
       name="reported"
       :label="$i18next.t('ReportManagement.tab.reported_comments')">
@@ -344,59 +344,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.table-list {
-  min-height: 10vh;
-  max-height: 30vh;
-  overflow-y: auto;  
-}
-.table-list li {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 10px 15px;
-  align-items: center;
-  border-bottom: 1px dashed rgba(0,0,0,.08);
-}
-.table-list li div.users, .table-list li div.meta{
-  line-height: 24px;
-  font-size: 12px;
-  margin-right: 15px;
-  width: 100px;
-  text-align: center;
-}
-.users .display-name{
-  color: #444;
-}
-.users .email, .users .ip, .reported-by{
-  color: #aaa
-}
-.table-list li div.content {
-  flex: 1;
-}
-.buttons .ivu-btn {
-  opacity: 0.7;
-  transition: opacity 0.2s ease-out;
-  padding: 0;
-}
-.buttons .ivu-btn:hover {
-  opacity: 1;
-}
-.poptip-content{
-  max-height: 220px;
-  max-width: 650px;
-  overflow: auto;
-  white-space: normal
-}
-/* If smaller than or equal to iPhone 6 size */
-@media only screen 
-  and (max-device-width: 375px) 
-  and (-webkit-min-device-pixel-ratio: 2) { 
-  /* display buttons vertically */
-  .buttons {
-    display: flex;
-    flex-direction: column;
-  }
-}
-</style>

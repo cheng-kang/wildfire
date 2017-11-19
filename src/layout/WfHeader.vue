@@ -221,13 +221,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-header { margin-bottom: 30px; }
-.ivu-menu { background-color: transparent; }
-.wf-nav-user { display: inline-block; margin: 0 20px; padding: 0 20px; float: left; height: 100%; }
-.wf-nav-user:hover { color: #eee; }
-.wf-nav-user div { display: flex; height: 100%; width: 100%; align-items: center; }
-.wf-nav-user div img { width: 30px; height: 30px; }
-.no-border-bottom { border-bottom: unset !important; }
-</style>

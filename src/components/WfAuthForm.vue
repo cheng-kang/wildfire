@@ -1,5 +1,5 @@
 <template> 
-  <i-tabs :value="initTab">
+  <i-tabs :value="initTab" class="wf-auth-form">
     <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_up')" name="sign_up" :disabled="loadingSignIn">
       <div class="form-warp">
         <i-form ref="signUpForm" :model="signUpForm" :rules="rule" label-position="top">
@@ -208,8 +208,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.form-warp { display: flex; flex-direction: column; height: 100%; padding: 10px 20px 20px 20px; justify-content: center; }
-.form-itme-button button { margin: 0 10px; }
-</style>

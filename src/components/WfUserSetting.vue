@@ -1,5 +1,5 @@
 <template> 
-  <i-tabs>
+  <i-tabs class="wf-user-setting">
     <i-tab-pane :label="$i18next.t('UserSetting.tab.profile')" name="profile" :disabled="updatingAccount">
       <div class="form-warp" :class="{ 'small-screen': isSmallScreen }">
         <i-form ref="profileForm" :model="profileForm" :rules="rule" label-position="top">
@@ -258,16 +258,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.form-warp { display: flex; flex-direction: row; width: 80%; height: 100%; margin: auto; padding-top: 10px; padding-bottom: 30px; align-items: center; align-items: space-between; }
-.form-warp form { flex: 1 1 100%; }
-.form-warp .avatar { position: relative; top: -16px; left: 10px; height: 100%; flex: 0 0 100px;display: flex; justify-content: center; align-items: center; }
-.form-warp .avatar .ivu-avatar { width: 75px; height: 75px; border: 1px solid rgba(0, 0, 0, .2); }
-.form-warp.small-screen .avatar { flex: 0 0 60px; }
-.form-warp.small-screen .avatar .ivu-avatar { width: 60px; height: 60px; }
-.form-itme-button button { margin: 0 10px; }
-.ivu-tabs-tabpane { display: flex; flex-direction: column; }
-.ivu-input-group-append .ivu-btn, .ivu-input-group-prepend .ivu-btn { margin: -7px; }
-.align-for-profile { margin-right: -100px; }
-</style>
