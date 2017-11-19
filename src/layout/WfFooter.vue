@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="wf-footer">
     <a href="https://github.com/cheng-kang/wildfire"
       class="wf-use-wildfire"
       target="blank">
@@ -8,7 +8,7 @@
     </a>
     <img
       class="wf-logo"
-      src="https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-logo.svg"
+      src="../assets/images/wildfire-logo.svg"
       title="Wildfire - Provided by Lahk">
   </footer>
 </template>
@@ -25,7 +25,7 @@ export default {
 </script>
 
 <style scoped>
-footer { font-weight: 500; display: flex; height: 45px; margin-top: 30px; color: #656c7a; border-top: 2px solid #d4d4d4; justify-content: space-between; align-items: center; }
-a { font-size: 12px; display: flex; align-items: center; }
+footer.wf-footer { font-weight: 500; display: flex; height: 45px; margin-top: 30px; color: #656c7a; border-top: 2px solid #d4d4d4; justify-content: space-between; align-items: center; }
+.wf-footer a { font-size: 12px; display: flex; align-items: center; }
 .wf-use-wildfire svg, .wf-logo { width: 18px; height: 18px; margin-right: 10px; }
 </style>
