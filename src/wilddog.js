@@ -11,6 +11,7 @@ import iView from './common/loadiView'
 import Wildfire from './Wildfire'
 import './assets/style.css'
 import './assets/style.dark.css'
+import './assets/animation.css'
 
 const install = (_Vue, config) => {
   const {
