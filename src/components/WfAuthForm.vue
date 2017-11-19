@@ -208,3 +208,8 @@ export default {
   }
 }
 </script>
+<style>
+.wf-auth-form .form-warp { display: flex; flex-direction: column; height: 100%; padding: 10px 20px 20px 20px; justify-content: center; }
+.wf-auth-form .form-itme-button button { margin: 0 10px; }
+</style>
+

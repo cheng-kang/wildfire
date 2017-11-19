@@ -438,3 +438,13 @@ export default {
   }
 }
 </script>
+<style>
+.wf-reply-form img { width: 48px; height: 48px; }
+.wf-reply-form.wf-is-reply img { width: 36px; height: 36px; }
+.wf-reply-form .no-bottom-margin {    /*margin-bottom: 0;*/ }
+.wf-reply-form .float-right { text-align: right; }
+.wf-reply-form .ivu-btn { padding: 6px 15px; }
+.wf-reply-form .ivu-form .ivu-form-item-label { padding: 0; text-align: left; }
+.wf-reply-form .ivu-form { margin-top: 10px; }
+.wf-reply-form .ivu-form-item { margin-bottom: 12px; }
+</style>

@@ -258,3 +258,15 @@ export default {
   }
 }
 </script>
+<style>
+.wf-user-setting .form-warp { display: flex; flex-direction: row; width: 80%; height: 100%; margin: auto; padding-top: 10px; padding-bottom: 30px; align-items: center; align-items: space-between; }
+.wf-user-setting .form-warp form { flex: 1 1 100%; }
+.wf-user-setting .form-warp .avatar { position: relative; top: -16px; left: 10px; height: 100%; flex: 0 0 100px;display: flex; justify-content: center; align-items: center; }
+.wf-user-setting .form-warp .avatar .ivu-avatar { width: 75px; height: 75px; border: 1px solid rgba(0, 0, 0, .2); }
+.wf-user-setting .form-warp.small-screen .avatar { flex: 0 0 60px; }
+.wf-user-setting .form-warp.small-screen .avatar .ivu-avatar { width: 60px; height: 60px; }
+.wf-user-setting .form-itme-button button { margin: 0 10px; }
+.wf-user-setting .ivu-tabs-tabpane { display: flex; flex-direction: column; }
+.wf-user-setting .ivu-input-group-append .ivu-btn, .wf-user-setting .ivu-input-group-prepend .ivu-btn { margin: -7px; }
+.wf-user-setting .align-for-profile { margin-right: -100px; }
+</style>

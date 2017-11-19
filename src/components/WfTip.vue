@@ -13,3 +13,6 @@ export default {
   }
 }
 </script>
+<style>
+.wf-tip { padding: 0 16px 8px 16px; font-size: 0.7em; color: #656c7a; text-align: left; }
+</style>
