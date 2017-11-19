@@ -31,7 +31,7 @@ const install = (_Vue, config) => {
       pageURL: btoa(pageURL), // encode pageURL with base64
       locale,
       theme,
-      defaultAvatarURL: 'http://7u2sl0.com1.z0.glb.clouddn.com/wildfire/firefighter-avatar.png',
+      defaultAvatarURL: 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg',
       anonymousUserId: 'Anonymous'
     },
     info: {ip: 'unknown', isBanned: false},
