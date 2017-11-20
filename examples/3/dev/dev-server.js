@@ -1,7 +1,7 @@
 'use strict'
-require('./check-versions')()
+require('../../../build/check-versions')()
 
-const config = require('../config')
+const config = require('../../../build/config')
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }

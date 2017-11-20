@@ -1,18 +1,18 @@
 'use strict'
 const path = require('path')
-const utils = require('./utils')
+const utils = require('../../../build/utils')
 const webpack = require('webpack')
-const config = require('../config')
+const config = require('../../../build/config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const vueLoaderConfig = require('./vue-loader.conf')
+const vueLoaderConfig = require('../../../build/vue-loader.conf')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 module.exports = {
   entry: {
-    app: ['./build/dev-client', './examples/3/main.js']
+    app: ['./examples/3/dev/dev-client', './examples/3/main.js']
   },
   output: {
     path: config.build.assetsRoot,

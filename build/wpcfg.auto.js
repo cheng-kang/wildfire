@@ -1,4 +1,4 @@
-const config = require('../config').build
+const config = require('./config').build
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 let webpackConfig = {

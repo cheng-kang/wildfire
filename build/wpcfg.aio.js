@@ -1,6 +1,6 @@
 const path = require('path')
 const merge = require('webpack-merge')
-const config = require('../config').build
+const config = require('./config').build
 const baseWebpackConfig = require('./wpcfg.base')
 
 const webpackConfig = merge(baseWebpackConfig, {

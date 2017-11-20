@@ -39,7 +39,7 @@
     "url": "git://github.com/cheng-kang/wildfire.git"
   },
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "node examples/3/dev/dev-server.js",
     "start": "npm run dev",
     "build": "node build/build.js",
     "build:aio": "webpack --config build/wpcfg.aio.js",

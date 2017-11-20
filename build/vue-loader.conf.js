@@ -1,6 +1,6 @@
 'use strict'
 var utils = require('./utils')
-var config = require('../config')
+var config = require('./config')
 const isProduction = process.env.NODE_ENV === 'production'
 
 module.exports = {
