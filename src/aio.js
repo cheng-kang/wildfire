@@ -3,7 +3,6 @@ import wilddog from 'wilddog'
 import VueWild from 'vuewild'
 import firebase from 'firebase'
 import VueFire from 'vuefire'
-import moment from 'moment'
 import i18next from 'i18next'
 import {
   langEn,
@@ -14,6 +13,17 @@ import Wildfire from './Wildfire'
 import './assets/style.css'
 import './assets/style.dark.css'
 import './assets/animation.css'
+import { distanceInWordsToNow, format } from 'date-fns'
+import zhLocale from 'date-fns/locale/zh_cn'
+import enLocale from 'date-fns/locale/en'
+const getLocaleObject = (locale) => {
+  const lcl = locale.toLowerCase().split('-')[0]
+  if (lcl === 'zh') {
+    return zhLocale
+  }
+
+  return enLocale
+}
 
 const install = (_Vue, config) => {
   const {
@@ -25,6 +35,8 @@ const install = (_Vue, config) => {
     locale = 'en',
     defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg'
   } = config
+
+  const localeObject = getLocaleObject(locale)
 
   const wf = {
     config: {
@@ -39,7 +51,8 @@ const install = (_Vue, config) => {
     },
     info: {ip: 'unknown', isBanned: false},
     i18next,
-    moment
+    formatDate: (date) => format(date, 'YYYY-MM-DD h:mm:ss', { locale: localeObject, addSuffix: true }),
+    distanceInWordsToNow: (date) => distanceInWordsToNow(date, { locale: localeObject, addSuffix: true })
   }
 
   if (!_Vue.http) { _Vue.use(VueResource) }
@@ -70,8 +83,6 @@ const install = (_Vue, config) => {
     if (pageTitle) { this.$_wf.config.pageTitle = pageTitle }
     if (pageURL) { this.$_wf.config.pageURL = btoa(pageURL) }
   }
-
-  moment.locale(locale.toLowerCase())
 
   i18next.init({
     lng: locale,

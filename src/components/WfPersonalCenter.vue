@@ -5,7 +5,7 @@
       <wf-tip v-else>{{$i18next.t('PersonalCenter.text.tips')}}</wf-tip>
       <ul class="notification-list">
         <li v-for="notifId in notifIdsDESC" :class="{isRead: notifications[notifId].isRead}">
-          <span class="meta">{{$moment(notifications[notifId].date).fromNow()}}</span>
+          <span class="meta">{{distanceInWordsToNow(notifications[notifId].date)}}</span>
           <span class="content" v-html="notifications[notifId].processedContent"></span>
           <div class="buttons">
             <i-button type="text" @click="toggleRead(notifId)">{{$i18next.t(notifications[notifId].isRead ? 'PersonalCenter.btn.read' : 'PersonalCenter.btn.unread')}}</i-button>
@@ -40,8 +40,8 @@ export default {
     $i18next () {
       return this.$_wf.i18next
     },
-    $moment () {
-      return this.$_wf.moment
+    distanceInWordsToNow () {
+      return this.$_wf.distanceInWordsToNow
     },
     notifIdsDESC () {
       return Object.keys(this.notifications).reverse()

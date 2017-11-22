@@ -99,7 +99,7 @@
       <ul class="table-list">
         <li v-for="item in banTableData">
           <div class="meta">
-            {{$moment(item.date).fromNow()}}
+            {{distanceInWordsToNow(item.date)}}
           </div>
           <div class="users">
             <i-tooltip
@@ -161,8 +161,8 @@ export default {
     $i18next () {
       return this.$_wf.i18next
     },
-    $moment () {
-      return this.$_wf.moment
+    distanceInWordsToNow () {
+      return this.$_wf.distanceInWordsToNow
     },
     reportedTableData () {
       return Object.keys(this.reportedList).map(key => {

@@ -36,10 +36,10 @@
             </i-poptip>
             <span class="meta">
               <i-poptip
-                :content="$moment(comment.date).format('YYYY-MM-DD h:mm:ss')"
+                :content="formatDate(comment.date)"
                 trigger="hover"
                 placement="right">
-              · {{$moment(comment.date).fromNow()}}
+              · {{distanceInWordsToNow(comment.date)}}
               </i-poptip>
             </span>
           </div>
@@ -236,8 +236,11 @@ export default {
     $i18next () {
       return this.$_wf.i18next
     },
-    $moment () {
-      return this.$_wf.moment
+    distanceInWordsToNow () {
+      return this.$_wf.distanceInWordsToNow
+    },
+    formatDate () {
+      return this.$_wf.formatDate
     },
     isTopLevelComment () {
       return !this.comment.parentCommentId
