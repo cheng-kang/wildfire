@@ -49,7 +49,10 @@ A drop-in replacement for other comment systems.
 2. For all visitors (anonymous & authorized):
     - [x] Comment (with `Markdown` support)
     - [x] Mention (@username)
+    
+## License
 
+[GNU General Public License v3.0](https://github.com/cheng-kang/wildfire/blob/master/LICENSE)
 3. For authorized visitors:
     - [x] Like/dislike a comment
     - [x] Delete own comments
