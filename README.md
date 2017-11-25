@@ -23,25 +23,24 @@ A drop-in replacement for other comment systems.
 
 ## Features
 
-
 ### For site owners:
 - Database Support: 
-  - [`Firebase`](https://firebase.google.com/)
-  - [`Wilddog`](https://www.wilddog.com/).
+  - [x][`Firebase`](https://firebase.google.com/)
+  - [x][`Wilddog`](https://www.wilddog.com/).
 - Admin Function: 
-  - Delete comment
-  - Ban users by their IP/email
+  - [x]Delete comment
+  - [x]Ban users by their IP/email
 
 ### For all visitors (anonymous & authorized):
-- Comment (with `Markdown` support)
-- Mention (@username)
+- [x]Comment (with `Markdown` support)
+- [x]Mention (@username)
 
 ### For authorized visitors:
-- Like/dislike a comment
-- Delete own comments
-- Report inappropriate comments
+- [x]Like/dislike a comment
+- [x]Delete own comments
+- [x]Report inappropriate comments
 - Update user profile
-  - Display name
-  - Avatar
+  - [x]Display name
+  - [x]Avatar
 - Personal Center:
-  - Notification
+  - [x]Notification
