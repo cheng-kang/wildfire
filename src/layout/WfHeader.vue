@@ -225,6 +225,11 @@ export default {
 header.wf-header { margin-bottom: 30px; }
 .wf-header .ivu-menu { background-color: transparent; }
 .wf-header .wf-nav-user { display: inline-block; margin: 0 20px; padding: 0 20px; float: left; height: 100%; }
+@media only screen 
+  and (max-device-width: 321px) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+  .wf-header .wf-nav-user { margin: unset; }
+}
 .wf-header .wf-nav-user:hover { color: #eee; }
 .wf-header .wf-nav-user div { display: flex; height: 100%; width: 100%; align-items: center; }
 .wf-header .wf-nav-user div img { width: 30px; height: 30px; }
