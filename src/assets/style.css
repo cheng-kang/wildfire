@@ -31,15 +31,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* If smaller than or equal to iPhone 6 size */
-@media only screen 
-and (max-device-width:375px) 
-and (-webkit-min-device-pixel-ratio:2) {
-  /* display buttons vertically */
-  .wf .wf-personal-center .buttons, .wf .wf-report-management .buttons { display: flex; flex-direction: column; }
-}
-.wf .wf-reply-form .ivu-input:focus { box-shadow: 0 0 0 2px rgba(138, 138, 138, 0.2); }
-
 /* WfBody.vue */
 .wf .wf-body .no-content-tip { display: flex; justify-content: center; align-items: center; }
 .wf .wf-body .error { color: #ed3f14; }
@@ -82,7 +73,7 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .reply-poptip div { display: flex; flex-direction: column; }
 .wf .reply-poptip span span { overflow: auto; max-width: 120px; text-overflow: ellipsis; }
 .wf .wf-comment-item .drowdown-menu-button { opacity: 0; }
-.wf .wf-comment-item .wf-comment-item section.comment:hover .drowdown-menu-button { opacity: 1; }
+.wf .wf-comment-item .comment:hover .drowdown-menu-button { opacity: 1; }
 .wf .wf-comment-item .wf-comment-avatar { margin-right: 12px; }
 .wf .wf-comment-item .wf-comment-avatar img { width: 48px; height: 48px; border-radius: 4px; }
 .wf .wf-comment-item.wf-reply-item .wf-comment-avatar img { width: 36px; height: 36px; }
@@ -132,8 +123,8 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-reply-form .ivu-form-item { margin-bottom: 12px; }
 
 /* WfReportManagement.vue */
-.wf .wf-report-management .table-list { min-height: 10vh; max-height: 30vh; overflow-y: auto; }
-.wf .wf-report-management .table-list li { display: flex; flex-direction: row; justify-content: space-between; padding: 1px 15px; align-items: center; }
+.wf .wf-report-management .table-list { max-height: 30vh; overflow-y: auto; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+.wf .wf-report-management .table-list li { width: 100%; display: flex; flex-direction: row; justify-content: space-between; padding: 1px 15px; align-items: center; }
 .wf .wf-report-management .table-list li div.users, .wf-report-management .table-list li div.meta { line-height: 24px; font-size: 12px; margin-right: 15px; width: 100px; text-align: center; }
 .wf .wf-report-management .users .display-name { color: #444; }
 .wf .wf-report-management .users .email, .wf-report-management .users .ip, .reported-by { color: #aaa }
@@ -156,3 +147,13 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-user-setting .ivu-tabs-tabpane { display: flex; flex-direction: column; }
 .wf .wf-user-setting .ivu-input-group-append .ivu-btn, .wf-user-setting .ivu-input-group-prepend .ivu-btn { margin: -7px; }
 .wf .wf-user-setting .align-for-profile { margin-right: -100px; }
+
+
+/* If smaller than or equal to iPhone 6 size */
+@media only screen 
+and (max-device-width:375px) 
+and (-webkit-min-device-pixel-ratio:2) {
+  /* display buttons vertically */
+  .wf .wf-personal-center .buttons .ivu-btn, .wf .wf-report-management .buttons .ivu-btn { padding: 0; }
+}
+.wf .wf-reply-form .ivu-input:focus { box-shadow: 0 0 0 2px rgba(138, 138, 138, 0.2); }

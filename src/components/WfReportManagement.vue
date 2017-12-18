@@ -56,7 +56,8 @@
               @on-ok="banUser(item.comment.uid, item.comment.ip)" >
               <i-button
                 size="small"
-                type="warning">
+                type="text"
+                style="color: #f90;">
                 {{ $i18next.t('ReportManagement.btn.ban') }}
               </i-button>
             </i-poptip>
@@ -69,7 +70,8 @@
               @on-ok="deleteComment(item)">
               <i-button
                 size="small"
-                type="error">
+                type="text"
+                style="color: #ed3f14;">
                 {{ $i18next.t('ReportManagement.btn.delete') }}
               </i-button>
             </i-poptip>
