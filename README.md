@@ -18,8 +18,18 @@ A drop-in replacement for other comment systems.
 ## Screenshots
 
 <p align="center">
-  <img src="./resources/screenshot-0.png" height="300">
-  <img src="./resources/screenshot-1.png" height="300">
+  <img src="./resources/screenshots/1.png" height="260">
+  <img src="./resources/screenshots/2.png" height="260">
+  <img src="./resources/screenshots/3.png" height="260">
+</p>
+<p align="center">
+  <img src="./resources/screenshots/4.png" height="260">
+  <img src="./resources/screenshots/5.png" height="260">
+  <img src="./resources/screenshots/6.png" height="260">
+</p>
+<p align="center">
+  <img src="./resources/screenshots/7.png" height="260">
+  <img src="./resources/screenshots/8.png" height="260">
 </p>
 
 ## Usage
