@@ -17,11 +17,7 @@
     <section class="top-reply-area" v-if="isMain">
       <div class="tool-bar">
         <span style="color: #bbbec4">
-          {{isLoadingUserData
-              ? $i18next.t('ReplyArea.text.initializing_mention_autocomplete')
-              : (this.user
-                  ? $i18next.t('ReplyArea.text.initialized_mention_autocomplete')
-                  : $i18next.t('ReplyArea.text.mention_func_not_authorized'))}}
+          {{mentionLabel}}
         </span>
       </div>
       <div>
@@ -142,6 +138,13 @@ export default {
     },
     isCurrentUserBanned () {
       return (this.user && this.user.isBanned) || (!this.user && this.$info.isBanned)
+    },
+    mentionLabel () {
+      return this.isLoadingUserData
+              ? this.$i18next.t('ReplyArea.text.initializing_mention_autocomplete')
+              : (this.user
+                  ? this.$i18next.t('ReplyArea.text.initialized_mention_autocomplete')
+                  : this.$i18next.t('ReplyArea.text.mention_func_not_authorized'))
     }
   },
   mounted () {
@@ -438,13 +441,3 @@ export default {
   }
 }
 </script>
-<style>
-.wf-reply-form img { width: 48px; height: 48px; }
-.wf-reply-form.wf-is-reply img { width: 36px; height: 36px; }
-.wf-reply-form .no-bottom-margin {    /*margin-bottom: 0;*/ }
-.wf-reply-form .float-right { text-align: right; }
-.wf-reply-form .ivu-btn { padding: 6px 15px; }
-.wf-reply-form .ivu-form .ivu-form-item-label { padding: 0; text-align: left; }
-.wf-reply-form .ivu-form { margin-top: 10px; }
-.wf-reply-form .ivu-form-item { margin-bottom: 12px; }
-</style>

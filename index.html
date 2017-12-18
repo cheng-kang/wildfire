@@ -1,88 +1,145 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Wildfire - From a little spark may burst a flame.</title>
-    <link rel="stylesheet" type="text/css" href="static/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="static/css/style.css">
-    <link rel="stylesheet" type="text/css" href="static/css/highlight/default.css">
-  </head>
-  <body>
-    <nav>
-      <div class="logos">
-        <div class="wf">
-          <img 
-            src="static/img/wildfire.svg" 
-            class="wildfire-logo"
-            height="30">
-          <span>Wildfire</span>
-        </div>
-        <span> = </span>
-        <img src="static/img/wilddog.svg" height="23">
-        <span> + </span>
-        <img src="static/img/firebase.png" height="25">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wildfire - From a little spark may burst a flame.</title>
+  <link rel="stylesheet" type="text/css" href="static/css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="static/css/style.css">
+  <link rel="stylesheet" type="text/css" href="static/css/highlight/default.css">
+</head>
+
+<body>
+  <nav>
+    <div class="logos">
+      <div class="wf">
+        <img src="static/img/wildfire.svg" class="wildfire-logo" height="30">
+        <span>Wildfire</span>
       </div>
-    </nav>
-    <main>
-      <section class="main">
-        <h1>Wildfire</h1>
-        <h2 class="subtitle">A drop-in replacement for other comment systems.</h2>
-        <h3><em>“From a little spark may burst a flame.” <br>— Dante Alighieri, Paradiso</em></h3>
-        <div class="buttons">
-          <a class="button" href="#how-to-use">Get Started</a>
-          <a class="button white" href="https://github.com/cheng-kang/wildfire" target="blank">GitHub</a>
-        </div>
-        <p class="tip">
-          *Sroll down to bottom to view a live demo.
-        </p>
-      </section>
-      <section class="features" id="features">
-        <h2 class="section-title">
-          <a href="#features">Features</a>
-        </h2>
-        <h3>To be filled...</h3>
-      </section>
-      <section class="how-to-use" id="how-to-use">
-        <h2 class="section-title">
+      <span> = </span>
+      <img src="static/img/wilddog.svg" height="23">
+      <span> + </span>
+      <img src="static/img/firebase.png" height="25">
+    </div>
+  </nav>
+  <main>
+    <section class="main">
+      <h1>Wildfire</h1>
+      <h2 class="subtitle">A drop-in replacement for other comment systems.</h2>
+      <h3><em>“From a little spark may burst a flame.” <br>— Dante Alighieri, Paradiso</em></h3>
+      <div class="buttons">
+        <a class="button" href="#how-to-use">Get Started</a>
+        <a class="button white" href="https://github.com/cheng-kang/wildfire" target="blank">GitHub</a>
+      </div>
+      <p class="tip">
+        *Sroll down to bottom to view a live demo.
+      </p>
+    </section>
+    <section class="features" id="features">
+      <h2 class="section-title">
+        <a href="#features">Features</a>
+      </h2>
+      <ol class="feature-list">
+        <li>
+          <p>For site owners:</p>
+          <ul>
+            <li>Database Support:
+              <ul class="contains-task-list">
+                <li class="task-list-item">
+                  <input checked="" class="task-list-item-checkbox" disabled="" type="checkbox"> <a href="https://firebase.google.com/" rel="nofollow">Firebase</a></li>
+                <li class="task-list-item">
+                  <input checked="" class="task-list-item-checkbox" disabled="" type="checkbox"> <a href="https://www.wilddog.com/" rel="nofollow">Wilddog</a>.</li>
+              </ul>
+            </li>
+            <li>Admin Function:
+              <ul class="contains-task-list">
+                <li class="task-list-item">
+                  <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Delete comment</li>
+                <li class="task-list-item">
+                  <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Ban users by their IP/email</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <p>For all visitors (anonymous &amp; authorized):</p>
+          <ul class="contains-task-list">
+            <li class="task-list-item">
+              <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Comment (with Markdown support)</li>
+            <li class="task-list-item">
+              <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Mention (@username)</li>
+          </ul>
+        </li>
+        <li>
+          <p>For authorized visitors:</p>
+          <ul class="contains-task-list">
+            <li class="task-list-item">
+              <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Like/dislike a comment</li>
+            <li class="task-list-item">
+              <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Delete own comments</li>
+            <li class="task-list-item">
+              <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Report inappropriate comments</li>
+            <li>Update user profile
+              <ul class="contains-task-list">
+                <li class="task-list-item">
+                  <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Display name</li>
+                <li class="task-list-item">
+                  <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Avatar</li>
+              </ul>
+            </li>
+            <li>Personal Center:
+              <ul class="contains-task-list">
+                <li class="task-list-item">
+                  <input checked="" class="task-list-item-checkbox" disabled="" id="" type="checkbox"> Notification</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+    <section class="how-to-use" id="how-to-use">
+      <h2 class="section-title">
           <a href="#how-to-use">How to use?</a>
         </h2>
-        <h3>1. Set up your database</h3>
-        <div class="iframe-container">
-          <iframe src="https://slides.com/chengkang/set-up-firebase-for-wildfire/embed?style=light" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-        </div>
-        <br>
-        <h3>2. Add to your website</h3>
-        <div class="iframe-container">
-          <iframe src="https://slides.com/chengkang/how-to-wildfire/embed?style=light" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-        </div>
-      </section>
-      <section class="demo">
-        <h2 class="section-title">
+      <h3 class="subsection-title">1. Set up your database</h3>
+      <div class="iframe-container">
+        <iframe src="https://slides.com/chengkang/set-up-firebase-for-wildfire/embed?style=light" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+      <br>
+      <h3 class="subsection-title">2. Add to your website</h3>
+      <div class="iframe-container">
+        <iframe src="https://slides.com/chengkang/how-to-wildfire/embed?style=light" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      </div>
+    </section>
+    <section class="demo">
+      <h2 class="section-title">
           <a href="#demo">Demo</a>
         </h2>
-        <div class="wildfire_thread"></div>
-      </section>
-    </main>
+      <div class="wildfire_thread"></div>
+    </section>
+  </main>
   <script src="static/js/highlight.js"></script>
   <script>
-    hljs.initHighlightingOnLoad();
-    var wildfireConfig = () => ({
-      databaseProvider: 'firebase',
-      databaseConfig: {
-        apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
-        authDomain: 'wild-fire-ee770.firebaseapp.com',
-        databaseURL: 'https://wild-fire-ee770.firebaseio.com',
-        projectId: 'wild-fire-ee770',
-        storageBucket: 'wild-fire-ee770.appspot.com',
-        messagingSenderId: '655484997793'
-      },
-      pageURL: 'http://chengkang.me/wildfire',
-      pageTitle: 'Wildfire Demo',
-      theme: 'light',
-      locale: 'zh-CN'
-    });
+  hljs.initHighlightingOnLoad();
+  var wildfireConfig = () => ({
+    databaseProvider: 'firebase',
+    databaseConfig: {
+      apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+      authDomain: 'wild-fire-ee770.firebaseapp.com',
+      databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+      projectId: 'wild-fire-ee770',
+      storageBucket: 'wild-fire-ee770.appspot.com',
+      messagingSenderId: '655484997793'
+    },
+    pageURL: 'http://chengkang.me/wildfire',
+    pageTitle: 'Wildfire Demo',
+    theme: 'light',
+    locale: 'zh-CN'
+  });
+
   </script>
   <script src="https://unpkg.com/@chengkang/wildfire/dist/wildfire.auto.js"></script>
 </body>
+
 </html>

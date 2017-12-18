@@ -13,13 +13,17 @@
 .wf .thumbnail { line-height: 150px; display: inline-block; overflow: hidden; width: 150px; height: 150px; cursor: pointer; border: 1px solid #fff; border-radius: 4px; background: 0 0; background-repeat: no-repeat; background-position: 50%; background-size: 100%; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }
 .wf .top-reply-area { display: flex; flex-direction: row; margin-left: 60px; justify-content: space-between; }
 .wf .top-reply-area div { font-size: 10px; display: flex; }
-.wf .top-reply-area .tool-bar { margin-right: 10px; flex: 1; }
+.wf .top-reply-area .tool-bar { max-height: 32px; overflow-y: scroll; margin-right: 10px; flex: 1; }
 .wf .ivu-spin-text div { display: inline-block; }
 .wf .ivu-switch-checked .ivu-switch-inner { font-size: 8px; left: 4px; }
 .wf .ivu-switch-inner { font-size: 8px; left: 12.5px; }
 .wf .ivu-modal-confirm-body { overflow: hidden; max-height: 400px; min-height: 45px; }
 .wf .ivu-spin { position: unset; background-color: unset; }
 .wf .wf-form .ivu-form-label-top .ivu-form-item-label { float: left; padding: 0 0 8px 0; }
+.wf .ivu-menu-horizontal { height: 52px; line-height: 52px; }
+.wf .ivu-menu-horizontal .ivu-menu-item, .wf .ivu-menu-horizontal .ivu-menu-submenu { padding: 0 4px; font-weight: 500; }
+.wf .ivu-menu-horizontal .ivu-menu-item.float-right, .wf .ivu-menu-horizontal .ivu-menu-submenu.float-right { float: right; margin-right: 16px; }
+.wf .wf-header .ivu-menu li { font-weight: 500; }
 .wf .spin-icon { animation: ani-demo-spin 1s linear infinite; }
 @keyframes ani-demo-spin {
   from { transform: rotate(0); }
@@ -31,7 +35,124 @@
 @media only screen 
 and (max-device-width:375px) 
 and (-webkit-min-device-pixel-ratio:2) {
-
   /* display buttons vertically */
-  .wf-personal-center .buttons, .wf-report-management .buttons { display: flex; flex-direction: column; }
+  .wf .wf-personal-center .buttons, .wf .wf-report-management .buttons { display: flex; flex-direction: column; }
 }
+.wf .wf-reply-form .ivu-input:focus { box-shadow: 0 0 0 2px rgba(138, 138, 138, 0.2); }
+
+/* WfBody.vue */
+.wf .wf-body .no-content-tip { display: flex; justify-content: center; align-items: center; }
+.wf .wf-body .error { color: #ed3f14; }
+.wf .wf-body .ivu-page { text-align: center; }
+.wf .wf-body .mention-option { display: flex; flex-direction: row; align-items: center; }
+.wf .wf-body .mention-option img { width: 18px; height: 18px; margin-right: 10px; }
+.wf .wf-body .mention-option span:nth-of-type(1) { overflow: hidden; max-width: 120px; text-overflow: ellipsis; }
+.wf .wf-body .mention-option span:nth-of-type(2) { font-style: italic; margin-left: 20px; }
+
+/* WfFooter.vue */
+.wf .wf-footer { font-weight: 500; display: flex; height: 45px; margin-top: 30px; color: #656c7a; border-top: 2px solid #d4d4d4; justify-content: space-between; align-items: center; }
+.wf .wf-footer a { font-size: 12px; display: flex; align-items: center; }
+.wf .wf-footer .wf-use-wildfire svg, .wf .wf-footer .wf-logo { width: 18px; height: 18px; margin-right: 10px; }
+
+/* WfHeader.vue */
+.wf .wf-header { margin-bottom: 30px; }
+.wf .wf-header .ivu-menu { background-color: transparent; }
+.wf .wf-header .wf-nav-user { display: inline-block; padding: 0 20px; float: left; height: 100%; }
+@media only screen 
+and (max-device-width:321px) 
+and (-webkit-min-device-pixel-ratio:2) {
+  .wf .wf-header .wf-nav-user { margin: unset; }
+}
+.wf .wf-header .wf-nav-user:hover { color: #eee; }
+.wf .wf-header .wf-nav-user div { display: flex; height: 100%; width: 100%; align-items: center; }
+.wf .wf-header .wf-nav-user div img { width: 30px; height: 30px; }
+.wf .wf-header .no-border-bottom { border-bottom: unset !important; }
+
+/* WfAuthForm.vue */
+.wf .wf-auth-form .form-warp { display: flex; flex-direction: column; height: 100%; padding: 10px 20px 20px 20px; justify-content: center; }
+.wf .wf-auth-form .form-itme-button button { margin: 0 10px; }
+
+/* WfCommentCard.vue */
+.wf .wf-comment-item { display: flex; flex-direction: column; }
+.wf .wf-comment-item section { display: flex; flex-direction: row; }
+.wf .wf-comment-item section.replies { margin-top: 5px; margin-left: 60px; }
+.wf .wf-comment-item section.replies ul { width: 100%; }
+.wf .reply-poptip { display: flex; flex-direction: row; align-items: center; }
+.wf .reply-poptip img { width: 30px; height: 30px; }
+.wf .reply-poptip div { display: flex; flex-direction: column; }
+.wf .reply-poptip span span { overflow: auto; max-width: 120px; text-overflow: ellipsis; }
+.wf .wf-comment-item .drowdown-menu-button { opacity: 0; }
+.wf .wf-comment-item .wf-comment-item section.comment:hover .drowdown-menu-button { opacity: 1; }
+.wf .wf-comment-item .wf-comment-avatar { margin-right: 12px; }
+.wf .wf-comment-item .wf-comment-avatar img { width: 48px; height: 48px; border-radius: 4px; }
+.wf .wf-comment-item.wf-reply-item .wf-comment-avatar img { width: 36px; height: 36px; }
+.wf .wf-comment-item .wf-comment-body { line-height: 21px; position: relative; flex: 1; width: calc(100% - 60px); }
+.wf .wf-comment-item .wf-comment-body header { display: flex; color: #656c7a; justify-content: space-between; }
+.wf .wf-comment-item .wf-comment-body header .header-content a.username { font-size: 13px; font-weight: 700; text-decoration: none; }
+.wf .wf-comment-item .wf-comment-body header .header-content .meta { font-size: 12px; }
+.wf .wf-comment-item .wf-comment-body header .header-content .parent-link { font-size: 12px; }
+.wf .wf-comment-item .wf-comment-body header .header-content .parent-link:hover { color: black; }
+.wf .wf-comment-item .wf-comment-content { padding-bottom: 3px; }
+.wf .wf-comment-item .less { overflow: hidden; max-height: 180px; margin-bottom: 10px; }
+.wf .wf-comment-item footer { font-size: 13px; display: flex; align-items: center; }
+.wf .wf-comment-item footer .like-count, .wf-comment-item footer .dislike-count { color: rgba(237, 63, 20, .8); }
+.wf .wf-comment-item footer .separator { font-weight: 500; margin: 0 6px; color: #e7e9ee; }
+.wf .wf-comment-item footer a { font-weight: 500; text-decoration: none; color: rgba(237, 63, 20, .8); }
+.wf .wf-comment-item footer a:hover { color: #ed3f14; }
+.wf .wf-comment-item footer .inactive { color: #929292; filter: grayscale(100%); }
+.wf .wf-comment-item footer .disabled { cursor: not-allowed; }
+.wf .wf-comment-item .wf-reply-button { margin-left: 12px; }
+.wf .wf-comment-item .wf-delete-button { color: rgba(237, 63, 20, .8); }
+.wf .wf-comment-item .wf-delete-button:hover { color: #ed3f14; }
+.wf .wf-comment-item .ivu-btn { padding: 4px; }
+
+/* WfCommentUserinfoModal.vue */
+.wf .comment-user-modal { display: flex; flex-direction: row; align-items: center; }
+.wf .comment-user-modal > img { width: 60px; height: 60px; margin-right: 30px; }
+.wf .comment-user-modal > div > h3 { margin-bottom: 10px; }
+.wf .comment-user-modal > div > p > span { margin-right: 12px; }
+
+/* WfPersonalCenter.vue */
+.wf .wf-personal-center .notification-list { margin-top: 8px; }
+.wf .wf-personal-center .notification-list li { display: flex; flex-direction: row; justify-content: space-between; padding: 0 16px; }
+.wf .wf-personal-center .notification-list li span.meta { line-height: 2em; font-size: 0.8em; margin-right: 16px; color: #656c7a; width: 60px; text-align: left; }
+.wf .wf-personal-center .notification-list li span.content { flex: 1; text-align: left; }
+.wf .wf-personal-center .buttons .ivu-btn { opacity: 0.7; transition: opacity 0.2s ease-out; padding: 0; }
+.wf .wf-personal-center .buttons .ivu-btn:hover { opacity: 1; }
+.wf .wf-personal-center .isRead { opacity: 0.5; }
+
+/* WfReplyArea.vue */
+.wf .wf-reply-form img { width: 48px; height: 48px; }
+.wf .wf-reply-form.wf-is-reply img { width: 36px; height: 36px; }
+.wf .wf-reply-form .no-bottom-margin {    /*margin-bottom: 0;*/ }
+.wf .wf-reply-form .float-right { text-align: right; }
+.wf .wf-reply-form .ivu-btn { padding: 6px 15px; }
+.wf .wf-reply-form .ivu-form .ivu-form-item-label { padding: 0; text-align: left; }
+.wf .wf-reply-form .ivu-form { margin-top: 10px; }
+.wf .wf-reply-form .ivu-form-item { margin-bottom: 12px; }
+
+/* WfReportManagement.vue */
+.wf .wf-report-management .table-list { min-height: 10vh; max-height: 30vh; overflow-y: auto; }
+.wf .wf-report-management .table-list li { display: flex; flex-direction: row; justify-content: space-between; padding: 1px 15px; align-items: center; }
+.wf .wf-report-management .table-list li div.users, .wf-report-management .table-list li div.meta { line-height: 24px; font-size: 12px; margin-right: 15px; width: 100px; text-align: center; }
+.wf .wf-report-management .users .display-name { color: #444; }
+.wf .wf-report-management .users .email, .wf-report-management .users .ip, .reported-by { color: #aaa }
+.wf .wf-report-management .table-list li div.content { flex: 1; }
+.wf .wf-report-management .buttons .ivu-btn { opacity: 0.7; transition: opacity 0.2s ease-out; padding: 0px 3px; }
+.wf .wf-report-management .buttons .ivu-btn:hover { opacity: 1; }
+.wf .wf-report-management .poptip-content { max-height: 220px; max-width: 650px; overflow: auto; white-space: normal }
+
+/* WfTip.vue */
+.wf .wf-tip { padding: 0 16px 8px 16px; font-size: 0.7em; color: #656c7a; text-align: left; }
+
+/* WfUserSetting.vue */
+.wf .wf-user-setting .form-warp { display: flex; flex-direction: row; width: 80%; height: 100%; margin: auto; padding-top: 10px; padding-bottom: 30px; align-items: center; align-items: space-between; }
+.wf .wf-user-setting .form-warp form { flex: 1 1 100%; }
+.wf .wf-user-setting .form-warp .avatar { position: relative; top: -16px; left: 10px; height: 100%; flex: 0 0 100px; display: flex; justify-content: center; align-items: center; }
+.wf .wf-user-setting .form-warp .avatar .ivu-avatar { width: 75px; height: 75px; border: 1px solid rgba(0, 0, 0, .2); }
+.wf .wf-user-setting .form-warp.small-screen .avatar { flex: 0 0 60px; }
+.wf .wf-user-setting .form-warp.small-screen .avatar .ivu-avatar { width: 60px; height: 60px; }
+.wf .wf-user-setting .form-itme-button button { margin: 0 10px; }
+.wf .wf-user-setting .ivu-tabs-tabpane { display: flex; flex-direction: column; }
+.wf .wf-user-setting .ivu-input-group-append .ivu-btn, .wf-user-setting .ivu-input-group-prepend .ivu-btn { margin: -7px; }
+.wf .wf-user-setting .align-for-profile { margin-right: -100px; }

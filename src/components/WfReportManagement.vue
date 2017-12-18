@@ -344,14 +344,3 @@ export default {
   }
 }
 </script>
-<style>
-.wf-report-management .table-list { min-height: 10vh; max-height: 30vh; overflow-y: auto; }
-.wf-report-management .table-list li { display: flex; flex-direction: row; justify-content: space-between; padding: 1px 15px; align-items: center; }
-.wf-report-management .table-list li div.users, .wf-report-management .table-list li div.meta { line-height: 24px; font-size: 12px; margin-right: 15px; width: 100px; text-align: center; }
-.wf-report-management .users .display-name { color: #444; }
-.wf-report-management .users .email, .wf-report-management .users .ip, .reported-by { color: #aaa }
-.wf-report-management .table-list li div.content { flex: 1; }
-.wf-report-management .buttons .ivu-btn { opacity: 0.7; transition: opacity 0.2s ease-out; padding: 0px 3px; }
-.wf-report-management .buttons .ivu-btn:hover { opacity: 1; }
-.wf-report-management .poptip-content { max-height: 220px; max-width: 650px; overflow: auto; white-space: normal }
-</style>

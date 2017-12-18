@@ -223,12 +223,3 @@ export default {
   }
 }
 </script>
-<style>
-.wf-body .no-content-tip { display: flex; justify-content: center; align-items: center; }
-.wf-body .error { color: #ed3f14; }
-.wf-body .ivu-page { text-align: center; }
-.wf-body .mention-option { display: flex; flex-direction: row; align-items: center; }
-.wf-body .mention-option img { width: 18px; height: 18px; margin-right: 10px; }
-.wf-body .mention-option span:nth-of-type(1) { overflow: hidden; max-width: 120px; text-overflow: ellipsis; }
-.wf-body .mention-option span:nth-of-type(2) { font-style: italic; margin-left: 20px; }
-</style>

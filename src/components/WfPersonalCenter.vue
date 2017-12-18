@@ -141,12 +141,3 @@ export default {
   }
 }
 </script>
-<style>
-.wf-personal-center .notification-list { margin-top: 8px; }
-.wf-personal-center .notification-list li { display: flex; flex-direction: row; justify-content: space-between; padding: 0 16px; }
-.wf-personal-center .notification-list li span.meta { line-height: 2em; font-size: 0.8em; margin-right: 16px; color: #656c7a; width: 60px; text-align: left; }
-.wf-personal-center .notification-list li span.content { flex: 1; text-align: left; }
-.wf-personal-center .buttons .ivu-btn { opacity: 0.7; transition: opacity 0.2s ease-out; padding: 0; }
-.wf-personal-center .buttons .ivu-btn:hover { opacity: 1; }
-.wf-personal-center .isRead { opacity: 0.5; }
-</style>

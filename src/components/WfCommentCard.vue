@@ -522,38 +522,3 @@ export default {
   }
 }
 </script>
-<style>
-.wf-comment-item { display: flex; flex-direction: column; }
-.wf-comment-item section { display: flex; flex-direction: row; }
-.wf-comment-item section.replies { margin-top: 5px; margin-left: 60px; }
-.wf-comment-item section.replies ul { width: 100%; }
-.reply-poptip { display: flex; flex-direction: row; align-items: center; }
-.reply-poptip img { width: 30px; height: 30px; }
-.reply-poptip div { display: flex; flex-direction: column; }
-.reply-poptip span span { overflow: auto; max-width: 120px; text-overflow: ellipsis; }
-.wf-comment-item .drowdown-menu-button { opacity: 0; }
-.wf-comment-item .wf-comment-item section.comment:hover .drowdown-menu-button { opacity: 1; }
-.wf-comment-item .wf-comment-avatar { margin-right: 12px; }
-.wf-comment-item .wf-comment-avatar img { width: 48px; height: 48px; border-radius: 4px; }
-.wf-comment-item.wf-reply-item .wf-comment-avatar img { width: 36px; height: 36px; }
-.wf-comment-item .wf-comment-body { line-height: 21px; position: relative; flex: 1; width: calc(100% - 60px); }
-.wf-comment-item .wf-comment-body header { display: flex; color: #656c7a; justify-content: space-between; }
-.wf-comment-item .wf-comment-body header .header-content a.username { font-size: 13px; font-weight: 700; text-decoration: none; color: rgba(40, 140, 228, .85); }
-.wf-comment-item .wf-comment-body header .header-content a.username:hover { color: #288ce4; }
-.wf-comment-item .wf-comment-body header .header-content .meta { font-size: 12px; }
-.wf-comment-item .wf-comment-body header .header-content .parent-link { font-size: 12px; }
-.wf-comment-item .wf-comment-body header .header-content .parent-link:hover { color: black; }
-.wf-comment-item .wf-comment-content { padding-bottom: 3px; }
-.wf-comment-item .less { overflow: hidden; max-height: 180px; margin-bottom: 10px; }
-.wf-comment-item footer { font-size: 13px; display: flex; align-items: center; }
-.wf-comment-item footer .like-count, .wf-comment-item footer .dislike-count { color: rgba(237, 63, 20, .8); }
-.wf-comment-item footer .separator { font-weight: 500; margin: 0 6px; color: #e7e9ee; }
-.wf-comment-item footer a { font-weight: 500; text-decoration: none; color: rgba(237, 63, 20, .8); }
-.wf-comment-item footer a:hover { color: #ed3f14; }
-.wf-comment-item footer .inactive { color: #929292; filter: grayscale(100%); }
-.wf-comment-item footer .disabled { cursor: not-allowed; }
-.wf-comment-item .wf-reply-button { margin-left: 12px; }
-.wf-comment-item .wf-delete-button { color: rgba(237, 63, 20, .8); }
-.wf-comment-item .wf-delete-button:hover { color: #ed3f14; }
-.wf-comment-item .ivu-btn { padding: 4px; }
-</style>
