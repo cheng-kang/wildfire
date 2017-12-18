@@ -1,5 +1,7 @@
 # Wildfire [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
 
+[English Doc](https://github.com/cheng-kang/wildfire#wildfire-) | [中文说明文档](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
+
 <p>
 <!-- <p align="center"> -->
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/wildfire-logo.svg" height="60">
