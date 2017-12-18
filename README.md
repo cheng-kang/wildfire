@@ -1,4 +1,4 @@
-# Wildfire
+# Wildfire [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
 
 <p>
 <!-- <p align="center"> -->
@@ -34,6 +34,8 @@ A drop-in replacement for other comment systems.
 ### 2. Add Wildfire to your website
 
 Read the slides: [How to add Wildfire to your website?](http://slides.com/chengkang/how-to-wildfire#/)
+
+*Note: Since `Wildfire` is developed with `Vue.js`, you can use it as a **Vue component** in your Vue project. E.g. [exmaple 3](https://github.com/cheng-kang/wildfire/tree/master/examples/3).*
 
 Quick links:
 
