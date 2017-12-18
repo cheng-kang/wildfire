@@ -17,22 +17,11 @@ A drop-in replacement for other comment systems.
 
 *Note: A live demo is available at http://chengkang.me/wildfire*
 
-## Screenshots
+## Links
 
-<p align="center">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/screenshots/1.png" height="260">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/screenshots/2.png" height="260">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/screenshots/3.png" height="260">
-</p>
-<p align="center">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/screenshots/4.png" height="260">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/screenshots/5.png" height="260">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/screenshots/6.png" height="260">
-</p>
-<p align="center">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/screenshots/7.png" height="260">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/screenshots/8.png" height="260">
-</p>
+1. [Usage](#usage)
+2. [Features](#features)
+3. [Screenshots](#screenshots)
 
 ## Usage
 
@@ -83,6 +72,19 @@ Quick links:
       - [x] Avatar
     - Personal Center:
       - [x] Notification
+
+## Screenshots
+
+<p align="center">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/1.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/2.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/3.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/4.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/5.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/6.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/7.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/8.png" height="320">
+</p>
 
 ## License
 
