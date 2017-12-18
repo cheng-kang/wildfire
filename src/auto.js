@@ -140,11 +140,11 @@
 
   function startWildfire () {
     console.log('Starting Wildfire...')
-    loadCSS(`https://unpkg.com/@chengkang/wildfire/dist/${databaseProvider}/static/wildfire.css`)
+    loadCSS(`https://unpkg.com/wildfire/dist/${databaseProvider}/static/wildfire.css`)
     let jsList = []
     if (!window.Vue) { jsList.push('https://unpkg.com/vue') }
     jsList.push(databaseProvider === 'firebase' ? 'https://www.gstatic.com/firebasejs/4.6.2/firebase.js' : 'https://cdn.wilddog.com/sdk/js/2.5.17/wilddog.js')
-    jsList.push(`https://unpkg.com/@chengkang/wildfire/dist/${databaseProvider}/wildfire.min.js`)
+    jsList.push(`https://unpkg.com/wildfire/dist/${databaseProvider}/wildfire.min.js`)
 
     loadJSSequentially(jsList, () => {
       window.wildfire.default.install(window.Vue, {
