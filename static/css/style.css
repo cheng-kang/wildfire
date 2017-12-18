@@ -104,13 +104,13 @@ a.button.white {
   display: flex;
   align-items: flex-end;
 }
-.logos .wf {
+.logos .wildfire {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: -3px;
 }
-.logos .wf span {
+.logos .wildfire span {
   margin-top: 8px;
   font-size: 1.2em;
   font-weight: 400;
