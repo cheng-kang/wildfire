@@ -1,5 +1,7 @@
 # Wildfire 野火评论系统 [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
 
+[English Doc](https://github.com/cheng-kang/wildfire#wildfire-) | [中文说明文档](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
+
 <p>
 <!-- <p align="center"> -->
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/wildfire-logo.svg" height="60">
@@ -9,7 +11,7 @@
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/firebase.png" height="45">
 </p>
 
-又一个评论系统！
+如果你的网站需要一个方便的评论系统的话，不妨试试 Wildfire 野火评论系统。
 
 > *“星星之火可以燎原”。*
 > 
