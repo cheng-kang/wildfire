@@ -7,7 +7,8 @@
         },
         ".write": "auth.uid === $uid || root.child('users/'+auth.uid+'/isAdmin').val() === true"
       },
-      ".read": true
+      ".read": true,
+      ".indexOn": ["email"]
     },
     "pages": {
       ".write": true,
@@ -36,15 +37,18 @@
       ".indexOn": "uid"
     },
     "reported": {
-      "comments": {
-        "$commentId": {
-          "$uid": {
-            ".write": "root.child('users/'+auth.uid+'/isAdmin').val() === true || (!data.exists() && $uid === auth.uid)"
-          },
-          ".write": "root.child('users/'+auth.uid+'/isAdmin').val() === true"
-        }
+      "$commentId": {
+        "$uid": {
+          ".write": "root.child('users/'+auth.uid+'/isAdmin').val() === true || (!data.exists() && $uid === auth.uid)",
+          ".read": "root.child('users/'+auth.uid+'/isAdmin').val() === true || $uid === auth.uid"
+        },
+        ".write": "root.child('users/'+auth.uid+'/isAdmin').val() === true"
       },
       ".read": "root.child('users/'+auth.uid+'/isAdmin').val() === true"
+    },
+    "ban": {
+      ".write": "root.child('users/'+auth.uid+'/isAdmin').val() === true",
+      ".read": true
     },
     ".write": "root.child('users/'+auth.uid+'/isAdmin').val() === true",
     ".read": false

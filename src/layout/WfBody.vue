@@ -134,7 +134,6 @@ export default {
         const usernameLC = user.displayName.toLowerCase()
         const emailLC = user.email.toLowerCase()
         const mentioningUsernameLC = this.mentioningUsername.toLowerCase()
-        console.log(usernameLC, emailLC, mentioningUsernameLC)
         return usernameLC.indexOf(mentioningUsernameLC) !== -1 || emailLC.indexOf(mentioningUsernameLC) !== -1
       })
     }
