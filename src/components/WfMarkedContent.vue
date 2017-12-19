@@ -4,6 +4,7 @@
 
 <script>
 import Vue from 'vue'
+import sanitizeHtml from 'sanitize-html'
 import '../assets/highlight.css'
 import '../assets/highlight.dark.css'
 import hljs from '../common/loadHighlightjs'
@@ -17,24 +18,33 @@ export default {
   },
   methods: {
     compile () {
-      const _this = this
-      var Component = Vue.extend({
-        template: `<div> ${_this.markdown(_this.content)} </div>`,
+      const cleanedContent = this.markdown(sanitizeHtml(this.content, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ]),
+        allowedAttributes: {
+          '*': ['alt', 'title'],
+          a: [ 'href', 'name', 'target' ],
+          // We don't currently allow img itself by default, but this
+          // would make sense if we did
+          img: [ 'src', 'width', 'height' ]
+        }
+      }))
+      const Component = Vue.extend({
+        template: `<div> ${cleanedContent} </div>`,
         methods: {
           showUserInfo (email) {
             Bus.$emit('ShowUserInfo', email)
           }
         }
       })
-      var markedComponent = new Component().$mount()
+      const markedComponent = new Component().$mount()
       this.$refs['markedContent'].appendChild(markedComponent.$el)
     },
     markdown (content) {
-      var render = new marked.Renderer()
+      const render = new marked.Renderer()
       render.link = (href, title, text) => {
         if (text.indexOf('@') === 0) {
           const email = href
-          return `<a @click="showUserInfo('${email}')">${text}</a>`
+          return `<a @click="showUserInfo('${email}')" title="${email}">${text}</a>`
         } else {
           return `<a href="${href}" alt="${title}">${text}</a>`
         }
