@@ -6,4 +6,10 @@
 
 *Date: 2017-12-19*
 
+**New Features**
+
 - Added HTML sanitizor to avoid XSS attack.
+
+**Fixes**
+
+- Minor styling issues
