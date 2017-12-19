@@ -17,17 +17,29 @@ export default {
     this.compile()
   },
   methods: {
+    validateEmail (str) {
+      return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test((str || '').toLowerCase())
+    },
     compile () {
-      const cleanedContent = this.markdown(sanitizeHtml(this.content, {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ]),
+      const cleanedContent = sanitizeHtml(this.markdown(this.content), {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'span' ]),
         allowedAttributes: {
-          '*': ['alt', 'title'],
-          a: [ 'href', 'name', 'target' ],
-          // We don't currently allow img itself by default, but this
-          // would make sense if we did
+          '*': ['alt', 'title', 'class'],
+          a: [ 'href', 'name', 'target', '@click' ],
           img: [ 'src', 'width', 'height' ]
+        },
+        transformTags: {
+          'a': (tagName, attribs) => {
+            const { title } = attribs
+            return {
+              tagName: 'a',
+              attribs: {
+                '@click': this.validateEmail(title) ? `showUserInfo('${title}')` : false
+              }
+            }
+          }
         }
-      }))
+      })
       const Component = Vue.extend({
         template: `<div> ${cleanedContent} </div>`,
         methods: {
@@ -44,7 +56,7 @@ export default {
       render.link = (href, title, text) => {
         if (text.indexOf('@') === 0) {
           const email = href
-          return `<a @click="showUserInfo('${email}')" title="${email}">${text}</a>`
+          return `<a title="${email}">${text}</a>`
         } else {
           return `<a href="${href}" alt="${title}">${text}</a>`
         }
