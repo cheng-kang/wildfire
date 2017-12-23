@@ -13,7 +13,7 @@
 .wf .thumbnail { line-height: 150px; display: inline-block; overflow: hidden; width: 150px; height: 150px; cursor: pointer; border: 1px solid #fff; border-radius: 4px; background: 0 0; background-repeat: no-repeat; background-position: 50%; background-size: 100%; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }
 .wf .top-reply-area { display: flex; flex-direction: row; margin-left: 60px; justify-content: space-between; }
 .wf .top-reply-area div { font-size: 10px; display: flex; }
-.wf .top-reply-area .tool-bar { max-height: 32px; overflow-y: scroll; margin-right: 10px; flex: 1; }
+.wf .top-reply-area .tool-bar { max-height: 32px; overflow-y: auto; margin-right: 10px; flex: 1; }
 .wf .ivu-spin-text div { display: inline-block; }
 .wf .ivu-switch-checked .ivu-switch-inner { font-size: 8px; left: 4px; }
 .wf .ivu-switch-inner { font-size: 8px; left: 12.5px; }
@@ -49,8 +49,8 @@
 .wf .wf-header { margin-bottom: 30px; }
 .wf .wf-header .ivu-menu { background-color: transparent; }
 .wf .wf-header .wf-nav-user { display: inline-block; padding: 0 20px; float: left; height: 100%; }
-@media only screen 
-and (max-device-width:321px) 
+@media only screen
+and (max-device-width:321px)
 and (-webkit-min-device-pixel-ratio:2) {
   .wf .wf-header .wf-nav-user { margin: unset; }
 }
@@ -151,8 +151,8 @@ and (-webkit-min-device-pixel-ratio:2) {
 
 
 /* If smaller than or equal to iPhone 6 size */
-@media only screen 
-and (max-device-width:375px) 
+@media only screen
+and (max-device-width:375px)
 and (-webkit-min-device-pixel-ratio:2) {
   /* display buttons vertically */
   .wf .wf-personal-center .buttons .ivu-btn, .wf .wf-report-management .buttons .ivu-btn { padding: 0; }
