@@ -88,6 +88,7 @@
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/6.png" height="320">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/7.png" height="320">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/8.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/6fada41b/resources/screenshots/wldfire-dark-theme.png" height="320">
 </p>
 
 ## 开源许可协议
