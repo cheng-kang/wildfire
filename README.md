@@ -1,5 +1,8 @@
 # Wildfire [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
 
+> Note: The official NPM package page for this project `wildfire` is https://www.npmjs.com/package/wildfire.
+> ~~The old package `@chengkang/wildfire` (https://www.npmjs.com/package/@chengkang/wildfire) has been deprecated.~~
+
 [English Doc](https://github.com/cheng-kang/wildfire#wildfire-) | [中文说明文档](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
 
 <p>
