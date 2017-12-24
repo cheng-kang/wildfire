@@ -56,7 +56,7 @@
 2. 作为 UMD 模块使用
     - `wildfire.min.js`: 
         - [exmaple 3](https://github.com/cheng-kang/wildfire/tree/master/examples/3)
-### 自定义
+### 3. 自定义
 
 以下是一个示例，请参看注释部分：
 
