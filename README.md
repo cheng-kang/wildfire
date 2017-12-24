@@ -57,7 +57,7 @@ Quick links:
     - `wildfire.min.js`: 
         - [exmaple 3](https://github.com/cheng-kang/wildfire/tree/master/examples/3)
 
-### *Customization*
+### 3. Customization
 
 Here is an example.
 
