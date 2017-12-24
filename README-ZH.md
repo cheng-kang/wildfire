@@ -17,7 +17,7 @@
 > 
 > *—— 阿利盖利·但丁，《天堂》*
 
-*注意：点击查看在线示例 http://chengkang.me/wildfire*
+*注意：点击查看在线示例 [Firebase 示例](http://chengkang.me/wildfire) | [野狗示例](http://chengkang.me/wildfire/examples/demo-zh.html)。建议国内用户查看野狗示例 ;-)。*
 
 ## 链接
 
