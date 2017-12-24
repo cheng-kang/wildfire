@@ -1,9 +1,5 @@
 # Wildfire [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
 
-> Note: The official NPM package page for this project `wildfire` is https://www.npmjs.com/package/wildfire.
-
-> ~~The old package `@chengkang/wildfire` (https://www.npmjs.com/package/@chengkang/wildfire) has been deprecated.~~
-
 [English Doc](https://github.com/cheng-kang/wildfire#wildfire-) | [中文说明文档](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
 
 <p>
@@ -22,6 +18,11 @@ A drop-in replacement for other comment systems.
 > *—— Dante Alighieri, Paradiso*
 
 *Note: Live demos are available at [Demo with Firebase](http://chengkang.me/wildfire) | [Demo with Wildfire](http://chengkang.me/wildfire/examples/demo-zh.html). We recommend users from `mainland China` to check the later one.*
+
+<br><br><br>
+> *The official NPM package page for this project `wildfire` is https://www.npmjs.com/package/wildfire.*
+> 
+> *~~The old package `@chengkang/wildfire` (https://www.npmjs.com/package/@chengkang/wildfire) has been deprecated.~~*
 
 ## Links
 
