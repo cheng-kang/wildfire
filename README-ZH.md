@@ -56,6 +56,38 @@
 2. 作为 UMD 模块使用
     - `wildfire.min.js`: 
         - [exmaple 3](https://github.com/cheng-kang/wildfire/tree/master/examples/3)
+### 自定义
+
+以下是一个示例，请参看注释部分：
+
+```html
+<script>
+  // 你可以自定义一些配置
+  //
+  // databaseProvider: 必须为 'wilddog' 或者 'firebase'
+  // databaseConfig: 请从你的数据库控制台复制过来。
+  // pageURL(可选): 默认为当前页面的 URL。
+  // pageTitle(可选): 默认为当前页面的 title。
+  // theme(可选): 'light'（默认）或者 'dark'。
+  // locale(可选): 'en'（默认）或者 'zh-CN'
+  // defaultAvatarURL(可选): 默认头像是一个可爱的消防员 :-D
+  var wildfireConfig = () => ({
+    databaseProvider: 'firebase',
+    databaseConfig: {
+        apiKey: "AIzaSyA962a46AZyKFhyhEvBy3L2sjaNmwN5a2Q",
+        authDomain: "chengkang-me.firebaseapp.com",
+        databaseURL: "https://chengkang-me.firebaseio.com",
+        projectId: "chengkang-me",
+        storageBucket: "chengkang-me.appspot.com",
+        messagingSenderId: "1040071529318"
+    },
+    theme: 'dark',
+    locale: 'zh-CN',
+    defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg'
+  })
+</script>
+<script src="https://unpkg.com/wildfire/dist/wildfire.auto.js"></script>
+```
 
 ## 功能
 
