@@ -1,9 +1,5 @@
 # Wildfire 野火评论系统 [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
 
-> 请注意：`wildfire` 项目的正式 NPM 页面为：https://www.npmjs.com/package/wildfire 。
-
-> ~~这个旧的页面 `@chengkang/wildfire` (https://www.npmjs.com/package/@chengkang/wildfire) 已被弃用。~~
-
 [English Doc](https://github.com/cheng-kang/wildfire#wildfire-) | [中文说明文档](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
 
 <p>
@@ -22,6 +18,12 @@
 > *—— 阿利盖利·但丁，《天堂》*
 
 *注意：点击查看在线示例 [Firebase 示例](http://chengkang.me/wildfire) | [野狗示例](http://chengkang.me/wildfire/examples/demo-zh.html)。建议国内用户查看野狗示例 ;-)。*
+
+<br><br><br>
+
+> `wildfire` 项目的正式 NPM 页面为：https://www.npmjs.com/package/wildfire 。
+>
+> ~~这个旧的页面 `@chengkang/wildfire` (https://www.npmjs.com/package/@chengkang/wildfire) 已被弃用。~~
 
 ## 链接
 
