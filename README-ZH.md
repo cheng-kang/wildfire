@@ -73,17 +73,12 @@
   // defaultAvatarURL(可选): 默认头像是一个可爱的消防员 :-D
   var wildfireConfig = () => ({
     databaseProvider: 'firebase',
-    databaseConfig: {
-        apiKey: "AIzaSyA962a46AZyKFhyhEvBy3L2sjaNmwN5a2Q",
-        authDomain: "chengkang-me.firebaseapp.com",
-        databaseURL: "https://chengkang-me.firebaseio.com",
-        projectId: "chengkang-me",
-        storageBucket: "chengkang-me.appspot.com",
-        messagingSenderId: "1040071529318"
-    },
-    theme: 'dark',
-    locale: 'zh-CN',
-    defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg'
+    databaseConfig: YOUR_DATABASE_CONFIG,
+    // pageURL: YOUR_PAGE_URL,
+    // pageTitle: YOUR_PAGE_TITLE,
+    // theme: 'light',
+    // locale: 'en',
+    // defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg'
   })
 </script>
 <script src="https://unpkg.com/wildfire/dist/wildfire.auto.js"></script>
