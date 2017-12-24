@@ -17,7 +17,7 @@ A drop-in replacement for other comment systems.
 > 
 > *—— Dante Alighieri, Paradiso*
 
-*Note: A live demo is available at http://chengkang.me/wildfire*
+*Note: Live demos are available at [Demo with Firebase](http://chengkang.me/wildfire) | [Demo with Wildfire](http://chengkang.me/wildfire/examples/demo-zh.html). We recommend users from `mainland China` to check the later one.*
 
 ## Links
 
