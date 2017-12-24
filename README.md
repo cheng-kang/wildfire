@@ -57,6 +57,35 @@ Quick links:
     - `wildfire.min.js`: 
         - [exmaple 3](https://github.com/cheng-kang/wildfire/tree/master/examples/3)
 
+### *Customization*
+
+Here is an example.
+
+```html
+<script>
+  // Replace the configs with your own configs
+  //
+  // databaseProvider: (String) 'wilddog' or 'firebase'
+  // databaseConfig: (Object) the config object copied from your database console
+  // pageURL(optional): (String) default value is current URL
+  // pageTitle(optional): (String) default value is current document title
+  // theme(optional): (String) 'light'(default) or 'dark'
+  // locale(optional): (String) 'en'(default) or 'zh-CN'
+  // defaultAvatarURL(optional): (String) default avatar is a cute fire fighter :-D
+  //
+  var wildfireConfig = () => ({
+    databaseProvider: 'firebase',
+    databaseConfig: YOUR_DATABASE_CONFIG,
+    // pageURL: YOUR_PAGE_URL,
+    // pageTitle: YOUR_PAGE_TITLE,
+    // theme: 'light',
+    // locale: 'en',
+    // defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg'
+  })
+</script>
+<script src="https://unpkg.com/wildfire/dist/wildfire.auto.js"></script>
+```
+
 ## Features
 
 1. For site owners:
