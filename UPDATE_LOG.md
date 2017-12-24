@@ -2,6 +2,15 @@
 
 ## Beta Versions
 
+### v0.2.1
+
+*Date: 2017-12-24*
+
+**Changes**
+
+- Updated CDN link for Vue in `wildfire.auto.js`
+- Fixed minor styling issue. 
+
 ### v0.2.0
 
 *Date: 2017-12-19*

@@ -1,6 +1,6 @@
 {
   "name": "wildfire",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A drop-in replacement for other comment systems.",
   "keywords": [
     "wildfire",

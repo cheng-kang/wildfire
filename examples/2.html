@@ -21,27 +21,27 @@
     <wildfire></wildfire>
   </div>
   <script src="https://unpkg.com/vue"></script>
-  <script src="https://cdn.wilddog.com/sdk/js/2.5.17/wilddog.js"></script>
+  <!-- <script src="https://cdn.wilddog.com/sdk/js/2.5.17/wilddog.js"></script> -->
   <!-- <script src="../dist/wilddog/wildfire.min.js"></script> -->
-  <script src="https://unpkg.com/wildfire/dist/wilddog/wildfire.min.js"></script>
+  <!-- <script src="https://unpkg.com/wildfire/dist/wilddog/wildfire.min.js"></script> -->
 
-  <!-- <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
   <!-- <script src="https://unpkg.com/wildfire/dist/firebase/wildfire.min.js"></script> -->
-  <!-- <script src="../dist/firebase/wildfire.min.js"></script> -->
+  <script src="../dist/firebase/wildfire.min.js"></script>
   <script type="text/javascript">
     wildfire.default.install(Vue, {
       // databaseProvider: 'firebase',
-      databaseConfig: {
-        siteId: 'wd2168973289ifdmcg'
-      },
       // databaseConfig: {
-      //   apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
-      //   authDomain: 'wild-fire-ee770.firebaseapp.com',
-      //   databaseURL: 'https://wild-fire-ee770.firebaseio.com',
-      //   projectId: 'wild-fire-ee770',
-      //   storageBucket: 'wild-fire-ee770.appspot.com',
-      //   messagingSenderId: '655484997793'
+      //   siteId: 'wd2168973289ifdmcg'
       // },
+      databaseConfig: {
+        apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+        authDomain: 'wild-fire-ee770.firebaseapp.com',
+        databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+        projectId: 'wild-fire-ee770',
+        storageBucket: 'wild-fire-ee770.appspot.com',
+        messagingSenderId: '655484997793'
+      },
       pageURL: 'http://chengkang.me/wildfire',
       pageTitle: 'Wildfire Demo',
       theme: 'light',
