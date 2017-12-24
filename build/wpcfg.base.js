@@ -85,7 +85,6 @@ let webpackConfig = {
   },
   devtool: config.productionSourceMap ? '#source-map' : false,
   plugins: [
-    // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new HardSourceWebpackPlugin(),
     new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en-gb|zh-cn/),
     new webpack.DefinePlugin({
@@ -103,7 +102,6 @@ let webpackConfig = {
           warnings: false,
           drop_console: true
         },
-        warnings: false,
         sourceMap: true
       }
     }),

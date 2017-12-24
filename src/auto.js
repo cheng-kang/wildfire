@@ -142,7 +142,7 @@
     console.log('Starting Wildfire...')
     loadCSS(`https://unpkg.com/wildfire/dist/${databaseProvider}/static/wildfire.css`)
     let jsList = []
-    if (!window.Vue) { jsList.push('https://unpkg.com/vue') }
+    if (!window.Vue) { jsList.push('https://cdn.jsdelivr.net/npm/vue') }
     jsList.push(databaseProvider === 'firebase' ? 'https://www.gstatic.com/firebasejs/4.6.2/firebase.js' : 'https://cdn.wilddog.com/sdk/js/2.5.17/wilddog.js')
     jsList.push(`https://unpkg.com/wildfire/dist/${databaseProvider}/wildfire.min.js`)
 
