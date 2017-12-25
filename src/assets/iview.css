@@ -64,10 +64,10 @@
 .wf button, .wf input, .wf select, .wf textarea { font-family: inherit; font-size: inherit; line-height: inherit; }
 .wf ol, .wf ul { list-style: none; }
 .wf input::-ms-clear, .wf input::-ms-reveal { display: none; }
-.wf a { color: #333; background: 0 0; text-decoration: none; outline: 0; cursor: pointer; transition: color 0.2s ease; }
+.wf a { color: #333; background: 0 0; text-decoration: none !important; border-bottom: unset !important; outline: 0; cursor: pointer; transition: color 0.2s ease; }
 .wf a:hover { color: #8a8a8a; }
 .wf a:active { color: #8a8a8a; }
-.wf a:active, .wf a:hover { outline: 0; text-decoration: none; }
+.wf a:active, .wf a:hover { outline: 0; text-decoration: none !important; border-bottom: unset !important; background-image: unset !important; background-color: transparent !important; }
 .wf a[disabled] { color: #ccc; cursor: not-allowed; pointer-events: none; }
 .wf code, .wf kbd, .wf pre, .wf samp { font-family: Consolas, Menlo, Courier, monospace; }
 @font-face { font-family: Ionicons; src: url(fonts/ionicons.ttf?v=2.0.0) format("truetype"); font-weight: 400; font-style: normal; }
