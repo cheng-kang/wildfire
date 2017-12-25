@@ -35,6 +35,7 @@
     3. [自定义](#3-%E8%87%AA%E5%AE%9A%E4%B9%89)
 2. [功能](#%E5%8A%9F%E8%83%BD)
 3. [截图](#%E6%88%AA%E5%9B%BE)
+4. [更新日志](#更新日志)
 
 ## 使用方法
 
@@ -128,6 +129,10 @@
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/8.png" height="320">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/6fada41b/resources/screenshots/wldfire-dark-theme.png" height="320">
 </p>
+
+## 更新日志
+
+[Update Log](https://github.com/cheng-kang/wildfire/wiki/Update-Log) | [更新日志](https://github.com/cheng-kang/wildfire/wiki/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
 
 ## 开源许可协议
 
