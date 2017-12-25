@@ -4,7 +4,7 @@
 
 ![](https://cdn.rawgit.com/cheng-kang/wildfire/7d609949/resources/screenshots/home-page.png)
 
-**全新的 [Wildfire 主页](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)) 已经启用了，快去那儿看看详细的文档吧。**
+**全新的 [Wildfire 主页](https://wildfire.js.org/#/zh-cn/) ([https://wildfire.js.org/#/zh-cn/](https://wildfire.js.org/#/zh-cn/)) 已经启用了，快去那儿看看详细的文档吧。**
 
 **Please visit the brand new [Wildfire Home Page](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)). Detailed documentation is available.**
 
