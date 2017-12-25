@@ -1,4 +1,6 @@
-# Wildfire [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
+# Wildfire [![](https://img.shields.io/npm/v/wildfire.svg?style=flat-square)](https://www.npmjs.com/wildfire)
+
+> A drop-in replacement for other comment systems.
 
 [中文版 README.md](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
 
@@ -6,9 +8,7 @@
 
 **全新的 [Wildfire 主页](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)) 已经启用了，快去那儿看看详细的文档吧。**
 
-> A drop-in replacement for other comment systems.
-
-## Hello, world!
+## Intro
 
 `wildfire` aims to be an **it-just-works** comment system for personal websites, like your `Hexo` blogs. It takes advantage of free real-time databases ([Firebase](https://firebase.google.com) and [Wilddog](https://wilddog.com)) to store your comments data, and provide you real-time communicating experience.
 
