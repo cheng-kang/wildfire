@@ -29,6 +29,9 @@ A drop-in replacement for other comment systems.
 ## Links
 
 1. [Usage](#usage)
+    1. [Set up your database](#1-set-up-your-database)
+    2. [Add Wildfire to your website](#2-add-wildfire-to-your-website)
+    3. [Customization](#3-customization)
 2. [Features](#features)
 3. [Screenshots](#screenshots)
 
