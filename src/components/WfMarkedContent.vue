@@ -25,17 +25,20 @@ export default {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'span' ]),
         allowedAttributes: {
           '*': ['alt', 'title', 'class'],
-          a: [ 'href', 'name', 'target', '@click' ],
+          a: [ 'href', 'target', '@click' ],
           img: [ 'src', 'width', 'height' ]
         },
         transformTags: {
           'a': (tagName, attribs) => {
-            const { title } = attribs
+            const { title, href, alt } = attribs
+            let attrs = { target: '_blank' }
+            if (this.validateEmail(title)) { attrs['@click'] = `showUserInfo('${title}')` }
+            if (title) { attrs['title'] = title }
+            if (href) { attrs['href'] = href }
+            if (alt) { attrs['alt'] = alt }
             return {
               tagName: 'a',
-              attribs: {
-                '@click': this.validateEmail(title) ? `showUserInfo('${title}')` : false
-              }
+              attribs: attrs
             }
           }
         }
