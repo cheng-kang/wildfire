@@ -4,7 +4,7 @@
 
 ## Hello, world!
 
-`wildfire` aims to be an **it-just-works** comment system for personal websites, like your `Hexo` blogs. It takes advantage of free real-time databases ([[Firebase](https://firebase.google.com) and Wilddog](https://wilddog.com)) to store your comments data, and provide you real-time communicating experience.
+`wildfire` aims to be an **it-just-works** comment system for personal websites, like your `Hexo` blogs. It takes advantage of free real-time databases ([Firebase](https://firebase.google.com) and [Wilddog](https://wilddog.com)) to store your comments data, and provide you real-time communicating experience.
 
 
 Continue reading [Get Started](preface.md), and start your journey with `wildfire`!
