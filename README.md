@@ -2,11 +2,13 @@
 
 > A drop-in replacement for other comment systems.
 
-[中文版 README.md](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
+![](https://cdn.rawgit.com/cheng-kang/wildfire/7d609949/resources/screenshots/home-page.png)
 
 **Please visit the brand new [Wildfire Home Page](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)). Detailed documentation is available.**
 
 **全新的 [Wildfire 主页](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)) 已经启用了，快去那儿看看详细的文档吧。**
+
+*点此查看 [中文版 README.md](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)。*
 
 ## Intro
 
