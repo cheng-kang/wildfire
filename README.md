@@ -1,6 +1,6 @@
 # Wildfire [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
 
-> If you are using `Wildfire`, please share your website here: [这些网站正在使用 Wildfire 野火评论系统！](https://github.com/cheng-kang/wildfire/issues/8) :-D.
+> If you are using `Wildfire`, please share your website here: [We are using Wildfire!](https://github.com/cheng-kang/wildfire/issues/9) :-D.
 
 [English Doc](https://github.com/cheng-kang/wildfire#wildfire-) | [中文说明文档](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
 
