@@ -3454,7 +3454,10 @@ function renderMixin (proto) {
     text && this._renderTo('nav', this.compiler.compile(text));
 
     // Fix iOS `:hover` not working issue
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    console.log(navigator.userAgent)
+    console.log(isIOS)
+    if (isIOS) {
       const navEl = find('nav');
       const navItems = navEl.children[0].children;
       for (let i = navItems.length - 1; i >= 0; i--) {
