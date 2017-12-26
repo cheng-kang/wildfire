@@ -31,4 +31,6 @@
 
 ## 分享你的网站
 
-**如果你正在使用 `wildfire`，请在这里分享你的网站：[我们正在使用 Wildfire 野火评论系统！ ](https://github.com/cheng-kang/wildfire/issues/8)。** 我们会尽快将你的网站链接添加到我们的 [展示页面](https://github.com/cheng-kang/wildfire/wiki/%E6%88%91%E4%BB%AC%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8-Wildfire-%E9%87%8E%E7%81%AB%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%EF%BC%81)。
+**如果你正在使用 `wildfire`，请在这里分享你的网站：[《我们正在使用 Wildfire 野火评论系统！》](https://github.com/cheng-kang/wildfire/issues/8)。**
+
+我们会尽快将你的网站链接添加到我们的[展示页面](https://github.com/cheng-kang/wildfire/wiki/%E6%88%91%E4%BB%AC%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8-Wildfire-%E9%87%8E%E7%81%AB%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%EF%BC%81)。

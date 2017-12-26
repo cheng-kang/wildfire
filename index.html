@@ -33,6 +33,12 @@
     .sidebar-nav > ul > li > a {
       font-weight: 700;
     }
+    .wildfire_thread {
+      margin: 0 auto !important;
+      max-width: 800px !important;
+      padding: 30px 15px 40px !important;
+      position: relative !important;
+    }
     /* ![](linear-gradient(to left bottom, #ebedee 0%, #fbfbfb 100%)) */
   </style>
 </head>
@@ -68,12 +74,62 @@
       plugins: [
         function(hook, vm) {
           hook.beforeEach(function (html) {
+            // const _wfths = document.getElementsByClassName('wildfire_thread')
+            // for (var i = 0; i < _wfths.length; i++) { _wfths[i].parentNode.removeChild(_wfths[i]) }
+            // const _wfjs = document.getElementById('wfjs')
+            // if (_wfjs) { wfjs.parentNode.removeChild(_wfjs)}
+
             var url = 'https://github.com/cheng-kang/wildfire/tree/gh-pages' + vm.route.file
             var editHtml = '[:memo: Edit Document](' + url + ')\n'
             return html
               + '\n----\n'
               + 'Last modified {docsify-updated} '
               + editHtml
+          }),
+          hook.doneEach(function() {
+            // const wfth = document.createElement('div')
+            // wfth.className = 'wildfire_thread'
+
+            // const mainContent = document.getElementById('main')
+            // mainContent.appendChild(wfth)
+
+            // let wfjs = document.createElement('script')
+            // wfjs.src = 'https://unpkg.com/wildfire/dist/wildfire.auto.js'
+            // document.body.appendChild(wfjs)
+          }),
+          hook.mounted(function() {
+            if (window.location.hash.substring(2,7) === 'zh-cn') {
+              window.wildfireConfig = () => ({
+                databaseProvider: 'wilddog',
+                databaseConfig: {
+                  siteId: 'wd2168973289ifdmcg'
+                },
+                locale: 'zh-CN'
+              })
+            } else {
+              window.wildfireConfig = () => ({
+                databaseProvider: 'firebase',
+                databaseConfig: {
+                  apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+                  authDomain: 'wild-fire-ee770.firebaseapp.com',
+                  databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+                  projectId: 'wild-fire-ee770',
+                  storageBucket: 'wild-fire-ee770.appspot.com',
+                  messagingSenderId: '655484997793'
+                },
+                locale: 'en'
+              })
+            }
+
+            const wfth = document.createElement('div')
+            wfth.className = 'wildfire_thread'
+
+            const mainContent = document.getElementById('main')
+            mainContent.parentNode.appendChild(wfth)
+
+            let wfjs = document.createElement('script')
+            wfjs.src = 'https://unpkg.com/wildfire/dist/wildfire.auto.js'
+            document.body.appendChild(wfjs)
           })
         }
       ]

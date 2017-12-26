@@ -1,3 +1,3 @@
-- Translations
+- 多语言
   - [:cn: 中文](https://wildfire.js.org/#/zh-cn/)
   - [:uk: English](https://wildfire.js.org/)

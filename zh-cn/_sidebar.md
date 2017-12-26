@@ -1,4 +1,4 @@
-- [简介](/zh-cn/readme.md)
+- [简介](/zh-cn/readme.md#简介)
 - [起步](/zh-cn/preface.md)
     + [前言](/zh-cn/preface.md)
     + [使用说明](/zh-cn/usage.md)

@@ -31,4 +31,6 @@ You can report issues at: [https://github.com/cheng-kang/wildfire/issues](https:
 
 ## Share your website
 
-**If you are using `wildfire`, please share your site at [We are using Wildfire! ](https://github.com/cheng-kang/wildfire/issues/9).** We will add your link to our [Showcase Page](https://github.com/cheng-kang/wildfire/wiki/1.2-We-are-using-Wildfire!).
+**If you are using `wildfire`, please share your site at [We are using Wildfire! ](https://github.com/cheng-kang/wildfire/issues/9).** 
+
+We will add your link to our [Showcase Page](https://github.com/cheng-kang/wildfire/wiki/1.2-We-are-using-Wildfire!) ASAP.

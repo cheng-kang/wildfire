@@ -1,4 +1,4 @@
-- [Introduction](readme.md)
+- [Introduction](readme.md#introduction)
 - [Get Started](preface.md)
     + [Preface](preface.md)
     + [Usage](usage.md)
