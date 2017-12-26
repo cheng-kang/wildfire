@@ -1,4 +1,6 @@
 # Wildfire [![](https://img.shields.io/npm/v/wildfire.svg?style=flat-square)](https://www.npmjs.com/wildfire)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcheng-kang%2Fwildfire.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcheng-kang%2Fwildfire?ref=badge_shield)
+
 
 > A drop-in replacement for other comment systems.
 
@@ -86,3 +88,6 @@ We appreciate your kindness!
 ## License
 
 [GNU General Public License v3.0](https://github.com/cheng-kang/wildfire/blob/master/LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcheng-kang%2Fwildfire.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcheng-kang%2Fwildfire?ref=badge_large)
