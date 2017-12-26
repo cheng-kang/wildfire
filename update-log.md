@@ -2,6 +2,15 @@
 
 ## Beta Versions
 
+### v0.3.0
+
+*Date: 2017-12-26*
+
+**New Features**
+
+- Admin Helper Functions: admin helpers are used to reset things and clear unexpected errors. In this release, one helper function is added: reset discussion count of all pages. Check [here]() for more details.
+- `wildfire.count.js`: a new script for getting dicussion total of specific page(s). Check [here]() for more details.
+
 ### v0.2.3
 
 *Date: 2017-12-25*
