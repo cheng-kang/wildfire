@@ -6,6 +6,8 @@
 
 **全新的 [Wildfire 主页](https://wildfire.js.org/#/zh-cn/) ([https://wildfire.js.org/#/zh-cn/](https://wildfire.js.org/#/zh-cn/)) 已经启用了，快去那儿看看详细的文档吧。**
 
+**正在使用 `wildfire 野火评论系统`吗？快来把你的网站分享给其他人吧：[我们正在使用 Wildfire 野火评论系统！](https://github.com/cheng-kang/wildfire/issues/8)！**
+
 **Please visit the brand new [Wildfire Home Page](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)). Detailed documentation is available.**
 
 *Click here to read [English version README.md](https://github.com/cheng-kang/wildfire).*
@@ -27,6 +29,8 @@
 - 站主功能： 
   - 删除评论
   - 通过用户 IP 或 Email 进行屏蔽
+  - [重置所有页面评论数量统计](/zh-cn/admin-helpers.md#_1-reset-discussion-count-for-all-pages)
+  - [获取评论数](/zh-cn/get-discussion-count.md)
 
 **所有用户（匿名及登录用户）：**
 
