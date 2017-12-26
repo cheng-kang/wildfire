@@ -16,16 +16,42 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
   <style type="text/css">
+    section.cover {
+      z-index: 1;
+      height: auto;
+      padding-top: 120px;
+      padding-bottom: 40px;
+    }
+    main {
+      z-index: 3;
+    }
+    aside.sidebar {
+      z-index: 5;
+    }
+    .app-nav {
+      z-index: 7;
+    }
+    .sidebar-toggle {
+      z-index: 7;
+    }
+    .github-corner {
+      z-index: 9;
+    }
+    
     a.github-corner svg path:nth-child(1) {
       fill: #f36938;
     }
     section.cover .cover-main>p:last-child a {
       color: #f36938;
       border-color: #f36938;
+      font-size: 13px;
+      padding: .45em 24px;
     }
     section.cover .cover-main>p:last-child a:last-child {
       background-color: #f36938;
       border-color: #f36938;
+      font-size: 13px;
+      padding: .45em 24px;
     }
     main {
       border-top: 1px solid #eee;

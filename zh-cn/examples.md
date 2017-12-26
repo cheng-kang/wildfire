@@ -48,7 +48,7 @@
 
 https://jsfiddle.net/CHENGKANG/trdgbeeo/
 
-<iframe width="100%" height="300" src="//jsfiddle.net/CHENGKANG/trdgbeeo/embedded/html,css,result/" allowpaymentrequest allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/CHENGKANG/trdgbeeo/embedded/html,result/" allowpaymentrequest allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 #### wilddog/wildfire.min.js
 
@@ -56,7 +56,7 @@ https://jsfiddle.net/CHENGKANG/trdgbeeo/
 
 https://jsfiddle.net/CHENGKANG/99q5oow4/
 
-<iframe width="100%" height="300" src="//jsfiddle.net/CHENGKANG/99q5oow4/embedded/html,css,result/" allowpaymentrequest allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/CHENGKANG/99q5oow4/embedded/html,result/" allowpaymentrequest allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 #### firebase/wildfire.min.js
 
@@ -64,4 +64,4 @@ https://jsfiddle.net/CHENGKANG/99q5oow4/
 
 https://jsfiddle.net/CHENGKANG/zrm1g9s8/
 
-<iframe width="100%" height="300" src="//jsfiddle.net/CHENGKANG/zrm1g9s8/embedded/html,css,result/" allowpaymentrequest allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<iframe width="100%" height="300" src="//jsfiddle.net/CHENGKANG/zrm1g9s8/embedded/html,result/" allowpaymentrequest allowfullscreen="allowfullscreen" frameborder="0"></iframe>

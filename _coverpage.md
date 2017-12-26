@@ -1,4 +1,4 @@
-<img src="_static/images/wildfire.svg" alt="logo" width="160">
+<img src="_static/images/wildfire.svg" alt="logo" width="126">
 
 # wildfire [![](https://img.shields.io/npm/v/wildfire.svg?style=flat-square)](https://www.npmjs.com/wildfire)
 
