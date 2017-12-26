@@ -1,6 +1,6 @@
 {
   "name": "wildfire",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "A drop-in replacement for other comment systems.",
   "keywords": [
     "wildfire",
@@ -44,6 +44,7 @@
     "build": "node build/build.js",
     "build:aio": "webpack --config build/wpcfg.aio.js",
     "build:auto": "webpack --config build/wpcfg.auto.js",
+    "build:count": "webpack --config build/wpcfg.count.js",
     "build:firebase": "webpack --config build/wpcfg.firebase.js",
     "build:wilddog": "webpack --config build/wpcfg.wilddog.js",
     "lint": "eslint --ext .js,.vue src"

@@ -9,6 +9,7 @@ const aioCfg = require('./wpcfg.aio')
 const firebaseCfg = require('./wpcfg.firebase')
 const wilddogCfg = require('./wpcfg.wilddog')
 const autoCfg = require('./wpcfg.auto')
+const countCfg = require('./wpcfg.count')
 
 const build = (list) => {
   if (list.length === 0) { return }
@@ -56,6 +57,10 @@ rm(config.assetsRoot, err => {
     {
       name: 'wildfire.auto',
       config: autoCfg
+    },
+    {
+      name: 'wildfire.count',
+      config: countCfg
     }
   ])
 })

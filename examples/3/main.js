@@ -6,14 +6,18 @@ import wildfire from '../../src/aio'
 
 Vue.config.productionTip = true
 Vue.use(wildfire, {
-  databaseProvider: 'firebase',
+  // databaseProvider: 'firebase',
+  // databaseConfig: {
+  //   apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
+  //   authDomain: 'wild-fire-ee770.firebaseapp.com',
+  //   databaseURL: 'https://wild-fire-ee770.firebaseio.com',
+  //   projectId: 'wild-fire-ee770',
+  //   storageBucket: 'wild-fire-ee770.appspot.com',
+  //   messagingSenderId: '655484997793'
+  // },
+  databaseProvider: 'wilddog',
   databaseConfig: {
-    apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
-    authDomain: 'wild-fire-ee770.firebaseapp.com',
-    databaseURL: 'https://wild-fire-ee770.firebaseio.com',
-    projectId: 'wild-fire-ee770',
-    storageBucket: 'wild-fire-ee770.appspot.com',
-    messagingSenderId: '655484997793'
+    siteId: 'wd2168973289ifdmcg'
   },
   pageURL: 'http://chengkang.me/wildfire',
   pageTitle: 'Wildfire Demo',

@@ -433,25 +433,43 @@ export default {
     confirmDelete () {
       const commentId = this.comment.commentId
 
-      Promise.all([
-        this.$db.ref(`comments/${commentId}`).remove(),
-        this.$db.ref(`votes/${commentId}`).remove(),
-        // Note: [todo] should move "deleting votes" outside of
-        //        this batch. "votes" data shouldn't be writable
-        //        by all users, because site owner cannot recover
-        //        "votes" data with other unmutalbe data.
-        ...(this.isTopLevelComment
-          ? [
-            this.$db.ref(`pages/${this.comment.pageURL}/comments/${commentId}`).remove(),
-            this.$db.ref(`commentReplies/${commentId}`).remove(),
-            ...this.replies.map(reply => this.$db.ref(`comments/${reply.commentId}`).remove())
-          ]
-          : [this.$db.ref(`commentReplies/${this.comment.rootCommentId}/${commentId}`).remove()])
-      ]).then(() => {
-        this.$Message.success(this.$i18next.t('CommentCard.success.deleting_comment'))
-      }).catch(() => {
-        this.$Message.error(this.$i18next.t('CommentCard.error.deleting_comment'))
-      })
+      const executeDeletion = () => {
+        Promise.all([
+          this.$db.ref(`comments/${commentId}`).remove(),
+          this.$db.ref(`votes/${commentId}`).remove(),
+          // Note: [todo] should move "deleting votes" outside of
+          //        this batch. "votes" data shouldn't be writable
+          //        by all users, because site owner cannot recover
+          //        "votes" data with other unmutalbe data.
+          ...(this.isTopLevelComment
+            ? [
+              this.$db.ref(`pages/${this.comment.pageURL}/comments/${commentId}`).remove(),
+              this.$db.ref(`commentReplies/${commentId}`).remove(),
+              ...this.replies.map(reply => this.$db.ref(`comments/${reply.commentId}`).remove())
+            ]
+            : [this.$db.ref(`commentReplies/${this.comment.rootCommentId}/${commentId}`).remove()])
+        ]).then(() => {
+          this.$Message.success(this.$i18next.t('CommentCard.success.deleting_comment'))
+
+          // Update `discussionCount`
+          this.$db.ref(`pages/${this.$config.pageURL}/discussionCount`).transaction(function (currentValue) {
+            const newVal = (currentValue || 0) - deletingDiscussionCount
+            return newVal >= 0 ? newVal : 0
+          })
+        }).catch(() => {
+          this.$Message.error(this.$i18next.t('CommentCard.error.deleting_comment'))
+        })
+      }
+
+      let deletingDiscussionCount = 1
+      if (this.isTopLevelComment) {
+        this.$db.ref(`commentReplies/${commentId}`).once('value').then(snap => {
+          deletingDiscussionCount += snap.val() ? Object.keys(snap.val()).length : 0
+          executeDeletion()
+        })
+      } else {
+        executeDeletion()
+      }
     },
     handleDropdownClick (name) {
       this[name]()

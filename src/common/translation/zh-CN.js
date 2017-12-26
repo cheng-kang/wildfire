@@ -2,9 +2,35 @@ export const langZhCN = {
   common: {
     add_wildfire_to_your_site: '在你的网站使用 Wildfire',
     anonymous_user: '匿名用户',
+    btn: {
+      cancel: '取消',
+      confirm: '确认'
+    },
     tip_prefix: '*小提示：',
     unknown_ip: '未知 IP 地址',
     unknown_user: '未知用户'
+  },
+  AdminHelpers: {
+    btn: {
+      reset: '重置',
+      resetting: '重置中...'
+    },
+    confirm: {
+      resetting_discussion_count_for_all_pages: '确定要重置所有页面的评论数量吗？'
+    },
+    error: {
+      resetting_discussion_count_for_all_pages: '出错了，请稍后再试。'
+    },
+    success: {
+      resetting_discussion_count_for_all_pages: '成功重置了所有页面的评论数量！'
+    },
+    tab: {
+      helpers: '辅助功能'
+    },
+    text: {
+      desc_resetting_discussion_count_for_all_pages: '如果页面的评论数量出现错误的话，你可以通过这个辅助功能重置所有页面的评论数量。',
+      resetting_discussion_count_for_all_pages: '重置所有页面的评论数量'
+    }
   },
   AuthForm: {
     btn: {
@@ -101,6 +127,7 @@ export const langZhCN = {
     menu: {
       actions: '更多操作',
       admin_center: '站长中心',
+      admin_helpers: '辅助功能',
       more: '更多操作',
       notification: '系统消息',
       personal_center: '个人中心',

@@ -42,6 +42,7 @@
           </i-menu-group>
           <i-menu-group :title="$i18next.t('Header.menu.admin_center')" v-if="user && user.isAdmin">
             <i-menu-item name="report_management">{{$i18next.t('Header.menu.report_management')}}</i-menu-item>
+            <i-menu-item name="admin_helpers">{{$i18next.t('Header.menu.admin_helpers')}}</i-menu-item>
           </i-menu-group>
           <i-menu-group :title="$i18next.t('Header.menu.more')" v-if="isSmallScreen">
             <i-menu-item name="sign_out">{{$i18next.t('Header.menu.sign_out')}}</i-menu-item>
@@ -101,6 +102,11 @@
         <wf-report-management :user="user" v-if='user && user.isAdmin'></wf-report-management>
       </div>
     </i-modal>
+    <i-modal v-model="adminHelpersModal" :closable="false" :footer-hide="true" :theme="$config.theme">
+      <div style="text-align:center">
+        <wf-admin-helpers :user="user" v-if='user && user.isAdmin'></wf-admin-helpers>
+      </div>
+    </i-modal>
   </header>
 </template>
 
@@ -110,6 +116,7 @@ import WfAuthForm from '../components/WfAuthForm'
 import WfUserSetting from '../components/WfUserSetting'
 import WfPersonalCenter from '../components/WfPersonalCenter'
 import WfReportManagement from '../components/WfReportManagement'
+import WfAdminHelpers from '../components/WfAdminHelpers'
 
 export default {
   name: 'wf-header',
@@ -121,7 +128,8 @@ export default {
     WfAuthForm,
     WfUserSetting,
     WfPersonalCenter,
-    WfReportManagement
+    WfReportManagement,
+    WfAdminHelpers
   },
   data () {
     return {
@@ -130,6 +138,7 @@ export default {
       userSettingModal: false,
       personalCenterModal: false,
       reportMangementModal: false,
+      adminHelpersModal: false,
       isAdmin: false,
       menuActiveName: 'comments_count'
     }
@@ -206,6 +215,8 @@ export default {
         this.personalCenterModal = true
       } else if (name === 'report_management') {
         this.reportMangementModal = true
+      } else if (name === 'admin_helpers') {
+        this.adminHelpersModal = true
       } else if (name === 'sign_out') {
         this.signOut()
       } else if (name === 'sign_up' || name === 'sign_in') {

@@ -27,6 +27,7 @@ import AutoComplete from 'iview/src/components/auto-complete'
 import Avatar from 'iview/src/components/avatar'
 import Button from 'iview/src/components/button'
 import Card from 'iview/src/components/card'
+import Collapse from 'iview/src/components/collapse'
 import Dropdown from 'iview/src/components/dropdown'
 import Form from 'iview/src/components/form'
 import Icon from 'iview/src/components/icon'
@@ -57,6 +58,8 @@ const iview = {
   iCard: Card,
   Col,
   iCol: Col,
+  Collapse,
+  iCollapse: Collapse,
   Dropdown,
   DropdownItem: Dropdown.Item,
   DropdownMenu: Dropdown.Menu,
@@ -84,7 +87,10 @@ const iview = {
   iOption: Option,
   Page,
   iPage: Page,
+  Panel: Collapse.Panel,
+  iPanel: Collapse.Panel,
   Row,
+  iRow: Row,
   Select,
   iSelect: Select,
   Spin,

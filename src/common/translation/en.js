@@ -1,10 +1,36 @@
 export const langEn = {
   common: {
     add_wildfire_to_your_site: 'Add Wildfire to your site',
+    btn: {
+      cancel: 'Cancel',
+      confirm: 'Confirm'
+    },
     anonymous_user: 'Anonymous',
     tip_prefix: '*Tips: ',
     unknown_ip: 'Unknown IP address',
     unknown_user: 'Unknown User'
+  },
+  AdminHelpers: {
+    btn: {
+      reset: 'Reset',
+      resetting: 'Resetting...'
+    },
+    confirm: {
+      resetting_discussion_count_for_all_pages: 'Are you sure to reset discussion count for all pages?'
+    },
+    error: {
+      resetting_discussion_count_for_all_pages: 'Something went wrong. Please try again later.'
+    },
+    success: {
+      resetting_discussion_count_for_all_pages: 'Successfully reset discussion count for all pages!'
+    },
+    tab: {
+      helpers: 'Helpers'
+    },
+    text: {
+      desc_resetting_discussion_count_for_all_pages: 'If the discusstion count for your webpage went wrong, you can reset discussion count for all pages with this helper function.',
+      resetting_discussion_count_for_all_pages: 'Reset Discussion Count for All Pages'
+    }
   },
   AuthForm: {
     btn: {
@@ -101,6 +127,7 @@ export const langEn = {
     menu: {
       actions: 'Actions',
       admin_center: 'Admin',
+      admin_helpers: 'Helpers',
       more: 'More',
       notification: 'Notification',
       personal_center: 'Personal',

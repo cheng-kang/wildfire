@@ -241,6 +241,13 @@ export default {
           this.form.content = ''
           this.$Message.success(this.$i18next.t('ReplyArea.success.posting_comment'))
 
+          // Update `discussionCount`
+          //  Note: Should use `this.$config.pageURL` here,
+          //        because `pageURL` variable above is conditional.
+          this.$db.ref(`pages/${this.$config.pageURL}/discussionCount`).transaction(function (currentValue) {
+            return (currentValue || 0) + 1
+          })
+
           /*
             Handle Mention
            */
