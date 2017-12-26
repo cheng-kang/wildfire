@@ -8,6 +8,6 @@
 - —— Dante Alighieri, Paradiso
 
 [GitHub](https://github.com/cheng-kang/wildfire/)
-[Get Started](readme.md)
+[Get Started](README.md)
 
 ![color](white)
