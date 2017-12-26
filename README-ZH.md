@@ -1,122 +1,50 @@
-# Wildfire 野火评论系统 [![npm version](https://badge.fury.io/js/wildfire.svg)](https://badge.fury.io/js/wildfire)
+# Wildfire [![](https://img.shields.io/npm/v/wildfire.svg?style=flat-square)](https://www.npmjs.com/wildfire)
 
-> 如果你正在使用 `Wildfire 野火评论系统`，请在这里分享你的网站吧：[我们正在使用 Wildfire 野火评论系统！](https://github.com/cheng-kang/wildfire/issues/8) :D。
+> 如果你的网站需要一个方便的评论系统的话，不妨试试 Wildfire 野火评论系统。
 
-[English Doc](https://github.com/cheng-kang/wildfire#wildfire-) | [中文说明文档](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)
+![](https://cdn.rawgit.com/cheng-kang/wildfire/7d609949/resources/screenshots/home-page.png)
 
-<p>
-<!-- <p align="center"> -->
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/wildfire-logo.svg" height="60">
-  <span>&emsp;=&emsp;</span>
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/wilddog.svg" height="40">
-  <span>&emsp;+&emsp;</span>
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d37678ae/resources/firebase.png" height="45">
-</p>
+**全新的 [Wildfire 主页](https://wildfire.js.org/#/zh-cn/) ([https://wildfire.js.org/#/zh-cn/](https://wildfire.js.org/#/zh-cn/)) 已经启用了，快去那儿看看详细的文档吧。**
 
-如果你的网站需要一个方便的评论系统的话，不妨试试 Wildfire 野火评论系统。
+**Please visit the brand new [Wildfire Home Page](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)). Detailed documentation is available.**
 
-> *“星星之火可以燎原”。*
-> 
-> *—— 阿利盖利·但丁，《天堂》*
+*Click here to read [English version README.md](https://github.com/cheng-kang/wildfire).*
 
-*注意：点击查看在线示例 [Firebase 示例](http://chengkang.me/wildfire) | [野狗示例](http://chengkang.me/wildfire/examples/demo-zh.html)。建议国内用户查看野狗示例 ;-)。*
+## 简介
 
-<br><br><br>
+`wildfire` 希望成为一个 **就是管用** 的个人网站评论系统，比如你的 `Hexo` 博客。它利用免费的实时数据库（[Firebase](https://firebase.google.com) 和 [野狗](https://wilddog.com)）来储存你的评论数据，并带给你实时的交流体验。
 
-> `wildfire` 项目的正式 NPM 页面为：https://www.npmjs.com/package/wildfire 。
->
-> ~~这个旧的页面 `@chengkang/wildfire` (https://www.npmjs.com/package/@chengkang/wildfire) 已被弃用。~~
 
-## 链接
-
-1. [使用方法](#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)
-    1. [设置数据库](#1-%E8%AE%BE%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93)
-    2. [将 Wildfire 添加到你的网站上](#2-%E5%B0%86-wildfire-%E6%B7%BB%E5%8A%A0%E5%88%B0%E4%BD%A0%E7%9A%84%E7%BD%91%E7%AB%99%E4%B8%8A)
-    3. [自定义](#3-%E8%87%AA%E5%AE%9A%E4%B9%89)
-2. [功能](#%E5%8A%9F%E8%83%BD)
-3. [截图](#%E6%88%AA%E5%9B%BE)
-4. [更新日志](#更新日志)
-
-## 使用方法
-
-### 1. 设置数据库
-
-- 幻灯片：[如何为 Wildfire 设置 Firebase 数据库？](https://slides.com/chengkang/set-up-firebase-for-wildfire)
-
-- 幻灯片：如何为 Wildfire 设置 Wilddog 数据库？ (待创建……你可以参考上一个幻灯片，二者设置步骤差不多，相信你能搞明白！:-D)
-
-### 2. 将 Wildfire 添加到你的网站上
-
-请看看这个幻灯片： [如何将 Wildfire 添加到你的网站](http://slides.com/chengkang/how-to-wildfire#/)
-
-*注意：`Wildfire` 是用 `Vue.js` 开发的，因此你可以将其作为 Vue 组件来使用。 请参考 [示例 3](https://github.com/cheng-kang/wildfire/tree/master/examples/3)。*
-
-一些链接：
-
-1. 通过 CDN 使用
-    - `wildfire.auto.js`: 
-        - [JSFiddle: Wildfire Example: CDN (wildfire.auto.js)](https://jsfiddle.net/CHENGKANG/trdgbeeo/)
-        - [exmaple 4](https://github.com/cheng-kang/wildfire/tree/master/examples/4)
-    - `wilddog/wildfire.min.js` （如果你的项目中使用了 `Vue`）
-        - [JSFiddle: Wildfire Example: CDN (wilddog/wildfire.min.js)](https://jsfiddle.net/CHENGKANG/99q5oow4/)
-    - `firebase/wildfire.min.js` （如果你的项目中使用了 `Vue`）
-        - [JSFiddle: Wildfire Example: CDN (firebase/wildfire.min.js)](https://jsfiddle.net/CHENGKANG/zrm1g9s8/)
-2. 作为 UMD 模块使用
-    - `wildfire.min.js`: 
-        - [exmaple 3](https://github.com/cheng-kang/wildfire/tree/master/examples/3)
-### 3. 自定义
-
-以下是一个示例，请参看注释部分：
-
-```html
-<script>
-  // 你可以自定义一些配置
-  //
-  // databaseProvider: 必须为 'wilddog' 或者 'firebase'
-  // databaseConfig: 请从你的数据库控制台复制过来。
-  // pageURL(可选): 默认为当前页面的 URL。
-  // pageTitle(可选): 默认为当前页面的 title。
-  // theme(可选): 'light'（默认）或者 'dark'。
-  // locale(可选): 'en'（默认）或者 'zh-CN'
-  // defaultAvatarURL(可选): 默认头像是一个可爱的消防员 :-D
-  var wildfireConfig = () => ({
-    databaseProvider: 'firebase',
-    databaseConfig: YOUR_DATABASE_CONFIG,
-    // pageURL: YOUR_PAGE_URL,
-    // pageTitle: YOUR_PAGE_TITLE,
-    // theme: 'light',
-    // locale: 'en',
-    // defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg'
-  })
-</script>
-<script src="https://unpkg.com/wildfire/dist/wildfire.auto.js"></script>
-```
+继续阅读 [起步](https://wildfire.js.org/#/zh-cn/preface)，开始你的 `wildire` 野火评论之旅吧！
 
 ## 功能
 
-1. 站主:
-    - 数据库支持: 
-      - [x] [`Firebase`](https://firebase.google.com/)
-      - [x] [`Wilddog 野狗`](https://www.wilddog.com/).
-    - 站主功能: 
-      - [x] 删除评论
-      - [x] 通过用户 IP 或 Email 屏蔽或禁言用户。
+**站主：**
 
-2. 匿名用户和登录用户:
-    - [x] 评论（支持 Markdown 语法）
-    - [x] 提及功能（@用户名）
+- 数据库支持： 
+  - [Firebase](https://firebase.google.com/)
+  - [野狗](https://www.wilddog.com/).
+- 站主功能： 
+  - 删除评论
+  - 通过用户 IP 或 Email 进行屏蔽
+
+**所有用户（匿名及登录用户）：**
+
+- 评论（支持 `Markdown` 语法）
+- 提及（@其他用户）
     
-3. 登录用户:
-    - [x] 赞、踩评论
-    - [x] 删除自己的评论
-    - [x] 举报内容不当评论
-    - 更新个人信息
-      - [x] 用户名
-      - [x] 头像
-    - 个人中心:
-      - [x] 系统通知
+**登录用户：**
 
-## 截图
+- 赞、踩评论
+- 删除自己的评论
+- 举报包含不恰当言论的评论
+- 更新个人资料：
+  - 用户名
+  - 头像
+- 个人中心：
+  - 通知消息
+
+## 展示
 
 <p align="center">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/1.png" height="320">
@@ -130,9 +58,28 @@
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/6fada41b/resources/screenshots/wldfire-dark-theme.png" height="320">
 </p>
 
-## 更新日志
+更多展示，请看这个百科页面：[我们正在使用 Wildfire 野火评论系统！](https://github.com/cheng-kang/wildfire/wiki/%E6%88%91%E4%BB%AC%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8-Wildfire-%E9%87%8E%E7%81%AB%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%EF%BC%81)
 
-[Update Log](https://github.com/cheng-kang/wildfire/wiki/Update-Log) | [更新日志](https://github.com/cheng-kang/wildfire/wiki/%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
+## 捐赠
+
+如果你觉得 `wildfire` 确实不错的话，给我们买杯饮料喝吧！
+
+> 噢，对了，别担心，所有捐赠都会和 [@mrliao](http://maliao.cn) 一起分享的 ;-D。
+
+#### - Paypal Me
+
+<p align="center">
+  <a href="https://www.paypal.me/chengkang" target="_blank"><img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/paypal-me.png" width="320"></a>
+</p>
+
+#### - 支付宝 和 微信打赏
+
+<p align="center">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/alipay.jpg" width="160">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/wechat.jpg" width="160">
+</p>
+
+感谢你的慷慨！
 
 ## 开源许可协议
 
