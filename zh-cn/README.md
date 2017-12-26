@@ -7,7 +7,7 @@
 `wildfire` 希望成为一个 **就是管用** 的个人网站评论系统，比如你的 `Hexo` 博客。它利用免费的实时数据库（[Firebase](https://firebase.google.com) 和 [野狗](https://wilddog.com)）来储存你的评论数据，并带给你实时的交流体验。
 
 
-继续阅读 [起步](preface.md)，开始你的 `wildire` 野火评论之旅吧！
+继续阅读 [起步](/zh-cn/preface.md)，开始你的 `wildire` 野火评论之旅吧！
 
 ## 功能
 
@@ -19,6 +19,8 @@
 - 站主功能： 
   - 删除评论
   - 通过用户 IP 或 Email 进行屏蔽
+  - [重置所有页面评论数量统计](/zh-cn/admin-helpers.md#_1-reset-discussion-count-for-all-pages)
+  - [获取评论数](/zh-cn/get-discussion-count.md)
 
 **所有用户（匿名及登录用户）：**
 

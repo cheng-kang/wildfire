@@ -19,6 +19,8 @@ Continue reading [Get Started](preface.md), and start your journey with `wildfir
 - Admin Function: 
   - Delete comment
   - Ban users by their IP/email
+  - [Reset discussion count of all pages](admin-helpers.md#_1-reset-discussion-count-for-all-pages)
+  - [Get discussion count](get-discussion-count.md)
 
 **For all visitors (anonymous & authorized):**
 

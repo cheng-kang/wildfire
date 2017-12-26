@@ -8,8 +8,8 @@
 
 **New Features**
 
-- Admin Helper Functions: admin helpers are used to reset things and clear unexpected errors. In this release, one helper function is added: reset discussion count of all pages. Check [here]() for more details.
-- `wildfire.count.js`: a new script for getting dicussion total of specific page(s). Check [here]() for more details.
+- Admin Helper Functions: admin helpers are used to reset things and clear unexpected errors. In this release, one helper function is added: reset discussion count of all pages. Check [Reset discussion count of all pages](admin-helpers.md#_1-reset-discussion-count-for-all-pages) for more details.
+- `wildfire.count.js`: a new script for getting dicussion total of specific page(s). Check [Get discussion count](get-discussion-count.md) for more details.
 
 ### v0.2.3
 
