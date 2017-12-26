@@ -6,6 +6,8 @@
 
 **Please visit the brand new [Wildfire Home Page](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)). Detailed documentation is available.**
 
+**Started using `wildfire`? Share your website with others: [We are using Wildfire! ](https://github.com/cheng-kang/wildfire/issues/9)!**
+
 **全新的 [Wildfire 主页](https://wildfire.js.org/#/zh-cn/) ([https://wildfire.js.org/#/zh-cn/](https://wildfire.js.org/#/zh-cn/)) 已经启用了，快去那儿看看详细的文档吧。**
 
 *点此查看 [中文版 README.md](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)。*
@@ -29,6 +31,8 @@ Continue reading [Get Started](https://wildfire.js.org/#/preface), and start you
 - Admin Function: 
   - Delete comment
   - Ban users by their IP/email
+  - [Reset discussion count of all pages](admin-helpers.md#_1-reset-discussion-count-for-all-pages)
+  - [Get discussion count](get-discussion-count.md)
 
 **For all visitors (anonymous & authorized):**
 
