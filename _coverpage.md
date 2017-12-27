@@ -1,6 +1,6 @@
-<img src="_static/images/wildfire.svg" alt="logo" width="126">
+<img src="_static/images/wildfire.svg" alt="logo" height="94">
 
-# wildfire [![](https://img.shields.io/npm/v/wildfire.svg?style=flat-square)](https://www.npmjs.com/wildfire)
+# wildfire <a href="https://www.npmjs.com/wildfire" style="height: 20px;"><img src="https://img.shields.io/npm/v/wildfire.svg?style=flat-square"></a>
 
 > A drop-in replacement for other comment systems.
 
