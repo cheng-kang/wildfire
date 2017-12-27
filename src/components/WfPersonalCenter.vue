@@ -19,6 +19,7 @@
 
 <script>
 import Vue from 'vue'
+import { stripHTML } from '../common/utils'
 import WfTip from './WfTip'
 export default {
   name: 'wf-personal-center',
@@ -102,7 +103,7 @@ export default {
             updatedContent = this.$i18next.t('PersonalCenter.text.new_comment_on_page+', {
               email: commentAuthor.email,
               displayName: commentAuthor.displayName,
-              content: comment.content,
+              content: stripHTML(comment.content),
               pageTitle,
               pageURL: decodedPageURL
             })
@@ -110,19 +111,19 @@ export default {
             updatedContent = this.$i18next.t('PersonalCenter.text.new_reply_to_comment+', {
               email: commentAuthor.email,
               displayName: commentAuthor.displayName,
-              content: comment.content
+              content: stripHTML(comment.content)
             })
           } else if (type === 'd') {
             updatedContent = this.$i18next.t('PersonalCenter.text.new_disc_in_comment+', {
               email: commentAuthor.email,
               displayName: commentAuthor.displayName,
-              content: comment.content
+              content: stripHTML(comment.content)
             })
           } else if (type === 'm') {
             updatedContent = this.$i18next.t('PersonalCenter.text.new_mention+', {
               email: commentAuthor.email,
               displayName: commentAuthor.displayName,
-              content: comment.content
+              content: stripHTML(comment.content)
             })
           }
           updatedContent += ` <a href="${decodedPageURL}" target="blank"><i class="ivu-icon ivu-icon-ios-search"></i>${this.$i18next.t('PersonalCenter.text.details')}</a>`
