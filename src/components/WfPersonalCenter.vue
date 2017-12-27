@@ -99,7 +99,6 @@ export default {
             }
           }
           let updatedContent
-          console.log(textContent(comment.content))
           if (type === 'c') {
             updatedContent = this.$i18next.t('PersonalCenter.text.new_comment_on_page+', {
               email: commentAuthor.email,
