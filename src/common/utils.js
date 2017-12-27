@@ -15,5 +15,5 @@ export const stripHTML = (html) => {
   return (tmp.textContent || tmp.innerText).trim()
 }
 
-// Get text content of Markdown content
+// Get text content from Markdown content
 export const textContent = (content) => stripHTML(markdown(content))
