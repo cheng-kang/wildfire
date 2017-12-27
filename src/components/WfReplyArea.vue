@@ -264,7 +264,7 @@ export default {
           // then no notification to `admin`.
           if (!admin) {
             shouldNotifyAdmin = false
-          } if (user && user.uid === admin.uid) {
+          } else if (user && user.uid === admin.uid) {
             shouldNotifyAdmin = false
           }
           // If replying to comment posted by
@@ -333,7 +333,7 @@ export default {
           this.isPosting = false
           this.form.content = ''
           this.$Message.error(this.$i18next.t('ReplyArea.error.posting_comment'))
-          console.log(error)
+          console.error(error)
         })
       }
     },
