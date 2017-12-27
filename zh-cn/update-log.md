@@ -2,6 +2,15 @@
 
 ## 公测版本
 
+### v0.3.1
+
+*日期：2017-12-27*
+
+**修复**
+
+- [Failed to execute 'btoa' on 'Window': The string to be encoded contains characters outside of the Latin1 range.](https://github.com/cheng-kang/wildfire/issues/16)
+- 修复了某些 `Hexo` 主题下 UI 的问题。
+
 ### v0.3.0
 
 *日期：2017-12-26*

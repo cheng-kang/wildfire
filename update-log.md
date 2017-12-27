@@ -2,6 +2,15 @@
 
 ## Beta Versions
 
+### v0.3.1
+
+*Date: 2017-12-27*
+
+**Fixes**
+
+- [Failed to execute 'btoa' on 'Window': The string to be encoded contains characters outside of the Latin1 range.](https://github.com/cheng-kang/wildfire/issues/16)
+- Fixes UI issues with some `Hexo` themes.
+
 ### v0.3.0
 
 *Date: 2017-12-26*
