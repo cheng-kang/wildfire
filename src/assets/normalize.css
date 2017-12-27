@@ -1,0 +1,161 @@
+.wf article,
+.wf aside,
+.wf footer,
+.wf header,
+.wf nav,
+.wf section {
+  display: block;
+}
+
+.wf h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.wf figcaption,
+.wf figure,
+.wf main {
+  display: block;
+}
+
+.wf figure {
+  margin: 1em 40px;
+}
+
+.wf hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+  margin: 0;
+  border: none;
+  background: auto;
+}
+
+.wf pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+  margin: 0;
+}
+
+.wf a {
+  background-color: transparent;
+  -webkit-text-decoration-skip: objects;
+  border: none;
+}
+
+.wf a:active,
+.wf a:hover {
+  outline-width: 0;
+  border: none;
+}
+
+.wf abbr[title] {
+  border-bottom: none;
+  text-decoration: underline;
+  text-decoration: underline dotted;
+}
+
+.wf b,
+.wf strong {
+  font-weight: inherit;
+}
+.wf blockquote {
+  padding: 0;
+  border: none;
+}
+.wf blockquote cite::before {
+  content: none;
+  padding: 0;
+}
+.wf b,
+.wf strong {
+  font-weight: bolder;
+}
+
+.wf code,
+.wf kbd,
+.wf samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.wf dfn {
+  font-style: italic;
+}
+
+.wf mark {
+  background: transparent;
+  color: #000;
+}
+
+.wf small {
+  font-size: 80%;
+}
+
+.wf sub,
+.wf sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.wf sub {
+  bottom: -0.25em;
+}
+
+.wf sup {
+  top: -0.5em;
+}
+
+.wf audio,
+.wf video {
+  display: inline-block;
+}
+
+.wf audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+.wf img {
+  border-style: none;
+  display: inline;
+  margin: 0;
+  height: auto;
+}
+
+.wf svg:not(:root) {
+  overflow: hidden;
+}
+
+.wf button,
+.wf input,
+.wf optgroup,
+.wf select,
+.wf textarea {
+  font-family: sans-serif;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.wf button,
+.wf input {
+  overflow: visible;
+}
+
+.wf button,
+.wf select {
+  text-transform: none;
+}
+.wf table {
+  margin: 0;
+  width: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  table-layout: fixed;
+  word-wrap: break-all;
+}

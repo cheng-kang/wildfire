@@ -1,3 +1,5 @@
+@import './normalize.css';
+
 .wf { font-family: sans-serif; line-height: 1.15; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif; font-size: 12px; line-height: 1.5; color: #495060; background-color: transparent; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 .wf .ivu-load-loop { animation: ani-load-loop 1s linear infinite; }
 @keyframes ani-load-loop {
@@ -16,31 +18,7 @@
 .wf .ivu-breadcrumb > span:last-child .ivu-breadcrumb-item-separator { display: none; }
 .wf .ivu-breadcrumb-item-separator { margin: 0 8px; color: #dddee1; }
 .wf .ivu-breadcrumb-item-link > .ivu-icon + span { margin-left: 4px; }
-.wf article, .wf aside, .wf footer, .wf header, .wf nav, .wf section { display: block; }
-.wf h1 { font-size: 2em; margin: 0.67em 0; }
-.wf figcaption, .wf figure, .wf main { display: block; }
-.wf figure { margin: 1em 40px; }
-.wf hr { box-sizing: content-box; height: 0; overflow: visible; }
-.wf pre { font-family: monospace, monospace; font-size: 1em; }
-.wf a { background-color: transparent; -webkit-text-decoration-skip: objects; }
-.wf a:active, .wf a:hover { outline-width: 0; }
-.wf abbr[title] { border-bottom: none; text-decoration: underline; text-decoration: underline dotted; }
-.wf b, .wf strong { font-weight: inherit; }
-.wf b, .wf strong { font-weight: bolder; }
-.wf code, .wf kbd, .wf samp { font-family: monospace, monospace; font-size: 1em; }
-.wf dfn { font-style: italic; }
-.wf mark { background-color: #ff0; color: #000; }
-.wf small { font-size: 80%; }
-.wf sub, .wf sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
-.wf sub { bottom: -0.25em; }
-.wf sup { top: -0.5em; }
-.wf audio, .wf video { display: inline-block; }
-.wf audio:not([controls]) { display: none; height: 0; }
-.wf img { border-style: none; }
-.wf svg:not(:root) { overflow: hidden; }
-.wf button, .wf input, .wf optgroup, .wf select, .wf textarea { font-family: sans-serif; font-size: 100%; line-height: 1.15; margin: 0; }
-.wf button, .wf input { overflow: visible; }
-.wf button, .wf select { text-transform: none; }
+
 .wf [type=reset], .wf [type=submit], .wf button, .wf html [type=button] { -webkit-appearance: button; }
 .wf [type=button]::-moz-focus-inner, .wf [type=reset]::-moz-focus-inner, .wf [type=submit]::-moz-focus-inner, .wf button::-moz-focus-inner { border-style: none; padding: 0; }
 .wf [type=button]:-moz-focusring, .wf [type=reset]:-moz-focusring, .wf [type=submit]:-moz-focusring, .wf button:-moz-focusring { outline: 1px dotted ButtonText; }
