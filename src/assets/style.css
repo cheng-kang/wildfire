@@ -69,10 +69,10 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-comment-item section { display: flex; flex-direction: row; }
 .wf .wf-comment-item section.replies { margin-top: 5px; margin-left: 60px; }
 .wf .wf-comment-item section.replies ul { width: 100%; }
-.wf .reply-poptip { display: flex; flex-direction: row; align-items: end; white-space: normal;}
-.wf .reply-poptip img { width: 30px; height: 30px;}
+.wf .reply-poptip { display: flex; flex-direction: row; align-items: center;}
+.wf .reply-poptip img { width: 30px; height: 30px; margin-right: 8px;}
 .wf .reply-poptip div { display: flex; flex-direction: column; }
-.wf .reply-poptip div span { overflow: auto; word-break: break-word; max-width: 300px; max-height: 100px;}
+.wf .reply-poptip div span { overflow: auto; max-width: 120px; text-overflow: ellipsis; }
 .wf .wf-comment-item .drowdown-menu-button { opacity: 0; }
 .wf .wf-comment-item .comment:hover .drowdown-menu-button { opacity: 1; }
 .wf .wf-comment-item .wf-comment-avatar { margin-right: 12px; }
