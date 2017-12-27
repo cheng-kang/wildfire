@@ -64,7 +64,7 @@ export default {
   },
   created () {
     this.listenToAuthStateChange()
-    this.listenToCommentsFromFirebase()
+    this.listenToCommentsFromDatabase()
 
     /*
       `CurrentUserInfoUpdated` event observer
@@ -138,7 +138,7 @@ export default {
             watches `commentsCount` node in order to get the
             correct discussion count.
      */
-    listenToCommentsFromFirebase () {
+    listenToCommentsFromDatabase () {
       this.commentsLoadingState = 'loading'
       const { pageURL } = this.$config
 
