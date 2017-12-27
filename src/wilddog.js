@@ -22,6 +22,7 @@ const getLocaleObject = (locale) => {
 
   return enLocale
 }
+import { b64EncodeUnicode, b64DecodeUnicode } from './common/utils'
 
 const install = (_Vue, config) => {
   const {
@@ -41,7 +42,7 @@ const install = (_Vue, config) => {
       databaseProvider: 'wilddog',
       databaseConfig,
       pageTitle,
-      pageURL: btoa(pageURL), // encode pageURL with base64
+      pageURL: b64EncodeUnicode(pageURL), // encode pageURL with base64
       locale,
       theme,
       defaultAvatarURL,
@@ -66,12 +67,15 @@ const install = (_Vue, config) => {
   wf.auth = wf.dbApp.auth()
   wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
 
+  wf.b64EncodeUnicode = b64EncodeUnicode
+  wf.b64DecodeUnicode = b64DecodeUnicode
+
   _Vue.prototype.$_wf = wf
 
   // Dynamically update `pageTitle` & `pageURL`
   _Vue.prototype.$_updateWildfirePageInfo = function ({ pageTitle, pageURL }) {
     if (pageTitle) { this.$_wf.config.pageTitle = pageTitle }
-    if (pageURL) { this.$_wf.config.pageURL = btoa(pageURL) }
+    if (pageURL) { this.$_wf.config.pageURL = b64EncodeUnicode(pageURL) }
   }
 
   i18next.init({

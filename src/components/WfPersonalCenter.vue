@@ -40,6 +40,9 @@ export default {
     $i18next () {
       return this.$_wf.i18next
     },
+    $b64DecodeUnicode () {
+      return this.$_wf.b64DecodeUnicode
+    },
     distanceInWordsToNow () {
       return this.$_wf.distanceInWordsToNow
     },
@@ -56,7 +59,7 @@ export default {
       const newNotifId = this.$config.databaseProvider === 'firebase' ? newNotifSnap.key : newNotifSnap.key()
 
       const { type, pageURL, pageTitle, commentId, content = this.$i18next.t('PersonalCenter.text.notif_doesnt_exist') } = newNotif
-      const decodedPageURL = pageURL ? atob(pageURL) : null
+      const decodedPageURL = pageURL ? this.$b64DecodeUnicode(pageURL) : null
       let processedContent
       if (type === 'c') {
         processedContent = this.$i18next.t('PersonalCenter.text.new_comment_on_page', { pageTitle, pageURL: decodedPageURL })
