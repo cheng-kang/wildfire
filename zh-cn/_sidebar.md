@@ -5,7 +5,8 @@
     + [示例](/zh-cn/examples.md)
 - [配置](/zh-cn/configuration.md)
 - 更多功能
-    + [站长辅助功能](/zh-cn/admin-helpers.md)
+    + [管理员](/zh-cn/admin.md)
+    + [管理员辅助功能](/zh-cn/admin-helpers.md)
     + [获取评论数](/zh-cn/get-discussion-count.md)
 - -
 - [更新日志](/zh-cn/update-log.md)

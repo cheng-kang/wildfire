@@ -17,10 +17,11 @@
   - [Firebase](https://firebase.google.com/)
   - [野狗](https://www.wilddog.com/).
 - 站主功能： 
-  - 删除评论
+  - 删除任意评论
   - 通过用户 IP 或 Email 进行屏蔽
   - [重置所有页面评论数量统计](/zh-cn/admin-helpers.md#_1-reset-discussion-count-for-all-pages)
   - [获取评论数](/zh-cn/get-discussion-count.md)
+  - [管理员辅助功能](/zh-cn/admin-helpers.md)
 
 **所有用户（匿名及登录用户）：**
 

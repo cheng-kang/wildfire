@@ -2,6 +2,20 @@
 
 ## Beta Versions
 
+### v0.3.2
+
+*Date: 2017-12-27*
+
+**Enhancement**
+
+- The content displayed at (1) `replyToComment` tooltip, and (2) the title attribute of notification item have been changed raw Markdown content to extracted text content. Now you won't see HTML tags at these places.
+
+**Fixes**
+
+- Notifications were not being sent after posting comments/replies.
+- iView tooltip transfer-dom bug in `WfReportedManagement.vue`
+- Some other styling issues.
+
 ### v0.3.1
 
 *Date: 2017-12-27*

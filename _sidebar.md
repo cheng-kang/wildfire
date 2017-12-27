@@ -5,6 +5,7 @@
     + [Examples](examples.md)
 - [Configuration](configuration.md)
 - More Fun
+    + [Admin](admin.md)
     + [Admin Helper Functions](admin-helpers.md)
     + [Get Discussion Count](get-discussion-count.md)
 - -

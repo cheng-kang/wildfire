@@ -17,10 +17,11 @@ Continue reading [Get Started](preface.md), and start your journey with `wildfir
   - [Firebase](https://firebase.google.com/)
   - [Wilddog](https://www.wilddog.com/).
 - Admin Function: 
-  - Delete comment
+  - Delete any comment
   - Ban users by their IP/email
   - [Reset discussion count of all pages](admin-helpers.md#_1-reset-discussion-count-for-all-pages)
   - [Get discussion count](get-discussion-count.md)
+  - [Admin Helper Functions](admin-helpers.md)
 
 **For all visitors (anonymous & authorized):**
 
