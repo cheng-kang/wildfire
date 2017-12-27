@@ -128,7 +128,7 @@ and (-webkit-min-device-pixel-ratio:2) {
 
 /* WfReportManagement.vue */
 .wf .wf-report-management .table-list { max-height: 30vh; overflow-y: auto; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-.wf .wf-report-management .table-list li { width: 100%; display: flex; flex-direction: row; justify-content: space-between; padding: 1px 15px; align-items: center; }
+.wf .wf-report-management .table-list li { flex: 0 0 30px; width: 100%; display: flex; flex-direction: row; justify-content: space-between; padding: 1px 15px; align-items: center; }
 .wf .wf-report-management .table-list li div.users, .wf-report-management .table-list li div.meta { line-height: 24px; font-size: 12px; margin-right: 15px; width: 100px; text-align: center; }
 .wf .wf-report-management .users .display-name { color: #444; }
 .wf .wf-report-management .users .email, .wf-report-management .users .ip, .reported-by { color: #aaa }
