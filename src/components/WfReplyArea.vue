@@ -260,10 +260,12 @@ export default {
           let isAdminMentioned = false
           let isParentCommentAuthorMentioned = false
           let isRootCommentAuthorMentioned = false
-          // If current user is admin,
+          // If no admin exists,
           // then no notification to `admin`.
           if (!admin) {
             shouldNotifyAdmin = false
+          // If current user is admin,
+          // then no notification to `admin`.
           } else if (user && user.uid === admin.uid) {
             shouldNotifyAdmin = false
           }
@@ -277,7 +279,7 @@ export default {
             shouldNotifyParentCommentAuthor = false
           } else if (user && user.uid === replyToComment.uid) {
             shouldNotifyParentCommentAuthor = false
-          } else if (admin.uid === replyToComment.uid) {
+          } else if (admin && admin.uid === replyToComment.uid) {
             shouldNotifyParentCommentAuthor = false
           }
           // If `rootComment` posted by
@@ -291,7 +293,7 @@ export default {
             shouldNotifyRootCommentAuthor = false
           } else if (user && user.uid === replyToComment.rootCommentUid) {
             shouldNotifyRootCommentAuthor = false
-          } else if (admin.uid === replyToComment.rootCommentUid) {
+          } else if (admin && admin.uid === replyToComment.rootCommentUid) {
             shouldNotifyRootCommentAuthor = false
           } else if (replyToComment.uid === replyToComment.rootCommentUid) {
             shouldNotifyRootCommentAuthor = false
@@ -360,7 +362,7 @@ export default {
         // If mentioning (1) admin, (2) parentCommentAuthor,
         // or (3) rootCommentAuthor, then set related flag
         // and leave the notification
-        if (mentionedUid === admin.uid) {
+        if (admin && mentionedUid === admin.uid) {
           isAdminMentioned = true
           return
         }
