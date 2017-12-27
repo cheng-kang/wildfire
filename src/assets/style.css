@@ -39,7 +39,8 @@
 .wf .mention-option img { width: 18px; height: 18px; margin-right: 10px; }
 .wf .mention-option span:nth-of-type(1) { overflow: hidden; max-width: 120px; text-overflow: ellipsis; }
 .wf .mention-option span:nth-of-type(2) { font-style: italic; margin-left: 20px; }
-
+.wf .poptip-content { max-width: 30vw; max-height: 30vh;}
+.wf .poptip-content p { word-break: break-word; white-space: normal;}
 /* WfFooter.vue */
 .wf .wf-footer { font-weight: 500; display: flex; height: 45px; margin-top: 30px; color: #656c7a; border-top: 2px solid #d4d4d4; justify-content: space-between; align-items: center; }
 .wf .wf-footer a { font-size: 12px; display: flex; align-items: center; }
@@ -68,10 +69,10 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-comment-item section { display: flex; flex-direction: row; }
 .wf .wf-comment-item section.replies { margin-top: 5px; margin-left: 60px; }
 .wf .wf-comment-item section.replies ul { width: 100%; }
-.wf .reply-poptip { display: flex; flex-direction: row; align-items: center; }
-.wf .reply-poptip img { width: 30px; height: 30px; }
+.wf .reply-poptip { display: flex; flex-direction: row; align-items: end; white-space: normal;}
+.wf .reply-poptip img { width: 30px; height: 30px;}
 .wf .reply-poptip div { display: flex; flex-direction: column; }
-.wf .reply-poptip span span { overflow: auto; max-width: 120px; text-overflow: ellipsis; }
+.wf .reply-poptip div span { overflow: auto; word-break: break-word; max-width: 300px; max-height: 100px;}
 .wf .wf-comment-item .drowdown-menu-button { opacity: 0; }
 .wf .wf-comment-item .comment:hover .drowdown-menu-button { opacity: 1; }
 .wf .wf-comment-item .wf-comment-avatar { margin-right: 12px; }
@@ -84,6 +85,7 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-comment-item .wf-comment-body header .header-content .parent-link { font-size: 12px; }
 .wf .wf-comment-item .wf-comment-body header .header-content .parent-link:hover { color: black; }
 .wf .wf-comment-item .wf-comment-content { padding-bottom: 3px; }
+.wf .wf-comment-item .wf-comment-content p { word-break: break-word; }
 .wf .wf-comment-item .wf-comment-content a { text-decoration: underline; }
 .wf .wf-comment-item .less { overflow: hidden; max-height: 180px; margin-bottom: 10px; }
 .wf .wf-comment-item footer { font-size: 13px; display: flex; align-items: center; }
