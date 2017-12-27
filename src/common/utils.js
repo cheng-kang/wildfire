@@ -1,3 +1,5 @@
+import markdown from './markdown'
+
 /*
   The "Unicode Problem" of Base64 encoding and decoding
   URL: https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
@@ -10,5 +12,8 @@ export const b64DecodeUnicode = (str) => decodeURIComponent(atob(str).split('').
 export const stripHTML = (html) => {
   const tmp = document.createElement('div')
   tmp.innerHTML = html
-  return tmp.textContent || tmp.innerText
+  return (tmp.textContent || tmp.innerText).trim()
 }
+
+// Get text content of Markdown content
+export const textContent = (content) => stripHTML(markdown(content))

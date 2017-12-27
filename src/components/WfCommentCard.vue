@@ -27,7 +27,7 @@
                   <span :title="replyToComment.author.displayName">
                     <strong>{{replyToComment.author.displayName}}</strong>
                   </span>
-                  <span :title="stripHTML(replyToComment.content)">{{stripHTML(replyToComment.content)}}</span>
+                  <span :title="textContent(replyToComment.content)">{{textContent(replyToComment.content)}}</span>
                 </div>
               </div>
               <div slot="content" v-else>
@@ -172,7 +172,7 @@
 const MAX_CONTENT_HEIGHT = 180
 
 import Bus from '../common/bus'
-import { stripHTML } from '../common/utils'
+import { textContent } from '../common/utils'
 import WfReplyArea from './WfReplyArea'
 import WfMarkedContent from './WfMarkedContent'
 
@@ -236,6 +236,9 @@ export default {
     },
     $i18next () {
       return this.$_wf.i18next
+    },
+    textContent () {
+      return textContent
     },
     distanceInWordsToNow () {
       return this.$_wf.distanceInWordsToNow
@@ -386,9 +389,6 @@ export default {
     shortenedUsername (username) {
       if (username.length > 10) { return username.slice(0, 10) + '...' }
       return username
-    },
-    stripHTML (html) {
-      return stripHTML(html)
     },
     toggleReplyArea () {
       this.isShowingReplyArea = !this.isShowingReplyArea
