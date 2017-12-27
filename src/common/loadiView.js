@@ -40,7 +40,7 @@ import {
   Select,
   Option
 } from 'iview/src/components/select'
-import Tooltip from 'iview/src/components/tooltip'
+import Tooltip from './iview//tooltip'
 
 import Message from './iview/message'
 import Modal from './iview/modal'
