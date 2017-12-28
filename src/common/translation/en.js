@@ -194,7 +194,8 @@ export const langEn = {
     text: {
       initializing_mention_autocomplete: 'Initializing Mention (@) auto-complete...',
       initialized_mention_autocomplete: 'Mention (@) auto-complete is on',
-      mention_func_not_authorized: 'Sign in to enable Mention (@)'
+      mention_func_not_authorized: 'Sign in to enable Mention (@)',
+      mention_func_not_authorized_banned_user: 'You are currently banned.'
     }
   },
   ReportManagement: {

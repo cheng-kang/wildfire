@@ -114,7 +114,8 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-reply-form.wf-is-reply img { width: 36px; height: 36px; }
 .wf .wf-reply-form .wf-is-main { display: flex; flex-direction: row; margin-left: 60px; justify-content: space-between; }
 .wf .wf-reply-form .wf-is-main div { font-size: 10px; display: flex; }
-.wf .wf-reply-form .wf-is-main .wf-tool-bar { max-height: 32px; overflow-y: auto; margin-right: 10px; flex: 1; }
+.wf .wf-reply-form .wf-is-main .wf-tool-bar { max-height: 32px; overflow-y: auto; margin-right: 10px; flex: 1; align-items: center; }
+.wf .wf-reply-form .wf-is-main .wf-tool-bar .wf-inactive { color: #bbbec4; }
 .wf .wf-reply-form .wf-no-bottom-margin {    /*margin-bottom: 0;*/ }
 .wf .wf-reply-form .wf-float-right { text-align: right; }
 .wf .wf-reply-form .ivu-btn { padding: 6px 15px; }

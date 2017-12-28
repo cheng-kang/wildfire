@@ -194,7 +194,8 @@ export const langZhCN = {
     text: {
       initializing_mention_autocomplete: '初始化提及功能（@）自动补全中...',
       initialized_mention_autocomplete: '提及功能（@）自动补全已启用',
-      mention_func_not_authorized: '登录以激活提及（@）功能'
+      mention_func_not_authorized: '登录以激活提及（@）功能',
+      mention_func_not_authorized_banned_user: '你现在处于被禁言状态。'
     }
   },
   ReportManagement: {
