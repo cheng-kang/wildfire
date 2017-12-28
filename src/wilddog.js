@@ -61,7 +61,7 @@ const install = (_Vue, config) => {
   wf.dbApp = wilddog.initializeApp({
     authDomain: `${databaseConfig.siteId}.wilddog.com`,
     syncURL: `https://${databaseConfig.siteId}.wilddogio.com`
-  })
+  }, 'wildfire')
   wf.db = wf.dbApp.sync()
   wf.auth = wf.dbApp.auth()
   wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential

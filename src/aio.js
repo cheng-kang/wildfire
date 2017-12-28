@@ -64,13 +64,13 @@ const install = (_Vue, config) => {
     wf.dbApp = wilddog.initializeApp({
       authDomain: `${databaseConfig.siteId}.wilddog.com`,
       syncURL: `https://${databaseConfig.siteId}.wilddogio.com`
-    })
+    }, 'wildfire')
     wf.db = wf.dbApp.sync()
     wf.auth = wf.dbApp.auth()
     wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
   } else if (databaseProvider === 'firebase') {
     if (!_Vue.$bindAsObject) { _Vue.use(VueFire) }
-    wf.dbApp = firebase.initializeApp(databaseConfig)
+    wf.dbApp = firebase.initializeApp(databaseConfig, 'wildfire')
     wf.db = wf.dbApp.database()
     wf.auth = wf.dbApp.auth()
     wf.authService = firebase.auth.EmailAuthProvider.credential

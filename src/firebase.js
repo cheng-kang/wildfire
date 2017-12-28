@@ -58,7 +58,7 @@ const install = (_Vue, config) => {
   _Vue.use(iView)
 
   if (!_Vue.$bindAsObject) { _Vue.use(VueFire) }
-  wf.dbApp = firebase.initializeApp(databaseConfig)
+  wf.dbApp = firebase.initializeApp(databaseConfig, 'wildfire')
   wf.db = wf.dbApp.database()
   wf.auth = wf.dbApp.auth()
   wf.authService = firebase.auth.EmailAuthProvider.credential
