@@ -23,7 +23,7 @@
         @on-change="pageChanged"></i-page>
     </template>
 
-    <p v-else class="no-content-tip">
+    <p v-else class="wf-no-content-tip">
       <i-spin v-if="commentsLoadingState === 'loading'"
         :default-slot-style="{
           display: 'flex',
@@ -36,7 +36,7 @@
       <span v-if="commentsLoadingState === 'finished'">
         {{$i18next.t('Body.text.post_the_first_comment')}}
       </span>
-      <span v-if="commentsLoadingState === 'failed'" class="error">
+      <span v-if="commentsLoadingState === 'failed'" class="wf-error">
         {{$i18next.t('Body.text.loading_comments_failed')}}
       </span>
     </p>
@@ -56,7 +56,7 @@
         @on-select="mentionAutoCompleteOnSelect">
 
         <i-option v-for="user in mentioningUserAutoComplete" :value="JSON.stringify(user)" :key="user.id">
-          <div class="mention-option">
+          <div class="wf-mention-option">
             <img :src="user.photoURL">
             <span>{{ user.displayName }}</span>
             <span>{{ user.email }}</span>
@@ -70,8 +70,8 @@
       v-model="shouldShowCommentUserModal"
       :closable="false"
       :footer-hide="true"
-      class-name="vertical-center-modal">
-      <wf-comment-userinfo-modal></wf-comment-userinfo-modal>
+      class-name="wf-vertical-center-modal">
+      <wf-user-info-modal></wf-user-info-modal>
     </i-modal>
   </section>
 </template>
@@ -81,13 +81,13 @@ import Vue from 'vue'
 import Bus from '../common/bus'
 import WfReplyArea from '../components/WfReplyArea'
 import WfCommentCard from '../components/WfCommentCard'
-import WfCommentUserinfoModal from '../components/WfCommentUserinfoModal'
+import WfUserInfoModal from '../components/WfUserInfoModal'
 export default {
   name: 'wf-body',
   components: {
     WfReplyArea,
     WfCommentCard,
-    WfCommentUserinfoModal
+    WfUserInfoModal
   },
   props: [
     'user',

@@ -34,7 +34,7 @@
           {{shortenedUsername(username)}}
         </a>
       </li>
-      <i-submenu name="more" v-if="user" :class="{ 'float-right': !isLargeScreen}" class="no-border-bottom">
+      <i-submenu name="more" v-if="user" :class="{ 'wf-float-right': !isLargeScreen}" class="wf-no-border-bottom">
         <template slot="title"></template>
         <template v-if="user">
           <i-menu-group :title="$i18next.t('Header.menu.personal_center')">
@@ -55,7 +55,7 @@
           </i-menu-group>
         </template>
       </i-submenu>
-      <li class="float-right" v-if="!isSmallScreen || !user">
+      <li class="wf-float-right" v-if="!isSmallScreen || !user">
         <template v-if="!user" >
           <a @click="showAuthFormModal('sign_up')">
             {{$i18next.t('Header.btn.sign_up')}}

@@ -6,20 +6,20 @@
       <span v-if="reportedTableData.length === 0">
         {{ $i18next.t('ReportManagement.text.empty_reported_comment') }}
       </span>
-      <ul class="table-list">
-        <li v-for="item in reportedTableData">
-          <div class="users">
+      <ul class="wf-ul">
+        <li class="wf-li" v-for="item in reportedTableData">
+          <div class="wf-meta">
             <i-tooltip
               placement='top'
               :transfer="true">
-              <p claas="display-name">{{ item.author.displayName }}</p>
+              <p class="wf-display-name">{{ item.author.displayName }}</p>
               <div slot="content">
                 <p v-if="item.author.email">{{ item.author.email }}</p>
                 <p >{{ item.comment.ip }}</p>
               </div>
             </i-tooltip>
           </div>
-          <div class="content">
+          <div class="wf-detail">
             <i-tooltip
               placement='top'
               :transfer="true">
@@ -36,7 +36,7 @@
                     icon="ios-search">
                     <!-- {{$i18next.t('ReportManagement.btn.more')}} -->
                   </i-button>
-                  <div class="poptip-content" slot="content">
+                  <div class="wf-poptip-content" slot="content">
                     <div v-html="markdown(item.comment.content)"></div>
                   </div>
                 </i-poptip>
@@ -46,7 +46,7 @@
               </div>
             </i-tooltip>
           </div>
-          <div class="buttons">
+          <div class="wf-buttons">
             <i-poptip
               :confirm="true"
               :title="getBanActionTip(item.comment.uid, item.comment.ip)"
@@ -98,22 +98,22 @@
       <span v-if="banTableData.length === 0">
         {{ $i18next.t('ReportManagement.text.empty_banned_user') }}
       </span>
-      <ul class="table-list">
-        <li v-for="item in banTableData">
-          <div class="meta">
+      <ul class="wf-ul">
+        <li class="wf-li" v-for="item in banTableData">
+          <div class="wf-meta">
             {{distanceInWordsToNow(item.date)}}
           </div>
-          <div class="users">
+          <div class="wf-detail">
             <i-tooltip
               placement='top'
               :transfer="true">
-              <p claas="">{{ item.info }}</p>
+              <p class="">{{ item.info }}</p>
               <div slot="content">
                 <p >{{ item.displayName }}</p>
               </div>
             </i-tooltip>
           </div>
-          <div class="buttons">
+          <div class="wf-buttons">
             <i-poptip
               :confirm="true"
               :title="$i18next.t('ReportManagement.confirm.unbanning_user')"
@@ -137,10 +137,10 @@
 
 <script>
 import Vue from 'vue'
+import markdown from '../common/markdown'
+import { textContent } from '../common/utils'
 import '../assets/highlight.css'
 import '../assets/highlight.dark.css'
-import hljs from 'highlight.js'
-import marked from 'marked'
 export default {
   name: 'wf-report-management',
   data () {
@@ -177,7 +177,8 @@ export default {
       }).sort((a, b) => {
         return a.date < b.date
       })
-    }
+    },
+    markdown: () => markdown
   },
   methods: {
     listenToReported () {
@@ -233,7 +234,8 @@ export default {
       }
       return deleteAttr + this.$i18next.t('ReportManagement.confirm.deleting_comment')
     },
-    getAbstract (text) {
+    getAbstract (content) {
+      const text = textContent(content)
       return text.length >= 20 ? text.slice(0, 17) + '...' : text
     },
     banUser (commentUid, commentIp) {
@@ -318,30 +320,6 @@ export default {
         }).catch(() => {
           this.$Message.error(this.$i18next.t('ReportManagement.error.unknown'))
         })
-    },
-    markdown (content) {
-      var render = new marked.Renderer()
-      render.link = (href, title, text) => {
-        if (text.indexOf('@') === 0) {
-          return `<strong>${text}[${href}]</strong>`
-        } else {
-          return `<a href="${href}" alt="${title}">${text}</a>`
-        }
-      }
-      marked.setOptions({
-        renderer: render,
-        gfm: true,
-        tables: true,
-        breaks: true,
-        pedantic: false,
-        sanitize: false,
-        smartLists: true,
-        smartypants: false,
-        highlight: (code) => {
-          return hljs.highlightAuto(code).value
-        }
-      })
-      return marked(content)
     }
   }
 }

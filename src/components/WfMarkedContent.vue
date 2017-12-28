@@ -1,5 +1,5 @@
 <template >
-  <div ref="markedContent"></div>
+  <div class="wf-marked-content" ref="markedContent"></div>
 </template>
 
 <script>

@@ -3,11 +3,11 @@
     <TabPane :label="$i18next.t('PersonalCenter.tab.notification')" name="notification-box">
       <span v-if="Object.keys(notifications).length === 0">{{$i18next.t('PersonalCenter.text.empty_notif_list')}}</span>
       <wf-tip v-else>{{$i18next.t('PersonalCenter.text.tips')}}</wf-tip>
-      <ul class="notification-list">
-        <li v-for="notifId in notifIdsDESC" :class="{isRead: notifications[notifId].isRead}">
-          <span class="meta">{{distanceInWordsToNow(notifications[notifId].date)}}</span>
-          <span class="content" v-html="notifications[notifId].processedContent"></span>
-          <div class="buttons">
+      <ul class="wf-ul">
+        <li v-for="notifId in notifIdsDESC" class="wf-li" :class="{'wf-is-read': notifications[notifId].isRead}">
+          <span class="wf-meta">{{distanceInWordsToNow(notifications[notifId].date)}}</span>
+          <span class="wf-detail" v-html="notifications[notifId].processedContent"></span>
+          <div class="wf-buttons">
             <i-button type="text" @click="toggleRead(notifId)">{{$i18next.t(notifications[notifId].isRead ? 'PersonalCenter.btn.read' : 'PersonalCenter.btn.unread')}}</i-button>
             <i-button type="text" style="color: #ed3f14" @click="deleteNotif(notifId)">{{$i18next.t('PersonalCenter.btn.delete')}}</i-button>
           </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-user-modal">
+  <div class="wf-user-info-modal">
     <img :src="selectedCommentUserInfo.photoURL">
     <div>
       <h3>{{selectedCommentUserInfo.displayName}}</h3>
@@ -16,7 +16,7 @@
 <script>
 import Bus from '../common/bus'
 export default {
-  name: 'wf-comment-userinfo-modal',
+  name: 'wf-user-info-modal',
   data () {
     return {
       uid: null

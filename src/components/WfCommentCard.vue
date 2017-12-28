@@ -1,18 +1,18 @@
 <template>
   <li class="wf-comment-item" :class="{'wf-reply-item': !isTopLevelComment}">
-    <section class="comment">
-      <div class="wf-comment-avatar">
-        <img :src="author.photoURL" :class="{ anonymous: isPostedByAnonymousUser }">
+    <section class="wf-section-comment">
+      <div class="wf-avatar">
+        <img :src="author.photoURL" :class="{ 'wf-anonymous': isPostedByAnonymousUser }">
       </div>
       <div class="wf-comment-body">
-        <header>
-          <div class="header-content">
-            <a class="username" :title="author.displayName" @click="showUserInfo">{{shortenedUsername(author.displayName)}}</a>
+        <header class="wf-comment-header">
+          <div class="wf-content">
+            <a class="wf-username" :title="author.displayName" @click="showUserInfo">{{shortenedUsername(author.displayName)}}</a>
             <i-poptip
               v-if="!isTopLevelComment"
               trigger="hover"
               placement="top">
-              <span class="parent-link">
+              <span class="wf-parent-link">
                 <i-icon type="forward"></i-icon>
                 {{shortenedUsername(replyToComment.author.displayName)}}
               </span>
@@ -21,7 +21,7 @@
                       replyToComment.author.displayName &&
                       replyToComment.author.photoURL"
                 slot="content"
-                class="reply-poptip">
+                class="wf-reply-poptip">
                 <img :src="replyToComment.author.photoURL">
                 <div>
                   <span :title="replyToComment.author.displayName">
@@ -34,7 +34,7 @@
                 {{$i18next.t('CommentCard.text.loading_comments_content')}}
               </div>
             </i-poptip>
-            <span class="meta">
+            <span class="wf-meta">
               <i-poptip
                 :content="formatDate(comment.date)"
                 trigger="hover"
@@ -47,7 +47,7 @@
             trigger="click"
             placement="bottom-end"
             @on-click="handleDropdownClick">
-            <a href="javascript:void(0)" class="drowdown-menu-button">
+            <a href="javascript:void(0)" class="wf-drowdown-menu-button">
               <i-icon type="arrow-down-b"></i-icon>
             </a>
             <i-dropdown-menu slot="list">
@@ -63,9 +63,9 @@
           </i-dropdown>
         </header>
         <div class="wf-comment-content"
-          :class="{'code-overflow-hidden': !isShowingFullText}"
+          :class="{'wf-code-overflow-hidden': !isShowingFullText}"
           :id="'wf-comment-content-'+comment.commentId">
-          <div :class="{ less: isContentTooLong && !isShowingFullText }">
+          <div :class="{ 'wf-less': isContentTooLong && !isShowingFullText }">
             <wf-marked-content :content="comment.content"></wf-marked-content>
           </div>
           <i-button v-if="isContentTooLong"
@@ -82,21 +82,21 @@
             </template>
           </i-button>
         </div>
-        <footer>
+        <footer class="wf-comment-footer">
           <a :title="$i18next.t('CommentCard.html_title.like_comment')"
             :class="{
-              inactive: likeUserIdList.indexOf(currentUserId) === -1,
-              disabled: !user
+              'wf-inactive': likeUserIdList.indexOf(currentUserId) === -1,
+              'wf-disabled': !user
             }"
             @click="toggleVote('like')">
             <span>{{likeUserIdList.length || ''}}</span>
             <i-icon type="heart"></i-icon>
           </a>
-          <span class="separator">|</span>
+          <span class="wf-separator">|</span>
           <a :title="$i18next.t('CommentCard.html_title.dislike_comment')"
             :class="{
-              inactive: dislikeUserIdList.indexOf(currentUserId) === -1,
-              disabled: !user
+              'wf-inactive': dislikeUserIdList.indexOf(currentUserId) === -1,
+              'wf-disabled': !user
             }"
             @click="toggleVote('dislike')">
             <span>{{dislikeUserIdList.length || ''}}</span>
@@ -104,7 +104,7 @@
           </a>
           <i-button
             type="text"
-            class="wf-reply-button"
+            class="wf-reply-btn"
             @click="toggleReplyArea"
             v-if="commentsLoadingState === 'finished'">
             {{isShowingReplyArea ? $i18next.t('CommentCard.btn.hide') : $i18next.t('CommentCard.btn.reply')}}
@@ -113,7 +113,7 @@
             confirm
             :title="$i18next.t('CommentCard.confirm.deleting_comment')"
             @on-ok="confirmDelete">
-            <i-button type="text" class="wf-delete-button"
+            <i-button type="text" class="wf-delete-btn"
               v-if="canDelete">
               {{$i18next.t('CommentCard.btn.delete')}}
             </i-button>
@@ -138,7 +138,7 @@
           @finished-replying="isShowingReplyArea = false"></wf-reply-area>
       </div>
     </section>
-    <section class="replies">
+    <section class="wf-section-replies">
       <ul class="wf-reply-group" v-if="isTopLevelComment">
         <wf-comment-card
           v-for="(reply, idx) in replies"
