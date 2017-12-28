@@ -67,8 +67,6 @@
 
 如果你觉得 `wildfire` 确实不错的话，给我们买杯饮料喝吧！
 
-> 噢，对了，别担心，所有捐赠都会和 [@mrliao](http://maliao.cn) 一起分享的 ;-D。
-
 #### - Paypal Me
 
 <p align="center">
