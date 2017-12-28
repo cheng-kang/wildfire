@@ -3,8 +3,8 @@
     :label-width="60"
     class="wf-reply-form"
     :class="{ 'wf-is-reply': isReply }">
-    <i-form-item class="no-bottom-margin">
-      <img slot="label" :src="avatarURL" :class="{ anonymous: user === null }">
+    <i-form-item class="wf-no-bottom-margin">
+      <img slot="label" :src="avatarURL" :class="{ 'wf-anonymous': user === null }">
       <i-input
         v-model="form.content"
         type="textarea"
@@ -14,8 +14,8 @@
         :placeholder="placeholder"
         :disabled="shouldDisableInput"></i-input>
     </i-form-item>
-    <section class="top-reply-area" v-if="isMain">
-      <div class="tool-bar">
+    <section class="wf-is-main" v-if="isMain">
+      <div class="wf-tool-bar">
         <span style="color: #bbbec4">
           {{mentionLabel}}
         </span>
@@ -39,7 +39,7 @@
       </div>
     </section>
 
-    <i-form-item class="float-right" v-else>
+    <i-form-item class="wf-float-right" v-else>
       <i-button type="text"
         :disabled="shouldDisableButton"
         @click="form.content = ''">

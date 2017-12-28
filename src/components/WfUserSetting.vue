@@ -1,7 +1,7 @@
 <template> 
   <i-tabs class="wf-user-setting">
     <i-tab-pane :label="$i18next.t('UserSetting.tab.profile')" name="profile" :disabled="updatingAccount">
-      <div class="form-warp" :class="{ 'small-screen': isSmallScreen }">
+      <div class="wf-form-warp" :class="{ 'wf-is-small-screen': isSmallScreen }">
         <i-form ref="profileForm" :model="profileForm" :rules="rule" label-position="top">
           <i-form-item :label="$i18next.t('UserSetting.label.display_name')" prop="displayName">
             <i-input type="text" v-model="profileForm.displayName" :placeholder="$i18next.t('UserSetting.placeholder.display_name')">
@@ -12,7 +12,7 @@
               <i-button slot="append" icon="refresh" @click="resetAvatar"></i-button>
             </i-input>
           </i-form-item>
-          <div class="form-itme-button align-for-profile">
+          <div class="wf-buttons wf-align-for-profile">
             <i-button 
             type="primary" 
             @click="handleChangeProfile()" 
@@ -28,14 +28,14 @@
             </i-button>
           </div>
         </i-form>
-        <div class="avatar">
+        <div class="wf-avatar">
           <i-avatar shape="square" style="background: #fff" :src="avatarTestURL" />
         </div>
       </div>
     </i-tab-pane>
 
     <i-tab-pane :label="$i18next.t('UserSetting.tab.account')" name="account" :disabled="updatingProfile">
-      <div class="form-warp">
+      <div class="wf-form-warp">
         <i-form ref="accountForm" :model="accountForm" :rules="rule" label-position="top">
           <i-form-item :label="$i18next.t('UserSetting.label.old_pwd')" prop="oldPassword">
             <i-input type="password" v-model="accountForm.oldPassword" :placeholder="$i18next.t('UserSetting.placeholder.old_pwd')">
@@ -49,7 +49,7 @@
             <i-input type="password" v-model="accountForm.passwordCheck" :placeholder="$i18next.t('UserSetting.placeholder.confirm_pwd')">
             </i-input>
           </i-form-item>
-          <div class="form-itme-button">
+          <div class="wf-buttons">
             <i-button
             type="primary" 
             @click="handleChangeAccount()" 

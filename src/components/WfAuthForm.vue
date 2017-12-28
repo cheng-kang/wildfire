@@ -1,7 +1,7 @@
 <template> 
   <i-tabs :value="initTab" class="wf-auth-form">
     <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_up')" name="sign_up" :disabled="loadingSignIn">
-      <div class="form-warp">
+      <div class="wf-form-warp">
         <i-form ref="signUpForm" :model="signUpForm" :rules="rule" label-position="top">
           <i-form-item :label="$i18next.t('AuthForm.label.email')" prop="email">
             <i-input type="text" v-model="signUpForm.email" :placeholder="$i18next.t('AuthForm.placeholder.email')">
@@ -15,7 +15,7 @@
             <i-input type="password" v-model="signUpForm.passwordCheck" :placeholder="$i18next.t('AuthForm.placeholder.confirm_pwd')">
             </i-input>
           </i-form-item>
-          <div class="form-itme-button">
+          <div class="wf-buttons">
             <i-button
             type="primary" 
             @click="handleSignUp('signUpForm')" 
@@ -35,7 +35,7 @@
     </i-tab-pane>
 
     <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_in')" name="sign_in" :disabled="loadingSignUp">
-      <div class="form-warp">
+      <div class="wf-form-warp">
         <i-form ref="signInForm" :model="signInForm" :rules="rule" label-position="top">
           <i-form-item :label="$i18next.t('AuthForm.label.email')" prop="email">
             <i-input type="text" v-model="signInForm.email" :placeholder="$i18next.t('AuthForm.placeholder.email')">
@@ -45,7 +45,7 @@
             <i-input type="password" v-model="signInForm.password" :placeholder="$i18next.t('AuthForm.placeholder.password')">
             </i-input>
           </i-form-item>
-          <div class="form-itme-button">
+          <div class="wf-buttons">
             <i-button 
             type="primary" 
             @click="handleSignIn('signInForm')" 
