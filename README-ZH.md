@@ -58,8 +58,7 @@
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/5.png" height="320">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/6.png" height="320">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/7.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/8.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/6fada41b/resources/screenshots/wldfire-dark-theme.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d9862632/resources/screenshots/wldfire-dark-theme.png" height="320">
 </p>
 
 更多展示，请看这个百科页面：[我们正在使用 Wildfire 野火评论系统！](https://github.com/cheng-kang/wildfire/wiki/%E6%88%91%E4%BB%AC%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8-Wildfire-%E9%87%8E%E7%81%AB%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%EF%BC%81)
