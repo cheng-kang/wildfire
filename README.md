@@ -31,8 +31,9 @@ Continue reading [Get Started](https://wildfire.js.org/#/preface), and start you
 - Admin Function: 
   - Delete comment
   - Ban users by their IP/email
-  - [Reset discussion count of all pages](admin-helpers.md#_1-reset-discussion-count-for-all-pages)
-  - [Get discussion count](get-discussion-count.md)
+  - [Reset discussion count of all pages](https://wildfire.js.org/#/admin-helpers?id=_1-reset-discussion-count-for-all-pages)
+  - [Get discussion count](https://wildfire.js.org/#/get-discussion-count)
+  - [Admin Helper Functions](https://wildfire.js.org/#/admin-helpers)
 
 **For all visitors (anonymous & authorized):**
 
