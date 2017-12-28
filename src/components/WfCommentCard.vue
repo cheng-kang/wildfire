@@ -511,23 +511,23 @@ export default {
       if (this.comment.uid !== this.$config.anonymousUserId) {
         key = this.comment.uid
       } else if (/unknow/.test(this.comment.ip)) {
-        this.$Message.error('屏蔽失败')
+        this.$Message.error(this.$i18next.t('CommentCard.error.banning_user'))
         return
       } else {
         key = this.comment.ip.replace(/\./g, '-')
       }
       this.$db.ref(`ban/${key}`).once('value').then((snapshot) => {
         if (snapshot.val()) {
-          this.$Message.error('请勿重复屏蔽')
+          this.$Message.error(this.$i18next.t('CommentCard.error.repeated_banning'))
           return
         }
         this.$db.ref(`ban/${key}`).set({
           date: now,
           reason: 'comment'
         }).then(() => {
-          this.$Message.success('屏蔽成功')
+          this.$Message.success(this.$i18next.t('CommentCard.success.banning_user'))
         }).catch(() => {
-          this.$Message.error('屏蔽失败')
+          this.$Message.error(this.$i18next.t('CommentCard.error.banning_user'))
         })
       })
     },

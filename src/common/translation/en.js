@@ -95,7 +95,9 @@ export const langEn = {
       deleting_comment: 'Are you sure to delete this comment?'
     },
     error: {
+      banning_user: 'Failed to ban this user.',
       deleting_comment: 'Failed to delete.',
+      repeated_banning: 'This user has already been banned.',
       repeated_reporting: 'You had already reported this comment!',
       reporting_comment: 'Something went wrong, please try again later.',
       banned_title: 'Banned',
@@ -106,6 +108,7 @@ export const langEn = {
       like_comment: 'Like this comment!'
     },
     success: {
+      banning_user: 'User banned.',
       deleting_comment: 'Deleted.',
       reporting_comment: 'Comment reported.'
     },

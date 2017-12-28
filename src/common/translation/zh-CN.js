@@ -95,7 +95,9 @@ export const langZhCN = {
       deleting_comment: '你确定要删除这条评论吗？'
     },
     error: {
+      banning_user: '封禁用户失败。',
       deleting_comment: '删除失败。',
+      repeated_banning: '这个用户已经被封禁了。',
       repeated_reporting: '你已经举报过这条评论。',
       reporting_comment: '举报失败，请稍后重试。',
       banned_title: '禁止操作',
@@ -106,6 +108,7 @@ export const langZhCN = {
       like_comment: '给这条评论点赞！'
     },
     success: {
+      banning_user: '封禁成功。',
       deleting_comment: '删除成功。',
       reporting_comment: '评论举报成功。'
     },
