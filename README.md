@@ -2,7 +2,7 @@
 
 > A drop-in replacement for other comment systems.
 
-![](https://cdn.rawgit.com/cheng-kang/wildfire/7d609949/resources/screenshots/home-page.png)
+![](https://cdn.rawgit.com/cheng-kang/wildfire/52a1fdea/resources/screenshots/home-page.png)
 
 **Please visit the brand new [Wildfire Home Page](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)). Detailed documentation is available.**
 
