@@ -29,8 +29,9 @@
 - 站主功能： 
   - 删除评论
   - 通过用户 IP 或 Email 进行屏蔽
-  - [重置所有页面评论数量统计](/zh-cn/admin-helpers.md#_1-reset-discussion-count-for-all-pages)
-  - [获取评论数](/zh-cn/get-discussion-count.md)
+  - [重置所有页面评论数量统计](https://wildfire.js.org/#/zh-cn/admin-helpers?id=_1-reset-discussion-count-for-all-pages)
+  - [获取评论数](https://wildfire.js.org/#/zh-cn/get-discussion-count)
+  - [管理员辅助功能](https://wildfire.js.org/#/zh-cn/admin-helpers)
 
 **所有用户（匿名及登录用户）：**
 
