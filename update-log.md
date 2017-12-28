@@ -2,6 +2,19 @@
 
 ## Beta Versions
 
+### v0.3.3
+
+*Date: 2017-12-28*
+
+**Enhancement**
+
+- Added prefix `wf-` to all custom class names used in the project to avoid class name collisions.
+
+**Changes**
+
+- Updated datetime text format. Now comment datetime will be shown as `2017-12-28 23:00`.
+- Changed `mention` placeholder text to icon, and added tooltip.
+
 ### v0.3.2
 
 *Date: 2017-12-27*
