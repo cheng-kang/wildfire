@@ -1,13 +1,13 @@
 {
-    "name": "",
+    "name": "Wildfire Doc",
     "icons": [
         {
-            "src": "/static/icons/android-chrome-192x192.png",
+            "src": "_static/icons/android-chrome-192x192.png?v=eE5Kv0ongk",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/static/icons/android-chrome-512x512.png",
+            "src": "_static/icons/android-chrome-512x512.png?v=eE5Kv0ongk",
             "sizes": "512x512",
             "type": "image/png"
         }

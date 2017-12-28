@@ -71,6 +71,17 @@
 
 感谢你的慷慨！
 
+## 致谢
+
+`wildfire` 的
+
+- 标识，及
+- 默认用户头像
+
+均来自于 <a href="http://www.freepik.com" title="Freepik" target="_blank">Freepik</a> 在 <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">www.flaticon.com</a> 上发布的图标，经 <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">Creative Commons BY 3.0</a> 协议授权许可。
+
+其中 `wildfire` 标识图案进行了重新设计。
+
 ## 开源许可协议
 
 [GNU General Public License v3.0](https://github.com/cheng-kang/wildfire/blob/master/LICENSE)

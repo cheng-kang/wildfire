@@ -71,6 +71,17 @@ Buy us a cup of tea if you think `wildfire` does work!
 
 We appreciate your kindness!
 
+## Acknowledgement
+
+The `wildfire` 
+
+- logo, and
+- default user avatar
+
+are from icons made by <a href="http://www.freepik.com" title="Freepik" target="_blank">Freepik</a> and published on <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">www.flaticon.com</a> under license <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">Creative Commons BY 3.0</a>. 
+
+The `wildfire` logo has been redesigned from the original.
+
 ## License
 
 [GNU General Public License v3.0](https://github.com/cheng-kang/wildfire/blob/master/LICENSE)
