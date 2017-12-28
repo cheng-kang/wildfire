@@ -16,9 +16,9 @@
     </i-form-item>
     <section class="wf-is-main" v-if="isMain">
       <div class="wf-tool-bar">
-        <span style="color: #bbbec4">
-          {{mentionLabel}}
-        </span>
+        <i-tooltip placement="right" :content="mentionLabel">
+          <i-icon type="at" size="14" :class="{ 'wf-inactive': !isMentionAvailable }"></i-icon>
+        </i-tooltip>
       </div>
       <div>
         <i-button type="text"
@@ -139,12 +139,17 @@ export default {
     isCurrentUserBanned () {
       return (this.user && this.user.isBanned) || (!this.user && this.$info.isBanned)
     },
+    isMentionAvailable () {
+      return this.isMentionEnabled && this.user && !this.isCurrentUserBanned
+    },
     mentionLabel () {
       return this.isLoadingUserData
               ? this.$i18next.t('ReplyArea.text.initializing_mention_autocomplete')
-              : (this.user
-                  ? this.$i18next.t('ReplyArea.text.initialized_mention_autocomplete')
-                  : this.$i18next.t('ReplyArea.text.mention_func_not_authorized'))
+              : (this.isCurrentUserBanned
+                  ? this.$i18next.t('ReplyArea.text.mention_func_not_authorized_banned_user')
+                  : (this.user
+                      ? this.$i18next.t('ReplyArea.text.initialized_mention_autocomplete')
+                      : this.$i18next.t('ReplyArea.text.mention_func_not_authorized')))
     }
   },
   mounted () {

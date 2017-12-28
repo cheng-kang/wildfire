@@ -78,10 +78,10 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-comment-item .wf-comment-header .wf-content .wf-meta { font-size: 12px; }
 .wf .wf-comment-item .wf-comment-header .wf-content .wf-parent-link { font-size: 12px; }
 .wf .wf-comment-item .wf-comment-header .wf-content .wf-parent-link:hover { color: black; }
-.wf .wf-comment-item .wf-comment-header .wf-reply-poptip { display: flex; flex-direction: row; align-items: center;}
-.wf .wf-comment-item .wf-comment-header .wf-reply-poptip img { width: 30px; height: 30px; margin-right: 8px;}
-.wf .wf-comment-item .wf-comment-header .wf-reply-poptip div { display: flex; flex-direction: column; }
-.wf .wf-comment-item .wf-comment-header .wf-reply-poptip div span { overflow: hidden; max-width: 120px; text-overflow: ellipsis; }
+.wf .wf-reply-poptip { display: flex; flex-direction: row; align-items: center;}
+.wf .wf-reply-poptip img { width: 30px; height: 30px; margin-right: 8px;}
+.wf .wf-reply-poptip div { display: flex; flex-direction: column; }
+.wf .wf-reply-poptip div span { overflow: hidden; max-width: 120px; text-overflow: ellipsis; }
 .wf .wf-comment-item .wf-comment-content { padding-bottom: 3px; }
 .wf .wf-comment-item .wf-comment-content p { word-break: break-word; }
 .wf .wf-comment-item .wf-comment-content a { text-decoration: underline; }
@@ -114,7 +114,8 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-reply-form.wf-is-reply img { width: 36px; height: 36px; }
 .wf .wf-reply-form .wf-is-main { display: flex; flex-direction: row; margin-left: 60px; justify-content: space-between; }
 .wf .wf-reply-form .wf-is-main div { font-size: 10px; display: flex; }
-.wf .wf-reply-form .wf-is-main .wf-tool-bar { max-height: 32px; overflow-y: auto; margin-right: 10px; flex: 1; }
+.wf .wf-reply-form .wf-is-main .wf-tool-bar { max-height: 32px; overflow-y: auto; margin-right: 10px; flex: 1; align-items: center; }
+.wf .wf-reply-form .wf-is-main .wf-tool-bar .wf-inactive { color: #bbbec4; }
 .wf .wf-reply-form .wf-no-bottom-margin {    /*margin-bottom: 0;*/ }
 .wf .wf-reply-form .wf-float-right { text-align: right; }
 .wf .wf-reply-form .ivu-btn { padding: 6px 15px; }

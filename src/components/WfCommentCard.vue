@@ -47,7 +47,7 @@
             trigger="click"
             placement="bottom-end"
             @on-click="handleDropdownClick">
-            <a href="javascript:void(0)" class="wf-drowdown-menu-button">
+            <a href="javascript:void(0)" class="wf-dropdown-menu-button">
               <i-icon type="arrow-down-b"></i-icon>
             </a>
             <i-dropdown-menu slot="list">
