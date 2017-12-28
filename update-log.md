@@ -2,6 +2,14 @@
 
 ## Beta Versions
 
+### v0.3.4
+
+*Date: 2017-12-28*
+
+**Fixes**
+
+- Fixed user ban status issue. 
+
 ### v0.3.3
 
 *Date: 2017-12-28*
