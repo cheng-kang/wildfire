@@ -1,6 +1,6 @@
 {
   "name": "wildfire",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A drop-in replacement for other comment systems.",
   "keywords": [
     "wildfire",
@@ -10,7 +10,7 @@
     "wilddog",
     "vue"
   ],
-  "homepage": "https://github.com/cheng-kang/wildfire",
+  "homepage": "https://wildfire.js.org",
   "bugs": {
     "url": "https://github.com/cheng-kang/wildfire/issues"
   },
