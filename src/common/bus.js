@@ -33,6 +33,7 @@ const Bus = new Vue({
         Mention
        */
       isLoadingUserData: true,
+      info: {ip: 'unknown', isBanned: false},
       users: [],
       admin: null,
       currentReplyAreaId: null,
@@ -49,6 +50,11 @@ const Bus = new Vue({
       /*
         End of: Comment User Modal
        */
+    }
+  },
+  computed: {
+    isCurrentUserBanned () {
+      return this.info.isBanned
     }
   },
   methods: {

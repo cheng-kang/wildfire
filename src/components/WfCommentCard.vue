@@ -237,9 +237,8 @@ export default {
     $i18next () {
       return this.$_wf.i18next
     },
-    textContent () {
-      return textContent
-    },
+    isCurrentUserBanned: () => Bus.isCurrentUserBanned,
+    textContent: () => textContent,
     distanceInWordsToNow () {
       return this.$_wf.distanceInWordsToNow
     },
@@ -399,7 +398,7 @@ export default {
      */
     toggleVote (type) {
       if (!this.user) { return }
-      if ((this.user && this.user.isBanned) || (!this.user && this.$ip.isBanned)) {
+      if (this.isCurrentUserBanned) {
         this.$Modal.error({
           title: this.$i18next.t('CommentCard.error.banned_title'),
           content: this.$i18next.t('CommentCard.error.banned_content'),
@@ -480,7 +479,7 @@ export default {
     },
     reportCurrentComment () {
       if (!this.user) { return }
-      if ((this.user && this.user.isBanned) || (!this.user && this.$ip.isBanned)) {
+      if (this.isCurrentUserBanned) {
         this.$Modal.error({
           title: this.$i18next.t('CommentCard.error.banned_title'),
           content: this.$i18next.t('CommentCard.error.banned_content'),

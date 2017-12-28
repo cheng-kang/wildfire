@@ -96,9 +96,6 @@ export default {
     $db () {
       return this.$_wf.db
     },
-    $info () {
-      return this.$_wf.info
-    },
     $i18next () {
       return this.$_wf.i18next
     },
@@ -124,20 +121,16 @@ export default {
     isReply () {
       return !!this.replyToComment
     },
+    isCurrentUserBanned: () => Bus.isCurrentUserBanned,
     shouldDisableInput () {
       return this.isPosting || this.commentsLoadingState === 'loading' || this.isCurrentUserBanned
     },
     shouldDisableButton () {
       return this.form.content.trim() === '' || this.isPosting || this.isCurrentUserBanned
     },
-    isLoadingUserData () {
-      return Bus.$data.isLoadingUserData
-    },
+    isLoadingUserData: () => Bus.$data.isLoadingUserData,
     isMentionEnabled () {
       return !this.isLoadingUserData
-    },
-    isCurrentUserBanned () {
-      return (this.user && this.user.isBanned) || (!this.user && this.$info.isBanned)
     },
     isMentionAvailable () {
       return this.isMentionEnabled && this.user && !this.isCurrentUserBanned
@@ -192,7 +185,7 @@ export default {
 
       if (content.trim() !== '') {
         const aDate = new Date()
-        const ip = this.$info.ip
+        const ip = Bus.$data.info.ip
         const uid = user ? user.uid : this.$config.anonymousUserId
         const date = aDate.toISOString()
 

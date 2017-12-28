@@ -80,11 +80,11 @@ export default {
     this.$bindAsArray('banData', this.$db.ref('ban'))
 
     Vue.http.get('https://api.ipify.org?format=json').then(response => {
-      this.$set(this.$_wf.info, 'ip', response.body.ip)
-      this.$set(this.$_wf.info, 'isBanned', this.banList.indexOf(this.$_wf.info.ip) > -1)
+      Bus.$data.info = Object.assign({}, Bus.$data.info, {ip: response.body.ip})
+      this.checkBanState()
     }, response => {
       // error callback
-      this.$set(this.$_wf.info, 'ip', 'unknown')
+      Bus.$data.info = Object.assign({}, Bus.$data.info, {ip: 'unknown'})
     })
   },
   mounted () {
@@ -128,7 +128,7 @@ export default {
           this.user = snapshot.val()
           this.$set(this.user, 'uid', user.uid)
           this.$set(this.user, 'isAdmin', snapshot.val().isAdmin || false)
-          this.$set(this.user, 'isBanned', this.banList.indexOf(this.user.uid) > -1)
+          this.checkBanState()
         })
       })
     },
@@ -164,10 +164,8 @@ export default {
       })
     },
     checkBanState () {
-      if (this.user) {
-        this.$set(this.user, 'isBanned', this.banList.indexOf(this.user.uid) > -1)
-      }
-      this.$set(this.$_wf.info, 'isBanned', this.banList.indexOf(this.$_wf.info.ip) > -1)
+      const isBanned = (this.user && this.banList.indexOf(this.user.uid) > -1) || this.banList.indexOf(Bus.$data.info.ip) > -1
+      Bus.$data.info = Object.assign({}, Bus.$data.info, {isBanned})
     }
   }
 }
