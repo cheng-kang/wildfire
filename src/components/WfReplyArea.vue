@@ -146,8 +146,10 @@ export default {
       return this.isLoadingUserData
               ? this.$i18next.t('ReplyArea.text.initializing_mention_autocomplete')
               : (this.isCurrentUserBanned
-                  ? this.$i18next.t('ReplyArea.text.mention_func_not_authorized')
-                  : this.$i18next.t('ReplyArea.text.initialized_mention_autocomplete'))
+                  ? this.$i18next.t('ReplyArea.text.mention_func_not_authorized_banned_user')
+                  : (this.user
+                      ? this.$i18next.t('ReplyArea.text.initialized_mention_autocomplete')
+                      : this.$i18next.t('ReplyArea.text.mention_func_not_authorized')))
     }
   },
   mounted () {
