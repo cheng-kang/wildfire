@@ -40,7 +40,8 @@
 /* WfFooter.vue */
 .wf .wf-footer { font-weight: 500; display: flex; height: 45px; margin-top: 30px; color: #656c7a; border-top: 2px solid #d4d4d4; justify-content: space-between; align-items: center; }
 .wf .wf-footer a { font-size: 12px; display: flex; align-items: center; }
-.wf .wf-footer .wf-use-wildfire svg, .wf .wf-footer .wf-logo { width: 18px; height: 18px; margin-right: 10px; }
+.wf .wf-footer .wf-use-wildfire svg { width: 18px; height: 18px; margin-right: 10px; }
+.wf .wf-footer .wf-logo img { width: 28px; height: 28px; }
 
 /* WfHeader.vue */
 .wf .wf-header { margin-bottom: 30px; }
