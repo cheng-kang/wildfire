@@ -52,7 +52,7 @@ const install = (_Vue, config) => {
     },
     info: {ip: 'unknown', isBanned: false},
     i18next,
-    formatDate: (date) => format(date, 'YYYY-MM-DD h:mm:ss', { locale: localeObject, addSuffix: true }),
+    formatDate: (date) => format(date, 'YYYY-MM-DD HH:mm:ss', { locale: localeObject, addSuffix: true }),
     distanceInWordsToNow: (date) => distanceInWordsToNow(date, { locale: localeObject, addSuffix: true })
   }
 
