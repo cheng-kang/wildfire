@@ -59,7 +59,7 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-header .wf-no-border-bottom { border-bottom: unset !important; }
 
 /* WfAuthForm.vue */
-.wf .wf-auth-form .wf-wf-form-warp { display: flex; flex-direction: column; height: 100%; padding: 10px 20px 20px 20px; justify-content: center; }
+.wf .wf-auth-form .wf-form-warp { display: flex; flex-direction: column; height: 100%; padding: 10px 20px 20px 20px; justify-content: center; }
 .wf .wf-auth-form .wf-buttons button { margin: 0 10px; }
 
 /* WfCommentCard.vue */
