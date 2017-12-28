@@ -60,8 +60,6 @@ For more showcases, check this Wiki page: [Who is using Wildfire?](https://githu
 
 Buy us a cup of tea if you think `wildfire` does work! 
 
-> B.t.w., don't worry, the donation will be shared with [@mrliao](http://maliao.cn) ;-D.
-
 #### - Paypal Me
 
 <a href="https://www.paypal.me/chengkang" target="_blank"><img src="_static/images/paypal-me.png" width="320"></a>
