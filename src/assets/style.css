@@ -89,7 +89,7 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-comment-item .wf-comment-content pre { padding: 8px 12px; background-color: rgba(255, 255, 255, 0.8); font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px; }
 .wf .wf-comment-item .wf-comment-content pre code { display: inline-block; overflow: auto; width: 100%; max-height: 300px; line-height: 20px; vertical-align: middle; }
 .wf .wf-comment-item .wf-comment-content img { max-width: 100% !important; }
-.wf .wf-comment-item .wf-comment-content img.wf-error-image { width: 80px; border-radius: 6px;}
+.wf .wf-comment-item .wf-comment-content img.wf-error-image { width: 50px; }
 .wf .wf-comment-item .wf-comment-content img.wf-error-image:hover { animation: hvr-buzz-out 0.75s linear 1;}
 .wf .wf-comment-item .wf-less { overflow: hidden; max-height: 180px; margin-bottom: 10px; }
 .wf .wf-comment-item .wf-comment-footer { font-size: 13px; display: flex; align-items: center; }
@@ -157,9 +157,9 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-user-setting .wf-form-warp { display: flex; flex-direction: row; width: 80%; height: 100%; margin: auto; padding-top: 10px; padding-bottom: 30px; align-items: center; align-items: space-between; }
 .wf .wf-user-setting .wf-form-warp form { flex: 1 1 100%; }
 .wf .wf-user-setting .wf-form-warp .wf-avatar { position: relative; top: -16px; left: 10px; height: 100%; flex: 0 0 100px; display: flex; justify-content: center; align-items: center; }
-.wf .wf-user-setting .wf-form-warp .wf-avatar .ivu-avatar { width: 75px; height: 75px; border: 1px solid rgba(0, 0, 0, .2); }
+.wf .wf-user-setting .wf-form-warp .wf-avatar img { width: 75px; height: 75px; border: 1px solid rgba(0, 0, 0, .2); border-radius: 4px; }
 .wf .wf-user-setting .wf-form-warp.wf-is-small-screen .wf-avatar { flex: 0 0 60px; }
-.wf .wf-user-setting .wf-form-warp.wf-is-small-screen .wf-avatar .ivu-avatar { width: 60px; height: 60px; }
+.wf .wf-user-setting .wf-form-warp.wf-is-small-screen .wf-avatar img { width: 60px; height: 60px; }
 .wf .wf-user-setting .wf-buttons button { margin: 0 10px; }
 .wf .wf-user-setting .ivu-tabs-tabpane { display: flex; flex-direction: column; }
 .wf .wf-user-setting .ivu-input-group-append .ivu-btn, .wf-user-setting .ivu-input-group-prepend .ivu-btn { margin: -7px; }

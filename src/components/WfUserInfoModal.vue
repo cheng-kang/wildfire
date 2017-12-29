@@ -2,7 +2,7 @@
   <div class="wf-user-info-modal">
     <img
       :src="selectedCommentUserInfo.photoURL"
-      @error="avatarLoadError">
+      @error="avatarOnError">
     <div>
       <h3>{{selectedCommentUserInfo.displayName}}</h3>
       <p v-if="encodedIP">
@@ -17,7 +17,7 @@
 
 <script>
 import Bus from '../common/bus'
-import { handleImageLoaderror } from '../common/utils'
+import { handleImageOnError } from '../common/utils'
 export default {
   name: 'wf-user-info-modal',
   data () {
@@ -46,11 +46,12 @@ export default {
     }
   },
   methods: {
-    avatarLoadError (event) {
-      const avatarEle = event.target
-      const defaultAvatarURL = this.$config.defaultAvatarURL
-      const title = this.$i18next.t('CommentCard.html_title.image_load_error')
-      handleImageLoaderror(avatarEle, defaultAvatarURL, title)
+    avatarOnError (event) {
+      handleImageOnError(
+        event.target,
+        this.$config.defaultAvatarURL,
+        this.$i18next.t('CommentCard.html_title.image_onerror')
+        )
     }
   }
 }

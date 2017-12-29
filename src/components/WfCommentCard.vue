@@ -5,7 +5,7 @@
         <img
           :src="author.photoURL"
           :class="{ 'wf-anonymous': isPostedByAnonymousUser }"
-          @error="avatarLoadError" />
+          @error="avatarOnError" />
       </div>
       <div class="wf-comment-body">
         <header class="wf-comment-header">
@@ -27,8 +27,8 @@
                 class="wf-reply-poptip">
                 <img
                   :src="replyToComment.author.photoURL"
-                  :class="{ 'wf-anonymous': replyToComment.author.isAnonymousUser }"
-                  @error="avatarLoadError">
+                  :class="{ 'wf-anonymous': replyToComment.author.isAnonymous }"
+                  @error="avatarOnError">
                 <div>
                   <span :title="replyToComment.author.displayName">
                     <strong>{{replyToComment.author.displayName}}</strong>
@@ -178,7 +178,7 @@
 const MAX_CONTENT_HEIGHT = 180
 
 import Bus from '../common/bus'
-import { textContent, handleImageLoaderror } from '../common/utils'
+import { textContent, handleImageOnError } from '../common/utils'
 import WfReplyArea from './WfReplyArea'
 import WfMarkedContent from './WfMarkedContent'
 import errorImage from '../assets/images/error-image.svg'
@@ -278,7 +278,7 @@ export default {
     // Init user info as anonymous user
     this.author.displayName = this.$i18next.t('common.anonymous_user')
     this.author.photoURL = this.$config.defaultAvatarURL
-    this.replyToComment.author.isAnonymousUser = true
+    this.replyToComment.author.isAnonymous = true
     this.replyToComment.author.displayName = this.$i18next.t('common.anonymous_user')
     this.replyToComment.author.photoURL = this.$config.defaultAvatarURL
 
@@ -332,9 +332,7 @@ export default {
             if (!author) { return }
             if (author.displayName) {
               this.replyToComment.author.displayName = author.displayName
-              this.replyToComment.author.isAnonymousUser = false
-            } else {
-              this.replyToComment.author.isAnonymousUser = true
+              this.replyToComment.author.isAnonymous = false
             }
             if (author.photoURL) { this.replyToComment.author.photoURL = author.photoURL }
           })
@@ -362,20 +360,20 @@ export default {
   },
   mounted () {
     const contentEle = document.getElementById('wf-comment-content-' + this.comment.commentId)
-    this.setShowingFullStatus(contentEle)
+    this.checkShouldFold(contentEle)
 
     const imgEles = contentEle.getElementsByTagName('img')
     for (var i = imgEles.length - 1; i >= 0; i--) {
       imgEles[i].onload = () => {
-        this.setShowingFullStatus(contentEle)
+        this.checkShouldFold(contentEle)
       }
       imgEles[i].onerror = (event) => {
         const imageEle = event.target
-        const title = this.$i18next.t('CommentCard.html_title.image_load_error')
+        const title = this.$i18next.t('CommentCard.html_title.image_onerror')
 
         imageEle.className = 'wf-error-image'
-        handleImageLoaderror(imageEle, errorImage, title)
-        this.setShowingFullStatus(contentEle)
+        handleImageOnError(imageEle, errorImage, title)
+        this.checkShouldFold(contentEle)
       }
     }
 
@@ -409,7 +407,7 @@ export default {
       if (username.length > 10) { return username.slice(0, 10) + '...' }
       return username
     },
-    setShowingFullStatus (contentEle) {
+    checkShouldFold (contentEle) {
       /*
         Calculate comment content height
         Note: If longer than MAX_CONTENT_HEIGHT, then fold.
@@ -418,13 +416,17 @@ export default {
       if (contentEleHeight > MAX_CONTENT_HEIGHT) {
         this.isContentTooLong = true
         this.isShowingFullText = false
+      } else {
+        this.isContentTooLong = false
+        this.isShowingFullText = true
       }
     },
-    avatarLoadError (event) {
-      const avatarEle = event.target
-      const defaultAvatarURL = this.$config.defaultAvatarURL
-      const title = this.$i18next.t('CommentCard.html_title.image_load_error')
-      handleImageLoaderror(avatarEle, defaultAvatarURL, title)
+    avatarOnError (event) {
+      handleImageOnError(
+        event.target,
+        this.$config.defaultAvatarURL,
+        this.$i18next.t('CommentCard.html_title.image_onerror')
+        )
     },
     toggleReplyArea () {
       this.isShowingReplyArea = !this.isShowingReplyArea

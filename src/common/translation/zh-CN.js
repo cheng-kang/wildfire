@@ -106,7 +106,7 @@ export const langZhCN = {
     html_title: {
       dislike_comment: '踩这条评论。',
       like_comment: '给这条评论点赞！',
-      image_load_error: '图片加载失败！'
+      image_onerror: '图片加载失败。'
     },
     success: {
       banning_user: '封禁成功。',
