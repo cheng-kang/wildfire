@@ -1,6 +1,8 @@
 <template>
   <div class="wf-user-info-modal">
-    <img :src="selectedCommentUserInfo.photoURL">
+    <img
+      :src="selectedCommentUserInfo.photoURL"
+      @error="avatarLoadError">
     <div>
       <h3>{{selectedCommentUserInfo.displayName}}</h3>
       <p v-if="encodedIP">
@@ -15,6 +17,7 @@
 
 <script>
 import Bus from '../common/bus'
+import { handleImageLoaderror } from '../common/utils'
 export default {
   name: 'wf-user-info-modal',
   data () {
@@ -40,6 +43,14 @@ export default {
     isAnonymousUser () {
       const { anonymousUserId } = this.$config
       return !this.selectedCommentUserInfo.uid || this.selectedCommentUserInfo.uid === anonymousUserId
+    }
+  },
+  methods: {
+    avatarLoadError (event) {
+      const avatarEle = event.target
+      const defaultAvatarURL = this.$config.defaultAvatarURL
+      const title = this.$i18next.t('CommentCard.html_title.image_load_error')
+      handleImageLoaderror(avatarEle, defaultAvatarURL, title)
     }
   }
 }

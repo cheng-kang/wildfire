@@ -105,7 +105,8 @@ export const langEn = {
     },
     html_title: {
       dislike_comment: 'Dislike this comment.',
-      like_comment: 'Like this comment!'
+      like_comment: 'Like this comment!',
+      image_load_error: 'Image loading failed!'
     },
     success: {
       banning_user: 'User banned.',

@@ -27,7 +27,7 @@
 .wf .wf-body .wf-no-content-tip { display: flex; justify-content: center; align-items: center; }
 .wf .wf-body .wf-error { color: #ed3f14; }
 .wf .wf-body .ivu-page { text-align: center; }
-/* 
+/*
   Thought the four lines below are for this component only,
   the DOM elements will be transfered into `document.body`;
   thus, they are not scoped.
@@ -89,6 +89,8 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-comment-item .wf-comment-content pre { padding: 8px 12px; background-color: rgba(255, 255, 255, 0.8); font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 12px; border: 1px solid #ddd; border-radius: 3px; }
 .wf .wf-comment-item .wf-comment-content pre code { display: inline-block; overflow: auto; width: 100%; max-height: 300px; line-height: 20px; vertical-align: middle; }
 .wf .wf-comment-item .wf-comment-content img { max-width: 100% !important; }
+.wf .wf-comment-item .wf-comment-content img.wf-error-image { width: 80px; border-radius: 6px;}
+.wf .wf-comment-item .wf-comment-content img.wf-error-image:hover { animation: hvr-buzz-out 0.75s linear 1;}
 .wf .wf-comment-item .wf-less { overflow: hidden; max-height: 180px; margin-bottom: 10px; }
 .wf .wf-comment-item .wf-comment-footer { font-size: 13px; display: flex; align-items: center; }
 .wf .wf-comment-item .wf-comment-footer .wf-separator { font-weight: 500; margin: 0 6px; color: #e7e9ee; }
@@ -134,7 +136,7 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-report-management .wf-ul .wf-li .wf-detail { flex: 1; }
 .wf .wf-report-management .wf-buttons .ivu-btn { opacity: 0.7; transition: opacity 0.2s ease-out; padding: 0px 3px; }
 .wf .wf-report-management .wf-buttons .ivu-btn:hover { opacity: 1; }
-/* 
+/*
   Thought the two lines below are for this component only,
   the DOM elements will be transfered into `document.body`;
   thus, they are not scoped.

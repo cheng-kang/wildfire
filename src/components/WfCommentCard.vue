@@ -2,7 +2,10 @@
   <li class="wf-comment-item" :class="{'wf-reply-item': !isTopLevelComment}">
     <section class="wf-section-comment">
       <div class="wf-avatar">
-        <img :src="author.photoURL" :class="{ 'wf-anonymous': isPostedByAnonymousUser }">
+        <img
+          :src="author.photoURL"
+          :class="{ 'wf-anonymous': isPostedByAnonymousUser }"
+          @error="avatarLoadError" />
       </div>
       <div class="wf-comment-body">
         <header class="wf-comment-header">
@@ -22,7 +25,10 @@
                       replyToComment.author.photoURL"
                 slot="content"
                 class="wf-reply-poptip">
-                <img :src="replyToComment.author.photoURL">
+                <img
+                  :src="replyToComment.author.photoURL"
+                  :class="{ 'wf-anonymous': replyToComment.author.isAnonymousUser }"
+                  @error="avatarLoadError">
                 <div>
                   <span :title="replyToComment.author.displayName">
                     <strong>{{replyToComment.author.displayName}}</strong>
@@ -172,10 +178,10 @@
 const MAX_CONTENT_HEIGHT = 180
 
 import Bus from '../common/bus'
-import { textContent } from '../common/utils'
+import { textContent, handleImageLoaderror } from '../common/utils'
 import WfReplyArea from './WfReplyArea'
 import WfMarkedContent from './WfMarkedContent'
-
+import errorImage from '../assets/images/error-image.svg'
 /*
   Wf Comment Card
   Note: this component is used for both top-level `comments`
@@ -212,6 +218,7 @@ export default {
       isShowingFullText: true,
       replyToComment: {
         author: {
+          isAnonymousUser: null,
           displayName: '',
           photoURL: ''
         },
@@ -271,6 +278,7 @@ export default {
     // Init user info as anonymous user
     this.author.displayName = this.$i18next.t('common.anonymous_user')
     this.author.photoURL = this.$config.defaultAvatarURL
+    this.replyToComment.author.isAnonymousUser = true
     this.replyToComment.author.displayName = this.$i18next.t('common.anonymous_user')
     this.replyToComment.author.photoURL = this.$config.defaultAvatarURL
 
@@ -322,7 +330,12 @@ export default {
               otherwise use default anonymous user info value.
              */
             if (!author) { return }
-            if (author.displayName) { this.replyToComment.author.displayName = author.displayName }
+            if (author.displayName) {
+              this.replyToComment.author.displayName = author.displayName
+              this.replyToComment.author.isAnonymousUser = false
+            } else {
+              this.replyToComment.author.isAnonymousUser = true
+            }
             if (author.photoURL) { this.replyToComment.author.photoURL = author.photoURL }
           })
         }
@@ -348,15 +361,22 @@ export default {
     }
   },
   mounted () {
-    /*
-      Calculate comment content height
-      Note: If longer than MAX_CONTENT_HEIGHT, then fold.
-     */
     const contentEle = document.getElementById('wf-comment-content-' + this.comment.commentId)
-    const contentEleHeight = parseInt(window.getComputedStyle(contentEle).height)
-    if (contentEleHeight > MAX_CONTENT_HEIGHT) {
-      this.isContentTooLong = true
-      this.isShowingFullText = false
+    this.setShowingFullStatus(contentEle)
+
+    const imgEles = contentEle.getElementsByTagName('img')
+    for (var i = imgEles.length - 1; i >= 0; i--) {
+      imgEles[i].onload = () => {
+        this.setShowingFullStatus(contentEle)
+      }
+      imgEles[i].onerror = (event) => {
+        const imageEle = event.target
+        const title = this.$i18next.t('CommentCard.html_title.image_load_error')
+
+        imageEle.className = 'wf-error-image'
+        handleImageLoaderror(imageEle, errorImage, title)
+        this.setShowingFullStatus(contentEle)
+      }
     }
 
     /*
@@ -388,6 +408,23 @@ export default {
     shortenedUsername (username) {
       if (username.length > 10) { return username.slice(0, 10) + '...' }
       return username
+    },
+    setShowingFullStatus (contentEle) {
+      /*
+        Calculate comment content height
+        Note: If longer than MAX_CONTENT_HEIGHT, then fold.
+       */
+      const contentEleHeight = parseInt(window.getComputedStyle(contentEle).height)
+      if (contentEleHeight > MAX_CONTENT_HEIGHT) {
+        this.isContentTooLong = true
+        this.isShowingFullText = false
+      }
+    },
+    avatarLoadError (event) {
+      const avatarEle = event.target
+      const defaultAvatarURL = this.$config.defaultAvatarURL
+      const title = this.$i18next.t('CommentCard.html_title.image_load_error')
+      handleImageLoaderror(avatarEle, defaultAvatarURL, title)
     },
     toggleReplyArea () {
       this.isShowingReplyArea = !this.isShowingReplyArea
