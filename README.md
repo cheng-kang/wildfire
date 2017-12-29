@@ -46,7 +46,7 @@ You can find a live `wildfire` at the bottom of this page (as well as other page
 For more showcases, check this Wiki page: [Who is using Wildfire?](https://github.com/cheng-kang/wildfire/wiki/1.-%E8%BF%99%E4%BA%9B%E7%BD%91%E7%AB%99%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8-Wildfire-%E9%87%8E%E7%81%AB%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%EF%BC%81).
 
 <p align="center">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/6fada41b/resources/screenshots/wldfire-dark-theme.png" height="320">
+  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d9862632/resources/screenshots/wldfire-dark-theme.png" height="320">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/1.png" height="320">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/2.png" height="320">
   <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/3.png" height="320">
