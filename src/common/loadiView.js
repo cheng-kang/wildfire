@@ -24,7 +24,6 @@ import '../assets/iview.css'
  */
 
 import AutoComplete from 'iview/src/components/auto-complete'
-import Avatar from 'iview/src/components/avatar'
 import Button from 'iview/src/components/button'
 import Card from 'iview/src/components/card'
 import Collapse from 'iview/src/components/collapse'
@@ -50,8 +49,6 @@ import Tabs from './iview/tabs'
 const iview = {
   AutoComplete,
   iAutoComplete: AutoComplete,
-  Avatar,
-  iAvatar: Avatar,
   Button,
   iButton: Button,
   Card,

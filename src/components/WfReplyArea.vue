@@ -4,7 +4,7 @@
     class="wf-reply-form"
     :class="{ 'wf-is-reply': isReply }">
     <i-form-item class="wf-no-bottom-margin">
-      <img slot="label" :src="avatarURL" :class="{ 'wf-anonymous': user === null }">
+      <img slot="label" :src="avatarURL" :class="{ 'wf-anonymous': user === null }" @error="avatarOnError">
       <i-input
         v-model="form.content"
         type="textarea"
@@ -59,6 +59,7 @@
 
 <script>
 import Bus from '../common/bus'
+import { handleImageOnError } from '../common/utils'
 export default {
   name: 'wf-reply-area',
   props: [
@@ -164,6 +165,13 @@ export default {
     isAnonymousUser (uid) {
       const { anonymousUserId } = this.$config
       return !uid || uid === anonymousUserId
+    },
+    avatarOnError (event) {
+      handleImageOnError(
+        event.target,
+        this.$config.defaultAvatarURL,
+        this.$i18next.t('CommentCard.html_title.image_onerror')
+        )
     },
     postComment () {
       if (this.isPosting) { return }

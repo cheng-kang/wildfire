@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="65" height="52">
+  <path fill="none" d="M-1-1h67v54H-1z"/>
+  <g>
+    <path fill="none" d="M5 5h55v42H5z"/>
+    <path fill="#dddee1" d="M61 48H4V4h57v44zM6 46h53V6H6v40z"/>
+    <path fill="#e9eaec" d="M9 9h47v34H9z"/>
+    <path fill="none" d="M57 44H8V8h49v36zm-47-2h45V10H10v32z"/>
+    <g stroke="null">
+      <path fill="#a67d6e" d="M41.78854 25.76134s-1.01314 1.48831-3.13649 2.74818c0 0 1.53782-12.99694-8.4822-15.25423 2.56721 9.42187-3.26545 12.07896-5.3916 7.10123-3.55057 4.74053-.8547 8.87641-.8547 8.87641-1.45588.20976-2.67887-1.38082-2.67887-1.38082-.01096.19593-.017.39322-.017.59188 0 5.77385 4.68066 10.45444 10.45444 10.45444s10.45444-4.68066 10.45444-10.45444c0-.9275-.12132-1.82651-.34802-2.68265z"/>
+      <path fill="#875a4c" d="M41.78854 25.76134s-1.01314 1.48831-3.13649 2.74818c0 0 1.37727-11.6419-6.96993-14.80258v25.19149c5.77386 0 10.45444-4.68066 10.45444-10.45444 0-.9275-.12132-1.8265-.34802-2.68264z"/>
+      <path fill="#e0d8a9" d="M36.26701 34.31354c0 2.53214-2.05275 4.58489-4.58489 4.58489s-4.58489-2.05275-4.58489-4.58489c0-1.35534.5881-2.57326 1.52293-3.41263 1.77268 2.40832 4.29885-1.24491 2.33016-3.91266 0-.00008 5.31668.66618 5.31668 7.32528z"/>
+      <path fill="#cfbd97" d="M31.68212 27.16423v11.73412c2.53214 0 4.58489-2.05275 4.58489-4.58489 0-5.10715-3.12727-6.68919-4.58489-7.14923z"/>
+    </g>
+    <path fill="none" stroke="null" stroke-linecap="null" stroke-linejoin="null" stroke-opacity="null" stroke-width="null" d="M62.03079 24.86731L42.28966 48.49195"/>
+    <path fill="none" stroke="null" stroke-linecap="null" stroke-linejoin="null" stroke-opacity="null" stroke-width="10" d="M42.61328 49.1392L58.14729 23.411"/>
+    <path fill="#fff" stroke="null" stroke-opacity="null" stroke-width="10" d="M.70605091 20.64301754l34.64101615-20 4 6.92820323-34.64101615 20z"/>
+    <text x="11.70213" y="17.57483" fill="#ed3f14" fill-opacity="null" stroke="null" stroke-opacity="null" stroke-width="0" font-family="Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, 微软雅黑, Arial, sans-serif" font-size="10" transform="rotate(-30 20.02553558 14.10691738)">
+      404
+    </text>
+  </g>
+</svg>

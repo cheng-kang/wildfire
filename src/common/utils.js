@@ -17,3 +17,10 @@ export const stripHTML = (html) => {
 
 // Get text content from Markdown content
 export const textContent = (content) => stripHTML(markdown(content))
+
+export const handleImageOnError = (imageEle, defaultImageURL, imageTitle) => {
+  const originalImageURL = imageEle.src
+  imageEle.title = imageTitle
+  imageEle.setAttribute('data-original-url', originalImageURL)
+  imageEle.src = defaultImageURL
+}

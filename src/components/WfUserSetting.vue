@@ -28,8 +28,8 @@
             </i-button>
           </div>
         </i-form>
-        <div class="wf-avatar">
-          <i-avatar shape="square" style="background: #fff" :src="avatarTestURL" />
+        <div class="wf-avatar" >
+          <img :src="avatarTestURL" @error="avatarOnError">
         </div>
       </div>
     </i-tab-pane>
@@ -73,6 +73,7 @@
 
 <script>
 import Bus from '../common/bus'
+import { handleImageOnError } from '../common/utils'
 import WfTip from './WfTip'
 export default {
   name: 'wf-user-setting',
@@ -197,6 +198,13 @@ export default {
     })
   },
   methods: {
+    avatarOnError (event) {
+      handleImageOnError(
+        event.target,
+        this.$config.defaultAvatarURL,
+        this.$i18next.t('CommentCard.html_title.image_onerror')
+        )
+    },
     handleChangeProfile () {
       this.$refs['profileForm'].validate((valid) => {
         if (valid) {
