@@ -2,6 +2,19 @@
 
 ## Beta Versions
 
+### v0.3.6
+
+*Date: 2017-12-28*
+
+**Enhancement(s)**
+
+- Changed to a better IP info API.
+
+**Fix(es)**
+
+- Fixed comment content folding issue. Now comment content height will be checked after each image being loaded, and make sure comment folds when needed.
+- Handled image loading error issue by replacing missing images with default images.
+
 ### v0.3.5
 
 *Date: 2017-12-28*
