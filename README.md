@@ -1,8 +1,8 @@
 # Wildfire [![](https://img.shields.io/npm/v/wildfire.svg?style=flat-square)](https://www.npmjs.com/wildfire)
 
-> A drop-in replacement for other comment systems.
+> A drop-in replacement for other comment plug-ins.
 
-![](https://cdn.rawgit.com/cheng-kang/wildfire/52a1fdea/resources/screenshots/home-page.png)
+![](https://cdn.rawgit.com/cheng-kang/wildfire/1b8a7387/resources/screenshots/home-page.png)
 
 **Please visit the brand new [Wildfire Home Page](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)). Detailed documentation is available.**
 
@@ -14,7 +14,7 @@
 
 ## Intro
 
-`wildfire` aims to be an **it-just-works** comment system for personal websites, like your `Hexo` blogs. It takes advantage of free real-time databases ([Firebase](https://firebase.google.com) and [Wilddog](https://wilddog.com)) to store your comments data, and provide you real-time communicating experience.
+`wildfire` aims to be an **it-just-works** comment plug-in for personal websites, like your `Hexo` blogs. It takes advantage of free real-time databases ([Firebase](https://firebase.google.com) and [Wilddog](https://wilddog.com)) to store your comments data, and provide you real-time communicating experience.
 
 
 Continue reading [Get Started](https://wildfire.js.org/#/preface), and start your journey with `wildfire`!
