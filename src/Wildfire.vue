@@ -79,11 +79,13 @@ export default {
 
     this.$bindAsArray('banData', this.$db.ref('ban'))
 
-    Vue.http.get('https://api.ipify.org?format=json').then(response => {
-      Bus.$data.info = Object.assign({}, Bus.$data.info, {ip: response.body.ip})
+    Vue.http.get('https://api.userinfo.io/userinfos')
+    .then(response => {
+      Bus.$data.info = Object.assign({}, Bus.$data.info, {ip: response.data.ip_address})
       this.checkBanState()
-    }, response => {
-      // error callback
+    })
+    .catch(error => {
+      console.error(error)
       Bus.$data.info = Object.assign({}, Bus.$data.info, {ip: 'unknown'})
     })
   },
