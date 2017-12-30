@@ -18,7 +18,8 @@
       </ul>
       <i-page
         :total="pageCommentsCount"
-        v-if="pageCommentsCount > 10"
+        :page-size="numberOfCommentsPerPage"
+        v-if="pageCommentsCount > numberOfCommentsPerPage"
         size="small"
         @on-change="pageChanged"></i-page>
     </template>
@@ -97,7 +98,7 @@ export default {
   ],
   data () {
     return {
-      numberOfCommentsPerPage: 10,
+      numberOfCommentsPerPage: 8,
       currentPage: 1,
       /*
         Mention
