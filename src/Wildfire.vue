@@ -83,10 +83,17 @@ export default {
     .then(response => {
       Bus.$data.info = Object.assign({}, Bus.$data.info, {ip: response.data.ip_address})
       this.checkBanState()
+      return response.data
     })
     .catch(error => {
       console.error(error)
       Bus.$data.info = Object.assign({}, Bus.$data.info, {ip: 'unknown'})
+    })
+    .then(data => {
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') { return }
+      const { pageURL, pageTitle, databaseProvider } = this.$config
+      const wfAnalyticsURL = (databaseProvider === 'firebase' ? 'https://https://wildfire-bada3.firebaseio.com/' : 'https://autolayout.wilddogio.com/') + `sites/${pageURL}.json`
+      Vue.http.post(wfAnalyticsURL, Object.assign({}, data, {pageTitle}))
     })
   },
   mounted () {
