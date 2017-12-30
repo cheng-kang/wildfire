@@ -86,10 +86,12 @@ export const langEn = {
       confirm: 'Confirm',
       report_comment: 'Report this comment',
       ban_user: 'Ban this user',
-      show_full_text: 'Show full text',
-      show_more_discussion: 'Show more',
-      show_less_discussion: 'Show less',
-      show_less_text: 'Show less text'
+      show_full_content: 'Show full content',
+      show_more_discussion: 'Show {{count}} more discussion',
+      show_more_discussion_plural: 'Show {{count}} more discussions',
+      show_less_content: 'Show less content',
+      show_less_discussion: 'Fold {{count}} discussion',
+      show_less_discussion_plural: 'Fold {{count}} discussions'
     },
     confirm: {
       deleting_comment: 'Are you sure to delete this comment?'

@@ -80,11 +80,11 @@
             type="text" long>
             <template v-if="isShowingFullText">
               <i-icon type="chevron-up"></i-icon>
-              {{$i18next.t('CommentCard.btn.show_less_text')}}
+              {{$i18next.t('CommentCard.btn.show_less_content')}}
             </template>
             <template v-else>
               <i-icon type="chevron-down"></i-icon>
-              {{$i18next.t('CommentCard.btn.show_full_text')}}
+              {{$i18next.t('CommentCard.btn.show_full_content')}}
             </template>
           </i-button>
         </div>
@@ -162,11 +162,11 @@
           long>
           <template v-if="isShowingLessReplies">
             <i-icon type="chevron-down"></i-icon>
-            {{$i18next.t('CommentCard.btn.show_more_discussion')}}
+            {{$i18next.t('CommentCard.btn.show_more_discussion', { count: foldedDiscussionCount })}}
           </template>
           <template v-else>
             <i-icon type="chevron-up"></i-icon>
-            {{$i18next.t('CommentCard.btn.show_less_discussion')}}
+            {{$i18next.t('CommentCard.btn.show_less_discussion', { count: foldedDiscussionCount })}}
           </template>
         </i-button>
       </ul>
@@ -272,6 +272,9 @@ export default {
     },
     canDelete () {
       return this.user && (this.user.uid === this.comment.uid || this.user.isAdmin)
+    },
+    foldedDiscussionCount () {
+      return this.replies.length - this.numberOfRepliesWhenShowingLess
     }
   },
   created () {

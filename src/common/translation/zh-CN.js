@@ -86,10 +86,12 @@ export const langZhCN = {
       confirm: '确认',
       report_comment: '举报此评论',
       ban_user: '封禁该用户',
-      show_full_text: '展开全部',
-      show_more_discussion: '展开更多讨论',
-      show_less_discussion: '收起更多讨论',
-      show_less_text: '收起'
+      show_full_content: '展开全文',
+      show_more_discussion: '展开更多 {{count}} 条讨论',
+      show_more_discussion_plural: '展开更多 {{count}} 条讨论',
+      show_less_content: '收起',
+      show_less_discussion: '收起 {{count}} 条讨论',
+      show_less_discussion_plural: '收起 {{count}} 条讨论'
     },
     confirm: {
       deleting_comment: '你确定要删除这条评论吗？'
