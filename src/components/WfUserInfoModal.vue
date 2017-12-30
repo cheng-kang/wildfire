@@ -2,6 +2,7 @@
   <div class="wf-user-info-modal">
     <img
       :src="selectedCommentUserInfo.photoURL"
+      :class="{ 'wf-anonymous': isAnonymousUser }"
       @error="avatarOnError">
     <div>
       <h3>{{selectedCommentUserInfo.displayName}}</h3>
