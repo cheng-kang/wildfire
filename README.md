@@ -2,7 +2,7 @@
 
 > A drop-in replacement for other comment plug-ins.
 
-!> **IMPORTANT MESSAGE:** If you are going to add `wildfire`, or have added it, to your website, please use the CDN link of the specific version `v0.3.7` to load the script, e.g. `https://unpkg.com/wildfire@0.3.7/dist/wildfire.auto.js`. We are preparing a major update to `wildfire`, and your help will make the transition smoother. More details to come. Thanks a lot!
+!> **IMPORTANT MESSAGE:** If you are going to add `wildfire`, or have added it, to your website, please use the CDN link of the specific version `v0.3.8` to load the script, e.g. `https://unpkg.com/wildfire@0.3.8/dist/wildfire.auto.js`. We are preparing a major update to `wildfire`, and your help will make the transition smoother. More details to come. Thanks a lot!
 
 ## Hello, world!
 

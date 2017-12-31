@@ -2,6 +2,14 @@
 
 ## Beta Versions
 
+### v0.3.8
+
+*Date: 2017-12-30*
+
+**Fix(es)**
+
+- Corrected user data collecting API link for Firebase.
+
 ### v0.3.7
 
 *Date: 2017-12-30*
