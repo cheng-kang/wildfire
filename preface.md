@@ -15,13 +15,13 @@ Before getting started, we would like to give you a little more information.
 
 You can use the following links to quickly load **latest version** `wildfire` files:
 
-- wildfire.auto.js: https://unpkg.com/wildfire/dist/wildfire.auto.js
+- wildfire.auto.js: https://unpkg.com/wildfire@0.3.7/dist/wildfire.auto.js
 - firebase: 
-    + wildfire.min.js: https://unpkg.com/wildfire/dist/firebase/wildfire.min.js
-    + wildfire.css: https://unpkg.com/wildfire/dist/firebase/static/wildfire.css
+    + wildfire.min.js: https://unpkg.com/wildfire@0.3.7/dist/firebase/wildfire.min.js
+    + wildfire.css: https://unpkg.com/wildfire@0.3.7/dist/firebase/static/wildfire.css
 - wilddog: 
-    + wildfire.min.js: https://unpkg.com/wildfire/dist/wilddog/wildfire.min.js
-    + wildfire.css: https://unpkg.com/wildfire/dist/wilddog/static/wildfire.css
+    + wildfire.min.js: https://unpkg.com/wildfire@0.3.7/dist/wilddog/wildfire.min.js
+    + wildfire.css: https://unpkg.com/wildfire@0.3.7/dist/wilddog/static/wildfire.css
 
 If you wish to load `wildfire` with specific version, please refer to [UNPKG](https://unpkg.com/).
 

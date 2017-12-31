@@ -2,9 +2,28 @@
 
 ## Beta Versions
 
+### v0.3.7
+
+*Date: 2017-12-30*
+
+**Change(s)**
+
+- Added script for recording user data. It will be removed in the next major release.
+
+> This script is used for getting websites that are currently using `wildfire`. The reason for collecting the data is that we are considering a major change to the project, and we hope we could be able to find all our users and inform them the change, to make sure of a smooth transition to the upcoming new version. This script will be removed in the next major release.
+
+**Enhancement(s)**
+
+- Updated texts for folding buttons.
+- Changed numbers of comments per page from 10 to 8.
+
+**Fix(es)**
+
+- Added missing filter for anonymous user avatar in user info modal.
+
 ### v0.3.6
 
-*Date: 2017-12-28*
+*Date: 2017-12-29*
 
 **Enhancement(s)**
 

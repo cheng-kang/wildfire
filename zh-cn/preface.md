@@ -15,13 +15,13 @@
 
 你可以使用以下的链接来快速加载**最新版本**的 `wildfire` 文件：
 
-- wildfire.auto.js: https://unpkg.com/wildfire/dist/wildfire.auto.js
+- wildfire.auto.js: https://unpkg.com/wildfire@0.3.7/dist/wildfire.auto.js
 - firebase: 
-    + wildfire.min.js: https://unpkg.com/wildfire/dist/firebase/wildfire.min.js
-    + wildfire.css: https://unpkg.com/wildfire/dist/firebase/static/wildfire.css
+    + wildfire.min.js: https://unpkg.com/wildfire@0.3.7/dist/firebase/wildfire.min.js
+    + wildfire.css: https://unpkg.com/wildfire@0.3.7/dist/firebase/static/wildfire.css
 - wilddog: 
-    + wildfire.min.js: https://unpkg.com/wildfire/dist/wilddog/wildfire.min.js
-    + wildfire.css: https://unpkg.com/wildfire/dist/wilddog/static/wildfire.css
+    + wildfire.min.js: https://unpkg.com/wildfire@0.3.7/dist/wilddog/wildfire.min.js
+    + wildfire.css: https://unpkg.com/wildfire@0.3.7/dist/wilddog/static/wildfire.css
 
 如果你想要加载特定版本的 `wildfire`，请查看 [UNPKG](https://unpkg.com/)。
 

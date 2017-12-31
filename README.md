@@ -2,6 +2,8 @@
 
 > A drop-in replacement for other comment plug-ins.
 
+!> **IMPORTANT MESSAGE:** If you are going to add `wildfire`, or have added it, to your website, please use the CDN link of the specific version `v0.3.7` to load the script, e.g. `https://unpkg.com/wildfire@0.3.7/dist/wildfire.auto.js`. We are preparing a major update to `wildfire`, and your help will make the transition smoother. More details to come. Thanks a lot!
+
 ## Hello, world!
 
 `wildfire` aims to be an **it-just-works** comment plug-in for personal websites, like your `Hexo` blogs. It takes advantage of free real-time databases ([Firebase](https://firebase.google.com) and [Wilddog](https://wilddog.com)) to store your comments data, and provide you real-time communicating experience.
