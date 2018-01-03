@@ -24,3 +24,12 @@ export const handleImageOnError = (imageEle, defaultImageURL, imageTitle) => {
   imageEle.setAttribute('data-original-url', originalImageURL)
   imageEle.src = defaultImageURL
 }
+
+export const defaultPageURL = (isURLWithHashtag = false) => {
+  const { origin, pathname, hash } = window.location
+  if (!isURLWithHashtag) console.log(origin + pathname)
+  if (!isURLWithHashtag) return origin + pathname
+  const hashNoQM = hash.split('?')[0] // Hash without question mark (the search part of URL)
+  console.log(origin + pathname + hashNoQM)
+  return origin + pathname + hashNoQM
+}

@@ -8,31 +8,36 @@ import { initLocalComponents } from './common/loadLocalComponents'
 import iView from './common/loadiView'
 import dateFns from './common/loadDateFns'
 import i18next, { initI18next, resetI18next, addTranslation } from './common/loadI18next'
-import { b64EncodeUnicode, b64DecodeUnicode } from './common/utils'
+import { b64EncodeUnicode, b64DecodeUnicode, defaultPageURL } from './common/utils'
 import Wildfire from './Wildfire'
 import './assets/style.css'
 import './assets/style.dark.css'
 import './assets/animation.css'
 
 export const install = (_Vue, config) => {
-  // Init wildfire components
   initLocalComponents(_Vue)
 
   if (!_Vue.http) { _Vue.use(VueResource) }
 
   _Vue.use(iView)
 
-  const {
+  let {
     databaseProvider,
     databaseConfig,
     standbyDatabaseConfigs = [],
+
     pageTitle = document.title,
-    pageURL = window.location.href,
+    pageURL,
+    isURLWithHashtag = false,
+
     theme = 'light',
     locale = 'en',
     defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg',
+
     plugins = []
   } = config
+
+  if (!pageURL) pageURL = defaultPageURL(isURLWithHashtag)
 
   initI18next(locale)
 
@@ -45,6 +50,7 @@ export const install = (_Vue, config) => {
       standbyDatabaseConfigs,
       pageTitle,
       pageURL: b64EncodeUnicode(pageURL), // encode pageURL with base64
+      isURLWithHashtag,
       locale,
       theme,
       defaultAvatarURL,
@@ -58,7 +64,13 @@ export const install = (_Vue, config) => {
     pluginOptions: {}
   }
 
-  if (databaseProvider === 'wilddog') {
+  if (databaseProvider === 'firebase') {
+    if (!_Vue.$bindAsObject) { _Vue.use(VueFire) }
+    wf.dbApp = firebase.initializeApp(databaseConfig, `wildfire-${databaseConfig.projectId}`)
+    wf.db = wf.dbApp.database()
+    wf.auth = wf.dbApp.auth()
+    wf.authService = firebase.auth.EmailAuthProvider.credential
+  } else if (databaseProvider === 'wilddog') {
     if (!_Vue.$bindAsObject) { _Vue.use(VueWild) }
     wf.dbApp = wilddog.initializeApp({
       authDomain: `${databaseConfig.siteId}.wilddog.com`,
@@ -67,12 +79,6 @@ export const install = (_Vue, config) => {
     wf.db = wf.dbApp.sync()
     wf.auth = wf.dbApp.auth()
     wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
-  } else if (databaseProvider === 'firebase') {
-    if (!_Vue.$bindAsObject) { _Vue.use(VueFire) }
-    wf.dbApp = firebase.initializeApp(databaseConfig, `wildfire-${databaseConfig.projectId}`)
-    wf.db = wf.dbApp.database()
-    wf.auth = wf.dbApp.auth()
-    wf.authService = firebase.auth.EmailAuthProvider.credential
   }
 
   wf.b64EncodeUnicode = b64EncodeUnicode
@@ -80,7 +86,6 @@ export const install = (_Vue, config) => {
 
   Object.assign(Bus, wf)
 
-  // Install plugins
   plugins.forEach(plugin => {
     plugin.install({
       registerComponent: (componentName, component) => {
@@ -112,7 +117,8 @@ export const reset = (_Vue, config = {}, err) => {
     databaseConfig,
     standbyDatabaseConfigs = Bus.config.standbyDatabaseConfigs,
     pageTitle = document.title,
-    pageURL = window.location.href,
+    pageURL,
+    isURLWithHashtag = Bus.config.isURLWithHashtag,
     theme = Bus.config.theme,
     locale = Bus.config.locale,
     defaultAvatarURL = Bus.config.defaultAvatarURL,
@@ -120,6 +126,7 @@ export const reset = (_Vue, config = {}, err) => {
   } = config
 
   if (!databaseConfig) databaseConfig = getDatabaseConfig()
+  if (!pageURL) pageURL = defaultPageURL(isURLWithHashtag)
 
   resetI18next(locale)
 
@@ -131,6 +138,7 @@ export const reset = (_Vue, config = {}, err) => {
       databaseConfig,
       standbyDatabaseConfigs,
       pageTitle,
+      isURLWithHashtag,
       pageURL: b64EncodeUnicode(pageURL), // encode pageURL with base64
       locale,
       theme,
@@ -144,7 +152,14 @@ export const reset = (_Vue, config = {}, err) => {
     pluginOptions: {}
   }
 
-  if (databaseProvider === 'wilddog') {
+  if (databaseProvider === 'firebase') {
+    if (!_Vue.$bindAsObject) { _Vue.use(VueFire) }
+    const appName = `wildfire-${databaseConfig.projectId}`
+    wf.dbApp = firebase.apps.find(app => app.name === appName) || firebase.initializeApp(databaseConfig, appName)
+    wf.db = wf.dbApp.database()
+    wf.auth = wf.dbApp.auth()
+    wf.authService = firebase.auth.EmailAuthProvider.credential
+  } else if (databaseProvider === 'wilddog') {
     if (!_Vue.$bindAsObject) { _Vue.use(VueWild) }
     wf.dbApp = wilddog.initializeApp({
       authDomain: `${databaseConfig.siteId}.wilddog.com`,
@@ -153,18 +168,10 @@ export const reset = (_Vue, config = {}, err) => {
     wf.db = wf.dbApp.sync()
     wf.auth = wf.dbApp.auth()
     wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
-  } else if (databaseProvider === 'firebase') {
-    if (!_Vue.$bindAsObject) { _Vue.use(VueFire) }
-    const appName = `wildfire-${databaseConfig.projectId}`
-    wf.dbApp = firebase.apps.find(app => app.name === appName) || firebase.initializeApp(databaseConfig, appName)
-    wf.db = wf.dbApp.database()
-    wf.auth = wf.dbApp.auth()
-    wf.authService = firebase.auth.EmailAuthProvider.credential
   }
 
   Object.assign(Bus, wf)
 
-  // Install plugins
   plugins.forEach(plugin => {
     plugin.install({
       registerComponent: (name, component) => {

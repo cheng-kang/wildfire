@@ -6,31 +6,36 @@ import { initLocalComponents } from './common/loadLocalComponents'
 import iView from './common/loadiView'
 import dateFns from './common/loadDateFns'
 import i18next, { initI18next, resetI18next, addTranslation } from './common/loadI18next'
-import { b64EncodeUnicode, b64DecodeUnicode } from './common/utils'
+import { b64EncodeUnicode, b64DecodeUnicode, defaultPageURL } from './common/utils'
 import Wildfire from './Wildfire'
 import './assets/style.css'
 import './assets/style.dark.css'
 import './assets/animation.css'
 
 export const install = (_Vue, config) => {
-  // Init wildfire components
   initLocalComponents(_Vue)
 
   if (!_Vue.http) { _Vue.use(VueResource) }
 
   _Vue.use(iView)
 
-  const {
+  let {
     // databaseProvider = 'firebase',
     databaseConfig,
     standbyDatabaseConfigs = [],
+
     pageTitle = document.title,
-    pageURL = window.location.href,
+    pageURL,
+    isURLWithHashtag = false,
+
     theme = 'light',
     locale = 'en',
     defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg',
+
     plugins = []
   } = config
+
+  if (!pageURL) pageURL = defaultPageURL(isURLWithHashtag)
 
   initI18next(locale)
 
@@ -42,7 +47,7 @@ export const install = (_Vue, config) => {
       databaseConfig,
       standbyDatabaseConfigs,
       pageTitle,
-      pageURL: b64EncodeUnicode(pageURL), // encode pageURL with base64
+      pageURL: b64EncodeUnicode(pageURL),
       locale,
       theme,
       defaultAvatarURL,
@@ -67,7 +72,6 @@ export const install = (_Vue, config) => {
 
   Object.assign(Bus, wf)
 
-  // Install plugins
   plugins.forEach(plugin => {
     plugin.install({
       registerComponent: (name, component) => {
@@ -99,7 +103,8 @@ export const reset = (_Vue, config = {}, err) => {
     databaseConfig,
     standbyDatabaseConfigs = Bus.config.standbyDatabaseConfigs,
     pageTitle = document.title,
-    pageURL = window.location.href,
+    pageURL,
+    isURLWithHashtag = Bus.config.isURLWithHashtag,
     theme = Bus.config.theme,
     locale = Bus.config.locale,
     defaultAvatarURL = Bus.config.defaultAvatarURL,
@@ -107,6 +112,7 @@ export const reset = (_Vue, config = {}, err) => {
   } = config
 
   if (!databaseConfig) databaseConfig = getDatabaseConfig()
+  if (!pageURL) pageURL = defaultPageURL(isURLWithHashtag)
 
   resetI18next(locale)
 
@@ -118,7 +124,8 @@ export const reset = (_Vue, config = {}, err) => {
       databaseConfig,
       standbyDatabaseConfigs,
       pageTitle,
-      pageURL: b64EncodeUnicode(pageURL), // encode pageURL with base64
+      pageURL: b64EncodeUnicode(pageURL),
+      isURLWithHashtag,
       locale,
       theme,
       defaultAvatarURL,
@@ -139,7 +146,6 @@ export const reset = (_Vue, config = {}, err) => {
 
   Object.assign(Bus, wf)
 
-  // Install plugins
   plugins.forEach(plugin => {
     plugin.install({
       registerComponent: (name, component) => {
