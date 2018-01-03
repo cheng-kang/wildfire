@@ -140,12 +140,12 @@
 
   function startWildfire () {
     console.log('Starting Wildfire...')
-    loadCSS(`https://cdn.rawgit.com/cheng-kang/wildfire/dev/dist/${databaseProvider}/static/wildfire.css`)
+    loadCSS(`https://unpkg.com/wildfire-dev/dist/${databaseProvider}/static/wildfire.css`)
 
     let jsList = []
     if (!window.Vue) { jsList.push('https://cdn.jsdelivr.net/npm/vue') }
     jsList.push(databaseProvider === 'firebase' ? 'https://www.gstatic.com/firebasejs/4.6.2/firebase.js' : 'https://cdn.wilddog.com/sdk/js/2.5.17/wilddog.js')
-    jsList.push(`https://cdn.rawgit.com/cheng-kang/wildfire/dev/dist/${databaseProvider}/wildfire.min.js`)
+    jsList.push(`https://unpkg.com/wildfire-dev/dist/${databaseProvider}/wildfire.min.js`)
 
     loadJSSequentially(jsList, () => {
       window.wildfire.default.install(window.Vue, {
