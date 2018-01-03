@@ -1,14 +1,14 @@
 <template> 
   <i-tabs class="wf-user-setting">
-    <i-tab-pane :label="$i18next.t('UserSetting.tab.profile')" name="profile" :disabled="updatingAccount">
+    <i-tab-pane :label="i18next.t('UserSetting.tab.profile')" name="profile" :disabled="updatingAccount">
       <div class="wf-form-warp" :class="{ 'wf-is-small-screen': isSmallScreen }">
         <i-form ref="profileForm" :model="profileForm" :rules="rule" label-position="top">
-          <i-form-item :label="$i18next.t('UserSetting.label.display_name')" prop="displayName">
-            <i-input type="text" v-model="profileForm.displayName" :placeholder="$i18next.t('UserSetting.placeholder.display_name')">
+          <i-form-item :label="i18next.t('UserSetting.label.display_name')" prop="displayName">
+            <i-input type="text" v-model="profileForm.displayName" :placeholder="i18next.t('UserSetting.placeholder.display_name')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('UserSetting.label.photo_url')" prop="photoURL">
-            <i-input type="text" v-model="profileForm.photoURL" :placeholder="$i18next.t('UserSetting.placeholder.photo_url')">
+          <i-form-item :label="i18next.t('UserSetting.label.photo_url')" prop="photoURL">
+            <i-input type="text" v-model="profileForm.photoURL" :placeholder="i18next.t('UserSetting.placeholder.photo_url')">
               <i-button slot="append" icon="refresh" @click="resetAvatar"></i-button>
             </i-input>
           </i-form-item>
@@ -18,13 +18,13 @@
             @click="handleChangeProfile()" 
             :disabled="updatingProfile || avatarTesting" 
             :loading="updatingProfile">
-              {{ $i18next.t('UserSetting.btn.update') }}
+              {{ i18next.t('UserSetting.btn.update') }}
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
             :disabled="updatingProfile">
-              {{ $i18next.t('UserSetting.btn.cancel') }}
+              {{ i18next.t('UserSetting.btn.cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -34,19 +34,19 @@
       </div>
     </i-tab-pane>
 
-    <i-tab-pane :label="$i18next.t('UserSetting.tab.account')" name="account" :disabled="updatingProfile">
+    <i-tab-pane :label="i18next.t('UserSetting.tab.account')" name="account" :disabled="updatingProfile">
       <div class="wf-form-warp">
         <i-form ref="accountForm" :model="accountForm" :rules="rule" label-position="top">
-          <i-form-item :label="$i18next.t('UserSetting.label.old_pwd')" prop="oldPassword">
-            <i-input type="password" v-model="accountForm.oldPassword" :placeholder="$i18next.t('UserSetting.placeholder.old_pwd')">
+          <i-form-item :label="i18next.t('UserSetting.label.old_pwd')" prop="oldPassword">
+            <i-input type="password" v-model="accountForm.oldPassword" :placeholder="i18next.t('UserSetting.placeholder.old_pwd')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('UserSetting.label.new_pwd')" prop="newPassword">
-            <i-input type="password" v-model="accountForm.newPassword" :placeholder="$i18next.t('UserSetting.placeholder.new_pwd')">
+          <i-form-item :label="i18next.t('UserSetting.label.new_pwd')" prop="newPassword">
+            <i-input type="password" v-model="accountForm.newPassword" :placeholder="i18next.t('UserSetting.placeholder.new_pwd')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('UserSetting.label.confirm_pwd')" prop="passwordCheck">
-            <i-input type="password" v-model="accountForm.passwordCheck" :placeholder="$i18next.t('UserSetting.placeholder.confirm_pwd')">
+          <i-form-item :label="i18next.t('UserSetting.label.confirm_pwd')" prop="passwordCheck">
+            <i-input type="password" v-model="accountForm.passwordCheck" :placeholder="i18next.t('UserSetting.placeholder.confirm_pwd')">
             </i-input>
           </i-form-item>
           <div class="wf-buttons">
@@ -55,13 +55,13 @@
             @click="handleChangeAccount()" 
             :disabled="updatingAccount || passwordTesting" 
             :loading="updatingAccount">
-              {{ $i18next.t('UserSetting.btn.update') }} 
+              {{ i18next.t('UserSetting.btn.update') }} 
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
             :disabled="updatingAccount">
-              {{ $i18next.t('UserSetting.btn.cancel') }}
+              {{ i18next.t('UserSetting.btn.cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -78,14 +78,14 @@ import WfTip from './WfTip'
 export default {
   name: 'wf-user-setting',
   components: { WfTip },
-  props: ['user'],
   data () {
-    const _i18next = this.$_wf.i18next
+    const user = Bus.user
+    const _i18next = Bus.i18next
     const validateOldPassword = (rule, value, callback) => {
       this.passwordTesting = true
-      const credential = this.$_wf.authService(this.user.email, value)
-      if (typeof (this.$auth.currentUser.reauthenticate) === 'function') {
-        this.$auth.currentUser.reauthenticate(credential)
+      const credential = Bus.authService(user.email, value)
+      if (typeof (this.auth.currentUser.reauthenticate) === 'function') {
+        this.auth.currentUser.reauthenticate(credential)
         .then(() => {
           this.passwordTesting = false
           callback()
@@ -94,8 +94,8 @@ export default {
           this.passwordTesting = false
           callback(new Error(_i18next.t('UserSetting.error.password')))
         })
-      } else if (typeof (this.$auth.currentUser.reauthenticateWithCredential) === 'function') {
-        this.$auth.currentUser.reauthenticateWithCredential(credential)
+      } else if (typeof (this.auth.currentUser.reauthenticateWithCredential) === 'function') {
+        this.auth.currentUser.reauthenticateWithCredential(credential)
         .then(() => {
           this.passwordTesting = false
           callback()
@@ -123,7 +123,7 @@ export default {
         callback()
       }
       avatar.onerror = () => {
-        this.avatarTestURL = this.user.photoURL
+        this.avatarTestURL = user.photoURL
         this.avatarTesting = false
         callback(new Error(_i18next.t('UserSetting.error.invalid_photo_url')))
       }
@@ -136,10 +136,10 @@ export default {
       passwordTesting: false,
       updatingProfile: false,
       updatingAccount: false,
-      avatarTestURL: this.user.photoURL,
+      avatarTestURL: user.photoURL,
       profileForm: {
-        displayName: this.user.displayName,
-        photoURL: this.user.photoURL
+        displayName: user.displayName,
+        photoURL: user.photoURL
       },
       accountForm: {
         oldPassword: '',
@@ -173,36 +173,23 @@ export default {
     }
   },
   computed: {
-    $auth () {
-      return this.$_wf.auth
-    },
-    $config () {
-      return this.$_wf.config
-    },
-    $db () {
-      return this.$_wf.db
-    },
-    $i18next () {
-      return this.$_wf.i18next
-    },
-    windowWidth: () => Bus.$data.windowWidth,
+    auth: () => Bus.auth,
+    config: () => Bus.config,
+    db: () => Bus.db,
+    i18next: () => Bus.i18next,
+    user: () => Bus.user,
+    windowWidth: () => Bus.windowWidth,
     isSmallScreen () {
       // <= screen width of iPhone 6 plus
       return this.windowWidth <= 414
     }
   },
-  created () {
-    Bus.$on('CurrentUserInfoUpdated', updates => {
-      this.user.displayName = updates['/displayName']
-      this.user.photoURL = updates['/photoURL']
-    })
-  },
   methods: {
     avatarOnError (event) {
       handleImageOnError(
         event.target,
-        this.$config.defaultAvatarURL,
-        this.$i18next.t('CommentCard.html_title.image_onerror')
+        this.config.defaultAvatarURL,
+        this.i18next.t('CommentCard.html_title.image_onerror')
         )
     },
     handleChangeProfile () {
@@ -214,23 +201,19 @@ export default {
             '/displayName': displayName,
             '/photoURL': photoURL
           }
-          this.$db.ref(`/users/${this.user.uid}`).update(updates)
+          this.db.ref(`/users/${this.user.uid}`).update(updates)
             .then(snapshot => {
-              this.user.displayName = displayName
-              this.user.photoURL = photoURL
+              Bus.user = Object.assign({}, Bus.user, {displayName, photoURL})
 
               this.updatingProfile = false
-              this.$Message.info(this.$i18next.t('UserSetting.success.updating_profile'))
-
-              // Broadcast 'CurrentUserInfoUpdated' event
-              Bus.$emit('CurrentUserInfoUpdated', updates)
+              this.$Message.info(this.i18next.t('UserSetting.success.updating_profile'))
             }).catch((error) => {
               this.updatingProfile = false
               console.log(error.code, error.message)
-              this.$Message.error(this.$i18next.t('UserSetting.error.unknown'))
+              this.$Message.error(this.i18next.t('UserSetting.error.unknown'))
             })
         } else {
-          this.$Message.error(this.$i18next.t('UserSetting.error.invalid_form'))
+          this.$Message.error(this.i18next.t('UserSetting.error.invalid_form'))
         }
       })
     },
@@ -239,17 +222,17 @@ export default {
         if (valid) {
           this.updatingAccount = true
           const password = this.accountForm.newPassword
-          this.$auth.currentUser.updatePassword(password).then(() => {
+          this.auth.currentUser.updatePassword(password).then(() => {
             this.updatingAccount = false
             this.$refs['accountForm'].resetFields()
-            this.$Message.info(this.$i18next.t('UserSetting.success.changing_password'))
+            this.$Message.info(this.i18next.t('UserSetting.success.changing_password'))
           }).catch((error) => {
             this.updatingAccount = false
             console.log(error.code, error.message)
             this.$refs['accountForm'].resetFields()
           })
         } else {
-          this.$Message.error(this.$i18next.t('UserSetting.error.invalid_form'))
+          this.$Message.error(this.i18next.t('UserSetting.error.invalid_form'))
         }
       })
     },

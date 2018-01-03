@@ -27,22 +27,18 @@ export default {
     }
   },
   computed: {
-    $config () {
-      return this.$_wf.config
-    },
-    $i18next () {
-      return this.$_wf.i18next
-    },
+    config: () => Bus.config,
+    i18next: () => Bus.i18next,
     selectedCommentUserInfo: () => Bus.$data.selectedCommentUserInfo,
     encodedIP () {
       const ip = this.selectedCommentUserInfo.ip
-      if (!ip || (ip.indexOf('unknown') !== -1)) { return this.$i18next.t('common.unknown_ip') }
+      if (!ip || (ip.indexOf('unknown') !== -1)) { return this.i18next.t('common.unknown_ip') }
       const lastDotIdx = ip.lastIndexOf('.')
       const lastSec = ip.slice(lastDotIdx + 1)
-      return lastSec ? `***.**.**.${lastSec}` : this.$i18next.t('common.unknown_ip')
+      return lastSec ? `***.**.**.${lastSec}` : this.i18next.t('common.unknown_ip')
     },
     isAnonymousUser () {
-      const { anonymousUserId } = this.$config
+      const { anonymousUserId } = this.config
       return !this.selectedCommentUserInfo.uid || this.selectedCommentUserInfo.uid === anonymousUserId
     }
   },
@@ -50,8 +46,8 @@ export default {
     avatarOnError (event) {
       handleImageOnError(
         event.target,
-        this.$config.defaultAvatarURL,
-        this.$i18next.t('CommentCard.html_title.image_onerror')
+        this.config.defaultAvatarURL,
+        this.i18next.t('CommentCard.html_title.image_onerror')
         )
     }
   }

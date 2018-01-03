@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wildfire Example - 2</title>
+  <title>Use Plugin Example - Wildfire</title>
   <link rel="stylesheet" type="text/css" href="../dist/firebase/static/wildfire.css">
   <style type="text/css">
     #app {
@@ -29,6 +29,7 @@
   <!-- <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script> -->
   <!-- <script src="https://unpkg.com/wildfire@0.3.8/dist/firebase/wildfire.min.js"></script> -->
   <!-- <script src="../dist/firebase/wildfire.min.js"></script> -->
+  <script src="https://unpkg.com/wildfire-pinned-comment"></script>
   <script type="text/javascript">
     wildfire.default.install(Vue, {
       // databaseProvider: 'firebase',
@@ -50,7 +51,10 @@
       // theme: 'dark',
       // locale: 'en'
       locale: 'zh-CN',
-      defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg'
+      defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg',
+      plugins: [
+        WfPinnedComment.default()
+      ]
     })
     var app = new Vue({ el: '#app' })
   </script>

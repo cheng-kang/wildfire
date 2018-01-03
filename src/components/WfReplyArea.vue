@@ -19,13 +19,17 @@
         <i-tooltip placement="right" :content="mentionLabel">
           <i-icon type="at" size="14" :class="{ 'wf-inactive': !isMentionAvailable }"></i-icon>
         </i-tooltip>
+        <component v-for="(cpntName, idx) in pluginComponents['toolbar']"
+          :is="cpntName"
+          :key="idx"
+          :bus="bus"/>
       </div>
       <div>
         <i-button type="text"
           class="wf-clear-btn"
           :disabled="shouldDisableButton"
           @click="form.content = ''">
-          {{$i18next.t('ReplyArea.btn.clear')}}
+          {{i18next.t('ReplyArea.btn.clear')}}
         </i-button>
 
         <i-button :type="isPosting ? 'ghost' : 'primary'"
@@ -34,7 +38,7 @@
           @click="postComment"
           :disabled="shouldDisableButton"
           :loading="isPosting">
-          {{$i18next.t(isPosting ? 'ReplyArea.btn.posting' : 'ReplyArea.btn.post')}}
+          {{i18next.t(isPosting ? 'ReplyArea.btn.posting' : 'ReplyArea.btn.post')}}
         </i-button>
       </div>
     </section>
@@ -43,7 +47,7 @@
       <i-button type="text"
         :disabled="shouldDisableButton"
         @click="form.content = ''">
-        {{$i18next.t('ReplyArea.btn.clear')}}
+        {{i18next.t('ReplyArea.btn.clear')}}
       </i-button>
 
       <i-button :type="isPosting ? 'ghost' : 'primary'"
@@ -51,7 +55,7 @@
         @click="postComment"
         :disabled="shouldDisableButton"
         :loading="isPosting">
-        {{$i18next.t(isPosting ? 'ReplyArea.btn.posting' : 'ReplyArea.btn.post')}}
+        {{i18next.t(isPosting ? 'ReplyArea.btn.posting' : 'ReplyArea.btn.post')}}
       </i-button>
     </i-form-item>
   </i-form>
@@ -63,7 +67,6 @@ import { handleImageOnError } from '../common/utils'
 export default {
   name: 'wf-reply-area',
   props: [
-    'user',
     'replyToCommentAuthorUsername',
     'replyToComment',
     'rootComment',
@@ -91,33 +94,30 @@ export default {
     }
   },
   computed: {
-    $config () {
-      return this.$_wf.config
-    },
-    $db () {
-      return this.$_wf.db
-    },
-    $i18next () {
-      return this.$_wf.i18next
-    },
+    bus: () => Bus,
+    pluginComponents: () => Bus.pluginComponents,
+    config: () => Bus.config,
+    db: () => Bus.db,
+    i18next: () => Bus.i18next,
     avatarURL () {
       return this.user
         ? this.user.photoURL
-        : this.$config.defaultAvatarURL
+        : this.config.defaultAvatarURL
     },
+    user: () => Bus.user,
     username () {
       return this.user
-              ? this.$i18next.t('common.anonymous_user')
+              ? this.i18next.t('common.anonymous_user')
               : this.user.displayName
     },
     placeholder () {
       return this.isCurrentUserBanned
-      ? this.$i18next.t('ReplyArea.placeholder.user_is_banned')
+      ? this.i18next.t('ReplyArea.placeholder.user_is_banned')
       : this.isReply
-        ? this.$i18next.t('ReplyArea.placeholder.reply_to_user_comment', { username: this.replyToCommentAuthorUsername })
+        ? this.i18next.t('ReplyArea.placeholder.reply_to_user_comment', { username: this.replyToCommentAuthorUsername })
         : (this.user
-            ? this.$i18next.t('ReplyArea.placeholder.join_conversation')
-            : this.$i18next.t('ReplyArea.placeholder.join_conversation_anonymously'))
+            ? this.i18next.t('ReplyArea.placeholder.join_conversation')
+            : this.i18next.t('ReplyArea.placeholder.join_conversation_anonymously'))
     },
     isReply () {
       return !!this.replyToComment
@@ -138,12 +138,12 @@ export default {
     },
     mentionLabel () {
       return this.isLoadingUserData
-              ? this.$i18next.t('ReplyArea.text.initializing_mention_autocomplete')
+              ? this.i18next.t('ReplyArea.text.initializing_mention_autocomplete')
               : (this.isCurrentUserBanned
-                  ? this.$i18next.t('ReplyArea.text.mention_func_not_authorized_banned_user')
+                  ? this.i18next.t('ReplyArea.text.mention_func_not_authorized_banned_user')
                   : (this.user
-                      ? this.$i18next.t('ReplyArea.text.initialized_mention_autocomplete')
-                      : this.$i18next.t('ReplyArea.text.mention_func_not_authorized')))
+                      ? this.i18next.t('ReplyArea.text.initialized_mention_autocomplete')
+                      : this.i18next.t('ReplyArea.text.mention_func_not_authorized')))
     }
   },
   mounted () {
@@ -163,14 +163,14 @@ export default {
   },
   methods: {
     isAnonymousUser (uid) {
-      const { anonymousUserId } = this.$config
+      const { anonymousUserId } = this.config
       return !uid || uid === anonymousUserId
     },
     avatarOnError (event) {
       handleImageOnError(
         event.target,
-        this.$config.defaultAvatarURL,
-        this.$i18next.t('CommentCard.html_title.image_onerror')
+        this.config.defaultAvatarURL,
+        this.i18next.t('CommentCard.html_title.image_onerror')
         )
     },
     postComment () {
@@ -180,9 +180,9 @@ export default {
       // and try to post new comment :-D
       if (this.isCurrentUserBanned) {
         this.$Modal.error({
-          title: this.$i18next.t('ReplyArea.error.banned_title'),
-          content: this.$i18next.t('ReplyArea.error.banned_content'),
-          okText: this.$i18next.t('ReplyArea.btn.confirm')
+          title: this.i18next.t('ReplyArea.error.banned_title'),
+          content: this.i18next.t('ReplyArea.error.banned_content'),
+          okText: this.i18next.t('ReplyArea.btn.confirm')
         })
         return
       }
@@ -194,7 +194,7 @@ export default {
       if (content.trim() !== '') {
         const aDate = new Date()
         const ip = Bus.$data.info.ip
-        const uid = user ? user.uid : this.$config.anonymousUserId
+        const uid = user ? user.uid : this.config.anonymousUserId
         const date = aDate.toISOString()
 
         let pageURL = null
@@ -211,7 +211,7 @@ export default {
           // for retrieving comments of a page.
           // If the comment is top-level comment, then it has `pageURL`;
           // else, it has `rootCommentPageURL`.
-          rootCommentPageURL = this.$config.pageURL
+          rootCommentPageURL = this.config.pageURL
           parentCommentId = replyToComment.commentId
           parentCommentUid = replyToComment.uid
           if (replyToComment.rootCommentId) {
@@ -222,35 +222,35 @@ export default {
             rootCommentUid = replyToComment.uid
           }
         } else {
-          pageURL = this.$config.pageURL
+          pageURL = this.config.pageURL
         }
 
         const postData = { uid, content, date, ip, pageURL, rootCommentPageURL, parentCommentId, parentCommentUid, rootCommentId, rootCommentUid }
 
-        var newNode = this.$db.ref().push()
+        var newNode = this.db.ref().push()
         /*
           There is a difference between `firebase` and `wilddog`
           Note:
             - firebase: ref.key
             - wilddog: ref.key()
          */
-        const newKey = this.$config.databaseProvider === 'firebase' ? newNode.key : newNode.key()
+        const newKey = this.config.databaseProvider === 'firebase' ? newNode.key : newNode.key()
 
         Promise.all([
-          this.$db.ref(`comments/${newKey}`).update(postData),
+          this.db.ref(`comments/${newKey}`).update(postData),
           isReply
-            ? this.$db.ref(`commentReplies/${rootCommentId}/${newKey}`).set(date)
-            : this.$db.ref(`pages/${pageURL}/comments/${newKey}`).set(date)
+            ? this.db.ref(`commentReplies/${rootCommentId}/${newKey}`).set(date)
+            : this.db.ref(`pages/${pageURL}/comments/${newKey}`).set(date)
         ]).then(() => {
           this.isPosting = false
           this.$emit('finished-replying') // When successfully posted reply, hide current reply area
           this.form.content = ''
-          this.$Message.success(this.$i18next.t('ReplyArea.success.posting_comment'))
+          this.$Message.success(this.i18next.t('ReplyArea.success.posting_comment'))
 
           // Update `discussionCount`
-          //  Note: Should use `this.$config.pageURL` here,
+          //  Note: Should use `this.config.pageURL` here,
           //        because `pageURL` variable above is conditional.
-          this.$db.ref(`pages/${this.$config.pageURL}/discussionCount`).transaction(function (currentValue) {
+          this.db.ref(`pages/${this.config.pageURL}/discussionCount`).transaction(function (currentValue) {
             return (currentValue || 0) + 1
           })
 
@@ -327,7 +327,7 @@ export default {
           } else {
             Promise.all(mentions.map(mention => {
               const email = mention.slice(mention.indexOf('(') + 1, -1)
-              return this.$db.ref(`users`).orderByChild('email').equalTo(email).once('value')
+              return this.db.ref(`users`).orderByChild('email').equalTo(email).once('value')
             })).then(snaps => {
               const mentionedUids = snaps.map(snap => snap.val() ? Object.keys(snap.val())[0] : undefined)
               this.handleNotifications(mentionedUids, newKey, notifyFlags, mentionFlags)
@@ -340,7 +340,7 @@ export default {
         .catch((error) => {
           this.isPosting = false
           this.form.content = ''
-          this.$Message.error(this.$i18next.t('ReplyArea.error.posting_comment'))
+          this.$Message.error(this.i18next.t('ReplyArea.error.posting_comment'))
           console.error(error)
         })
       }
@@ -358,7 +358,7 @@ export default {
         isParentCommentAuthorMentioned,
         isRootCommentAuthorMentioned
       } = mentionFlags
-      const pageURL = this.$config.pageURL
+      const pageURL = this.config.pageURL
       mentionedUids.forEach(mentionedUid => {
         // Incase uid is undefined/null
         if (!mentionedUid) { return }
@@ -385,7 +385,7 @@ export default {
           uid: mentionedUid,
           type: 'm',
           pageURL: pageURL,
-          pageTitle: this.$config.pageTitle,
+          pageTitle: this.config.pageTitle,
           commentId
         })
       })
@@ -400,7 +400,7 @@ export default {
                       ? 'r' : 'd')
                     : 'c'),
           pageURL: pageURL,
-          pageTitle: this.$config.pageTitle,
+          pageTitle: this.config.pageTitle,
           commentId
         })
       }
@@ -409,7 +409,7 @@ export default {
           uid: this.replyToComment.uid,
           type: isParentCommentAuthorMentioned ? 'm' : 'r',
           pageURL: pageURL,
-          pageTitle: this.$config.pageTitle,
+          pageTitle: this.config.pageTitle,
           commentId
         })
       }
@@ -418,7 +418,7 @@ export default {
           uid: this.replyToComment.rootCommentUid,
           type: isRootCommentAuthorMentioned ? 'm' : 'd',
           pageURL: pageURL,
-          pageTitle: this.$config.pageTitle,
+          pageTitle: this.config.pageTitle,
           commentId
         })
       }
@@ -427,7 +427,7 @@ export default {
       const aDate = new Date()
       const date = aDate.toISOString()
       const {uid, type, pageURL = null, pageTitle = null, commentId = null, content = null} = data
-      this.$db.ref('notifications').push({
+      this.db.ref('notifications').push({
         uid,
         type,
         pageURL,

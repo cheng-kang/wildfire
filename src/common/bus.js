@@ -29,27 +29,24 @@ const Bus = new Vue({
     return {
       windowWidth: 0,
       discussionCount: 0,
-      /*
-        Mention
-       */
+      /* Mention */
       isLoadingUserData: true,
       info: {ip: 'unknown', isBanned: false},
+      user: null,
       users: [],
       admin: null,
       currentReplyAreaId: null,
-      /*
-        End of: Mention
-       */
+      /* End of: Mention */
 
       /*
         Comment User Modal
           Note: This is the modal that shows when you click
                 on username or @username in comment card
        */
-      selectedCommentUserInfo: {}
-      /*
-        End of: Comment User Modal
-       */
+      selectedCommentUserInfo: {},
+      /* End of: Comment User Modal */
+      // For plugin data
+      plugins: {}
     }
   },
   computed: {
@@ -93,6 +90,7 @@ const Bus = new Vue({
      */
     enough (event, callback, identifier) {
       if (identifier) {
+        if (!this._events[event]) return this
         const cbIdx = this._events[event].findIndex(cb => cb._uid === identifier)
         this._events[event].splice(cbIdx, 1)
         return this

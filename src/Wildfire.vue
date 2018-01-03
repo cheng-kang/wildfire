@@ -1,14 +1,23 @@
 <template>
   <div :class="classes">
-    <wf-header
-      :user="user"
-      :comments-loading-state="commentsLoadingState"></wf-header>
+    <component v-for="(cpntName, idx) in pluginComponents['header.before']"
+      :is="cpntName"
+      :key="idx"
+      :bus="bus"/>
+    <wf-header :comments-loading-state="commentsLoadingState"/>
+    <component v-for="(cpntName, idx) in pluginComponents['header.after']"
+      :is="cpntName"
+      :key="idx"
+      :bus="bus"/>
     <wf-body
-      :user="user"
       :page-comments-count="pageCommentsCount"
       :comments="commentsWithId"
-      :comments-loading-state="commentsLoadingState"></wf-body>
-    <wf-footer :user="user"></wf-footer>
+      :comments-loading-state="commentsLoadingState"/>
+    <component v-for="(cpntName, idx) in pluginComponents['footer.before']"
+      :is="cpntName"
+      :key="idx"
+      :bus="bus"/>
+    <wf-footer/>
   </div>
 </template>
 
@@ -29,7 +38,6 @@ export default {
   data () {
     return {
       commentsLoadingState: 'prepare',
-      user: null,
       pageCommentsCount: 0,
       pageComments: [],
       comments: [],
@@ -38,19 +46,16 @@ export default {
     }
   },
   computed: {
-    $auth () {
-      return this.$_wf.auth
-    },
-    $config () {
-      return this.$_wf.config
-    },
-    $db () {
-      return this.$_wf.db
-    },
+    bus: () => Bus,
+    pluginComponents: () => Bus.pluginComponents,
+    auth: () => Bus.auth,
+    config: () => Bus.config,
+    db: () => Bus.db,
+    user: () => Bus.user,
     classes () {
       return [
         'wf',
-        `wf-theme-${this.$config.theme}`
+        `wf-theme-${this.config.theme}`
       ]
     },
     commentsWithId () {
@@ -73,11 +78,13 @@ export default {
             affect all child components.
      */
     Bus.$on('CurrentUserInfoUpdated', updates => {
-      this.user.displayName = updates['/displayName']
-      this.user.photoURL = updates['/photoURL']
+      Bus.user = Object.assign({}, Bus.user, {
+        displayName: updates['/displayName'],
+        photoURL: updates['/photoURL']
+      })
     })
 
-    this.$bindAsArray('banData', this.$db.ref('ban'))
+    this.$bindAsArray('banData', this.db.ref('ban'))
 
     Vue.http.get('https://api.userinfo.io/userinfos')
     .then(response => {
@@ -91,7 +98,7 @@ export default {
     })
     .then(data => {
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') { return }
-      const { pageURL, pageTitle, databaseProvider } = this.$config
+      const { pageURL, pageTitle, databaseProvider } = this.config
       const wfAnalyticsURL = (databaseProvider === 'firebase' ? 'https://wildfire-bada3.firebaseio.com/' : 'https://autolayout.wilddogio.com/') + `sites/${pageURL}.json`
       Vue.http.post(wfAnalyticsURL, Object.assign({}, data, {pageTitle}))
     })
@@ -107,9 +114,6 @@ export default {
     this.observer.listenTo(this.$el, () => {
       Bus.$data.windowWidth = this.$el.offsetWidth
     })
-  },
-  beforeDestroy () {
-    this.observer.removeListener(this.$refs.navWrap, this.handleResize)
   },
   watch: {
     banData (newVal, oldVal) {
@@ -128,15 +132,14 @@ export default {
             object).
      */
     listenToAuthStateChange () {
-      this.$auth.onAuthStateChanged((user) => {
+      this.auth.onAuthStateChanged((user) => {
         if (!user) {
-          this.user = null
+          Bus.user = null
           return
         }
-        this.$db.ref(`users/${user.uid}`).once('value').then((snapshot) => {
-          this.user = snapshot.val()
-          this.$set(this.user, 'uid', user.uid)
-          this.$set(this.user, 'isAdmin', snapshot.val().isAdmin || false)
+        this.db.ref(`users/${user.uid}`).once('value').then((snapshot) => {
+          const userData = snapshot.val()
+          Bus.user = Object.assign({}, userData, {uid: user.uid, isAdmin: userData.isAdmin || false})
           this.checkBanState()
         })
       })
@@ -149,13 +152,13 @@ export default {
      */
     listenToCommentsFromDatabase () {
       this.commentsLoadingState = 'loading'
-      const { pageURL } = this.$config
+      const { pageURL } = this.config
 
-      this.$db.ref(`pages/${pageURL}/comments`).on('value', snapshot => {
+      this.db.ref(`pages/${pageURL}/comments`).on('value', snapshot => {
         this.pageComments = snapshot.val() || {}
         this.pageCommentsCount = Object.keys(this.pageComments).length
         Promise.all(Object.keys(this.pageComments).map(commentId => {
-          return this.$db.ref(`commentReplies/${commentId}`).once('value')
+          return this.db.ref(`commentReplies/${commentId}`).once('value')
         })).then(snaps => {
           Bus.$data.discussionCount = this.pageCommentsCount + snaps.reduce((repliesCount, snap) => {
             return repliesCount + Object.keys(snap.val() || {}).length
@@ -163,7 +166,7 @@ export default {
         })
       })
 
-      this.$bindAsArray('comments', this.$db
+      this.$bindAsArray('comments', this.db
       .ref(`comments`).orderByChild('pageURL').equalTo(pageURL), () => {
         this.commentsLoadingState = 'failed'
         this.pageCommentsCount = 0
@@ -173,7 +176,7 @@ export default {
       })
     },
     checkBanState () {
-      const isBanned = (this.user && this.banList.indexOf(this.user.uid) > -1) || this.banList.indexOf(Bus.$data.info.ip) > -1
+      const isBanned = (Bus.user && this.banList.indexOf(Bus.user.uid) > -1) || this.banList.indexOf(Bus.$data.info.ip) > -1
       Bus.$data.info = Object.assign({}, Bus.$data.info, {isBanned})
     }
   }

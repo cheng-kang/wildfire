@@ -1,18 +1,18 @@
 <template> 
   <i-tabs :value="initTab" class="wf-auth-form">
-    <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_up')" name="sign_up" :disabled="loadingSignIn">
+    <i-tab-pane :label="i18next.t('AuthForm.btn.sign_up')" name="sign_up" :disabled="loadingSignIn">
       <div class="wf-form-warp">
         <i-form ref="signUpForm" :model="signUpForm" :rules="rule" label-position="top">
-          <i-form-item :label="$i18next.t('AuthForm.label.email')" prop="email">
-            <i-input type="text" v-model="signUpForm.email" :placeholder="$i18next.t('AuthForm.placeholder.email')">
+          <i-form-item :label="i18next.t('AuthForm.label.email')" prop="email">
+            <i-input type="text" v-model="signUpForm.email" :placeholder="i18next.t('AuthForm.placeholder.email')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('AuthForm.label.password')" prop="password">
-            <i-input type="password" v-model="signUpForm.password" :placeholder="$i18next.t('AuthForm.placeholder.password')">
+          <i-form-item :label="i18next.t('AuthForm.label.password')" prop="password">
+            <i-input type="password" v-model="signUpForm.password" :placeholder="i18next.t('AuthForm.placeholder.password')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('AuthForm.label.confirm_pwd')" prop="passwordCheck">
-            <i-input type="password" v-model="signUpForm.passwordCheck" :placeholder="$i18next.t('AuthForm.placeholder.confirm_pwd')">
+          <i-form-item :label="i18next.t('AuthForm.label.confirm_pwd')" prop="passwordCheck">
+            <i-input type="password" v-model="signUpForm.passwordCheck" :placeholder="i18next.t('AuthForm.placeholder.confirm_pwd')">
             </i-input>
           </i-form-item>
           <div class="wf-buttons">
@@ -21,28 +21,28 @@
             @click="handleSignUp('signUpForm')" 
             :disabled="loadingSignUp"
             :loading="loadingSignUp">
-              {{ $i18next.t('AuthForm.btn.sign_up') }} 
+              {{ i18next.t('AuthForm.btn.sign_up') }} 
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
             :disabled="loadingSignUp">
-              {{ $i18next.t('AuthForm.btn.cancel') }}
+              {{ i18next.t('AuthForm.btn.cancel') }}
             </i-button>
           </div>
         </i-form>
       </div>
     </i-tab-pane>
 
-    <i-tab-pane :label="$i18next.t('AuthForm.btn.sign_in')" name="sign_in" :disabled="loadingSignUp">
+    <i-tab-pane :label="i18next.t('AuthForm.btn.sign_in')" name="sign_in" :disabled="loadingSignUp">
       <div class="wf-form-warp">
         <i-form ref="signInForm" :model="signInForm" :rules="rule" label-position="top">
-          <i-form-item :label="$i18next.t('AuthForm.label.email')" prop="email">
-            <i-input type="text" v-model="signInForm.email" :placeholder="$i18next.t('AuthForm.placeholder.email')">
+          <i-form-item :label="i18next.t('AuthForm.label.email')" prop="email">
+            <i-input type="text" v-model="signInForm.email" :placeholder="i18next.t('AuthForm.placeholder.email')">
             </i-input>
           </i-form-item>
-          <i-form-item :label="$i18next.t('AuthForm.label.password')" prop="password">
-            <i-input type="password" v-model="signInForm.password" :placeholder="$i18next.t('AuthForm.placeholder.password')">
+          <i-form-item :label="i18next.t('AuthForm.label.password')" prop="password">
+            <i-input type="password" v-model="signInForm.password" :placeholder="i18next.t('AuthForm.placeholder.password')">
             </i-input>
           </i-form-item>
           <div class="wf-buttons">
@@ -51,13 +51,13 @@
             @click="handleSignIn('signInForm')" 
             :disabled="loadingSignIn" 
             :loading="loadingSignIn">
-              {{ $i18next.t('AuthForm.btn.sign_in') }}
+              {{ i18next.t('AuthForm.btn.sign_in') }}
             </i-button>
             <i-button 
             type="text" 
             @click="closeModel()" 
             :disabled="loadingSignIn">
-              {{ $i18next.t('AuthForm.btn.cancel') }}
+              {{ i18next.t('AuthForm.btn.cancel') }}
             </i-button>
           </div>
         </i-form>
@@ -67,11 +67,12 @@
 </template>
 
 <script>
+import Bus from '../common/bus'
 export default {
   name: 'wf-auth-form',
   props: ['initTab'],
   data () {
-    const _i18next = this.$_wf.i18next
+    const _i18next = Bus.i18next
     const validatePasswordCheck = (rule, value, callback) => {
       if (value !== this.signUpForm.password) {
         callback(new Error(_i18next.t('AuthForm.error.passwords_dont_match')))
@@ -110,18 +111,10 @@ export default {
     }
   },
   computed: {
-    $auth () {
-      return this.$_wf.auth
-    },
-    $config () {
-      return this.$_wf.config
-    },
-    $db () {
-      return this.$_wf.db
-    },
-    $i18next () {
-      return this.$_wf.i18next
-    }
+    auth: () => Bus.auth,
+    config: () => Bus.config,
+    db: () => Bus.db,
+    i18next: () => Bus.i18next
   },
   methods: {
     handleSignIn (name) {
@@ -130,20 +123,20 @@ export default {
           this.loadingSignIn = true
           const email = this.signInForm.email
           const password = this.signInForm.password
-          this.$auth.signInWithEmailAndPassword(email, password)
+          this.auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
-            this.$db.ref(`users/${user.uid}`).once('value').then((snapshot) => {
+            this.db.ref(`users/${user.uid}`).once('value').then((snapshot) => {
               this.loadingSignIn = false
               this.closeModel()
-              this.$Message.info(this.$i18next.t('AuthForm.success.signing_in'))
+              this.$Message.info(this.i18next.t('AuthForm.success.signing_in'))
             })
           }).catch((error) => {
             this.loadingSignIn = false
-            this.$Message.error(this.$i18next.t('AuthForm.error.signing_in'))
+            this.$Message.error(this.i18next.t('AuthForm.error.signing_in'))
             console.log(error.code, error.message)
           })
         } else {
-          this.$Message.error(this.$i18next.t('AuthForm.error.invalid_form'))
+          this.$Message.error(this.i18next.t('AuthForm.error.invalid_form'))
         }
       })
     },
@@ -154,9 +147,9 @@ export default {
           const email = this.signUpForm.email
           const password = this.signUpForm.password
           const displayName = email.split('@')[0]
-          const photoURL = this.$config.defaultAvatarURL
+          const photoURL = this.config.defaultAvatarURL
 
-          this.$auth.createUserWithEmailAndPassword(email, password)
+          this.auth.createUserWithEmailAndPassword(email, password)
           .then((user) => {
             let updates = {}
             updates['/displayName'] = displayName
@@ -164,15 +157,15 @@ export default {
             updates['/photoURL'] = photoURL
             updates['/regDate'] = (new Date()).toISOString()
 
-            this.$db.ref(`/users/${user.uid}`).update(updates)
+            this.db.ref(`/users/${user.uid}`).update(updates)
             .then(() => {
               this.loadingSignUp = false
               this.closeModel()
-              this.$Message.info(this.$i18next.t('AuthForm.success.signing_up'))
+              this.$Message.info(this.i18next.t('AuthForm.success.signing_up'))
             }).catch((error) => {
               this.loadingSignUp = false
               console.log(error.code, error.message)
-              this.$Message.error(this.$i18next.t('AuthForm.error.unknown'))
+              this.$Message.error(this.i18next.t('AuthForm.error.unknown'))
             })
           }).catch((error) => {
             this.loadingSignUp = false
@@ -180,23 +173,23 @@ export default {
             var errorMessage = error.message
             switch (errorCode) {
               case 'auth/email-already-in-use':
-                errorMessage = this.$i18next.t('AuthForm.error.email_already_in_use')
+                errorMessage = this.i18next.t('AuthForm.error.email_already_in_use')
                 break
               case 'auth/operation-not-allowed':
-                errorMessage = this.$i18next.t('AuthForm.error.operation_not_allowed')
+                errorMessage = this.i18next.t('AuthForm.error.operation_not_allowed')
                 break
               case 'auth/weak-password':
-                errorMessage = this.$i18next.t('AuthForm.error.weak_password')
+                errorMessage = this.i18next.t('AuthForm.error.weak_password')
                 break
               default:
                 console.log(errorCode, error.message)
-                errorMessage = this.$i18next.t('AuthForm.error.unknown')
+                errorMessage = this.i18next.t('AuthForm.error.unknown')
                 break
             }
             this.$Message.error(errorMessage)
           })
         } else {
-          this.$Message.error(this.$i18next.t('AuthForm.error.invalid_form'))
+          this.$Message.error(this.i18next.t('AuthForm.error.invalid_form'))
         }
       })
     },

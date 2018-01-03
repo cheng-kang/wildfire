@@ -6,25 +6,25 @@ import wildfire from '../../src/aio'
 
 Vue.config.productionTip = true
 Vue.use(wildfire, {
-  // databaseProvider: 'firebase',
-  // databaseConfig: {
-  //   apiKey: 'AIzaSyB39UJBnIUYAQxu3zKkpyzjTZDDfHt7lzc',
-  //   authDomain: 'wild-fire-ee770.firebaseapp.com',
-  //   databaseURL: 'https://wild-fire-ee770.firebaseio.com',
-  //   projectId: 'wild-fire-ee770',
-  //   storageBucket: 'wild-fire-ee770.appspot.com',
-  //   messagingSenderId: '655484997793'
-  // },
-  databaseProvider: 'wilddog',
+  databaseProvider: 'firebase',
   databaseConfig: {
-    siteId: 'wd2168973289ifdmcg'
+    apiKey: 'AIzaSyDCHvWMGjVVTMcL67sorfJm3Uv-_luAKg0',
+    authDomain: 'wildfire-plugin.firebaseapp.com',
+    databaseURL: 'https://wildfire-plugin.firebaseio.com',
+    projectId: 'wildfire-plugin',
+    storageBucket: '',
+    messagingSenderId: '712535216662'
   },
-  pageURL: 'http://chengkang.me/wildfire',
-  pageTitle: 'Wildfire Demo',
+  // databaseProvider: 'wilddog',
+  // databaseConfig: {
+  //   siteId: 'wd5350450577zvbtov'
+  // },
+  pageURL: 'https://wildfire.js.org/dev-example',
+  pageTitle: 'Wildfire Dev Demo',
   // defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg',
   theme: 'light',
   // theme: 'dark',
-  // locale: 'en'
+  // locale: 'en',
   locale: 'zh-CN'
 })
 

@@ -158,7 +158,22 @@
       })
 
       /* eslint-disable no-new */
-      new window.Vue({ el: '#wildfire' })
+      new window.Vue({
+        el: '#wildfire',
+        data () {
+          return {
+            resetKey: 0
+          }
+        },
+        mounted () {
+          window.$_wildfire_reset = (config) => {
+            const wfLoadingModalEle = document.getElementById('wf-loading-modal')
+            wfLoadingModalEle && (wfLoadingModalEle.style.display = 'block')
+            window.wildfire.default.reset(window.Vue, config)
+            this.resetKey += 1
+          }
+        }
+      })
     })
   }
 
@@ -180,7 +195,7 @@
         <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M389.699 251.826s-13.403 19.689-41.493 36.356c0 0 20.344-171.938-112.212-201.8 33.962 124.643-43.199 159.794-71.326 93.943-46.971 62.713-11.307 117.427-11.307 117.427-19.26 2.775-35.439-18.267-35.439-18.267-.145 2.592-.225 5.202-.225 7.83 0 76.383 61.921 138.303 138.303 138.303s138.303-61.921 138.303-138.303c0-12.27-1.605-24.163-4.604-35.489z' fill='%23f36b38'/%3E%3Cpath d='M389.699 251.826s-13.403 19.689-41.493 36.356c0 0 18.22-154.012-92.206-195.825v333.261c76.383 0 138.303-61.921 138.303-138.303 0-12.27-1.605-24.163-4.604-35.489z' fill='%23db450d'/%3E%3Cpath d='M316.654 364.964c0 33.498-27.156 60.654-60.654 60.654s-60.654-27.156-60.654-60.654c0-17.93 7.78-34.042 20.147-45.146 23.451 31.86 56.87-16.469 30.826-51.761 0-.001 70.335 8.813 70.335 96.907z' fill='%23fbda35'/%3E%3Cpath d='M256 270.385v155.232c33.498 0 60.654-27.156 60.654-60.654 0-67.563-41.371-88.492-60.654-94.578z' fill='%23f7ba35'/%3E%3C/svg%3E%0A" alt="Wildfire - Provided by Lahk">
         <span>${window._i18n.t('text.poweringWildfire')}</span>
       </div>
-      <div id="wildfire" v-cloak><wildfire></wildfire></div>
+      <div id="wildfire" v-cloak><wildfire :key="resetKey"></wildfire></div>
       `
   }
 

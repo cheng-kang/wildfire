@@ -137,6 +137,7 @@ export const langEn = {
       more: 'More',
       notification: 'Notification',
       personal_center: 'Personal',
+      plugin: 'Plugin',
       report_management: 'Reports',
       sign_in: 'Sign In',
       sign_out: 'Sign Out',

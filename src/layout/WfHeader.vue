@@ -17,12 +17,12 @@
             class="spin-icon"
             :style="{marginRight: '5px'}"></i-icon>
           <div>
-            {{$i18next.t('Header.text.loading')}}
+            {{i18next.t('Header.text.loading')}}
           </div>
         </i-spin>
 
         <span v-else>
-          {{discussionCount}} {{$i18next.t(discussionCount < 2 ? 'Header.btn.comment' : 'Header.btn.comments')}}
+          {{discussionCount}} {{i18next.t(discussionCount < 2 ? 'Header.btn.comment' : 'Header.btn.comments')}}
         </span>
       </i-menu-item>
 
@@ -37,36 +37,50 @@
       <i-submenu name="more" v-if="user" :class="{ 'wf-float-right': !isLargeScreen}" class="wf-no-border-bottom">
         <template slot="title"></template>
         <template v-if="user">
-          <i-menu-group :title="$i18next.t('Header.menu.personal_center')">
-            <i-menu-item name="notification">{{$i18next.t('Header.menu.notification')}}</i-menu-item>
+          <i-menu-group :title="i18next.t('Header.menu.personal_center')">
+            <i-menu-item name="notification">{{i18next.t('Header.menu.notification')}}</i-menu-item>
+            <component v-for="(cpntName, idx) in pluginComponents['menu.personal']"
+              :is="cpntName"
+              :key="idx"
+              :bus="bus"/>
           </i-menu-group>
-          <i-menu-group :title="$i18next.t('Header.menu.admin_center')" v-if="user && user.isAdmin">
-            <i-menu-item name="report_management">{{$i18next.t('Header.menu.report_management')}}</i-menu-item>
-            <i-menu-item name="admin_helpers">{{$i18next.t('Header.menu.admin_helpers')}}</i-menu-item>
+          <i-menu-group :title="i18next.t('Header.menu.admin_center')" v-if="user && user.isAdmin">
+            <i-menu-item name="report_management">{{i18next.t('Header.menu.report_management')}}</i-menu-item>
+            <i-menu-item name="admin_helpers">{{i18next.t('Header.menu.admin_helpers')}}</i-menu-item>
+            <component v-for="(cpntName, idx) in pluginComponents['menu.admin']"
+              :is="cpntName"
+              :key="idx"
+              :bus="bus"/>
           </i-menu-group>
-          <i-menu-group :title="$i18next.t('Header.menu.more')" v-if="isSmallScreen">
-            <i-menu-item name="sign_out">{{$i18next.t('Header.menu.sign_out')}}</i-menu-item>
+          <i-menu-group :title="i18next.t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
+            <component v-for="(cpntName, idx) in pluginComponents['menu.plugin']"
+              :is="cpntName"
+              :key="idx"
+              :bus="bus"/>
           </i-menu-group>
         </template>
-        <template v-if="isSmallScreen && !user">
-          <i-menu-group :title="$i18next.t('Header.menu.actions')">
-            <i-menu-item name="sign_up">{{$i18next.t('Header.menu.sign_up')}}</i-menu-item>
-            <i-menu-item name="sign_in">{{$i18next.t('Header.menu.sign_in')}}</i-menu-item>
+        <template v-if="isSmallScreen">
+          <i-menu-group :title="i18next.t('Header.menu.actions')">
+            <i-menu-item v-if="user" name="sign_out">{{i18next.t('Header.menu.sign_out')}}</i-menu-item>
+            <template v-else>
+              <i-menu-item name="sign_up">{{i18next.t('Header.menu.sign_up')}}</i-menu-item>
+              <i-menu-item name="sign_in">{{i18next.t('Header.menu.sign_in')}}</i-menu-item>
+            </template>
           </i-menu-group>
         </template>
       </i-submenu>
       <li class="wf-float-right" v-if="!isSmallScreen || !user">
         <template v-if="!user" >
           <a @click="showAuthFormModal('sign_up')">
-            {{$i18next.t('Header.btn.sign_up')}}
+            {{i18next.t('Header.btn.sign_up')}}
           </a>
           /
           <a @click="showAuthFormModal('sign_in')">
-            {{$i18next.t('Header.btn.sign_in')}}
+            {{i18next.t('Header.btn.sign_in')}}
           </a>
         </template>
         <a v-else @click="signOut">
-          {{$i18next.t('Header.btn.sign_out')}}
+          {{i18next.t('Header.btn.sign_out')}}
         </a>
       </li>
     </i-menu>
@@ -75,7 +89,7 @@
       v-model="authFormModal"
       :closable="false"
       :footer-hide="true"
-      :theme="$config.theme"
+      :theme="config.theme"
       class-name="wf-form">
       <div style="text-align:center">
         <wf-auth-form :init-tab="authFormInitTab"></wf-auth-form>
@@ -86,23 +100,23 @@
       v-model="userSettingModal"
       :closable="false"
       :footer-hide="true"
-      :theme="$config.theme"
+      :theme="config.theme"
       class-name="wf-form">
       <div style="text-align:center">
         <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
       </div>
     </i-modal>
-    <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true" :theme="$config.theme">
+    <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true" :theme="config.theme">
       <div style="text-align:center">
         <wf-personal-center :user="user" v-if="user"></wf-personal-center>
       </div>
     </i-modal>
-    <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true" :theme="$config.theme">
+    <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true" :theme="config.theme">
       <div style="text-align:center">
         <wf-report-management :user="user" v-if='user && user.isAdmin'></wf-report-management>
       </div>
     </i-modal>
-    <i-modal v-model="adminHelpersModal" :closable="false" :footer-hide="true" :theme="$config.theme">
+    <i-modal v-model="adminHelpersModal" :closable="false" :footer-hide="true" :theme="config.theme">
       <div style="text-align:center">
         <wf-admin-helpers :user="user" v-if='user && user.isAdmin'></wf-admin-helpers>
       </div>
@@ -112,25 +126,12 @@
 
 <script>
 import Bus from '../common/bus'
-import WfAuthForm from '../components/WfAuthForm'
-import WfUserSetting from '../components/WfUserSetting'
-import WfPersonalCenter from '../components/WfPersonalCenter'
-import WfReportManagement from '../components/WfReportManagement'
-import WfAdminHelpers from '../components/WfAdminHelpers'
 
 export default {
   name: 'wf-header',
   props: [
-    'user',
     'commentsLoadingState'
   ],
-  components: {
-    WfAuthForm,
-    WfUserSetting,
-    WfPersonalCenter,
-    WfReportManagement,
-    WfAdminHelpers
-  },
   data () {
     return {
       authFormInitTab: 'sign_in', // 'sign_in' || 'sign_up'
@@ -144,19 +145,16 @@ export default {
     }
   },
   computed: {
-    $auth () {
-      return this.$_wf.auth
-    },
-    $config () {
-      return this.$_wf.config
-    },
-    $i18next () {
-      return this.$_wf.i18next
-    },
+    bus: () => Bus,
+    pluginComponents: () => Bus.pluginComponents,
+    auth: () => Bus.auth,
+    config: () => Bus.config,
+    i18next: () => Bus.i18next,
+    user: () => Bus.user,
     username () {
       return this.user
       ? this.user.displayName
-      : this.$i18next.t('common.anonymous_user')
+      : this.i18next.t('common.anonymous_user')
     },
     discussionCount: () => Bus.$data.discussionCount,
     windowWidth: () => Bus.$data.windowWidth,
@@ -170,6 +168,9 @@ export default {
     },
     isLargeScreen () {
       return !this.isSmallScreen && !this.isSmallerScreen
+    },
+    shouldShowPluginMenu () {
+      return this.pluginComponents['menu.plugin'] && this.pluginComponents['menu.plugin'].length
     }
   },
   methods: {
@@ -181,12 +182,12 @@ export default {
     },
     signOut () {
       this.$Modal.confirm({
-        title: this.$i18next.t('Header.text.sign_out_confirm_title'),
-        content: `<p> ${this.$i18next.t('Header.text.sign_out_confirm_content')} </p>`,
-        okText: this.$i18next.t('Header.btn.confirm'),
-        cancelText: this.$i18next.t('Header.btn.cancel'),
+        title: this.i18next.t('Header.text.sign_out_confirm_title'),
+        content: `<p> ${this.i18next.t('Header.text.sign_out_confirm_content')} </p>`,
+        okText: this.i18next.t('Header.btn.confirm'),
+        cancelText: this.i18next.t('Header.btn.cancel'),
         onOk: () => {
-          this.$auth.signOut().then(() => {
+          this.auth.signOut().then(() => {
             console.log('User Sign Out.')
           })
         },
@@ -204,9 +205,9 @@ export default {
         this.userSettingModal = true
       } else {
         this.$Modal.warning({
-          title: this.$i18next.t('Header.text.sign_in_warning_title'),
-          content: this.$i18next.t('Header.text.sign_in_warning_content'),
-          okText: this.$i18next.t('Header.btn.confirm')
+          title: this.i18next.t('Header.text.sign_in_warning_title'),
+          content: this.i18next.t('Header.text.sign_in_warning_content'),
+          okText: this.i18next.t('Header.btn.confirm')
         })
       }
     },

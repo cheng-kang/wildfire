@@ -1,27 +1,27 @@
 <template>
   <section class="wf-body">
     <wf-reply-area
-      :user="user"
       :comments-loading-state="commentsLoadingState"
       style="margin-bottom: 30px;"
-      :isMain="true"></wf-reply-area>
+      :isMain="true"/>
 
     <template v-if="comments.length !== 0">
       <ul class="wf-comment-group">
+        <component v-for="(cpntName, idx) in pluginComponents['comments.before']"
+          :is="cpntName"
+          :key="idx"
+          :bus="bus"/>
         <wf-comment-card
           v-for="(comment, idx) in currentPageComments"
           :key="comment.commentId"
-          :user="user"
-          :comment="comment"
-          :comments-loading-state="commentsLoadingState"
-          ></wf-comment-card>
+          :comment="comment"/>
       </ul>
       <i-page
         :total="pageCommentsCount"
         :page-size="numberOfCommentsPerPage"
         v-if="pageCommentsCount > numberOfCommentsPerPage"
         size="small"
-        @on-change="pageChanged"></i-page>
+        @on-change="pageChanged"/>
     </template>
 
     <p v-else class="wf-no-content-tip">
@@ -32,13 +32,13 @@
           justifyContent: 'center'
         }">
           <i-icon class="spin-icon" type="load-c" size="18" :style="{marginRight: '5px'}"></i-icon>
-          <div>{{$i18next.t('Body.text.loading_comments')}}</div>
+          <div>{{i18next.t('Body.text.loading_comments')}}</div>
       </i-spin>
       <span v-if="commentsLoadingState === 'finished'">
-        {{$i18next.t('Body.text.post_the_first_comment')}}
+        {{i18next.t('Body.text.post_the_first_comment')}}
       </span>
       <span v-if="commentsLoadingState === 'failed'" class="wf-error">
-        {{$i18next.t('Body.text.loading_comments_failed')}}
+        {{i18next.t('Body.text.loading_comments_failed')}}
       </span>
     </p>
 
@@ -52,7 +52,7 @@
         ref="mentionAutoComplete"
         v-model="mentioningUsername"
         icon="ios-search"
-        :placeholder="$i18next.t('Body.placeholder.mention_autocomplete')"
+        :placeholder="i18next.t('Body.placeholder.mention_autocomplete')"
         style="width:300px"
         @on-select="mentionAutoCompleteOnSelect">
 
@@ -72,7 +72,7 @@
       :closable="false"
       :footer-hide="true"
       class-name="wf-vertical-center-modal">
-      <wf-user-info-modal></wf-user-info-modal>
+      <wf-user-info-modal/>
     </i-modal>
   </section>
 </template>
@@ -80,18 +80,9 @@
 <script>
 import Vue from 'vue'
 import Bus from '../common/bus'
-import WfReplyArea from '../components/WfReplyArea'
-import WfCommentCard from '../components/WfCommentCard'
-import WfUserInfoModal from '../components/WfUserInfoModal'
 export default {
   name: 'wf-body',
-  components: {
-    WfReplyArea,
-    WfCommentCard,
-    WfUserInfoModal
-  },
   props: [
-    'user',
     'comments',
     'commentsLoadingState',
     'pageCommentsCount'
@@ -118,12 +109,11 @@ export default {
     }
   },
   computed: {
-    $db () {
-      return this.$_wf.db
-    },
-    $i18next () {
-      return this.$_wf.i18next
-    },
+    bus: () => Bus,
+    user: () => Bus.user,
+    db: () => Bus.db,
+    i18next: () => Bus.i18next,
+    pluginComponents: () => Bus.pluginComponents,
     currentPageComments () {
       const start = (this.currentPage - 1) * this.numberOfCommentsPerPage
       const end = this.currentPage * this.numberOfCommentsPerPage
@@ -143,7 +133,7 @@ export default {
     /*
       Format users data for Mention auto complete
      */
-    this.$db.ref('/users').once('value').then(snapshot => {
+    this.db.ref('/users').once('value').then(snapshot => {
       const result = snapshot.val() || {}
       Bus.$data.users = Object.keys(result).map(id => {
         const { displayName, photoURL, email, isAdmin } = result[id]
@@ -186,7 +176,7 @@ export default {
       if (typeof data === 'object') {
         this.$set(Bus.$data, 'selectedCommentUserInfo', data)
       } else {
-        this.$db.ref('/users').orderByChild('email').equalTo(data).once('value', snapshot => {
+        this.db.ref('/users').orderByChild('email').equalTo(data).once('value', snapshot => {
           const res = snapshot.val()
           if (res) {
             const uid = Object.keys(res)[0]

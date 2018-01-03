@@ -37,7 +37,7 @@
                 </div>
               </div>
               <div slot="content" v-else>
-                {{$i18next.t('CommentCard.text.loading_comments_content')}}
+                {{i18next.t('CommentCard.text.loading_comments_content')}}
               </div>
             </i-poptip>
             <span class="wf-meta">
@@ -57,14 +57,24 @@
               <i-icon type="arrow-down-b"></i-icon>
             </a>
             <i-dropdown-menu slot="list">
+              <component v-for="(cpntName, idx) in pluginComponents['comment.menu.top']"
+                :is="cpntName"
+                :key="idx"
+                :bus="bus"
+                :comment="comment"/>
               <i-dropdown-item v-if="!user || !user.isAdmin" style="color: red"
                 name="reportCurrentComment">
-                {{$i18next.t('CommentCard.btn.report_comment')}}
+                {{i18next.t('CommentCard.btn.report_comment')}}
               </i-dropdown-item>
               <i-dropdown-item v-if="user && user.isAdmin" style="color: red"
                 name="banCurrentUser">
-                {{$i18next.t('CommentCard.btn.ban_user')}}
+                {{i18next.t('CommentCard.btn.ban_user')}}
               </i-dropdown-item>
+              <component v-for="(cpntName, idx) in pluginComponents['comment.menu.bottom']"
+                :is="cpntName"
+                :key="idx"
+                :bus="bus"
+                :comment="comment"/>
             </i-dropdown-menu>
           </i-dropdown>
         </header>
@@ -80,16 +90,16 @@
             type="text" long>
             <template v-if="isShowingFullText">
               <i-icon type="chevron-up"></i-icon>
-              {{$i18next.t('CommentCard.btn.show_less_content')}}
+              {{i18next.t('CommentCard.btn.show_less_content')}}
             </template>
             <template v-else>
               <i-icon type="chevron-down"></i-icon>
-              {{$i18next.t('CommentCard.btn.show_full_content')}}
+              {{i18next.t('CommentCard.btn.show_full_content')}}
             </template>
           </i-button>
         </div>
         <footer class="wf-comment-footer">
-          <a :title="$i18next.t('CommentCard.html_title.like_comment')"
+          <a :title="i18next.t('CommentCard.html_title.like_comment')"
             :class="{
               'wf-inactive': likeUserIdList.indexOf(currentUserId) === -1,
               'wf-disabled': !user
@@ -99,7 +109,7 @@
             <i-icon type="heart"></i-icon>
           </a>
           <span class="wf-separator">|</span>
-          <a :title="$i18next.t('CommentCard.html_title.dislike_comment')"
+          <a :title="i18next.t('CommentCard.html_title.dislike_comment')"
             :class="{
               'wf-inactive': dislikeUserIdList.indexOf(currentUserId) === -1,
               'wf-disabled': !user
@@ -108,22 +118,31 @@
             <span>{{dislikeUserIdList.length || ''}}</span>
             <i-icon type="heart-broken"></i-icon>
           </a>
+          <component v-for="(cpntName, idx) in pluginComponents['comment.buttons.pre']"
+            :is="cpntName"
+            :key="idx"
+            :bus="bus"
+            :comment="comment"/>
           <i-button
             type="text"
             class="wf-reply-btn"
-            @click="toggleReplyArea"
-            v-if="commentsLoadingState === 'finished'">
-            {{isShowingReplyArea ? $i18next.t('CommentCard.btn.hide') : $i18next.t('CommentCard.btn.reply')}}
+            @click="toggleReplyArea">
+            {{isShowingReplyArea ? i18next.t('CommentCard.btn.hide') : i18next.t('CommentCard.btn.reply')}}
           </i-button>
           <i-poptip
             confirm
-            :title="$i18next.t('CommentCard.confirm.deleting_comment')"
+            :title="i18next.t('CommentCard.confirm.deleting_comment')"
             @on-ok="confirmDelete">
             <i-button type="text" class="wf-delete-btn"
               v-if="canDelete">
-              {{$i18next.t('CommentCard.btn.delete')}}
+              {{i18next.t('CommentCard.btn.delete')}}
             </i-button>
           </i-poptip>
+          <component v-for="(cpntName, idx) in pluginComponents['comment.buttons.post']"
+            :is="cpntName"
+            :key="idx"
+            :bus="bus"
+            :comment="comment"/>
         </footer>
         <!-- If this is a comment -->
         <wf-reply-area v-if="!parentComment"
@@ -153,20 +172,18 @@
           :key="reply.commentId"
           :user="user"
           :comment="reply"
-          :parent-comment="comment"
-          :comments-loading-state="commentsLoadingState"
-          ></wf-comment-card>
+          :parent-comment="comment"></wf-comment-card>
         <i-button type="text"
           v-show="replies.length > numberOfRepliesWhenShowingLess"
           @click="isShowingLessReplies = !isShowingLessReplies"
           long>
           <template v-if="isShowingLessReplies">
             <i-icon type="chevron-down"></i-icon>
-            {{$i18next.t('CommentCard.btn.show_more_discussion', { count: foldedDiscussionCount })}}
+            {{i18next.t('CommentCard.btn.show_more_discussion', { count: foldedDiscussionCount })}}
           </template>
           <template v-else>
             <i-icon type="chevron-up"></i-icon>
-            {{$i18next.t('CommentCard.btn.show_less_discussion', { count: foldedDiscussionCount })}}
+            {{i18next.t('CommentCard.btn.show_less_discussion', { count: foldedDiscussionCount })}}
           </template>
         </i-button>
       </ul>
@@ -179,8 +196,6 @@ const MAX_CONTENT_HEIGHT = 180
 
 import Bus from '../common/bus'
 import { textContent, handleImageOnError } from '../common/utils'
-import WfReplyArea from './WfReplyArea'
-import WfMarkedContent from './WfMarkedContent'
 import errorImage from '../assets/images/error-image.svg'
 /*
   Wf Comment Card
@@ -195,15 +210,8 @@ import errorImage from '../assets/images/error-image.svg'
  */
 export default {
   name: 'wf-comment-card',
-  components: {
-    WfReplyArea,
-    'wf-comment-card': this,
-    WfMarkedContent
-  },
   props: [
-    'user',
     'comment',
-    'commentsLoadingState',
     'parentComment'
   ],
   data () {
@@ -235,23 +243,16 @@ export default {
     }
   },
   computed: {
-    $config () {
-      return this.$_wf.config
-    },
-    $db () {
-      return this.$_wf.db
-    },
-    $i18next () {
-      return this.$_wf.i18next
-    },
+    bus: () => Bus,
+    config: () => Bus.config,
+    db: () => Bus.db,
+    i18next: () => Bus.i18next,
+    pluginComponents: () => Bus.pluginComponents,
+    user: () => Bus.user,
     isCurrentUserBanned: () => Bus.isCurrentUserBanned,
     textContent: () => textContent,
-    distanceInWordsToNow () {
-      return this.$_wf.distanceInWordsToNow
-    },
-    formatDate () {
-      return this.$_wf.formatDate
-    },
+    distanceInWordsToNow: () => Bus.distanceInWordsToNow,
+    formatDate: () => Bus.formatDate,
     isTopLevelComment () {
       return !this.comment.parentCommentId
     },
@@ -268,7 +269,7 @@ export default {
       return this.isAnonymousUser(this.comment.uid)
     },
     encodedPageURL () {
-      return btoa(this.$config.pageURL)
+      return btoa(this.config.pageURL)
     },
     canDelete () {
       return this.user && (this.user.uid === this.comment.uid || this.user.isAdmin)
@@ -277,13 +278,21 @@ export default {
       return this.replies.length - this.numberOfRepliesWhenShowingLess
     }
   },
+  watch: {
+    user (newVal) {
+      if (newVal && this.comment.uid === newVal.uid) {
+        const { displayName, photoURL, email } = newVal
+        this.author = Object.assign({}, {displayName, photoURL, email})
+      }
+    }
+  },
   created () {
     // Init user info as anonymous user
-    this.author.displayName = this.$i18next.t('common.anonymous_user')
-    this.author.photoURL = this.$config.defaultAvatarURL
+    this.author.displayName = this.i18next.t('common.anonymous_user')
+    this.author.photoURL = this.config.defaultAvatarURL
     this.replyToComment.author.isAnonymous = true
-    this.replyToComment.author.displayName = this.$i18next.t('common.anonymous_user')
-    this.replyToComment.author.photoURL = this.$config.defaultAvatarURL
+    this.replyToComment.author.displayName = this.i18next.t('common.anonymous_user')
+    this.replyToComment.author.photoURL = this.config.defaultAvatarURL
 
     if (!this.isPostedByAnonymousUser) {
       const authorUid = this.comment.uid
@@ -295,7 +304,7 @@ export default {
       } else {
         // Else (not anomymous user and not current user),
         // get username & avatar from DB
-        this.$db.ref(`users/${authorUid}`).once('value').then((snapshot) => {
+        this.db.ref(`users/${authorUid}`).once('value').then((snapshot) => {
           let author = snapshot.val()
 
           /*
@@ -312,21 +321,21 @@ export default {
     }
 
     // Get Voting data
-    this.$bindAsObject('votes', this.$db.ref(`votes/${this.comment.commentId}`))
+    this.$bindAsObject('votes', this.db.ref(`votes/${this.comment.commentId}`))
 
     // If this comment is (1) a reply to comment, or
     // (2) a reply to a reply, get corresponding detail data.
     if (!this.isTopLevelComment) {
-      this.$db.ref(`comments/${this.comment.parentCommentId}`).once('value').then((snapshot) => {
+      this.db.ref(`comments/${this.comment.parentCommentId}`).once('value').then((snapshot) => {
         let comment = snapshot.val()
         if (!comment) {
-          this.replyToComment.content = this.$i18next.t('CommentCard.text.deleted_comment')
+          this.replyToComment.content = this.i18next.t('CommentCard.text.deleted_comment')
           return
         }
         this.replyToComment.content = comment.content
         const replyToCommentAuthorUid = comment.uid
         if (!this.isAnonymousUser(replyToCommentAuthorUid)) {
-          this.$db.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
+          this.db.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
             let author = snapshot.val()
             /*
               Assign value only when the value exists,
@@ -345,16 +354,16 @@ export default {
     // If the comment is top-level comment,
     // get its replies.
       const commentId = this.comment.commentId
-      this.$db.ref(`commentReplies/${commentId}`).once('value').then((snap) => {
+      this.db.ref(`commentReplies/${commentId}`).once('value').then((snap) => {
         this._repliesCount = Object.keys(snap.val() || {}).length
-        this.$db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_added', (snap) => {
+        this.db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_added', (snap) => {
           const child = snap.val()
-          this.replies.push(Object.assign(child, {commentId: this.$config.databaseProvider === 'firebase' ? snap.key : snap.key()}))
+          this.replies.push(Object.assign(child, {commentId: this.config.databaseProvider === 'firebase' ? snap.key : snap.key()}))
           if (this._repliesCount-- <= 0) { Bus.$data.discussionCount += 1 }
         })
       })
-      this.$db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_removed', (snap) => {
-        const key = this.$config.databaseProvider === 'firebase' ? snap.key : snap.key()
+      this.db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_removed', (snap) => {
+        const key = this.config.databaseProvider === 'firebase' ? snap.key : snap.key()
         const idx = this.replies.findIndex(reply => reply.commentId === key)
         this.replies.splice(idx, 1)
         Bus.$data.discussionCount -= 1
@@ -372,25 +381,13 @@ export default {
       }
       imgEles[i].onerror = (event) => {
         const imageEle = event.target
-        const title = this.$i18next.t('CommentCard.html_title.image_onerror')
+        const title = this.i18next.t('CommentCard.html_title.image_onerror')
 
         imageEle.className = 'wf-error-image'
         handleImageOnError(imageEle, errorImage, title)
         this.checkShouldFold(contentEle)
       }
     }
-
-    /*
-      `CurrentUserInfoUpdated` event observer
-      Note: if this comment/reply is posted by the current
-            user, update user info when recieves this event.
-     */
-    Bus.listenTo('CurrentUserInfoUpdated', updates => {
-      if (this.user && this.comment.uid === this.user.uid) {
-        this.author.displayName = updates['/displayName']
-        this.author.photoURL = updates['/photoURL']
-      }
-    }, this._uid)
 
     Bus.listenTo('OnlyOneReplyAreaShouldBeActive', activeReplyAreaId => {
       if (this.$refs.replyArea._uid !== activeReplyAreaId) {
@@ -403,7 +400,7 @@ export default {
   },
   methods: {
     isAnonymousUser (uid) {
-      const { anonymousUserId } = this.$config
+      const { anonymousUserId } = this.config
       return !uid || uid === anonymousUserId
     },
     shortenedUsername (username) {
@@ -427,8 +424,8 @@ export default {
     avatarOnError (event) {
       handleImageOnError(
         event.target,
-        this.$config.defaultAvatarURL,
-        this.$i18next.t('CommentCard.html_title.image_onerror')
+        this.config.defaultAvatarURL,
+        this.i18next.t('CommentCard.html_title.image_onerror')
         )
     },
     toggleReplyArea () {
@@ -442,9 +439,9 @@ export default {
       if (!this.user) { return }
       if (this.isCurrentUserBanned) {
         this.$Modal.error({
-          title: this.$i18next.t('CommentCard.error.banned_title'),
-          content: this.$i18next.t('CommentCard.error.banned_content'),
-          okText: this.$i18next.t('CommentCard.btn.confirm')
+          title: this.i18next.t('CommentCard.error.banned_title'),
+          content: this.i18next.t('CommentCard.error.banned_content'),
+          okText: this.i18next.t('CommentCard.btn.confirm')
         })
         return
       }
@@ -470,7 +467,7 @@ export default {
         }
       }
 
-      this.$db.ref(`votes/${commentId}`).update({
+      this.db.ref(`votes/${commentId}`).update({
         '/likes': likes,
         '/dislikes': dislikes
       })
@@ -480,35 +477,35 @@ export default {
 
       const executeDeletion = () => {
         Promise.all([
-          this.$db.ref(`comments/${commentId}`).remove(),
-          this.$db.ref(`votes/${commentId}`).remove(),
+          this.db.ref(`comments/${commentId}`).remove(),
+          this.db.ref(`votes/${commentId}`).remove(),
           // Note: [todo] should move "deleting votes" outside of
           //        this batch. "votes" data shouldn't be writable
           //        by all users, because site owner cannot recover
           //        "votes" data with other unmutalbe data.
           ...(this.isTopLevelComment
             ? [
-              this.$db.ref(`pages/${this.comment.pageURL}/comments/${commentId}`).remove(),
-              this.$db.ref(`commentReplies/${commentId}`).remove(),
-              ...this.replies.map(reply => this.$db.ref(`comments/${reply.commentId}`).remove())
+              this.db.ref(`pages/${this.comment.pageURL}/comments/${commentId}`).remove(),
+              this.db.ref(`commentReplies/${commentId}`).remove(),
+              ...this.replies.map(reply => this.db.ref(`comments/${reply.commentId}`).remove())
             ]
-            : [this.$db.ref(`commentReplies/${this.comment.rootCommentId}/${commentId}`).remove()])
+            : [this.db.ref(`commentReplies/${this.comment.rootCommentId}/${commentId}`).remove()])
         ]).then(() => {
-          this.$Message.success(this.$i18next.t('CommentCard.success.deleting_comment'))
+          this.$Message.success(this.i18next.t('CommentCard.success.deleting_comment'))
 
           // Update `discussionCount`
-          this.$db.ref(`pages/${this.$config.pageURL}/discussionCount`).transaction(function (currentValue) {
+          this.db.ref(`pages/${this.config.pageURL}/discussionCount`).transaction(function (currentValue) {
             const newVal = (currentValue || 0) - deletingDiscussionCount
             return newVal >= 0 ? newVal : 0
           })
         }).catch(() => {
-          this.$Message.error(this.$i18next.t('CommentCard.error.deleting_comment'))
+          this.$Message.error(this.i18next.t('CommentCard.error.deleting_comment'))
         })
       }
 
       let deletingDiscussionCount = 1
       if (this.isTopLevelComment) {
-        this.$db.ref(`commentReplies/${commentId}`).once('value').then(snap => {
+        this.db.ref(`commentReplies/${commentId}`).once('value').then(snap => {
           deletingDiscussionCount += snap.val() ? Object.keys(snap.val()).length : 0
           executeDeletion()
         })
@@ -517,32 +514,32 @@ export default {
       }
     },
     handleDropdownClick (name) {
-      this[name]()
+      this[name] && this[name]()
     },
     reportCurrentComment () {
       if (!this.user) { return }
       if (this.isCurrentUserBanned) {
         this.$Modal.error({
-          title: this.$i18next.t('CommentCard.error.banned_title'),
-          content: this.$i18next.t('CommentCard.error.banned_content'),
-          okText: this.$i18next.t('CommentCard.btn.confirm')
+          title: this.i18next.t('CommentCard.error.banned_title'),
+          content: this.i18next.t('CommentCard.error.banned_content'),
+          okText: this.i18next.t('CommentCard.btn.confirm')
         })
         return
       }
 
       var now = new Date()
-      this.$db.ref(`reported/${this.comment.commentId}/${this.user.uid}`)
+      this.db.ref(`reported/${this.comment.commentId}/${this.user.uid}`)
       .once('value').then((snapshot) => {
         if (snapshot.val()) {
-          this.$Message.error(this.$i18next.t('CommentCard.error.repeated_reporting'))
+          this.$Message.error(this.i18next.t('CommentCard.error.repeated_reporting'))
           return
         }
 
-        this.$db.ref(`reported/${this.comment.commentId}/${this.user.uid}`).set(now.toISOString())
+        this.db.ref(`reported/${this.comment.commentId}/${this.user.uid}`).set(now.toISOString())
         .then(() => {
-          this.$Message.success(this.$i18next.t('CommentCard.success.reporting_comment'))
+          this.$Message.success(this.i18next.t('CommentCard.success.reporting_comment'))
         }).catch(err => {
-          this.$Message.error(this.$i18next.t('CommentCard.error.reporting_comment'))
+          this.$Message.error(this.i18next.t('CommentCard.error.reporting_comment'))
           console.log(err)
         })
       })
@@ -550,26 +547,26 @@ export default {
     banCurrentUser () {
       let key = ''
       let now = new Date().toISOString()
-      if (this.comment.uid !== this.$config.anonymousUserId) {
+      if (this.comment.uid !== this.config.anonymousUserId) {
         key = this.comment.uid
       } else if (/unknow/.test(this.comment.ip)) {
-        this.$Message.error(this.$i18next.t('CommentCard.error.banning_user'))
+        this.$Message.error(this.i18next.t('CommentCard.error.banning_user'))
         return
       } else {
         key = this.comment.ip.replace(/\./g, '-')
       }
-      this.$db.ref(`ban/${key}`).once('value').then((snapshot) => {
+      this.db.ref(`ban/${key}`).once('value').then((snapshot) => {
         if (snapshot.val()) {
-          this.$Message.error(this.$i18next.t('CommentCard.error.repeated_banning'))
+          this.$Message.error(this.i18next.t('CommentCard.error.repeated_banning'))
           return
         }
-        this.$db.ref(`ban/${key}`).set({
+        this.db.ref(`ban/${key}`).set({
           date: now,
           reason: 'comment'
         }).then(() => {
-          this.$Message.success(this.$i18next.t('CommentCard.success.banning_user'))
+          this.$Message.success(this.i18next.t('CommentCard.success.banning_user'))
         }).catch(() => {
-          this.$Message.error(this.$i18next.t('CommentCard.error.banning_user'))
+          this.$Message.error(this.i18next.t('CommentCard.error.banning_user'))
         })
       })
     },
