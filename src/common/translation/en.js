@@ -1,14 +1,16 @@
 export const langEn = {
   common: {
     add_wildfire_to_your_site: 'Add Wildfire to your site',
+    anonymous_user: 'Anonymous',
     btn: {
       cancel: 'Cancel',
       confirm: 'Confirm'
     },
-    anonymous_user: 'Anonymous',
+    reset_when_wilddog_too_many_connections: 'Switching to a standby database, too many connections to the current database. Note: omments data are not shared between main & standby databases.',
     tip_prefix: '*Tips: ',
     unknown_ip: 'Unknown IP address',
-    unknown_user: 'Unknown User'
+    unknown_user: 'Unknown User',
+    wilddog_too_many_connections: 'The current database had too many connections, please contact the site admin.'
   },
   AdminHelpers: {
     btn: {

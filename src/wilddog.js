@@ -87,8 +87,15 @@ const install = (_Vue, config) => {
   _Vue.component('wildfire', Wildfire)
 }
 
-const reset = (_Vue, config = {}) => {
-  const {
+const reset = (_Vue, { config = {}, err }) => {
+  const getDatabaseConfig = () => {
+    const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config
+    if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) return databaseConfig
+    const currentConfigIdx = standbyDatabaseConfigs.findIndex(config => databaseProvider === 'firebase' ? config.projectId === databaseConfig.projectId : config.siteId === databaseConfig.siteId)
+    if (currentConfigIdx === -1 || currentConfigIdx === standbyDatabaseConfigs.length - 1) return standbyDatabaseConfigs[0]
+    return standbyDatabaseConfigs[currentConfigIdx + 1]
+  }
+  let {
     databaseProvider = Bus.config.databaseProvider,
     databaseConfig = Bus.config.databaseConfig, // required
     pageTitle = document.title,
@@ -98,6 +105,8 @@ const reset = (_Vue, config = {}) => {
     defaultAvatarURL = Bus.config.defaultAvatarURL,
     plugins = Bus.plugins
   } = config
+
+  if (!databaseConfig) databaseConfig = getDatabaseConfig()
 
   resetI18next(locale)
 

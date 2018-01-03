@@ -14,12 +14,8 @@ export default {
     }
   },
   mounted () {
-    window.$_wildfire_reset = (config) => {
-      wildfire.reset(Vue, {
-        pageURL: 'http://wildfire.js.org/dev-reset',
-        pageTitle: 'Reset!!!',
-        locale: 'en'
-      })
+    window.$_wildfire_reset = ({config, err}) => {
+      wildfire.reset(Vue, {config, err})
       this.resetKey += 1
     }
   }

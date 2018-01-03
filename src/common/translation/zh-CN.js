@@ -6,9 +6,11 @@ export const langZhCN = {
       cancel: '取消',
       confirm: '确认'
     },
+    reset_when_wilddog_too_many_connections: '当前数据库超载，正在切换至备用数据库。注意：主数据库和备用数据库间数据不互通。',
     tip_prefix: '*小提示：',
     unknown_ip: '未知 IP 地址',
-    unknown_user: '未知用户'
+    unknown_user: '未知用户',
+    wilddog_too_many_connections: '当前数据库超载，请管理员及时处理。'
   },
   AdminHelpers: {
     btn: {

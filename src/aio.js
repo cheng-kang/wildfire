@@ -24,7 +24,8 @@ const install = (_Vue, config) => {
 
   const {
     databaseProvider,
-    databaseConfig, // required
+    databaseConfig,
+    standbyDatabaseConfigs = [],
     pageTitle = document.title,
     pageURL = window.location.href,
     theme = 'light',
@@ -41,6 +42,7 @@ const install = (_Vue, config) => {
     config: {
       databaseProvider,
       databaseConfig,
+      standbyDatabaseConfigs,
       pageTitle,
       pageURL: b64EncodeUnicode(pageURL), // encode pageURL with base64
       locale,
@@ -97,10 +99,17 @@ const install = (_Vue, config) => {
   _Vue.component('wildfire', Wildfire)
 }
 
-const reset = (_Vue, config = {}) => {
-  const {
+const reset = (_Vue, { config = {}, err }) => {
+  const getDatabaseConfig = () => {
+    const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config
+    if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) return databaseConfig
+    const currentConfigIdx = standbyDatabaseConfigs.findIndex(config => databaseProvider === 'firebase' ? config.projectId === databaseConfig.projectId : config.siteId === databaseConfig.siteId)
+    if (currentConfigIdx === -1 || currentConfigIdx === standbyDatabaseConfigs.length - 1) return standbyDatabaseConfigs[0]
+    return standbyDatabaseConfigs[currentConfigIdx + 1]
+  }
+  let {
     databaseProvider = Bus.config.databaseProvider,
-    databaseConfig = Bus.config.databaseConfig, // required
+    databaseConfig,
     pageTitle = document.title,
     pageURL = window.location.href,
     theme = Bus.config.theme,
@@ -108,6 +117,8 @@ const reset = (_Vue, config = {}) => {
     defaultAvatarURL = Bus.config.defaultAvatarURL,
     plugins = Bus.plugins
   } = config
+
+  if (!databaseConfig) databaseConfig = getDatabaseConfig()
 
   resetI18next(locale)
 

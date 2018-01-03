@@ -52,6 +52,7 @@ export default {
     config: () => Bus.config,
     db: () => Bus.db,
     user: () => Bus.user,
+    i18next: () => Bus.i18next,
     classes () {
       return [
         'wf',
@@ -164,6 +165,20 @@ export default {
             return repliesCount + Object.keys(snap.val() || {}).length
           }, 0)
         })
+      }, err => {
+        // Handle Wilddog `too many connections` error
+        if (err.code === 26107 && this.config.standbyDatabaseConfigs.length !== 0) {
+          this.$Message.warning({
+            content: this.i18next.t('common.reset_when_wilddog_too_many_connections'),
+            duration: 5
+          })
+          window.$_wildfire_reset({err})
+        } else {
+          this.$Message.error({
+            content: this.i18next.t('common.wilddog_too_many_connections'),
+            duration: 3
+          })
+        }
       })
 
       this.$bindAsArray('comments', this.db
