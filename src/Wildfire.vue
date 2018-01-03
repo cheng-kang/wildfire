@@ -169,13 +169,12 @@ export default {
         console.error(err)
         // Handle Wilddog `too many connections` error
         if (err.code === 26107) {
-          console.log(this.config)
           if (this.config.standbyDatabaseConfigs.length !== 0) {
             this.$Message.warning({
               content: this.i18next.t('common.reset_when_wilddog_too_many_connections'),
               duration: 5
             })
-            window.$_wildfire_reset({err})
+            window.$_wildfire_reset(null, err)
           } else {
             this.$Message.error({
               content: this.i18next.t('common.wilddog_too_many_connections'),

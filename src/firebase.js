@@ -57,7 +57,7 @@ const install = (_Vue, config) => {
   }
 
   if (!_Vue.$bindAsObject) { _Vue.use(VueFire) }
-  wf.dbApp = firebase.initializeApp(databaseConfig, 'wildfire')
+  wf.dbApp = firebase.initializeApp(databaseConfig, `wildfire-${databaseConfig.projectId}`)
   wf.db = wf.dbApp.database()
   wf.auth = wf.dbApp.auth()
   wf.authService = firebase.auth.EmailAuthProvider.credential
@@ -86,7 +86,7 @@ const install = (_Vue, config) => {
   _Vue.component('wildfire', Wildfire)
 }
 
-const reset = (_Vue, { config = {}, err }) => {
+const reset = (_Vue, config = {}, err) => {
   const getDatabaseConfig = () => {
     const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config
     if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) return databaseConfig

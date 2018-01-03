@@ -169,10 +169,10 @@
           }
         },
         mounted () {
-          window.$_wildfire_reset = ({config, err}) => {
+          window.$_wildfire_reset = (config, err) => {
             const wfLoadingModalEle = document.getElementById('wf-loading-modal')
             wfLoadingModalEle && (wfLoadingModalEle.style.display = 'block')
-            window.wildfire.default.reset(window.Vue, {config, err})
+            window.wildfire.default.reset(window.Vue, config, err)
             this.resetKey += 1
           }
         }

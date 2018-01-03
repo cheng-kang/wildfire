@@ -14,8 +14,8 @@ export default {
     }
   },
   mounted () {
-    window.$_wildfire_reset = ({config, err}) => {
-      wildfire.reset(Vue, {config, err})
+    window.$_wildfire_reset = (config = {}, err) => {
+      wildfire.reset(Vue, config, err)
       this.resetKey += 1
     }
   }

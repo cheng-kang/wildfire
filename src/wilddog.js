@@ -60,7 +60,7 @@ const install = (_Vue, config) => {
   wf.dbApp = wilddog.initializeApp({
     authDomain: `${databaseConfig.siteId}.wilddog.com`,
     syncURL: `https://${databaseConfig.siteId}.wilddogio.com`
-  }, 'wildfire')
+  }, `wildfire-${databaseConfig.siteId}`)
   wf.db = wf.dbApp.sync()
   wf.auth = wf.dbApp.auth()
   wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
@@ -89,7 +89,7 @@ const install = (_Vue, config) => {
   _Vue.component('wildfire', Wildfire)
 }
 
-const reset = (_Vue, { config = {}, err }) => {
+const reset = (_Vue, config = {}, err) => {
   const getDatabaseConfig = () => {
     const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config
     if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) return databaseConfig

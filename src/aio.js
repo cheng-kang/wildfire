@@ -99,7 +99,7 @@ const install = (_Vue, config) => {
   _Vue.component('wildfire', Wildfire)
 }
 
-const reset = (_Vue, { config = {}, err }) => {
+const reset = (_Vue, config = {}, err) => {
   const getDatabaseConfig = () => {
     const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config
     if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) return databaseConfig
