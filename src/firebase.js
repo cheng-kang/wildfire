@@ -22,7 +22,8 @@ const install = (_Vue, config) => {
 
   const {
     // databaseProvider = 'firebase',
-    databaseConfig, // required
+    databaseConfig,
+    standbyDatabaseConfigs = [],
     pageTitle = document.title,
     pageURL = window.location.href,
     theme = 'light',
@@ -39,6 +40,7 @@ const install = (_Vue, config) => {
     config: {
       databaseProvider: 'firebase',
       databaseConfig,
+      standbyDatabaseConfigs,
       pageTitle,
       pageURL: b64EncodeUnicode(pageURL), // encode pageURL with base64
       locale,
