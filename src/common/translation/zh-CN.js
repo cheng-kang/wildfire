@@ -10,7 +10,8 @@ export const langZhCN = {
     tip_prefix: '*小提示：',
     unknown_ip: '未知 IP 地址',
     unknown_user: '未知用户',
-    wilddog_too_many_connections: '当前数据库超载，请管理员及时处理。'
+    wilddog_too_many_connections: '当前数据库超载，请管理员及时处理。',
+    wildfire_reset_not_found: '未找到全局 wildfire 重置方法。'
   },
   AdminHelpers: {
     btn: {

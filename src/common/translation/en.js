@@ -10,7 +10,8 @@ export const langEn = {
     tip_prefix: '*Tips: ',
     unknown_ip: 'Unknown IP address',
     unknown_user: 'Unknown User',
-    wilddog_too_many_connections: 'The current database had too many connections, please contact the site admin.'
+    wilddog_too_many_connections: 'The current database had too many connections, please contact the site admin.',
+    wildfire_reset_not_found: 'Global wildfire reset method not found.'
   },
   AdminHelpers: {
     btn: {
