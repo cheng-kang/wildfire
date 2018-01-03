@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wildfire Example - 4</title>
+  <style type="text/css">
+    body {
+      color:#fff;
+      background-color: #1d1f21;
+    }
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Wildfire Example</h1>
+      <h3>wildfire.auto.js</h3>
+    </header>
+    <main>
+      <div class="wildfire_thread"></div>
+      <script type="text/javascript">
+        var wildfireConfig = () => ({
+          // databaseProvider: 'firebase',
+          // databaseConfig: {
+          //   apiKey: 'AIzaSyDCHvWMGjVVTMcL67sorfJm3Uv-_luAKg0',
+          //   authDomain: 'wildfire-plugin.firebaseapp.com',
+          //   databaseURL: 'https://wildfire-plugin.firebaseio.com',
+          //   projectId: 'wildfire-plugin',
+          //   storageBucket: '',
+          //   messagingSenderId: '712535216662'
+          // },
+          databaseProvider: 'wilddog',
+          databaseConfig: {
+            // siteId: 'wd5350450577zvbtov'
+            siteId: 'wd3458066303ldsbyz'
+          },
+          standbyDatabaseConfigs: [
+            {
+              siteId: 'wd5350450577zvbtov'
+            }
+          ],
+          pageURL: 'http://wildfire.js.org/dev-example',
+          pageTitle: 'Wildfire Demo',
+          // theme: 'light',
+          theme: 'dark',
+          // locale: 'en'
+          locale: 'zh-CN'
+        })
+      </script>
+      <script src="https://unpkg.com/wildfire-dev/dist/wildfire.auto.js"></script>
+    </main>
+  </div>
+</body>
+</html>
