@@ -166,18 +166,23 @@ export default {
           }, 0)
         })
       }, err => {
+        console.error(err)
         // Handle Wilddog `too many connections` error
-        if (err.code === 26107 && this.config.standbyDatabaseConfigs.length !== 0) {
-          this.$Message.warning({
-            content: this.i18next.t('common.reset_when_wilddog_too_many_connections'),
-            duration: 5
-          })
-          window.$_wildfire_reset({err})
-        } else {
-          this.$Message.error({
-            content: this.i18next.t('common.wilddog_too_many_connections'),
-            duration: 3
-          })
+        if (err.code === 26107) {
+          console.log(this.config)
+          if (this.config.standbyDatabaseConfigs.length !== 0) {
+            this.$Message.warning({
+              content: this.i18next.t('common.reset_when_wilddog_too_many_connections'),
+              duration: 5
+            })
+            window.$_wildfire_reset({err})
+          } else {
+            this.$Message.error({
+              content: this.i18next.t('common.wilddog_too_many_connections'),
+              duration: 3
+            })
+          }
+          return
         }
       })
 
