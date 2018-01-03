@@ -110,6 +110,7 @@ export const reset = (_Vue, config = {}, err) => {
   let {
     databaseProvider = Bus.config.databaseProvider,
     databaseConfig,
+    standbyDatabaseConfigs = Bus.config.standbyDatabaseConfigs,
     pageTitle = document.title,
     pageURL = window.location.href,
     theme = Bus.config.theme,
@@ -128,6 +129,7 @@ export const reset = (_Vue, config = {}, err) => {
     config: {
       databaseProvider,
       databaseConfig,
+      standbyDatabaseConfigs,
       pageTitle,
       pageURL: b64EncodeUnicode(pageURL), // encode pageURL with base64
       locale,
