@@ -12,7 +12,7 @@ import './assets/style.css'
 import './assets/style.dark.css'
 import './assets/animation.css'
 
-const install = (_Vue, config) => {
+export const install = (_Vue, config) => {
   // Init wildfire components
   initLocalComponents(_Vue)
 
@@ -86,7 +86,7 @@ const install = (_Vue, config) => {
   _Vue.component('wildfire', Wildfire)
 }
 
-const reset = (_Vue, config = {}, err) => {
+export const reset = (_Vue, config = {}, err) => {
   const getDatabaseConfig = () => {
     const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config
     if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) return databaseConfig

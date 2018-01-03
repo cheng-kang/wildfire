@@ -148,7 +148,7 @@
     jsList.push(`https://unpkg.com/wildfire-dev/dist/${databaseProvider}/wildfire.min.js`)
 
     loadJSSequentially(jsList, () => {
-      window.wildfire.default.install(window.Vue, {
+      window.wildfire.install(window.Vue, {
         databaseProvider,
         databaseConfig,
         standbyDatabaseConfigs,
@@ -172,7 +172,7 @@
           window.$_wildfire_reset = (config, err) => {
             const wfLoadingModalEle = document.getElementById('wf-loading-modal')
             wfLoadingModalEle && (wfLoadingModalEle.style.display = 'block')
-            window.wildfire.default.reset(window.Vue, config, err)
+            window.wildfire.reset(window.Vue, config, err)
             this.resetKey += 1
           }
         }
