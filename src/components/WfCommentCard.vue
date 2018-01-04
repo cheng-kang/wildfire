@@ -453,24 +453,19 @@ export default {
       let dislikes = this.votes.dislikes || {}
       if (type === 'like') {
         if (uid in likes) {
-          likes[uid] = null
+          this.db.ref(`votes/${commentId}/likes/${uid}`).remove()
         } else {
-          likes[uid] = now.toISOString()
-          dislikes[uid] = null
+          this.db.ref(`votes/${commentId}/likes/${uid}`).set(now.toISOString())
+          this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
         }
       } else if (type === 'dislike') {
         if (uid in dislikes) {
-          dislikes[uid] = null
+          this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
         } else {
-          dislikes[uid] = now.toISOString()
-          likes[uid] = null
+          this.db.ref(`votes/${commentId}/dislikes/${uid}`).set(now.toISOString())
+          this.db.ref(`votes/${commentId}/likes/${uid}`).remove()
         }
       }
-
-      this.db.ref(`votes/${commentId}`).update({
-        '/likes': likes,
-        '/dislikes': dislikes
-      })
     },
     confirmDelete () {
       const commentId = this.comment.commentId
@@ -487,7 +482,10 @@ export default {
             ? [
               this.db.ref(`pages/${this.comment.pageURL}/comments/${commentId}`).remove(),
               this.db.ref(`commentReplies/${commentId}`).remove(),
-              ...this.replies.map(reply => this.db.ref(`comments/${reply.commentId}`).remove())
+              ...this.replies.map(reply => [
+                this.db.ref(`comments/${reply.commentId}`).remove(),
+                this.db.ref(`votes/${reply.commentId}`).remove()
+              ])
             ]
             : [this.db.ref(`commentReplies/${this.comment.rootCommentId}/${commentId}`).remove()])
         ]).then(() => {
