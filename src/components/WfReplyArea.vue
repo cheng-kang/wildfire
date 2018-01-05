@@ -427,8 +427,7 @@ export default {
       const aDate = new Date()
       const date = aDate.toISOString()
       const {uid, type, pageURL = null, pageTitle = null, commentId = null, content = null} = data
-      this.db.ref('notifications').push({
-        uid,
+      this.db.ref(`notifications/${uid}`).push({
         type,
         pageURL,
         pageTitle,

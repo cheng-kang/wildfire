@@ -43,8 +43,7 @@ export default {
   created () {
     const uid = this.user.uid
 
-    this.db.ref(`notifications`).orderByChild('uid').equalTo(uid)
-    .on('child_added', newNotifSnap => {
+    this.db.ref(`notifications/${uid}`).on('child_added', newNotifSnap => {
       const newNotif = newNotifSnap.val()
       const newNotifId = this.config.databaseProvider === 'firebase' ? newNotifSnap.key : newNotifSnap.key()
 
@@ -119,16 +118,20 @@ export default {
           this.notifications[newNotifId] = Object.assign({}, this.notifications[newNotifId], { processedContent: updatedContent })
         })
       })
+    }, err => {
+      console.error(err)
     })
   },
   methods: {
     deleteNotif (notifId) {
+      const uid = this.user.uid
       Vue.delete(this.notifications, notifId)
-      this.db.ref(`notifications/${notifId}`).remove()
+      this.db.ref(`notifications/${uid}/${notifId}`).remove()
     },
     toggleRead (notifId) {
+      const uid = this.user.uid
       const newValue = !this.notifications[notifId].isRead
-      this.db.ref(`notifications/${notifId}`).update({isRead: newValue})
+      this.db.ref(`notifications/${uid}/${notifId}`).update({isRead: newValue})
       this.notifications[notifId] = Object.assign({}, this.notifications[notifId], { isRead: newValue })
     }
   }

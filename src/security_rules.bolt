@@ -1,10 +1,12 @@
 path /users {
     read() { true }
-    // `.isAdmin` is not writable by any users including admin user.
     index() { ['email'] }
 
     /{uid} {
-        write() { (isCreate(this) || isCurrentUser(uid) || isAdmin()) && (this.isAdmin == null && prior(this).isAdmin == null) }
+        // `.isAdmin` is not writable by any users including admin user.
+        create() { this.isAdmin == null }
+        update() { this.isAdmin == null && prior(this).isAdmin == null && isCurrentUser(uid) || isAdmin() }
+        delete() { false }
     }
 }
 
@@ -13,7 +15,11 @@ path /comments {
     index() { ['rootCommentId', 'pageURL'] }
 
     /{commentId} {
-        write() { isCreate(this) || (isDelete(this) && canDeleteComment(this)) || isAdmin() }
+        // TODO: Comment should only be created under condition:
+        //          this.authorUid == 'anonymous' || this.authorUid == auth.uid
+        create() { true }
+        update() { false }
+        delete() { canDeleteComment(this) || isAdmin() }
     }
 }
 
@@ -50,12 +56,13 @@ path /votes {
     //  Might reconsider this issue in the future though.
 }
 
-path /notifications {
-    index() { ['uid'] }
+path /notifications/{uid} {
+    read() { isCurrentUser(uid) }
 
     /{notifId} {
-        read() { prior(this).uid == auth.uid }
-        write() { isCreate(this) || isCurrentUser(prior(this).uid) || isAdmin() }
+        create() { true }
+        update() { isCurrentUser(uid) || isAdmin() }
+        delete() { isCurrentUser(uid) || isAdmin() }
     }
 }
 
@@ -63,7 +70,9 @@ path /reported {
     read() { isAdmin() }
 
     /{commentId}/{uid} {
-        write() { (isCurrentUser(uid) && isCreate(this)) || isAdmin() }
+        create() { isCurrentUser(uid) }
+        update() { isAdmin() }
+        delete() { isAdmin() }
     }
 }
 
@@ -72,17 +81,46 @@ path /ban {
     write() { isAdmin() }
 }
 
-path /plugins/{pluginName}/{codeNumber}/{nodeName} {
-    read() { isFromUserGroup(this, floor(parseInt(codeNumber) / 8)) || isAdmin() }
-    write() { canWritePluginData(this, floor(parseInt(codeNumber) / 8), parseInt(codeNumber) % 8) || isAdmin() }
+// r: read access, c: create access, u: update access, d: delete access
+// t: node type [s(single), c(collection)]
+path /plugins/{pluginName}/{r}/{c}/{u}/{d} {
+    read() { hasAccessComplex(this, r) || isAdmin() }
+    create() { hasAccessSimple(this, c) || isAdmin() }
+    update() { hasAccessSimple(this, u) || isAdmin() }
+    delete() { hasAccessSimple(this, d) || isAdmin() }
+
+    /{nodeName} {
+        update() { hasAccessComplex(this, u) || isAdmin() }
+        delete() { hasAccessComplex(this, d) || isAdmin() }
+    }
+}
+function hasAccessSimple (this, code) {
+    code.includes('a') ?
+        true :              
+    code.includes('s') ?
+        isSignedInUser() :
+    // code.includes('x') ?
+        false
+}
+function hasAccessComplex (this, code) {
+    code.includes('a') ?
+        true :              
+    code.includes('s') ?
+        isSignedInUser() :  
+    code.includes('r') ?
+        isRelatedUser(this) :
+    code.includes('o') ?
+        isOwner(this) :
+    // code.includes('x') ?
+        false
 }
 
 function isCurrentUser (uid) { auth != null && auth.uid == uid }
 function isAdmin () { prior(root).users[auth.uid].isAdmin == true }
 
 function isCreate (this) { prior(this) == null }
-function isDelete (this) { this == null }
-function isUpdate (this) { this != prior(this) && !isCreate(this) && !isDelete(this) }
+function isUpdate (this) { this != null && prior(this) != null && this != prior(this)  }
+function isDelete (this) { prior(this) != null && this == null }
 
 function canDeleteComment (this) { isCommentAuthor(this) || isRootCommentAuthor(this) }
 function isCommentAuthor (this) { prior(this).uid == auth.uid }
@@ -92,76 +130,4 @@ function isSignedInUser () { auth != null }
 function isOwner (this) { isSignedInUser() && (prior(this).owner == auth.uid || (isCreate(this) && this.owner == auth.uid)) }
 function isRelatedUser (this) { 
     isSignedInUser() && (prior(this).relatedUsers[auth.uid] != null || isOwner(this))
-}
-// c: create, u: update, d: delete
-function xxx () { false }
-function xxd (this) { isDelete(this) }
-function xux (this) { isUpdate(this) }
-function xud (this) { isUpdate(this) || isDelete(this) }
-function cxx (this) { isCreate(this) }
-function cxd (this) { isCreate(this) || isDelete(this) }
-function cux (this) { isCreate(this) || isUpdate(this) }
-function cud () { true }
-
-function isFromUserGroup (this, userGroup) {
-    userGroup == 0 ? true 
-    : userGroup == 1 ? isSignedInUser()
-    : userGroup == 2 ? isRelatedUser(this)
-    : isOwner(this) // userGroup == 3
-}
-
-function canWritePluginData (this, userGroup, writeCodeNumber) {
-    isFromUserGroup(this, userGroup) && (
-        writeCodeNumber == 0 ? xxx()
-        : writeCodeNumber == 1 ? xxd(this) 
-        : writeCodeNumber == 2 ? xux(this) 
-        : writeCodeNumber == 3 ? xud(this) 
-        : writeCodeNumber == 4 ? cxx(this) 
-        : writeCodeNumber == 5 ? cxd(this) 
-        : writeCodeNumber == 6 ? cux(this)
-        : cud() // writeCodeNumber == 7
-    )
-}
-
-function floor (n) {
-    n < 1 ? 0 :
-    n < 2 ? 1 :
-    n < 3 ? 2 :
-    3 // n < 4
-}
-
-function parseInt (s) {
-    s == '0' ?
-    0 : s == '1' ?
-    1 : s == '2' ?
-    2 : s == '3' ?
-    3 : s == '4' ?
-    4 : s == '5' ?
-    5 : s == '6' ?
-    6 : s == '7' ?
-    7 : s == '8' ?
-    8 : s == '9' ?
-    9 : s == '10' ?
-    10 : s == '11' ?
-    11 : s == '12' ?
-    12 : s == '13' ?
-    13 : s == '14' ?
-    14 : s == '15' ?
-    15 : s == '16' ?
-    16 : s == '17' ?
-    17 : s == '18' ?
-    18 : s == '19' ?
-    19 : s == '20' ?
-    20 : s == '21' ?
-    21 : s == '22' ?
-    22 : s == '23' ?
-    23 : s == '24' ?
-    24 : s == '25' ?
-    25 : s == '26' ?
-    26 : s == '27' ?
-    27 : s == '28' ?
-    28 : s == '29' ?
-    29 : s == '30' ?
-    30 : 
-    31 // s == '32'
 }
