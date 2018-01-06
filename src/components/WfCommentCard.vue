@@ -354,19 +354,14 @@ export default {
     // If the comment is top-level comment,
     // get its replies.
       const commentId = this.comment.commentId
-      this.db.ref(`commentReplies/${commentId}`).once('value').then((snap) => {
-        this._repliesCount = Object.keys(snap.val() || {}).length
-        this.db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_added', (snap) => {
-          const child = snap.val()
-          this.replies.push(Object.assign(child, {commentId: this.config.databaseProvider === 'firebase' ? snap.key : snap.key()}))
-          if (this._repliesCount-- <= 0) { Bus.$data.discussionCount += 1 }
-        })
+      this.db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_added', (snap) => {
+        const reply = snap.val()
+        this.replies.push(Object.assign(reply, {commentId: this.config.databaseProvider === 'firebase' ? snap.key : snap.key()}))
       })
       this.db.ref(`comments`).orderByChild('rootCommentId').equalTo(commentId).on('child_removed', (snap) => {
         const key = this.config.databaseProvider === 'firebase' ? snap.key : snap.key()
         const idx = this.replies.findIndex(reply => reply.commentId === key)
         this.replies.splice(idx, 1)
-        Bus.$data.discussionCount -= 1
       })
     }
   },
@@ -469,47 +464,30 @@ export default {
     },
     confirmDelete () {
       const commentId = this.comment.commentId
+      const pageURL = this.config.pageURL
 
-      const executeDeletion = () => {
-        Promise.all([
-          this.db.ref(`comments/${commentId}`).remove(),
-          this.db.ref(`votes/${commentId}`).remove(),
-          // Note: [todo] should move "deleting votes" outside of
-          //        this batch. "votes" data shouldn't be writable
-          //        by all users, because site owner cannot recover
-          //        "votes" data with other unmutalbe data.
-          ...(this.isTopLevelComment
-            ? [
-              this.db.ref(`pages/${this.comment.pageURL}/comments/${commentId}`).remove(),
-              this.db.ref(`commentReplies/${commentId}`).remove(),
-              ...this.replies.map(reply => [
-                this.db.ref(`comments/${reply.commentId}`).remove(),
-                this.db.ref(`votes/${reply.commentId}`).remove()
-              ])
-            ]
-            : [this.db.ref(`commentReplies/${this.comment.rootCommentId}/${commentId}`).remove()])
-        ]).then(() => {
-          this.$Message.success(this.i18next.t('CommentCard.success.deleting_comment'))
-
-          // Update `discussionCount`
-          this.db.ref(`pages/${this.config.pageURL}/discussionCount`).transaction(function (currentValue) {
-            const newVal = (currentValue || 0) - deletingDiscussionCount
-            return newVal >= 0 ? newVal : 0
-          })
-        }).catch(() => {
-          this.$Message.error(this.i18next.t('CommentCard.error.deleting_comment'))
-        })
-      }
-
-      let deletingDiscussionCount = 1
-      if (this.isTopLevelComment) {
-        this.db.ref(`commentReplies/${commentId}`).once('value').then(snap => {
-          deletingDiscussionCount += snap.val() ? Object.keys(snap.val()).length : 0
-          executeDeletion()
-        })
-      } else {
-        executeDeletion()
-      }
+      Promise.all([
+        this.db.ref(`comments/${commentId}`).remove(),
+        this.db.ref(`votes/${commentId}`).remove(),
+        // Note: [todo] should move "deleting votes" outside of
+        //        this batch. "votes" data shouldn't be writable
+        //        by all users, because site owner cannot recover
+        //        "votes" data with other unmutalbe data.
+        ...(this.isTopLevelComment
+          ? [
+            this.db.ref(`pageComments/${pageURL}/${commentId}`).remove(),
+            ...this.replies.map(reply => [
+              this.db.ref(`comments/${reply.commentId}`).remove(),
+              this.db.ref(`votes/${reply.commentId}`).remove(),
+              this.db.ref(`pageComments/${pageURL}/${reply.commentId}`).remove()
+            ])
+          ]
+          : [this.db.ref(`pageComments/${pageURL}/${commentId}`).remove()])
+      ]).then(() => {
+        this.$Message.success(this.i18next.t('CommentCard.success.deleting_comment'))
+      }).catch(() => {
+        this.$Message.error(this.i18next.t('CommentCard.error.deleting_comment'))
+      })
     },
     handleDropdownClick (name) {
       this[name] && this[name]()

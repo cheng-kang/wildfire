@@ -234,25 +234,21 @@ export default {
             - firebase: ref.key
             - wilddog: ref.key()
          */
-        const newKey = this.config.databaseProvider === 'firebase' ? newNode.key : newNode.key()
+        const newCommentId = this.config.databaseProvider === 'firebase' ? newNode.key : newNode.key()
+        const pageCommentsData = {
+          authorUid: uid,
+          relatedUid: rootCommentUid,
+          rootCommentId
+        }
 
         Promise.all([
-          this.db.ref(`comments/${newKey}`).update(postData),
-          isReply
-            ? this.db.ref(`commentReplies/${rootCommentId}/${newKey}`).set(date)
-            : this.db.ref(`pages/${pageURL}/comments/${newKey}`).set(date)
+          this.db.ref(`comments/${newCommentId}`).update(postData),
+          this.db.ref(`pageComments/${this.config.pageURL}/${newCommentId}`).set(pageCommentsData)
         ]).then(() => {
           this.isPosting = false
           this.$emit('finished-replying') // When successfully posted reply, hide current reply area
           this.form.content = ''
           this.$Message.success(this.i18next.t('ReplyArea.success.posting_comment'))
-
-          // Update `discussionCount`
-          //  Note: Should use `this.config.pageURL` here,
-          //        because `pageURL` variable above is conditional.
-          this.db.ref(`pages/${this.config.pageURL}/discussionCount`).transaction(function (currentValue) {
-            return (currentValue || 0) + 1
-          })
 
           /*
             Handle Mention
@@ -317,20 +313,20 @@ export default {
           }
           // Forbid anonymous user to use Mention
           if (!this.user) {
-            this.handleNotifications([], newKey, notifyFlags, mentionFlags)
+            this.handleNotifications([], newCommentId, notifyFlags, mentionFlags)
             return
           }
           const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || []
           if (users.length !== 0) {
             const mentionedUids = mentions.map(mention => this.users.find(user => user.email === mention.slice(mention.indexOf('(') + 1, -1)).id)
-            this.handleNotifications(mentionedUids, newKey, notifyFlags, mentionFlags)
+            this.handleNotifications(mentionedUids, newCommentId, notifyFlags, mentionFlags)
           } else {
             Promise.all(mentions.map(mention => {
               const email = mention.slice(mention.indexOf('(') + 1, -1)
               return this.db.ref(`users`).orderByChild('email').equalTo(email).once('value')
             })).then(snaps => {
               const mentionedUids = snaps.map(snap => snap.val() ? Object.keys(snap.val())[0] : undefined)
-              this.handleNotifications(mentionedUids, newKey, notifyFlags, mentionFlags)
+              this.handleNotifications(mentionedUids, newCommentId, notifyFlags, mentionFlags)
             })
           }
           /*

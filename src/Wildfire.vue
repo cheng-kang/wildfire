@@ -155,17 +155,12 @@ export default {
       this.commentsLoadingState = 'loading'
       const { pageURL } = this.config
 
-      this.db.ref(`pages/${pageURL}/comments`).on('value', snapshot => {
-        this.pageComments = snapshot.val() || {}
-        this.pageCommentsCount = Object.keys(this.pageComments).length
-        Promise.all(Object.keys(this.pageComments).map(commentId => {
-          return this.db.ref(`commentReplies/${commentId}`).once('value')
-        })).then(snaps => {
-          Bus.$data.discussionCount = this.pageCommentsCount + snaps.reduce((repliesCount, snap) => {
-            return repliesCount + Object.keys(snap.val() || {}).length
-          }, 0)
-        })
-      }, err => {
+      this.$bindAsArray('comments', this.db
+      .ref(`comments`).orderByChild('pageURL').equalTo(pageURL), err => {
+        this.commentsLoadingState = 'failed'
+        this.pageCommentsCount = 0
+        Bus.$data.discussionCount = 0
+
         // Handle Wilddog `too many connections` error
         if (err.code === 26107) {
           if (this.config.standbyDatabaseConfigs.length !== 0) {
@@ -189,13 +184,6 @@ export default {
           }
           return
         }
-      })
-
-      this.$bindAsArray('comments', this.db
-      .ref(`comments`).orderByChild('pageURL').equalTo(pageURL), () => {
-        this.commentsLoadingState = 'failed'
-        this.pageCommentsCount = 0
-        Bus.$data.discussionCount = 0
       }, () => {
         this.commentsLoadingState = 'finished'
       })

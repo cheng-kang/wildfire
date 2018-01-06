@@ -149,6 +149,7 @@ export default {
     pluginComponents: () => Bus.pluginComponents,
     auth: () => Bus.auth,
     config: () => Bus.config,
+    db: () => Bus.db,
     i18next: () => Bus.i18next,
     user: () => Bus.user,
     username () {
@@ -227,6 +228,12 @@ export default {
         this.$refs.first_menu_item.handleClick()
       }
     }
+  },
+  created () {
+    this.db.ref(`pageComments/${this.config.pageURL}`).on('value', snapshot => {
+      this.pageComments = snapshot.val() || {}
+      Bus.$data.discussionCount = Object.keys(this.pageComments).length
+    })
   }
 }
 </script>
