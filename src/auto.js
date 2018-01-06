@@ -240,7 +240,7 @@
     databaseConfig,
     standbyDatabaseConfigs = [],
     pageTitle = document.title,
-    pageURL = window.location.href,
+    pageURL,
     pageURLMode = 'normal',
     locale = 'en',
     theme = 'light',
