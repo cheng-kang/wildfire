@@ -26,7 +26,7 @@ export const install = (_Vue, config) => {
 
     pageTitle = document.title,
     pageURL,
-    isURLWithHashtag = false,
+    pageURLMode = 'normal',
 
     theme = 'light',
     locale = 'en',
@@ -35,7 +35,7 @@ export const install = (_Vue, config) => {
     plugins = []
   } = config
 
-  if (!pageURL) pageURL = defaultPageURL(isURLWithHashtag)
+  if (!pageURL) pageURL = defaultPageURL(pageURLMode)
 
   initI18next(locale)
 
@@ -48,6 +48,7 @@ export const install = (_Vue, config) => {
       standbyDatabaseConfigs,
       pageTitle,
       pageURL: b64EncodeUnicode(pageURL),
+      pageURLMode,
       locale,
       theme,
       defaultAvatarURL,
@@ -104,7 +105,7 @@ export const reset = (_Vue, config = {}, err) => {
     standbyDatabaseConfigs = Bus.config.standbyDatabaseConfigs,
     pageTitle = document.title,
     pageURL,
-    isURLWithHashtag = Bus.config.isURLWithHashtag,
+    pageURLMode = Bus.config.pageURLMode,
     theme = Bus.config.theme,
     locale = Bus.config.locale,
     defaultAvatarURL = Bus.config.defaultAvatarURL,
@@ -112,7 +113,7 @@ export const reset = (_Vue, config = {}, err) => {
   } = config
 
   if (!databaseConfig) databaseConfig = getDatabaseConfig()
-  if (!pageURL) pageURL = defaultPageURL(isURLWithHashtag)
+  if (!pageURL) pageURL = defaultPageURL(pageURLMode)
 
   resetI18next(locale)
 
@@ -125,7 +126,7 @@ export const reset = (_Vue, config = {}, err) => {
       standbyDatabaseConfigs,
       pageTitle,
       pageURL: b64EncodeUnicode(pageURL),
-      isURLWithHashtag,
+      pageURLMode,
       locale,
       theme,
       defaultAvatarURL,

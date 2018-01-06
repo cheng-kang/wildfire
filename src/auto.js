@@ -148,11 +148,12 @@
     jsList.push(`https://unpkg.com/wildfire-dev/dist/${databaseProvider}/wildfire.min.js`)
 
     loadJSSequentially(jsList, () => {
-      window.wildfire.install(window.Vue, {
+      window.Vue.use(window.wildfire, {
         databaseProvider,
         databaseConfig,
         standbyDatabaseConfigs,
         pageURL,
+        pageURLMode,
         pageTitle,
         theme,
         locale,
@@ -240,6 +241,7 @@
     standbyDatabaseConfigs = [],
     pageTitle = document.title,
     pageURL = window.location.href,
+    pageURLMode = 'normal',
     locale = 'en',
     theme = 'light',
     defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg',
