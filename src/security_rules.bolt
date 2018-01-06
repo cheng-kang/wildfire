@@ -23,12 +23,7 @@ path /comments {
     }
 }
 
-path /pages {
-    read() { true }
-    write() { true }
-}
-
-path /commentReplies {
+path /pageComments {
     read() { true }
     write() { true }
 }
@@ -84,50 +79,67 @@ path /ban {
 // r: read access, c: create access, u: update access, d: delete access
 // t: node type [s(single), c(collection)]
 path /plugins/{pluginName}/{r}/{c}/{u}/{d} {
-    read() { hasAccessComplex(this, r) || isAdmin() }
-    create() { hasAccessSimple(this, c) || isAdmin() }
-    update() { hasAccessSimple(this, u) || isAdmin() }
-    delete() { hasAccessSimple(this, d) || isAdmin() }
-
-    /{nodeName} {
-        update() { hasAccessComplex(this, u) || isAdmin() }
-        delete() { hasAccessComplex(this, d) || isAdmin() }
-    }
+  /u {
+    read() { hasAccessUnowned(this, r) }
+    create() { hasAccessUnowned(this, c) }
+    update() { hasAccessUnowned(this, u) }
+    delete() { hasAccessUnowned(this, d) }
+  }
+  
+  /o1/{key} {
+    read() { hasAccessOwned(this, r, key) }
+    create() { hasAccessOwned(this, c, key) }
+    update() { hasAccessOwned(this, u, key) }
+    delete() { hasAccessOwned(this, d, key) }
+  }
+  /o2/{nodeName}/{key} {
+    read() { hasAccessOwned(this, r, key) }
+    create() { hasAccessOwned(this, c, key) }
+    update() { hasAccessOwned(this, u, key) }
+    delete() { hasAccessOwned(this, d, key) }
+  }
 }
-function hasAccessSimple (this, code) {
+
+function hasAccessUnowned (this, code) {
     code.includes('a') ?
         true :              
     code.includes('s') ?
         isSignedInUser() :
     // code.includes('x') ?
-        false
+        isAdmin()
 }
-function hasAccessComplex (this, code) {
+function hasAccessOwned (this, code, key) {
     code.includes('a') ?
         true :              
     code.includes('s') ?
         isSignedInUser() :  
     code.includes('r') ?
-        isRelatedUser(this) :
+        isRelatedUser(this, key) :
     code.includes('o') ?
-        isOwner(this) :
+        isOwner(this, key) :
     // code.includes('x') ?
-        false
+        isAdmin()
+}
+
+function isCreate (this) { prior(this) == null }
+
+function isSignedInUser () { auth != null }
+function isRelatedUser (this, key) { 
+    prior(this).relatedUser == auth.uid
+}
+function isOwner (this, key) { 
+  key == auth.uid ||
+  (isCreate(this) ? 
+    this.ownerUid == auth.uid :
+  // isUpdate, isDelete ? 
+    prior(this).ownerUid == auth.uid)
+}
+function isAdmin () { 
+  prior(root).users[auth.uid].isAdmin == true 
 }
 
 function isCurrentUser (uid) { auth != null && auth.uid == uid }
-function isAdmin () { prior(root).users[auth.uid].isAdmin == true }
-
-function isCreate (this) { prior(this) == null }
-function isUpdate (this) { this != null && prior(this) != null && this != prior(this)  }
-function isDelete (this) { prior(this) != null && this == null }
 
 function canDeleteComment (this) { isCommentAuthor(this) || isRootCommentAuthor(this) }
 function isCommentAuthor (this) { prior(this).uid == auth.uid }
 function isRootCommentAuthor (this) { prior(this).rootCommentUid == auth.uid }
-
-function isSignedInUser () { auth != null }
-function isOwner (this) { isSignedInUser() && (prior(this).owner == auth.uid || (isCreate(this) && this.owner == auth.uid)) }
-function isRelatedUser (this) { 
-    isSignedInUser() && (prior(this).relatedUsers[auth.uid] != null || isOwner(this))
-}

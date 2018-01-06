@@ -19,11 +19,7 @@
         "pageURL"
       ]
     },
-    "pages": {
-      ".read": "true",
-      ".write": "true"
-    },
-    "commentReplies": {
+    "pageComments": {
       ".read": "true",
       ".write": "true"
     },
@@ -57,11 +53,24 @@
           "$c": {
             "$u": {
               "$d": {
-                "$nodeName": {
-                  ".write": "data.val() != null && newData.val() != null && (($u.contains('a') ? true : $u.contains('s') ? auth != null : $u.contains('r') ? auth != null && (data.child('relatedUsers').child(auth.uid).val() != null || auth != null && (data.child('owner').val() == auth.uid || data.val() == null && newData.child('owner').val() == auth.uid)) : $u.contains('o') ? auth != null && (data.child('owner').val() == auth.uid || data.val() == null && newData.child('owner').val() == auth.uid) : false) || root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() == null && (($d.contains('a') ? true : $d.contains('s') ? auth != null : $d.contains('r') ? auth != null && (data.child('relatedUsers').child(auth.uid).val() != null || auth != null && (data.child('owner').val() == auth.uid || data.val() == null && newData.child('owner').val() == auth.uid)) : $d.contains('o') ? auth != null && (data.child('owner').val() == auth.uid || data.val() == null && newData.child('owner').val() == auth.uid) : false) || root.child('users').child(auth.uid).child('isAdmin').val() == true)"
+                "u": {
+                  ".write": "data.val() == null && ($c.contains('a') ? true : $c.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() != null && ($u.contains('a') ? true : $u.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() == null && ($d.contains('a') ? true : $d.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true)",
+                  ".read": "$r.contains('a') ? true : $r.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true"
                 },
-                ".write": "data.val() == null && (($c.contains('a') ? true : $c.contains('s') ? auth != null : false) || root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() != null && (($u.contains('a') ? true : $u.contains('s') ? auth != null : false) || root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() == null && (($d.contains('a') ? true : $d.contains('s') ? auth != null : false) || root.child('users').child(auth.uid).child('isAdmin').val() == true)",
-                ".read": "($r.contains('a') ? true : $r.contains('s') ? auth != null : $r.contains('r') ? auth != null && (data.child('relatedUsers').child(auth.uid).val() != null || auth != null && (data.child('owner').val() == auth.uid || data.val() == null && data.child('owner').val() == auth.uid)) : $r.contains('o') ? auth != null && (data.child('owner').val() == auth.uid || data.val() == null && data.child('owner').val() == auth.uid) : false) || root.child('users').child(auth.uid).child('isAdmin').val() == true"
+                "o1": {
+                  "$key": {
+                    ".write": "data.val() == null && ($c.contains('a') ? true : $c.contains('s') ? auth != null : $c.contains('r') ? data.child('relatedUser').val() == auth.uid : $c.contains('o') ? $key == auth.uid || (data.val() == null ? newData.child('ownerUid').val() == auth.uid : data.child('ownerUid').val() == auth.uid) : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() != null && ($u.contains('a') ? true : $u.contains('s') ? auth != null : $u.contains('r') ? data.child('relatedUser').val() == auth.uid : $u.contains('o') ? $key == auth.uid || (data.val() == null ? newData.child('ownerUid').val() == auth.uid : data.child('ownerUid').val() == auth.uid) : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() == null && ($d.contains('a') ? true : $d.contains('s') ? auth != null : $d.contains('r') ? data.child('relatedUser').val() == auth.uid : $d.contains('o') ? $key == auth.uid || (data.val() == null ? newData.child('ownerUid').val() == auth.uid : data.child('ownerUid').val() == auth.uid) : root.child('users').child(auth.uid).child('isAdmin').val() == true)",
+                    ".read": "$r.contains('a') ? true : $r.contains('s') ? auth != null : $r.contains('r') ? data.child('relatedUser').val() == auth.uid : $r.contains('o') ? $key == auth.uid || (data.val() == null ? data.child('ownerUid').val() == auth.uid : data.child('ownerUid').val() == auth.uid) : root.child('users').child(auth.uid).child('isAdmin').val() == true"
+                  }
+                },
+                "o2": {
+                  "$nodeName": {
+                    "$key": {
+                      ".write": "data.val() == null && ($c.contains('a') ? true : $c.contains('s') ? auth != null : $c.contains('r') ? data.child('relatedUser').val() == auth.uid : $c.contains('o') ? $key == auth.uid || (data.val() == null ? newData.child('ownerUid').val() == auth.uid : data.child('ownerUid').val() == auth.uid) : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() != null && ($u.contains('a') ? true : $u.contains('s') ? auth != null : $u.contains('r') ? data.child('relatedUser').val() == auth.uid : $u.contains('o') ? $key == auth.uid || (data.val() == null ? newData.child('ownerUid').val() == auth.uid : data.child('ownerUid').val() == auth.uid) : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() == null && ($d.contains('a') ? true : $d.contains('s') ? auth != null : $d.contains('r') ? data.child('relatedUser').val() == auth.uid : $d.contains('o') ? $key == auth.uid || (data.val() == null ? newData.child('ownerUid').val() == auth.uid : data.child('ownerUid').val() == auth.uid) : root.child('users').child(auth.uid).child('isAdmin').val() == true)",
+                      ".read": "$r.contains('a') ? true : $r.contains('s') ? auth != null : $r.contains('r') ? data.child('relatedUser').val() == auth.uid : $r.contains('o') ? $key == auth.uid || (data.val() == null ? data.child('ownerUid').val() == auth.uid : data.child('ownerUid').val() == auth.uid) : root.child('users').child(auth.uid).child('isAdmin').val() == true"
+                    }
+                  }
+                }
               }
             }
           }
