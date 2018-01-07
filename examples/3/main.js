@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import wildfire from '../../src/aio'
+import WfPinnedComment from '../../src/plugins/WfPinnedComment'
 
 Vue.config.productionTip = true
 Vue.use(wildfire, {
@@ -19,13 +20,17 @@ Vue.use(wildfire, {
   // databaseConfig: {
   //   siteId: 'wd5350450577zvbtov'
   // },
-  pageURL: 'https://wildfire.js.org/dev-example',
+  // pageURL: 'https://wildfire.js.org/dev-example',
   pageTitle: 'Wildfire Dev Demo',
+  // isURLWithHashtag: true, // default: false
   // defaultAvatarURL: 'https://image.flaticon.com/icons/svg/621/621863.svg',
   theme: 'light',
   // theme: 'dark',
   // locale: 'en',
-  locale: 'zh-CN'
+  locale: 'zh-CN',
+  plugins: [
+    WfPinnedComment()
+  ]
 })
 
 /* eslint-disable no-new */
