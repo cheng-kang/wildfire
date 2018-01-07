@@ -440,6 +440,7 @@ export default {
         })
         return
       }
+
       const { uid } = this.user
       const now = new Date()
       const commentId = this.comment.commentId
@@ -447,22 +448,79 @@ export default {
       let likes = this.votes.likes || {}
       let dislikes = this.votes.dislikes || {}
       if (type === 'like') {
-        if (uid in likes) {
-          this.db.ref(`votes/${commentId}/likes/${uid}`).remove()
+        const isLiked = uid in likes
+
+        // hook: beforeLikeComment
+        const shouldContinue = (Bus.hooks.beforeLikeComment || []).map(cb => cb({
+          bus: this.bus,
+          comment: this.comment,
+          oldVal: isLiked,
+          newVal: !isLiked
+        })).reduce((a, b) => a && b, true)
+        if (!shouldContinue) return
+
+        const likedCommentCbs = (err) => {
+          // hook: likedComment
+          const cbs = Bus.hooks.likedComment || []
+          cbs.forEach(cb => cb({
+            err,
+            bus: this.bus,
+            comment: this.comment,
+            oldVal: isLiked,
+            newVal: !isLiked
+          }))
+        }
+
+        if (isLiked) {
+          this.db.ref(`votes/${commentId}/likes/${uid}`).remove().then(() => likedCommentCbs()).catch(err => linkedCommentCbs(err))
         } else {
-          this.db.ref(`votes/${commentId}/likes/${uid}`).set(now.toISOString())
-          this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
+          Promise.all([
+            this.db.ref(`votes/${commentId}/likes/${uid}`).set(now.toISOString()),
+            this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
+          ]).then(() => likedCommentCbs()).catch(err => linkedCommentCbs(err))
         }
       } else if (type === 'dislike') {
-        if (uid in dislikes) {
-          this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
+        const isDisliked = uid in dislikes
+
+        // hook: beforeDislikeComment
+        const shouldContinue = (Bus.hooks.beforeDislikeComment || []).map(cb => cb({
+            bus: this.bus,
+            comment: this.comment,
+            oldVal: isDisliked,
+            newVal: !isDisliked
+          })).reduce((a, b) => a && b, true)
+        if (!shouldContinue) return
+
+        const dislikedCommentCbs = (err) => {
+          // hook: dislikedComment
+          const cbs = Bus.hooks.dislikedComment || []
+          cbs.forEach(cb => cb({
+            err,
+            bus: this.bus,
+            comment: this.comment,
+            oldVal: isDisliked,
+            newVal: !isDisliked
+          }))
+        }
+
+        if (isDisliked) {
+          this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove().then(() => dislikedCommentCbs()).catch(err => dislikedCommentCbs(err))
         } else {
-          this.db.ref(`votes/${commentId}/dislikes/${uid}`).set(now.toISOString())
-          this.db.ref(`votes/${commentId}/likes/${uid}`).remove()
+          Promise.all([
+            this.db.ref(`votes/${commentId}/dislikes/${uid}`).set(now.toISOString()),
+            this.db.ref(`votes/${commentId}/likes/${uid}`).remove()
+          ]).then(() => dislikedCommentCbs()).catch(err => dislikedCommentCbs(err))
         }
       }
     },
     confirmDelete () {
+      // hook: beforeDeleteComment
+      const shouldContinue = (Bus.hooks.beforeDeleteComment || []).map(cb => cb({ 
+        bus: this.bus, 
+        comment: this.comment
+      })).reduce((a, b) => a && b, true)
+      if (!shouldContinue) return
+
       const commentId = this.comment.commentId
       const pageURL = this.config.pageURL
 
@@ -485,8 +543,16 @@ export default {
           : [this.db.ref(`pageComments/${pageURL}/${commentId}`).remove()])
       ]).then(() => {
         this.$Message.success(this.i18next.t('CommentCard.success.deleting_comment'))
-      }).catch(() => {
+
+        // hook: deletedComment
+        const cbs = Bus.hooks.deletedComment || []
+        cbs.forEach(cb => cb({ bus: this.bus, comment: this.comment }))
+      }).catch(err => {
         this.$Message.error(this.i18next.t('CommentCard.error.deleting_comment'))
+
+        // hook: deletedComment
+        const cbs = Bus.hooks.deletedComment || []
+        cbs.forEach(cb => cb({ err, bus: this.bus, comment: this.comment }))
       })
     },
     handleDropdownClick (name) {
@@ -503,6 +569,10 @@ export default {
         return
       }
 
+      // hook: beforeReportComment
+      const shouldContinue = (Bus.hooks.beforeReportComment || []).map(cb => cb({ bus: this.bus, comment: this.comment })).reduce((a, b) => a && b, true)
+      if (!shouldContinue) return
+
       var now = new Date()
       this.db.ref(`reported/${this.comment.commentId}/${this.user.uid}`)
       .once('value').then((snapshot) => {
@@ -514,9 +584,16 @@ export default {
         this.db.ref(`reported/${this.comment.commentId}/${this.user.uid}`).set(now.toISOString())
         .then(() => {
           this.$Message.success(this.i18next.t('CommentCard.success.reporting_comment'))
+
+          // hook: reportedComment
+          const cbs = Bus.hooks.reportedComment || []
+          cbs.forEach(cb => cb({ bus: this.bus, comment: this.comment }))
         }).catch(err => {
           this.$Message.error(this.i18next.t('CommentCard.error.reporting_comment'))
-          console.log(err)
+
+          // hook: reportedComment
+          const cbs = Bus.hooks.reportedComment || []
+          cbs.forEach(cb => cb({ err, bus: this.bus, comment: this.comment }))
         })
       })
     },

@@ -111,6 +111,7 @@ export default {
     }
   },
   computed: {
+    bus: () => Bus,
     auth: () => Bus.auth,
     config: () => Bus.config,
     db: () => Bus.db,
@@ -120,20 +121,32 @@ export default {
     handleSignIn (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
+          // hook: beforeSignIn
+          const shouldContinue = (Bus.hooks.beforeSignIn || []).map(cb => cb({bus: this.bus})).reduce((a, b) => a && b, true)
+          if (!shouldContinue) return
+
           this.loadingSignIn = true
           const email = this.signInForm.email
           const password = this.signInForm.password
+
           this.auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
             this.db.ref(`users/${user.uid}`).once('value').then((snapshot) => {
               this.loadingSignIn = false
               this.closeModel()
               this.$Message.info(this.i18next.t('AuthForm.success.signing_in'))
+
+              // hook: signedIn
+              const cbs = Bus.hooks.signedIn || []
+              cbs.forEach(cb => cb({ bus: this.bus }))
             })
-          }).catch((error) => {
+          }).catch(err => {
             this.loadingSignIn = false
             this.$Message.error(this.i18next.t('AuthForm.error.signing_in'))
-            console.log(error.code, error.message)
+
+            // hook: signedIn
+            const cbs = Bus.hooks.signedIn || []
+            cbs.forEach(cb => cb({ err, bus: this.bus }))
           })
         } else {
           this.$Message.error(this.i18next.t('AuthForm.error.invalid_form'))
@@ -143,6 +156,10 @@ export default {
     handleSignUp (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
+          // hook: beforeSignUp
+          const shouldContinue = (Bus.hooks.beforeSignUp || []).map(cb => cb({ bus: this.bus })).reduce((a, b) => a && b, true)
+          if (!shouldContinue) return
+
           this.loadingSignUp = true
           const email = this.signUpForm.email
           const password = this.signUpForm.password
@@ -162,15 +179,22 @@ export default {
               this.loadingSignUp = false
               this.closeModel()
               this.$Message.info(this.i18next.t('AuthForm.success.signing_up'))
-            }).catch((error) => {
+
+              // hook: signedUp
+              const cbs = Bus.hooks.signedUp || []
+              cbs.forEach(cb => cb({ bus: this.bus }))
+            }).catch(err => {
               this.loadingSignUp = false
-              console.log(error.code, error.message)
               this.$Message.error(this.i18next.t('AuthForm.error.unknown'))
+
+              // hook: signedUp
+              const cbs = Bus.hooks.signedUp || []
+              cbs.forEach(cb => cb({ err, bus: this.bus }))
             })
-          }).catch((error) => {
+          }).catch(err => {
             this.loadingSignUp = false
-            var errorCode = error.code
-            var errorMessage = error.message
+            var errorCode = err.code
+            var errorMessage = err.message
             switch (errorCode) {
               case 'auth/email-already-in-use':
                 errorMessage = this.i18next.t('AuthForm.error.email_already_in_use')
@@ -187,6 +211,10 @@ export default {
                 break
             }
             this.$Message.error(errorMessage)
+
+            // hook: signedUp
+            const cbs = Bus.hooks.signedUp || []
+            cbs.forEach(cb => cb({ err, bus: this.bus}))
           })
         } else {
           this.$Message.error(this.i18next.t('AuthForm.error.invalid_form'))

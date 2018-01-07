@@ -227,6 +227,16 @@ export default {
 
         const postData = { uid, content, date, ip, pageURL, rootCommentPageURL, parentCommentId, parentCommentUid, rootCommentId, rootCommentUid }
 
+        // hook: beforePostComment
+        const shouldContinue = (Bus.hooks.beforePostComment || []).map(cb => cb({
+          bus: this.bus,
+          comment: postData
+        })).reduce((a, b) => a && b, true)
+        if (!shouldContinue) {
+          this.isPosting = false
+          return
+        }
+
         var newNode = this.db.ref().push()
         /*
           There is a difference between `firebase` and `wilddog`
@@ -249,6 +259,13 @@ export default {
           this.$emit('finished-replying') // When successfully posted reply, hide current reply area
           this.form.content = ''
           this.$Message.success(this.i18next.t('ReplyArea.success.posting_comment'))
+
+          // hook: postedComment
+          const cbs = Bus.hooks.postedComment || []
+          cbs.forEach(cb => cb({
+            bus: this.bus,
+            comment: Object.assign({}, postData, {commentId: newCommentId})
+          }))
 
           /*
             Handle Mention
@@ -333,11 +350,18 @@ export default {
             End of: Handle Mention
            */
         })
-        .catch((error) => {
+        .catch(err => {
           this.isPosting = false
           this.form.content = ''
           this.$Message.error(this.i18next.t('ReplyArea.error.posting_comment'))
-          console.error(error)
+
+          // hook: commentPosted
+          const cbs = Bus.hooks.commentPosted || []
+          cbs.forEach(cb => cb({
+            err,
+            bus: this.bus,
+            comment: postData
+          }))
         })
       }
     },

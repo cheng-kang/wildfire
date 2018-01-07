@@ -61,7 +61,8 @@ export const install = (_Vue, config) => {
     distanceInWordsToNow,
     plugins,
     pluginComponents: {},
-    pluginOptions: {}
+    pluginOptions: {},
+    hooks: {}
   }
 
   if (databaseProvider === 'firebase') {
@@ -88,15 +89,13 @@ export const install = (_Vue, config) => {
 
   plugins.forEach(plugin => {
     plugin.install({
-      registerComponent: (componentName, component) => {
-        _Vue.component(componentName, component)
-      },
-      i18n: (lang, translation) => {
-        addTranslation(lang, translation)
-      },
-      renderAt: (place, componentName) => {
-        (Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]}))
-      }
+      registerComponent: (componentName, component) => _Vue.component(componentName, component),
+      i18n: (lang, translation) => addTranslation(lang, translation),
+      renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
+    })
+    Object.keys(plugin.hooks || {}).forEach(hookName => {
+      const hookFn = plugin.hooks[hookName]
+      Bus.hooks[hookName] ? Bus.hooks[hookName].push(hookFn) : Object.assign(Bus.hooks, {[hookName]: [hookFn]})
     })
     Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
   })
@@ -149,7 +148,8 @@ export const reset = (_Vue, config = {}, err) => {
     distanceInWordsToNow,
     plugins,
     pluginComponents: {},
-    pluginOptions: {}
+    pluginOptions: {},
+    hooks: {}
   }
 
   if (databaseProvider === 'firebase') {
@@ -174,15 +174,13 @@ export const reset = (_Vue, config = {}, err) => {
 
   plugins.forEach(plugin => {
     plugin.install({
-      registerComponent: (name, component) => {
-        !_Vue.options.components[name] && _Vue.component(name, component)
-      },
-      i18n: (lang, translation) => {
-        addTranslation(lang, translation)
-      },
-      renderAt: (place, componentName) => {
-        (Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]}))
-      }
+      registerComponent: (componentName, component) => !_Vue.options.components[name] && _Vue.component(componentName, component),
+      i18n: (lang, translation) => addTranslation(lang, translation),
+      renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
+    })
+    Object.keys(plugin.hooks || {}).forEach(hookName => {
+      const hookFn = plugin.hooks[hookName]
+      Bus.hooks[hookName] ? Bus.hooks[hookName].push(hookFn) : Object.assign(Bus.hooks, {[hookName]: [hookFn]})
     })
     Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
   })

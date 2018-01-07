@@ -188,12 +188,21 @@ export default {
         okText: this.i18next.t('Header.btn.confirm'),
         cancelText: this.i18next.t('Header.btn.cancel'),
         onOk: () => {
+          // hook: beforeSignOut
+          const shouldContinue = (Bus.hooks.beforeSignOut || []).map(cb => cb({ bus: this.bus })).reduce((a, b) => a && b, true)
+          if (!shouldContinue) return
           this.auth.signOut().then(() => {
-            console.log('User Sign Out.')
+            // hook: signedOut
+            const cbs = Bus.hooks.signedOut || []
+            cbs.forEach(cb => cb({ bus: this.bus }))
+          }).catch(err => {
+            // hook: signedOut
+            const cbs = Bus.hooks.signedOut || []
+            cbs.forEach(cb => cb({ err, bus: this.bus }))
           })
         },
         onCancel: () => {
-          console.log('Aborted Sign Out.')
+          console.log('Canceled Sign Out.')
         }
       })
     },
