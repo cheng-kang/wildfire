@@ -65,6 +65,7 @@ path /reported {
     read() { isAdmin() }
 
     /{commentId}/{uid} {
+        read() { isCurrentUser(uid) || isAdmin() }
         create() { isCurrentUser(uid) }
         update() { isAdmin() }
         delete() { isAdmin() }
