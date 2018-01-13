@@ -125,7 +125,7 @@ function isCreate (this) { prior(this) == null }
 
 function isSignedInUser () { auth != null }
 function isRelatedUser (this, key) { 
-    prior(this).relatedUser == auth.uid
+    prior(this).relatedUser == auth.uid || isOwner(this, key)
 }
 function isOwner (this, key) { 
   key == auth.uid ||
