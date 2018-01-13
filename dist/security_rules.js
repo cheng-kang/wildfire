@@ -38,7 +38,8 @@
     "reported": {
       "$commentId": {
         "$uid": {
-          ".write": "data.val() == null && (auth != null && auth.uid == $uid) || data.val() != null && newData.val() != null && root.child('users').child(auth.uid).child('isAdmin').val() == true || data.val() != null && newData.val() == null && root.child('users').child(auth.uid).child('isAdmin').val() == true"
+          ".write": "data.val() == null && (auth != null && auth.uid == $uid) || data.val() != null && newData.val() != null && root.child('users').child(auth.uid).child('isAdmin').val() == true || data.val() != null && newData.val() == null && root.child('users').child(auth.uid).child('isAdmin').val() == true",
+          ".read": "auth != null && auth.uid == $uid || root.child('users').child(auth.uid).child('isAdmin').val() == true"
         }
       },
       ".read": "root.child('users').child(auth.uid).child('isAdmin').val() == true"
