@@ -126,7 +126,7 @@
 
 <script>
 import Bus from '../common/bus'
-
+import { beforeEvent, afterEvent } from '../common/utils'
 export default {
   name: 'wf-header',
   props: [
@@ -188,17 +188,15 @@ export default {
         okText: this.i18next.t('Header.btn.confirm'),
         cancelText: this.i18next.t('Header.btn.cancel'),
         onOk: () => {
-          // hook: beforeSignOut
-          const shouldContinue = (Bus.hooks.beforeSignOut || []).map(cb => cb({ bus: this.bus })).reduce((a, b) => a && b, true)
+          // event: beforeSignOut
+          const shouldContinue = beforeEvent('beforeSignOut', {}, this.bus)
           if (!shouldContinue) return
           this.auth.signOut().then(() => {
-            // hook: signedOut
-            const cbs = Bus.hooks.signedOut || []
-            cbs.forEach(cb => cb({ bus: this.bus }))
-          }).catch(err => {
-            // hook: signedOut
-            const cbs = Bus.hooks.signedOut || []
-            cbs.forEach(cb => cb({ err, bus: this.bus }))
+            // event: signedOut
+            afterEvent('signedOut', {}, this.bus)
+          }).catch(error => {
+            // event: signedOut
+            afterEvent('signedOut', { error }, this.bus)
           })
         },
         onCancel: () => {

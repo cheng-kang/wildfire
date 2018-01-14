@@ -42,8 +42,9 @@ export default (options = {}) => {
       renderAt('comments.before', 'pinned-comment')
       renderAt('comment.menu.top', 'pin-this-comment')
     },
-    hooks: {
-      postedComment ({ bus }) {
+    on: {
+      postedComment (bus, data) {
+        console.log(data)
         bus.$Message.success('Awesome, you just posted a comment!')
       }
     },

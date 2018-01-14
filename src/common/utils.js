@@ -33,3 +33,24 @@ export const defaultPageURL = (pageURLMode = 'normal') => {
   const hashNoQM = hash.split('?')[0] // Hash without question mark (the search part of URL)
   return origin + pathname + hashNoQM
 }
+
+export const beforeEvent = (eventName, data, bus) => {
+  const events = bus.events[eventName] || []
+  const newBus = bus.filteredBus(eventName)
+  // TODO:
+  // eventFn may be a asynchronous function,
+  // then it won't stop while shouldContinue is false.
+  // So make sure eventFn be a synchro function.
+  return events.map((eventFn) => {
+    return eventFn(newBus, data)
+  }).reduce((a, b) => a && b, true)
+}
+
+export const afterEvent = (eventName, data, bus) => {
+  const events = bus.events[eventName] || []
+  const newBus = bus.filteredBus(eventName)
+  events.forEach((eventFn) => {
+     eventFn(newBus, data)
+  })
+}
+

@@ -195,7 +195,7 @@
 const MAX_CONTENT_HEIGHT = 180
 
 import Bus from '../common/bus'
-import { textContent, handleImageOnError } from '../common/utils'
+import { textContent, handleImageOnError, beforeEvent, afterEvent } from '../common/utils'
 import errorImage from '../assets/images/error-image.svg'
 /*
   Wf Comment Card
@@ -431,6 +431,9 @@ export default {
      * @param  {string='like', 'dislike'} type
      */
     toggleVote (type) {
+      // if (type !=='like' && type !== 'dislikes') {
+      //   return
+      // }
       if (!this.user) { return }
       if (this.isCurrentUserBanned) {
         this.$Modal.error({
@@ -445,80 +448,77 @@ export default {
       const now = new Date()
       const commentId = this.comment.commentId
 
-      let likes = this.votes.likes || {}
-      let dislikes = this.votes.dislikes || {}
-      if (type === 'like') {
-        const isLiked = uid in likes
+      const isLiked = uid in (this.votes.likes || {})
+      const isDisliked = uid in (this.votes.dislikes || {})
+      const isLikeAction = (type === 'like')
 
-        // hook: beforeLikeComment
-        const shouldContinue = (Bus.hooks.beforeLikeComment || []).map(cb => cb({
-          bus: this.bus,
-          comment: this.comment,
-          oldVal: isLiked,
-          newVal: !isLiked
-        })).reduce((a, b) => a && b, true)
-        if (!shouldContinue) return
-
-        const likedCommentCbs = (err) => {
-          // hook: likedComment
-          const cbs = Bus.hooks.likedComment || []
-          cbs.forEach(cb => cb({
-            err,
-            bus: this.bus,
-            comment: this.comment,
-            oldVal: isLiked,
-            newVal: !isLiked
-          }))
+      // event: beforeVoteComment
+      const shouldContinue = beforeEvent('beforeVoteComment', {
+        'comment': this.comment,
+        'current': {
+          'isLike': isLiked,
+          'isDislik': isDisliked
+        },
+        'next': {
+          'isLike': !isLiked && isLikeAction,
+          'isDislik': !isDisliked && !isLikeAction
         }
+      }, this.bus)
+      if (!shouldContinue) return
+
+      // event: votedComment
+      const votedEventCallback = (error=null) => {
+        if (error) {
+          afterEvent('votedComment', { error }, this.bus)
+
+        } else {
+          afterEvent('votedComment', {
+            'comment': this.comment,
+            'last': {
+              'isLike': isLiked,
+              'isDislik': isDisliked
+            },
+            'current': {
+              'isLike': !isLiked && isLikeAction,
+              'isDislik': !isDisliked && !isLikeAction
+            }
+          }, this.bus)
+        }
+      }
+
+      if (isLikeAction) {
 
         if (isLiked) {
-          this.db.ref(`votes/${commentId}/likes/${uid}`).remove().then(() => likedCommentCbs()).catch(err => linkedCommentCbs(err))
+          this.db.ref(`votes/${commentId}/likes/${uid}`).remove()
+            .then(() => votedEventCallback())
+            .catch(error => votedEventCallback(error))
         } else {
           Promise.all([
             this.db.ref(`votes/${commentId}/likes/${uid}`).set(now.toISOString()),
             this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
-          ]).then(() => likedCommentCbs()).catch(err => linkedCommentCbs(err))
+          ]).then(() => votedEventCallback())
+            .catch(error => votedEventCallback(error))
         }
-      } else if (type === 'dislike') {
-        const isDisliked = uid in dislikes
-
-        // hook: beforeDislikeComment
-        const shouldContinue = (Bus.hooks.beforeDislikeComment || []).map(cb => cb({
-            bus: this.bus,
-            comment: this.comment,
-            oldVal: isDisliked,
-            newVal: !isDisliked
-          })).reduce((a, b) => a && b, true)
-        if (!shouldContinue) return
-
-        const dislikedCommentCbs = (err) => {
-          // hook: dislikedComment
-          const cbs = Bus.hooks.dislikedComment || []
-          cbs.forEach(cb => cb({
-            err,
-            bus: this.bus,
-            comment: this.comment,
-            oldVal: isDisliked,
-            newVal: !isDisliked
-          }))
-        }
+      } else {
 
         if (isDisliked) {
-          this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove().then(() => dislikedCommentCbs()).catch(err => dislikedCommentCbs(err))
+          this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
+            .then(() => votedEventCallback())
+            .catch(error => votedEventCallback(error))
         } else {
           Promise.all([
             this.db.ref(`votes/${commentId}/dislikes/${uid}`).set(now.toISOString()),
             this.db.ref(`votes/${commentId}/likes/${uid}`).remove()
-          ]).then(() => dislikedCommentCbs()).catch(err => dislikedCommentCbs(err))
+          ]).then(() => votedEventCallback())
+            .catch(error => votedEventCallback(error))
         }
       }
     },
     confirmDelete () {
-      // hook: beforeDeleteComment
-      const shouldContinue = (Bus.hooks.beforeDeleteComment || []).map(cb => cb({ 
-        bus: this.bus, 
-        comment: this.comment
-      })).reduce((a, b) => a && b, true)
+      // event: beforeDeleteComment
+      const shouldContinue = beforeEvent('beforeDeleteComment', {
+        'comment': this.comment
+      }, this.bus)
       if (!shouldContinue) return
 
       const commentId = this.comment.commentId
@@ -544,15 +544,16 @@ export default {
       ]).then(() => {
         this.$Message.success(this.i18next.t('CommentCard.success.deleting_comment'))
 
-        // hook: deletedComment
-        const cbs = Bus.hooks.deletedComment || []
-        cbs.forEach(cb => cb({ bus: this.bus, comment: this.comment }))
-      }).catch(err => {
+        // event: deletedComment
+        afterEvent('deletedComment', {
+          'comment': this.comment
+        }, this.bus)
+
+      }).catch(error => {
         this.$Message.error(this.i18next.t('CommentCard.error.deleting_comment'))
 
-        // hook: deletedComment
-        const cbs = Bus.hooks.deletedComment || []
-        cbs.forEach(cb => cb({ err, bus: this.bus, comment: this.comment }))
+        // event: deletedComment
+        afterEvent('deletedComment', { error }, this.bus)
       })
     },
     handleDropdownClick (name) {
@@ -569,8 +570,10 @@ export default {
         return
       }
 
-      // hook: beforeReportComment
-      const shouldContinue = (Bus.hooks.beforeReportComment || []).map(cb => cb({ bus: this.bus, comment: this.comment })).reduce((a, b) => a && b, true)
+      // event: beforeReportComment
+      const shouldContinue = beforeEvent('beforeReportComment', {
+        'comment': this.comment
+      }, this.bus)
       if (!shouldContinue) return
 
       var now = new Date()
@@ -585,29 +588,37 @@ export default {
         .then(() => {
           this.$Message.success(this.i18next.t('CommentCard.success.reporting_comment'))
 
-          // hook: reportedComment
-          const cbs = Bus.hooks.reportedComment || []
-          cbs.forEach(cb => cb({ bus: this.bus, comment: this.comment }))
-        }).catch(err => {
+          // event: reportedComment
+          afterEvent('reportedComment', {'comment': this.comment}, this.bus)
+
+        }).catch(error => {
           this.$Message.error(this.i18next.t('CommentCard.error.reporting_comment'))
 
-          // hook: reportedComment
-          const cbs = Bus.hooks.reportedComment || []
-          cbs.forEach(cb => cb({ err, bus: this.bus, comment: this.comment }))
+          // event: reportedComment
+          afterEvent('reportedComment', { error }, this.bus)
         })
       })
     },
     banCurrentUser () {
-      let key = ''
-      let now = new Date().toISOString()
+      let key
+      let type
+      const now = new Date().toISOString()
       if (this.comment.uid !== this.config.anonymousUserId) {
         key = this.comment.uid
+        type = 'uid'
       } else if (/unknow/.test(this.comment.ip)) {
         this.$Message.error(this.i18next.t('CommentCard.error.banning_user'))
         return
       } else {
         key = this.comment.ip.replace(/\./g, '-')
+        type = 'ip'
       }
+      // event: beforeBanUser
+      const shouldContinue = beforeEvent('beforeBanUser', {
+        userKey: key,
+        type
+      }, this.bus)
+      if (!shouldContinue) { return }
       this.db.ref(`ban/${key}`).once('value').then((snapshot) => {
         if (snapshot.val()) {
           this.$Message.error(this.i18next.t('CommentCard.error.repeated_banning'))
@@ -617,9 +628,19 @@ export default {
           date: now,
           reason: 'comment'
         }).then(() => {
+          // event: bannedUser
+          afterEvent('bannedUser', {
+            userKey: key,
+            type
+          }, this.bus)
+
           this.$Message.success(this.i18next.t('CommentCard.success.banning_user'))
-        }).catch(() => {
+        }).catch((error) => {
           this.$Message.error(this.i18next.t('CommentCard.error.banning_user'))
+
+          // event: bannedUser
+          afterEvent('bannedUser', { error }, this.bus)
+
         })
       })
     },

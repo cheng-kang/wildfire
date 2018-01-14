@@ -101,6 +101,12 @@ const Bus = new Vue({
       }
 
       return this.$off(event)
+    },
+    filteredBus (eventName) {
+      // TODO:
+      // 由于bus内部的变量涉及太多全局的状态，所以与事件无关的内部的变量需要被过滤，
+      // 尤其是events变量（之前的hooks），包含其他插件的事件函数，不可以允许被修改。
+      return Bus
     }
   }
 })

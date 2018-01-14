@@ -28,6 +28,7 @@ import Bus from './common/bus'
 import WfHeader from './layout/WfHeader'
 import WfBody from './layout/WfBody'
 import WfFooter from './layout/WfFooter'
+import { afterEvent } from './common/utils'
 export default {
   name: 'wildfire',
   components: {
@@ -136,24 +137,16 @@ export default {
       this.auth.onAuthStateChanged((user) => {
         if (!user) {
           Bus.user = null
-          // hook: authStateChanged
-          const cbs = Bus.hooks.authStateChanged || []
-          cbs.forEach(cb => cb({
-            bus: this.bus,
-            user: null
-          }))
+          // event: authStateChanged
+          afterEvent('authStateChanged', {'user': null}, this.bus)
           return
         }
         this.db.ref(`users/${user.uid}`).once('value').then((snapshot) => {
           const userData = snapshot.val()
           Bus.user = Object.assign({}, userData, {uid: user.uid, isAdmin: userData.isAdmin || false})
 
-          // hook: authStateChanged
-          const cbs = Bus.hooks.authStateChanged || []
-          cbs.forEach(cb => cb({
-            bus: this.bus,
-            user: Bus.user
-          }))
+          // event: authStateChanged
+          afterEvent('authStateChanged', {'user': this.user}, this.bus)
 
           this.checkBanState()
         })
