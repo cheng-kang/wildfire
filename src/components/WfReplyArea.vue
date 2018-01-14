@@ -63,7 +63,7 @@
 
 <script>
 import Bus from '../common/bus'
-import { handleImageOnError } from '../common/utils'
+import { handleImageOnError, beforeEvent, afterEvent } from '../common/utils'
 export default {
   name: 'wf-reply-area',
   props: [
@@ -227,11 +227,10 @@ export default {
 
         const postData = { uid, content, date, ip, pageURL, rootCommentPageURL, parentCommentId, parentCommentUid, rootCommentId, rootCommentUid }
 
-        // hook: beforePostComment
-        const shouldContinue = (Bus.hooks.beforePostComment || []).map(cb => cb({
-          bus: this.bus,
-          comment: postData
-        })).reduce((a, b) => a && b, true)
+        // event: beforePostComment
+        const shouldContinue = beforeEvent('beforePostComment', {
+          'comment': postData
+        }, this.bus)
         if (!shouldContinue) {
           this.isPosting = false
           return
@@ -260,12 +259,10 @@ export default {
           this.form.content = ''
           this.$Message.success(this.i18next.t('ReplyArea.success.posting_comment'))
 
-          // hook: postedComment
-          const cbs = Bus.hooks.postedComment || []
-          cbs.forEach(cb => cb({
-            bus: this.bus,
-            comment: Object.assign({}, postData, {commentId: newCommentId})
-          }))
+          // event: postedComment
+          afterEvent('postedComment', {
+            'comment': Object.assign({}, postData, {commentId: newCommentId})
+          }, this.bus)
 
           /*
             Handle Mention
@@ -350,18 +347,13 @@ export default {
             End of: Handle Mention
            */
         })
-        .catch(err => {
+        .catch(error => {
           this.isPosting = false
           this.form.content = ''
           this.$Message.error(this.i18next.t('ReplyArea.error.posting_comment'))
 
-          // hook: commentPosted
-          const cbs = Bus.hooks.commentPosted || []
-          cbs.forEach(cb => cb({
-            err,
-            bus: this.bus,
-            comment: postData
-          }))
+          // event: postedComment
+          afterEvent('postedComment', { error }, this.bus)
         })
       }
     },

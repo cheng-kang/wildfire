@@ -62,7 +62,7 @@ export const install = (_Vue, config) => {
     plugins,
     pluginComponents: {},
     pluginOptions: {},
-    hooks: {}
+    events: {}
   }
 
   if (databaseProvider === 'firebase') {
@@ -85,6 +85,9 @@ export const install = (_Vue, config) => {
   wf.b64EncodeUnicode = b64EncodeUnicode
   wf.b64DecodeUnicode = b64DecodeUnicode
 
+  // TODO:
+  // Should Not modify Bus dynamically here.
+  // The Bus should only have fixed fields.
   Object.assign(Bus, wf)
 
   plugins.forEach(plugin => {
@@ -93,9 +96,9 @@ export const install = (_Vue, config) => {
       i18n: (lang, translation) => addTranslation(lang, translation),
       renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
     })
-    Object.keys(plugin.hooks || {}).forEach(hookName => {
-      const hookFn = plugin.hooks[hookName]
-      Bus.hooks[hookName] ? Bus.hooks[hookName].push(hookFn) : Object.assign(Bus.hooks, {[hookName]: [hookFn]})
+    Object.keys(plugin.on || {}).forEach(eventName => {
+      const eventFn = plugin.on[eventName]
+      Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
     })
     Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
   })
@@ -149,7 +152,7 @@ export const reset = (_Vue, config = {}, err) => {
     plugins,
     pluginComponents: {},
     pluginOptions: {},
-    hooks: {}
+    events: {}
   }
 
   if (databaseProvider === 'firebase') {
@@ -178,9 +181,9 @@ export const reset = (_Vue, config = {}, err) => {
       i18n: (lang, translation) => addTranslation(lang, translation),
       renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
     })
-    Object.keys(plugin.hooks || {}).forEach(hookName => {
-      const hookFn = plugin.hooks[hookName]
-      Bus.hooks[hookName] ? Bus.hooks[hookName].push(hookFn) : Object.assign(Bus.hooks, {[hookName]: [hookFn]})
+    Object.keys(plugin.on || {}).forEach(eventName => {
+      const eventFn = plugin.on[eventName]
+      Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
     })
     Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
   })

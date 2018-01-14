@@ -1,4 +1,4 @@
-<template> 
+<template>
   <i-tabs :value="initTab" class="wf-auth-form">
     <i-tab-pane :label="i18next.t('AuthForm.btn.sign_up')" name="sign_up" :disabled="loadingSignIn">
       <div class="wf-form-warp">
@@ -17,15 +17,15 @@
           </i-form-item>
           <div class="wf-buttons">
             <i-button
-            type="primary" 
-            @click="handleSignUp('signUpForm')" 
+            type="primary"
+            @click="handleSignUp('signUpForm')"
             :disabled="loadingSignUp"
             :loading="loadingSignUp">
-              {{ i18next.t('AuthForm.btn.sign_up') }} 
+              {{ i18next.t('AuthForm.btn.sign_up') }}
             </i-button>
-            <i-button 
-            type="text" 
-            @click="closeModel()" 
+            <i-button
+            type="text"
+            @click="closeModel()"
             :disabled="loadingSignUp">
               {{ i18next.t('AuthForm.btn.cancel') }}
             </i-button>
@@ -46,16 +46,16 @@
             </i-input>
           </i-form-item>
           <div class="wf-buttons">
-            <i-button 
-            type="primary" 
-            @click="handleSignIn('signInForm')" 
-            :disabled="loadingSignIn" 
+            <i-button
+            type="primary"
+            @click="handleSignIn('signInForm')"
+            :disabled="loadingSignIn"
             :loading="loadingSignIn">
               {{ i18next.t('AuthForm.btn.sign_in') }}
             </i-button>
-            <i-button 
-            type="text" 
-            @click="closeModel()" 
+            <i-button
+            type="text"
+            @click="closeModel()"
             :disabled="loadingSignIn">
               {{ i18next.t('AuthForm.btn.cancel') }}
             </i-button>
@@ -68,6 +68,7 @@
 
 <script>
 import Bus from '../common/bus'
+import { beforeEvent, afterEvent } from '../common/utils'
 export default {
   name: 'wf-auth-form',
   props: ['initTab'],
@@ -121,13 +122,17 @@ export default {
     handleSignIn (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          // hook: beforeSignIn
-          const shouldContinue = (Bus.hooks.beforeSignIn || []).map(cb => cb({bus: this.bus})).reduce((a, b) => a && b, true)
-          if (!shouldContinue) return
 
-          this.loadingSignIn = true
           const email = this.signInForm.email
           const password = this.signInForm.password
+          this.loadingSignIn = true
+
+          // event: beforeSignIn
+          const shouldContinue = beforeEvent('beforeSignIn', { email }, this.bus)
+          if (!shouldContinue) {
+            this.loadingSignIn = false
+            return
+          }
 
           this.auth.signInWithEmailAndPassword(email, password)
           .then((user) => {
@@ -136,17 +141,15 @@ export default {
               this.closeModel()
               this.$Message.info(this.i18next.t('AuthForm.success.signing_in'))
 
-              // hook: signedIn
-              const cbs = Bus.hooks.signedIn || []
-              cbs.forEach(cb => cb({ bus: this.bus }))
+              // event: signedIn
+              afterEvent('signedIn', {user}, this.bus)
             })
-          }).catch(err => {
+          }).catch(error => {
             this.loadingSignIn = false
             this.$Message.error(this.i18next.t('AuthForm.error.signing_in'))
 
-            // hook: signedIn
-            const cbs = Bus.hooks.signedIn || []
-            cbs.forEach(cb => cb({ err, bus: this.bus }))
+            // event: signedIn
+            afterEvent('signedIn', { error }, this.bus)
           })
         } else {
           this.$Message.error(this.i18next.t('AuthForm.error.invalid_form'))
@@ -156,15 +159,17 @@ export default {
     handleSignUp (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          // hook: beforeSignUp
-          const shouldContinue = (Bus.hooks.beforeSignUp || []).map(cb => cb({ bus: this.bus })).reduce((a, b) => a && b, true)
-          if (!shouldContinue) return
-
-          this.loadingSignUp = true
           const email = this.signUpForm.email
           const password = this.signUpForm.password
           const displayName = email.split('@')[0]
           const photoURL = this.config.defaultAvatarURL
+          this.loadingSignUp = true
+          // event: beforeSignUp
+          const shouldContinue = beforeEvent('beforeSignUp', {email}, this.bus)
+          if (!shouldContinue) {
+            this.loadingSignUp = false
+            return
+          }
 
           this.auth.createUserWithEmailAndPassword(email, password)
           .then((user) => {
@@ -180,21 +185,20 @@ export default {
               this.closeModel()
               this.$Message.info(this.i18next.t('AuthForm.success.signing_up'))
 
-              // hook: signedUp
-              const cbs = Bus.hooks.signedUp || []
-              cbs.forEach(cb => cb({ bus: this.bus }))
-            }).catch(err => {
+              // event: signedUp
+              afterEvent('signedUp', {email}, this.bus)
+
+            }).catch(error => {
               this.loadingSignUp = false
               this.$Message.error(this.i18next.t('AuthForm.error.unknown'))
 
-              // hook: signedUp
-              const cbs = Bus.hooks.signedUp || []
-              cbs.forEach(cb => cb({ err, bus: this.bus }))
+              // event: signedUp
+              afterEvent('signedUp', { error }, this.bus)
             })
-          }).catch(err => {
+          }).catch(error => {
             this.loadingSignUp = false
-            var errorCode = err.code
-            var errorMessage = err.message
+            var errorCode = error.code
+            var errorMessage = error.message
             switch (errorCode) {
               case 'auth/email-already-in-use':
                 errorMessage = this.i18next.t('AuthForm.error.email_already_in_use')
@@ -212,9 +216,8 @@ export default {
             }
             this.$Message.error(errorMessage)
 
-            // hook: signedUp
-            const cbs = Bus.hooks.signedUp || []
-            cbs.forEach(cb => cb({ err, bus: this.bus}))
+            // event: signedUp
+            afterEvent('signedUp', { error }, this.bus)
           })
         } else {
           this.$Message.error(this.i18next.t('AuthForm.error.invalid_form'))

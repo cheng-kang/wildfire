@@ -61,7 +61,7 @@ export const install = (_Vue, config) => {
     plugins,
     pluginComponents: {},
     pluginOptions: {},
-    hooks: {}
+    events: {}
   }
 
   if (!_Vue.$bindAsObject) { _Vue.use(VueWild) }
@@ -85,9 +85,9 @@ export const install = (_Vue, config) => {
       i18n: (lang, translation) => addTranslation(lang, translation),
       renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
     })
-    Object.keys(plugin.hooks || {}).forEach(hookName => {
-      const hookFn = plugin.hooks[hookName]
-      Bus.hooks[hookName] ? Bus.hooks[hookName].push(hookFn) : Object.assign(Bus.hooks, {[hookName]: [hookFn]})
+    Object.keys(plugin.on || {}).forEach(eventName => {
+      const eventFn = plugin.on[eventName]
+      Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
     })
     Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
   })
@@ -141,7 +141,7 @@ export const reset = (_Vue, config = {}, err) => {
     plugins,
     pluginComponents: {},
     pluginOptions: {},
-    hooks: {}
+    events: {}
   }
 
   wf.dbApp = wilddog.initializeApp({
@@ -161,9 +161,9 @@ export const reset = (_Vue, config = {}, err) => {
       i18n: (lang, translation) => addTranslation(lang, translation),
       renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
     })
-    Object.keys(plugin.hooks || {}).forEach(hookName => {
-      const hookFn = plugin.hooks[hookName]
-      Bus.hooks[hookName] ? Bus.hooks[hookName].push(hookFn) : Object.assign(Bus.hooks, {[hookName]: [hookFn]})
+    Object.keys(plugin.on || {}).forEach(eventName => {
+      const eventFn = plugin.on[eventName]
+      Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
     })
     Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
   })
