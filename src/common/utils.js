@@ -50,7 +50,7 @@ export const afterEvent = (eventName, data, bus) => {
   const events = bus.events[eventName] || []
   const newBus = bus.filteredBus(eventName)
   events.forEach((eventFn) => {
-     eventFn(newBus, data)
+    eventFn(newBus, data)
   })
 }
 

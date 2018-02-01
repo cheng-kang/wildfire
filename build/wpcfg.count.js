@@ -1,5 +1,7 @@
 const config = require('./config').build
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const webpack = require('webpack')
+const utils = require('./utils')
 
 let webpackConfig = {
   entry: {
@@ -25,6 +27,9 @@ let webpackConfig = {
         },
         sourceMap: true
       }
+    }),
+    new webpack.BannerPlugin({
+      banner: utils.copyright(),
     })
   ]
 }
