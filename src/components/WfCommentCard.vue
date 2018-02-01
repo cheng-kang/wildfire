@@ -467,7 +467,7 @@ export default {
       if (!shouldContinue) return
 
       // event: votedComment
-      const votedEventCallback = (error=null) => {
+      const votedEventCallback = (error = null) => {
         if (error) {
           afterEvent('votedComment', { error }, this.bus)
 

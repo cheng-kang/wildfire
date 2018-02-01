@@ -21,7 +21,7 @@
     return
   }
 
-  let baseURL = ''
+  let baseURL
   if (databaseProvider === 'firebase') {
     baseURL = databaseProvider.databaseURL
   } else {
@@ -30,7 +30,7 @@
 
   const discussionCountEles = document.getElementsByClassName('wf-discussion-count-unit')
 
-  for (var i = 0; i < discussionCountEles.length; i++) {
+  for (let i = 0; i < discussionCountEles.length; i++) {
     const ele = discussionCountEles[i]
     const pageURL = ele.getAttribute('wf-page-url')
     if (!pageURL) {
@@ -38,18 +38,18 @@
       return
     }
 
-    fetch(`${baseURL}/pages/${b64EncodeUnicode(pageURL)}/discussionCount.json`)
-    .then((response) => {
-      var contentType = response.headers.get('content-type')
+    let url = `${baseURL}/pages/${b64EncodeUnicode(pageURL)}/discussionCount.json`
+    fetch(url).then((response) => {
+      let contentType = response.headers.get('content-type')
       if (contentType && contentType.includes('application/json')) {
         return response.json()
       }
       throw new TypeError("Oops, we haven't got JSON!")
-    })
-    .then((json) => {
+
+    }).then((json) => {
       const discussionCount = json || 0
       ele.innerHTML = discussionCount
-    })
-    .catch((error) => { console.error(error) })
+
+    }).catch((error) => { console.error(error) })
   }
 })()
