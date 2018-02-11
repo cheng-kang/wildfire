@@ -46,7 +46,7 @@
     "build:auto": "webpack --config build/wpcfg.auto.js",
     "build:count": "webpack --config build/wpcfg.count.js",
     "build:firebase": "webpack --config build/wpcfg.firebase.js",
-    "build:security-rules": "./node_modules/firebase-bolt/bin/firebase-bolt ./src/security_rules.bolt --output ./dist/security_rules.bolt",
+    "build:security-rules": "./node_modules/firebase-bolt/bin/firebase-bolt ./src/security_rules.bolt --output ./dist/security_rules.js",
     "build:wilddog": "webpack --config build/wpcfg.wilddog.js",
     "lint": "eslint --ext .js,.vue src"
   },
