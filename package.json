@@ -47,7 +47,8 @@
     "build:count": "webpack --config build/wpcfg.count.js",
     "build:firebase": "webpack --config build/wpcfg.firebase.js",
     "build:wilddog": "webpack --config build/wpcfg.wilddog.js",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "postinstall": "opencollective postinstall"
   },
   "dependencies": {
     "date-fns": "^1.29.0",
@@ -56,6 +57,7 @@
     "i18next": "^9.0.0",
     "iview": "^2.6.0",
     "marked": "^0.3.6",
+    "opencollective": "^1.0.3",
     "sanitize-html": "^1.16.3",
     "vue": "^2.4.2",
     "vue-resource": "^1.3.4",
@@ -122,5 +124,9 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/wildfire-473"
+  }
 }
