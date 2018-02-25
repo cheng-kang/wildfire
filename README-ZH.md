@@ -1,4 +1,4 @@
-# Wildfire [![](https://img.shields.io/npm/v/wildfire.svg?style=flat-square)](https://www.npmjs.com/wildfire)
+# Wildfire [![Backers on Open Collective](https://opencollective.com/wildfire-473/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/wildfire-473/sponsors/badge.svg)](#sponsors) [![](https://img.shields.io/npm/v/wildfire.svg?style=flat-square)](https://www.npmjs.com/wildfire)
 
 > 如果你的网站需要一个方便的评论系统的话，不妨试试 Wildfire 野火评论系统。
 
