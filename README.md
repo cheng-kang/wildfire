@@ -66,25 +66,6 @@ Continue reading [Get Started](https://wildfire.js.org/#/preface), and start you
 
 For more showcases, check this Wiki page: [Who is using Wildfire?](https://github.com/cheng-kang/wildfire/wiki/1.-%E8%BF%99%E4%BA%9B%E7%BD%91%E7%AB%99%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8-Wildfire-%E9%87%8E%E7%81%AB%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%EF%BC%81).
 
-## Donation
-
-Buy us a cup of tea if you think `wildfire` does work! 
-
-#### - Paypal Me
-
-<p align="center">
-  <a href="https://www.paypal.me/chengkang" target="_blank"><img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/paypal-me.png" width="320"></a>
-</p>
-
-#### - Alipay & Wechat
-
-<p align="center">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/alipay.jpg" width="160">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/wechat.jpg" width="160">
- </p>
-
-We appreciate your kindness!
-
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
