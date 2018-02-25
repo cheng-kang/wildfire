@@ -64,24 +64,33 @@
 
 更多展示，请看这个百科页面：[我们正在使用 Wildfire 野火评论系统！](https://github.com/cheng-kang/wildfire/wiki/%E6%88%91%E4%BB%AC%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8-Wildfire-%E9%87%8E%E7%81%AB%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%EF%BC%81)
 
-## 捐赠
+## Contributors
 
-如果你觉得 `wildfire` 确实不错的话，给我们买杯饮料喝吧！
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="graphs/contributors"><img src="https://opencollective.com/wildfire-473/contributors.svg?width=890&button=false" /></a>
 
-#### - Paypal Me
 
-<p align="center">
-  <a href="https://www.paypal.me/chengkang" target="_blank"><img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/paypal-me.png" width="320"></a>
-</p>
+## Backers
 
-#### - 支付宝 和 微信打赏
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/wildfire-473#backer)]
 
-<p align="center">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/alipay.jpg" width="160">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/wechat.jpg" width="160">
-</p>
+<a href="https://opencollective.com/wildfire-473#backers" target="_blank"><img src="https://opencollective.com/wildfire-473/backers.svg?width=890"></a>
 
-感谢你的慷慨！
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/wildfire-473#sponsor)]
+
+<a href="https://opencollective.com/wildfire-473/sponsor/0/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/1/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/2/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/3/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/4/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/5/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/6/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/7/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/8/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/wildfire-473/sponsor/9/website" target="_blank"><img src="https://opencollective.com/wildfire-473/sponsor/9/avatar.svg"></a>
 
 ## 开源许可协议
 
