@@ -5,22 +5,14 @@
       mode="horizontal"
       @on-select="menuOnSelect">
       <i-menu-item name="comments_count" ref="first_menu_item">
-        <i-spin v-if="commentsLoadingState === 'loading'"
-          :default-slot-style="{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }">
+        <span v-if="commentsLoadingState === 'loading'">
           <i-icon
             type="load-c"
-            size="18"
+            size="14"
             class="spin-icon"
             :style="{marginRight: '5px'}"></i-icon>
-          <div>
-            {{i18next.t('Header.text.loading')}}
-          </div>
-        </i-spin>
-
+          {{i18next.t('Header.text.loading')}}
+        </span>
         <span v-else>
           {{discussionCount}} {{i18next.t(discussionCount < 2 ? 'Header.btn.comment' : 'Header.btn.comments')}}
         </span>
@@ -38,7 +30,9 @@
         <template slot="title"></template>
         <template v-if="user">
           <i-menu-group :title="i18next.t('Header.menu.personal_center')">
+            <i-menu-item name="user_setting">{{i18next.t('Header.menu.user_setting')}}</i-menu-item>
             <i-menu-item name="notification">{{i18next.t('Header.menu.notification')}}</i-menu-item>
+            <i-menu-item name="plugin_center">{{i18next.t('Header.menu.plugin_center')}}</i-menu-item>
             <component v-for="(cpntName, idx) in pluginComponents['menu.personal']"
               :is="cpntName"
               :key="idx"
@@ -121,6 +115,12 @@
         <wf-admin-helpers :user="user" v-if='user && user.isAdmin'></wf-admin-helpers>
       </div>
     </i-modal>
+    <i-modal v-model="pluginCenterModal" :closable="false" :footer-hide="true" :theme="config.theme">
+      <div>
+        <!-- <wf-plugin-center  v-if='user && user.isAdmin'></wf-plugin-center> -->
+        <wf-plugin-center></wf-plugin-center>
+      </div>
+    </i-modal>
   </header>
 </template>
 
@@ -140,6 +140,7 @@ export default {
       personalCenterModal: false,
       reportMangementModal: false,
       adminHelpersModal: false,
+      pluginCenterModal: false,
       isAdmin: false,
       menuActiveName: 'comments_count'
     }
@@ -220,16 +221,40 @@ export default {
       }
     },
     menuOnSelect (name) {
-      if (name === 'notification') {
-        this.personalCenterModal = true
-      } else if (name === 'report_management') {
-        this.reportMangementModal = true
-      } else if (name === 'admin_helpers') {
-        this.adminHelpersModal = true
-      } else if (name === 'sign_out') {
-        this.signOut()
-      } else if (name === 'sign_up' || name === 'sign_in') {
-        this.showAuthFormModal(name)
+      switch (name) {
+        case 'user_setting': {
+          this.userSettingModal = true
+          break
+        }
+        case 'notification': {
+          this.personalCenterModal = true
+          break
+        }
+        case 'report_management': {
+          this.reportMangementModal = true
+          break
+        }
+        case 'admin_helpers': {
+          this.adminHelpersModal = true
+          break
+        }
+        case 'plugin_center': {
+          this.pluginCenterModal = true
+          break
+        }
+        case 'sign_out': {
+          this.signOut()
+          break
+        }
+        case 'sign_up': {
+          this.showAuthFormModal(name)
+          break
+        }
+        case 'sign_in': {
+          this.showAuthFormModal(name)
+          break
+        }
+
       }
       if (name !== 'comments_count') {
         this.$refs.first_menu_item.handleClick()

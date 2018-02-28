@@ -1844,6 +1844,7 @@
 .wf .ivu-collapse > .ivu-collapse-item:first-child { border-top: 0; }
 .wf .ivu-collapse > .ivu-collapse-item > .ivu-collapse-header { height: 38px; line-height: 38px; padding-left: 32px; color: #666; cursor: pointer; position: relative; }
 .wf .ivu-collapse > .ivu-collapse-item > .ivu-collapse-header > i { transition: transform 0.2s ease-in-out; }
+.wf .ivu-collapse > .ivu-collapse-item > .ivu-collapse-header > .ivu-collapse-header-extra {position: absolute; right: 32px; top: 0px;}
 .wf .ivu-collapse > .ivu-collapse-item.ivu-collapse-item-active > .ivu-collapse-header > i { -ms-transform: rotate(90deg); transform: rotate(90deg); }
 .wf .ivu-collapse-content { overflow: hidden; color: #495060; padding: 0 16px; background-color: #fff; }
 .wf .ivu-collapse-content > .ivu-collapse-content-box { padding-top: 16px; padding-bottom: 16px; }

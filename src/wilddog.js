@@ -5,8 +5,8 @@ import Bus from './common/bus'
 import { initLocalComponents } from './common/loadLocalComponents'
 import iView from './common/loadiView'
 import dateFns from './common/loadDateFns'
-import i18next, { initI18next, resetI18next, addTranslation } from './common/loadI18next'
-import { b64EncodeUnicode, b64DecodeUnicode, defaultPageURL } from './common/utils'
+import i18next, { initI18next, resetI18next } from './common/loadI18next'
+import { defaultPageURL, b64EncodeUnicode } from './common/utils'
 import Wildfire from './Wildfire'
 import './assets/style.css'
 import './assets/style.dark.css'
@@ -32,8 +32,6 @@ export const install = (_Vue, config) => {
     theme = 'light',
     locale = 'en',
     defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg',
-
-    plugins = []
   } = config
 
   if (!pageURL) pageURL = defaultPageURL(pageURLMode)
@@ -57,11 +55,7 @@ export const install = (_Vue, config) => {
     },
     i18next,
     formatDate,
-    distanceInWordsToNow,
-    plugins,
-    pluginComponents: {},
-    pluginOptions: {},
-    events: {}
+    distanceInWordsToNow
   }
 
   if (!_Vue.$bindAsObject) { _Vue.use(VueWild) }
@@ -73,24 +67,24 @@ export const install = (_Vue, config) => {
   wf.auth = wf.dbApp.auth()
   wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
 
-  wf.b64EncodeUnicode = b64EncodeUnicode
-  wf.b64DecodeUnicode = b64DecodeUnicode
-
+  // ToFix: 过多使用 assign 导致难以维护 bus
+  // 1、只在其他组件中动态添加【需要全局使用的变化状态值】；
+  // 2、其他需要全局使用的变量，应当通过utils，或者在bus中内部定义，不应当动态添加
   Object.assign(Bus, wf)
 
   // Install plugins
-  plugins.forEach(plugin => {
-    plugin.install({
-      registerComponent: (componentName, component) => _Vue.component(componentName, component),
-      i18n: (lang, translation) => addTranslation(lang, translation),
-      renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
-    })
-    Object.keys(plugin.on || {}).forEach(eventName => {
-      const eventFn = plugin.on[eventName]
-      Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
-    })
-    Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
-  })
+  // plugins.forEach(plugin => {
+  //   plugin.install({
+  //     registerComponent: (componentName, component) => _Vue.component(componentName, component),
+  //     i18n: (lang, translation) => addTranslation(lang, translation),
+  //     renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
+  //   })
+  //   Object.keys(plugin.on || {}).forEach(eventName => {
+  //     const eventFn = plugin.on[eventName]
+  //     Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
+  //   })
+  //   Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
+  // })
 
   _Vue.component('wildfire', Wildfire)
 }
@@ -112,8 +106,7 @@ export const reset = (_Vue, config = {}, err) => {
     pageURLMode = Bus.config.pageURLMode,
     theme = Bus.config.theme,
     locale = Bus.config.locale,
-    defaultAvatarURL = Bus.config.defaultAvatarURL,
-    plugins = Bus.plugins
+    defaultAvatarURL = Bus.config.defaultAvatarURL
   } = config
 
   if (!databaseConfig) databaseConfig = getDatabaseConfig()
@@ -137,11 +130,7 @@ export const reset = (_Vue, config = {}, err) => {
       anonymousUserId: 'Anonymous'
     },
     formatDate,
-    distanceInWordsToNow,
-    plugins,
-    pluginComponents: {},
-    pluginOptions: {},
-    events: {}
+    distanceInWordsToNow
   }
 
   wf.dbApp = wilddog.initializeApp({
@@ -153,20 +142,6 @@ export const reset = (_Vue, config = {}, err) => {
   wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
 
   Object.assign(Bus, wf)
-
-  // Install plugins
-  plugins.forEach(plugin => {
-    plugin.install({
-      registerComponent: (componentName, component) => !_Vue.options.components[name] && _Vue.component(componentName, component),
-      i18n: (lang, translation) => addTranslation(lang, translation),
-      renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
-    })
-    Object.keys(plugin.on || {}).forEach(eventName => {
-      const eventFn = plugin.on[eventName]
-      Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
-    })
-    Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
-  })
 }
 
 export default {install, reset}

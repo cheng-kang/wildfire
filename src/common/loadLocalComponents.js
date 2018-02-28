@@ -8,6 +8,7 @@ import WfReportManagement from '../components/WfReportManagement'
 import WfTip from '../components/WfTip'
 import WfUserInfoModal from '../components/WfUserInfoModal'
 import WfUserSetting from '../components/WfUserSetting'
+import WfPluginCenter from '../components/WfPluginCenter'
 
 const localComponents = {
   WfAdminHelpers,
@@ -19,7 +20,8 @@ const localComponents = {
   WfReportManagement,
   WfTip,
   WfUserInfoModal,
-  WfUserSetting
+  WfUserSetting,
+  WfPluginCenter,
 }
 
 export const initLocalComponents = (_Vue) => {

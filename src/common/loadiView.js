@@ -26,24 +26,24 @@ import '../assets/iview.css'
 import AutoComplete from 'iview/src/components/auto-complete'
 import Button from 'iview/src/components/button'
 import Card from 'iview/src/components/card'
-import Collapse from 'iview/src/components/collapse'
+import Collapse from './iview/collapse'
+import Dropdown from './iview/dropdown'
 import Form from 'iview/src/components/form'
 import Icon from 'iview/src/components/icon'
 import Input from 'iview/src/components/input'
 import Menu from 'iview/src/components/menu'
+import Message from './iview/message'
+import Modal from './iview/modal'
 import Page from 'iview/src/components/page'
-import Spin from 'iview/src/components/spin'
+import Poptip from './iview/poptip'
 import { Row, Col } from 'iview/src/components/grid'
+import Spin from 'iview/src/components/spin'
+import iSwitch from './iview/switch'
 import {
   Select,
   Option
 } from 'iview/src/components/select'
 import Tooltip from './iview//tooltip'
-
-import Dropdown from './iview/dropdown'
-import Message from './iview/message'
-import Modal from './iview/modal'
-import Poptip from './iview/poptip'
 import Tabs from './iview/tabs'
 
 const iview = {
@@ -57,6 +57,8 @@ const iview = {
   iCol: Col,
   Collapse,
   iCollapse: Collapse,
+  Panel: Collapse.Panel,
+  iPanel: Collapse.Panel,
   Dropdown,
   DropdownItem: Dropdown.Item,
   DropdownMenu: Dropdown.Menu,
@@ -84,14 +86,13 @@ const iview = {
   iOption: Option,
   Page,
   iPage: Page,
-  Panel: Collapse.Panel,
-  iPanel: Collapse.Panel,
   Row,
   iRow: Row,
   Select,
   iSelect: Select,
   Spin,
   iSpin: Spin,
+  iSwitch,
   TabPane: Tabs.Pane,
   iTabPane: Tabs.Pane,
   Tooltip,

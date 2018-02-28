@@ -1,22 +1,22 @@
 <template>
   <div :class="classes">
-    <component v-for="(cpntName, idx) in pluginComponents['header.before']"
+    <!-- <component v-for="(cpntName, idx) in pluginComponents['header.before']"
       :is="cpntName"
       :key="idx"
-      :bus="bus"/>
+      :bus="bus"/> -->
     <wf-header :comments-loading-state="commentsLoadingState"/>
-    <component v-for="(cpntName, idx) in pluginComponents['header.after']"
+    <!-- <component v-for="(cpntName, idx) in pluginComponents['header.after']"
       :is="cpntName"
       :key="idx"
-      :bus="bus"/>
+      :bus="bus"/> -->
     <wf-body
       :page-comments-count="pageCommentsCount"
       :comments="commentsWithId"
       :comments-loading-state="commentsLoadingState"/>
-    <component v-for="(cpntName, idx) in pluginComponents['footer.before']"
+    <!-- <component v-for="(cpntName, idx) in pluginComponents['footer.before']"
       :is="cpntName"
       :key="idx"
-      :bus="bus"/>
+      :bus="bus"/> -->
     <wf-footer/>
   </div>
 </template>
