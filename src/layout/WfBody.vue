@@ -25,15 +25,15 @@
     </template>
 
     <p v-else class="wf-no-content-tip">
-      <i-spin v-if="commentsLoadingState === 'loading'"
-        :default-slot-style="{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }">
-          <i-icon class="spin-icon" type="load-c" size="18" :style="{marginRight: '5px'}"></i-icon>
-          <div>{{i18next.t('Body.text.loading_comments')}}</div>
-      </i-spin>
+      <span v-if="commentsLoadingState === 'loading'">
+        <i-icon
+          type="load-c"
+          size="14"
+          class="spin-icon"
+          :style="{marginRight: '5px'}">
+        </i-icon>
+        {{i18next.t('Body.text.loading_comments')}}
+      </span>
       <span v-if="commentsLoadingState === 'finished'">
         {{i18next.t('Body.text.post_the_first_comment')}}
       </span>

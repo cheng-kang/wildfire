@@ -59,10 +59,6 @@ export const install = (_Vue, config) => {
     i18next,
     formatDate,
     distanceInWordsToNow,
-    plugins,
-    pluginComponents: {},
-    pluginOptions: {},
-    events: {}
   }
 
   if (databaseProvider === 'firebase') {
@@ -85,23 +81,11 @@ export const install = (_Vue, config) => {
   wf.b64EncodeUnicode = b64EncodeUnicode
   wf.b64DecodeUnicode = b64DecodeUnicode
 
+  Bus.registerPlugins(plugins)
   // TODO:
   // Should Not modify Bus dynamically here.
   // The Bus should only have fixed fields.
   Object.assign(Bus, wf)
-
-  plugins.forEach(plugin => {
-    plugin.install({
-      registerComponent: (componentName, component) => _Vue.component(componentName, component),
-      i18n: (lang, translation) => addTranslation(lang, translation),
-      renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
-    })
-    Object.keys(plugin.on || {}).forEach(eventName => {
-      const eventFn = plugin.on[eventName]
-      Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
-    })
-    Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
-  })
 
   _Vue.component('wildfire', Wildfire)
 }
@@ -124,8 +108,9 @@ export const reset = (_Vue, config = {}, err) => {
     theme = Bus.config.theme,
     locale = Bus.config.locale,
     defaultAvatarURL = Bus.config.defaultAvatarURL,
-    plugins = Bus.plugins
   } = config
+
+  let pluginCenter = Bus.pluginCenter
 
   if (!databaseConfig) databaseConfig = getDatabaseConfig()
   if (!pageURL) pageURL = defaultPageURL(pageURLMode)
@@ -149,10 +134,7 @@ export const reset = (_Vue, config = {}, err) => {
     },
     formatDate,
     distanceInWordsToNow,
-    plugins,
-    pluginComponents: {},
-    pluginOptions: {},
-    events: {}
+    pluginCenter
   }
 
   if (databaseProvider === 'firebase') {
@@ -174,19 +156,6 @@ export const reset = (_Vue, config = {}, err) => {
   }
 
   Object.assign(Bus, wf)
-
-  plugins.forEach(plugin => {
-    plugin.install({
-      registerComponent: (componentName, component) => !_Vue.options.components[name] && _Vue.component(componentName, component),
-      i18n: (lang, translation) => addTranslation(lang, translation),
-      renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
-    })
-    Object.keys(plugin.on || {}).forEach(eventName => {
-      const eventFn = plugin.on[eventName]
-      Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
-    })
-    Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
-  })
 }
 
 export default {install, reset}

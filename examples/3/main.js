@@ -3,23 +3,23 @@
 import Vue from 'vue'
 import App from './App'
 import wildfire from '../../src/aio'
-import WfPinnedComment from '../../src/plugins/WfPinnedComment'
+// import WfPinnedComment from '../../src/plugins/WfPinnedComment'
 
 Vue.config.productionTip = true
 Vue.use(wildfire, {
-  databaseProvider: 'firebase',
-  databaseConfig: {
-    apiKey: 'AIzaSyDCHvWMGjVVTMcL67sorfJm3Uv-_luAKg0',
-    authDomain: 'wildfire-plugin.firebaseapp.com',
-    databaseURL: 'https://wildfire-plugin.firebaseio.com',
-    projectId: 'wildfire-plugin',
-    storageBucket: '',
-    messagingSenderId: '712535216662'
-  },
-  // databaseProvider: 'wilddog',
+  // databaseProvider: 'firebase',
   // databaseConfig: {
-  //   siteId: 'wd5350450577zvbtov'
+  //   apiKey: 'AIzaSyDCHvWMGjVVTMcL67sorfJm3Uv-_luAKg0',
+  //   authDomain: 'wildfire-plugin.firebaseapp.com',
+  //   databaseURL: 'https://wildfire-plugin.firebaseio.com',
+  //   projectId: 'wildfire-plugin',
+  //   storageBucket: '',
+  //   messagingSenderId: '712535216662'
   // },
+  databaseProvider: 'wilddog',
+  databaseConfig: {
+    siteId: 'wd5350450577zvbtov'
+  },
   // pageURL: 'https://wildfire.js.org/dev-example',
   pageTitle: 'Wildfire Dev Demo',
   // isURLWithHashtag: true, // default: false
@@ -27,10 +27,7 @@ Vue.use(wildfire, {
   theme: 'light',
   // theme: 'dark',
   // locale: 'en',
-  locale: 'zh-CN',
-  plugins: [
-    WfPinnedComment()
-  ]
+  locale: 'zh-CN'
 })
 
 /* eslint-disable no-new */
