@@ -9,15 +9,14 @@ module.exports = {
   env: {
     browser: true,
   },
-  // https://github.com/standard/standard/blob/master/docs/RULES-en.md
-  extends: 'airbnb-base',
+  extends: [
+    'airbnb-base',
+  ],
   // required to lint *.vue files
   plugins: [
     'html'
   ],
-  // add your custom rules here
   'rules': {
-    // don't require .vue extension when importing
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'no-param-reassign': 'off',
