@@ -144,8 +144,7 @@
                 jsList.push(&#96;https://unpkg.com/wildfire@&#36;{version}/dist/&#36;{databaseProvider}/wildfire.min.js&#96;)
 
                 loadJSSequentially(jsList, () => {
-                  // TODO: remove \`.default\` in release, because \`install\` is already accessable in current dev version
-                  window.Vue.use(window.wildfire.default, {
+                  window.Vue.use(window.wildfire, {
                     databaseProvider,
                     databaseConfig,
                     standbyDatabaseConfigs,
@@ -235,9 +234,7 @@
     pageURLMode = 'normal',
     locale = 'en',
     theme = 'light',
-    defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg',
-    // TODO: handle plugins
-    plugins = [],
+    defaultAvatarURL,
   } = window.wildfireConfig()
 
   let wildfireThreadDom = document.getElementsByClassName('wildfire_thread')[0]

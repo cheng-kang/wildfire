@@ -19,12 +19,13 @@
   </div>
 </template>
 <script>
-  import Drop from 'iview/src/components/select/dropdown.vue'
-  import clickoutside from 'iview/src/directives/clickoutside'
-  import TransferDom from 'iview/src/directives/transfer-dom'
-  import { oneOf, findComponentUpward } from 'iview/src/utils/assist'
+  /* eslint consistent-return: 0 */
+  import Drop from 'iview/src/components/select/dropdown.vue';
+  import clickoutside from 'iview/src/directives/clickoutside';
+  import TransferDom from 'iview/src/directives/transfer-dom';
+  import { oneOf, findComponentUpward } from 'iview/src/utils/assist';
 
-  const prefixCls = 'ivu-dropdown'
+  const prefixCls = 'ivu-dropdown';
 
   export default {
     name: 'Dropdown',
@@ -32,137 +33,137 @@
     components: { Drop },
     props: {
       trigger: {
-        validator (value) {
-          return oneOf(value, ['click', 'hover', 'custom'])
+        validator(value) {
+          return oneOf(value, ['click', 'hover', 'custom']);
         },
-        default: 'hover'
+        default: 'hover',
       },
       placement: {
-        validator (value) {
-          return oneOf(value, ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'])
+        validator(value) {
+          return oneOf(value, ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end']);
         },
-        default: 'bottom'
+        default: 'bottom',
       },
       visible: {
         type: Boolean,
-        default: false
+        default: false,
       },
       transfer: {
         type: Boolean,
-        default: false
+        default: false,
       },
       theme: {
         type: String,
-        default: 'light'
-      }
+        default: 'light',
+      },
     },
     computed: {
-      transition () {
-        return ['bottom-start', 'bottom', 'bottom-end'].indexOf(this.placement) > -1 ? 'slide-up' : 'fade'
+      transition() {
+        return ['bottom-start', 'bottom', 'bottom-end'].indexOf(this.placement) > -1 ? 'slide-up' : 'fade';
       },
-      dropdownCls () {
-        return this.transfer ? [prefixCls + '-transfer'] : []
+      dropdownCls() {
+        return this.transfer ? [`${prefixCls}-transfer`] : [];
       },
-      transferDomClasses () {
+      transferDomClasses() {
         return [
           'wf',
-          `wf-theme-${this.theme}`
-        ]
-      }
+          `wf-theme-${this.theme}`,
+        ];
+      },
     },
-    data () {
+    data() {
       return {
-        prefixCls: prefixCls,
-        currentVisible: this.visible
-      }
+        prefixCls,
+        currentVisible: this.visible,
+      };
     },
     watch: {
-      visible (val) {
-        this.currentVisible = val
+      visible(val) {
+        this.currentVisible = val;
       },
-      currentVisible (val) {
+      currentVisible(val) {
         if (val) {
-          this.$refs.drop.update()
+          this.$refs.drop.update();
         } else {
-          this.$refs.drop.destroy()
+          this.$refs.drop.destroy();
         }
-        this.$emit('on-visible-change', val)
-      }
+        this.$emit('on-visible-change', val);
+      },
     },
     methods: {
-      handleClick () {
-        if (this.trigger === 'custom') return false
+      handleClick() {
+        if (this.trigger === 'custom') return false;
         if (this.trigger !== 'click') {
-          return false
+          return false;
         }
-        this.currentVisible = !this.currentVisible
+        this.currentVisible = !this.currentVisible;
       },
-      handleMouseenter () {
-        if (this.trigger === 'custom') return false
+      handleMouseenter() {
+        if (this.trigger === 'custom') return false;
         if (this.trigger !== 'hover') {
-          return false
+          return false;
         }
-        if (this.timeout) clearTimeout(this.timeout)
+        if (this.timeout) clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
-          this.currentVisible = true
-        }, 250)
+          this.currentVisible = true;
+        }, 250);
       },
-      handleMouseleave () {
-        if (this.trigger === 'custom') return false
+      handleMouseleave() {
+        if (this.trigger === 'custom') return false;
         if (this.trigger !== 'hover') {
-          return false
+          return false;
         }
         if (this.timeout) {
-          clearTimeout(this.timeout)
+          clearTimeout(this.timeout);
           this.timeout = setTimeout(() => {
-            this.currentVisible = false
-          }, 150)
+            this.currentVisible = false;
+          }, 150);
         }
       },
-      handleClose () {
-        if (this.trigger === 'custom') return false
+      handleClose() {
+        if (this.trigger === 'custom') return false;
         if (this.trigger !== 'click') {
-          return false
+          return false;
         }
-        this.currentVisible = false
+        this.currentVisible = false;
       },
-      hasParent () {
-        const $parent = findComponentUpward(this, 'Dropdown')
+      hasParent() {
+        const $parent = findComponentUpward(this, 'Dropdown');
         if ($parent) {
-          return $parent
-        } else {
-          return false
+          return $parent;
         }
-      }
+        return false;
+  
+      },
     },
-    mounted () {
+    mounted() {
       this.$on('on-click', (key) => {
-        const $parent = this.hasParent()
-        if ($parent) $parent.$emit('on-click', key)
-      })
+        const $parent = this.hasParent();
+        if ($parent) $parent.$emit('on-click', key);
+      });
       this.$on('on-hover-click', () => {
-        const $parent = this.hasParent()
+        const $parent = this.hasParent();
         if ($parent) {
           this.$nextTick(() => {
-            if (this.trigger === 'custom') return false
-            this.currentVisible = false
-          })
-          $parent.$emit('on-hover-click')
+            if (this.trigger === 'custom') return false;
+            this.currentVisible = false;
+          });
+          $parent.$emit('on-hover-click');
         } else {
           this.$nextTick(() => {
-            if (this.trigger === 'custom') return false
-            this.currentVisible = false
-          })
+            if (this.trigger === 'custom') return false;
+            this.currentVisible = false;
+          });
         }
-      })
+      });
       this.$on('on-haschild-click', () => {
         this.$nextTick(() => {
-          if (this.trigger === 'custom') return false
-          this.currentVisible = true
-        })
-        const $parent = this.hasParent()
-        if ($parent) $parent.$emit('on-haschild-click')
-      })
-    }
-  }
+          if (this.trigger === 'custom') return false;
+          this.currentVisible = true;
+        });
+        const $parent = this.hasParent();
+        if ($parent) $parent.$emit('on-haschild-click');
+      });
+    },
+  };
 </script>

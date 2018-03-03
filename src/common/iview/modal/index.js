@@ -1,68 +1,69 @@
-import Modal from './confirm'
+import Modal from './confirm';
 
-let modalInstance
+let modalInstance;
 
-function getModalInstance (render = undefined) {
+function getModalInstance(render = undefined) {
   modalInstance = modalInstance || Modal.newInstance({
     closable: false,
     maskClosable: false,
     footerHide: true,
-    render: render
-  })
+    render,
+  });
 
-  return modalInstance
+  return modalInstance;
 }
 
-function confirm (options) {
-  const render = ('render' in options) ? options.render : undefined
-  let instance = getModalInstance(render)
+function confirm(options) {
+  const render = ('render' in options) ? options.render : undefined;
+  const instance = getModalInstance(render);
 
-  options.onRemove = function () {
-    modalInstance = null
-  }
+  options.onRemove = () => {
+    modalInstance = null;
+  };
 
-  instance.show(options)
+  instance.show(options);
 }
 
-Modal.info = function (props = {}) {
-  props.icon = 'info'
-  props.showCancel = false
-  return confirm(props)
-}
+Modal.info = (props = {}) => {
+  props.icon = 'info';
+  props.showCancel = false;
+  return confirm(props);
+};
 
-Modal.success = function (props = {}) {
-  props.icon = 'success'
-  props.showCancel = false
-  return confirm(props)
-}
+Modal.success = (props = {}) => {
+  props.icon = 'success';
+  props.showCancel = false;
+  return confirm(props);
+};
 
-Modal.warning = function (props = {}) {
-  props.icon = 'warning'
-  props.showCancel = false
-  return confirm(props)
-}
+Modal.warning = (props = {}) => {
+  props.icon = 'warning';
+  props.showCancel = false;
+  return confirm(props);
+};
 
-Modal.error = function (props = {}) {
-  props.icon = 'error'
-  props.showCancel = false
-  return confirm(props)
-}
+Modal.error = (props = {}) => {
+  props.icon = 'error';
+  props.showCancel = false;
+  return confirm(props);
+};
 
-Modal.confirm = function (props = {}) {
-  props.icon = 'confirm'
-  props.showCancel = true
-  return confirm(props)
-}
+Modal.confirm = (props = {}) => {
+  props.icon = 'confirm';
+  props.showCancel = true;
+  return confirm(props);
+};
 
-Modal.remove = function () {
+/* eslint-disable-next-line consistent-return */
+Modal.remove = () => {
   // at loading status, remove after Cancel
   if (!modalInstance) {
-    return false
+    return false;
   }
 
-  const instance = getModalInstance()
+  const instance = getModalInstance();
 
-  instance.remove()
-}
+  instance.remove();
+};
 
-export default Modal
+export default Modal;

@@ -1,45 +1,45 @@
-export const langEn = {
+export default {
   common: {
     add_wildfire_to_your_site: 'Add Wildfire to your site',
     anonymous_user: 'Anonymous',
     btn: {
       cancel: 'Cancel',
-      confirm: 'Confirm'
+      confirm: 'Confirm',
     },
     reset_when_wilddog_too_many_connections: 'Switching to a standby database, too many connections to the current database. Note: omments data are not shared between main & standby databases.',
     tip_prefix: '*Tips: ',
     unknown_ip: 'Unknown IP address',
     unknown_user: 'Unknown User',
     wilddog_too_many_connections: 'The current database had too many connections, please contact the site admin.',
-    wildfire_reset_not_found: 'Global wildfire reset method not found.'
+    wildfire_reset_not_found: 'Global wildfire reset method not found.',
   },
   AdminHelpers: {
     btn: {
       reset: 'Reset',
-      resetting: 'Resetting...'
+      resetting: 'Resetting...',
     },
     confirm: {
-      resetting_discussion_count_for_all_pages: 'Are you sure to reset discussion count for all pages?'
+      resetting_discussion_count_for_all_pages: 'Are you sure to reset discussion count for all pages?',
     },
     error: {
-      resetting_discussion_count_for_all_pages: 'Something went wrong. Please try again later.'
+      resetting_discussion_count_for_all_pages: 'Something went wrong. Please try again later.',
     },
     success: {
-      resetting_discussion_count_for_all_pages: 'Successfully reset discussion count for all pages!'
+      resetting_discussion_count_for_all_pages: 'Successfully reset discussion count for all pages!',
     },
     tab: {
-      helpers: 'Helpers'
+      helpers: 'Helpers',
     },
     text: {
       desc_resetting_discussion_count_for_all_pages: 'If the discusstion count for your webpage went wrong, you can reset discussion count for all pages with this helper function.',
-      resetting_discussion_count_for_all_pages: 'Reset Discussion Count for All Pages'
-    }
+      resetting_discussion_count_for_all_pages: 'Reset Discussion Count for All Pages',
+    },
   },
   AuthForm: {
     btn: {
       cancel: 'Cancel',
       sign_in: 'Sign In',
-      sign_up: 'Sign Up'
+      sign_up: 'Sign Up',
     },
     error: {
       email_already_in_use: 'Email already used, try another one or sign in.',
@@ -54,32 +54,32 @@ export const langEn = {
       weak_password: 'Please enter a stronger password.',
       signing_in: 'Sign in failed, please try again!',
       signing_up: 'Sign up failed, please try again!',
-      unknown: 'Oops! Something went wrong!'
+      unknown: 'Oops! Something went wrong!',
     },
     label: {
       confirm_pwd: 'Confirm',
       email: 'Email',
-      password: 'Password'
+      password: 'Password',
     },
     placeholder: {
       confirm_pwd: 're-enter your password',
       email: 'your email address',
-      password: 'at least 6 digits'
+      password: 'at least 6 digits',
     },
     success: {
       signing_in: 'Signed in!',
-      signing_up: 'Successfully signed up!'
-    }
+      signing_up: 'Successfully signed up!',
+    },
   },
   Body: {
     placeholder: {
-      mention_autocomplete: 'who do you want to mention?'
+      mention_autocomplete: 'who do you want to mention?',
     },
     text: {
       loading_comments: 'Loading comments',
       loading_comments_failed: 'Failed to load comments.',
-      post_the_first_comment: 'Post the first comment!'
-    }
+      post_the_first_comment: 'Post the first comment!',
+    },
   },
   CommentCard: {
     btn: {
@@ -94,10 +94,10 @@ export const langEn = {
       show_more_discussion_plural: 'Show {{count}} more discussions',
       show_less_content: 'Show less content',
       show_less_discussion: 'Fold {{count}} discussion',
-      show_less_discussion_plural: 'Fold {{count}} discussions'
+      show_less_discussion_plural: 'Fold {{count}} discussions',
     },
     confirm: {
-      deleting_comment: 'Are you sure to delete this comment?'
+      deleting_comment: 'Are you sure to delete this comment?',
     },
     error: {
       banning_user: 'Failed to ban this user.',
@@ -106,32 +106,32 @@ export const langEn = {
       repeated_reporting: 'You had already reported this comment!',
       reporting_comment: 'Something went wrong, please try again later.',
       banned_title: 'Banned',
-      banned_content: 'You are currently banned from this action!'
+      banned_content: 'You are currently banned from this action!',
     },
     html_title: {
       dislike_comment: 'Dislike this comment.',
       like_comment: 'Like this comment!',
-      image_onerror: 'Failed to load image.'
+      image_onerror: 'Failed to load image.',
     },
     success: {
       banning_user: 'User banned.',
       deleting_comment: 'Deleted.',
-      reporting_comment: 'Comment reported.'
+      reporting_comment: 'Comment reported.',
     },
     text: {
       deleted_comment: 'This Comment has been deleted.',
-      loading_comments_content: 'Loading comment content...'
-    }
+      loading_comments_content: 'Loading comment content...',
+    },
   },
   Header: {
     btn: {
       cancel: 'Cancel',
       comment: 'Comment',
-      comments: 'Comments',
+      comment_plural: 'Comments',
       confirm: 'Confirm',
       sign_in: 'Sign In',
       sign_out: 'Sign Out',
-      sign_up: 'Sign Up'
+      sign_up: 'Sign Up',
     },
     menu: {
       actions: 'Actions',
@@ -146,24 +146,24 @@ export const langEn = {
       report_management: 'Reports',
       sign_in: 'Sign In',
       sign_out: 'Sign Out',
-      sign_up: 'Sign Up'
+      sign_up: 'Sign Up',
     },
     text: {
       loading: 'Loading',
       sign_in_warning_title: 'Please Sign In',
       sign_in_warning_content: 'You need to Sign in first before modifying your profile.',
       sign_out_confirm_title: 'Sign Out',
-      sign_out_confirm_content: 'Are you sure to sign out Wildfire?'
-    }
+      sign_out_confirm_content: 'Are you sure to sign out Wildfire?',
+    },
   },
   PersonalCenter: {
     btn: {
       delete: 'Delete',
       read: 'Read',
-      unread: 'Unread'
+      unread: 'Unread',
     },
     tab: {
-      notification: 'Notification'
+      notification: 'Notification',
     },
     text: {
       details: 'Details',
@@ -178,8 +178,8 @@ export const langEn = {
       'new_mention+': '<a title="{{email}}">{{displayName}}</a> mentioned you in <a title="{{content}}">comment</a>.',
       notif_doesnt_exist: 'Notification doesn\'t exist.',
       related_content_no_longer_exists: 'Related content no longer exists.',
-      tips: 'view more information by hovering your mouse on the highlighted text; open related webpage by clicking Details button.'
-    }
+      tips: 'view more information by hovering your mouse on the highlighted text; open related webpage by clicking Details button.',
+    },
   },
   ReplyArea: {
     btn: {
@@ -187,28 +187,28 @@ export const langEn = {
       clear: 'Clear',
       post: 'Post',
       posting: 'Posting',
-      confirm: 'Confirm'
+      confirm: 'Confirm',
     },
     error: {
       posting_comment: 'Failed to post comment.',
       banned_title: 'Banned',
-      banned_content: 'You are currently banned from making comments'
+      banned_content: 'You are currently banned from making comments',
     },
     placeholder: {
       join_conversation: 'Join the discusstion...',
       join_conversation_anonymously: 'Join the discusstion as Anonymous User',
       reply_to_user_comment: 'reply to {{username}}\'s comment',
-      user_is_banned: 'You are currently banned by the site owner.'
+      user_is_banned: 'You are currently banned by the site owner.',
     },
     success: {
-      posting_comment: 'Comment posted!'
+      posting_comment: 'Comment posted!',
     },
     text: {
       initializing_mention_autocomplete: 'Initializing Mention (@) auto-complete...',
       initialized_mention_autocomplete: 'Mention (@) auto-complete is on',
       mention_func_not_authorized: 'Sign in to enable Mention (@)',
-      mention_func_not_authorized_banned_user: 'You are currently banned.'
-    }
+      mention_func_not_authorized_banned_user: 'You are currently banned.',
+    },
   },
   ReportManagement: {
     btn: {
@@ -217,14 +217,14 @@ export const langEn = {
       delete: 'Delete',
       ignore: 'Ignore',
       more: 'More',
-      unban: 'Unban'
+      unban: 'Unban',
     },
     confirm: {
       banning_user: 'Sure to ban this user?',
       banning_user_anonymous: 'This is an anonymous user, ban the IP?',
       deleting_comment: 'Sure to delete this reported comment?',
       ignoring_report: 'Sure to ignore this report?',
-      unbanning_user: 'Sure to unban this user?'
+      unbanning_user: 'Sure to unban this user?',
     },
     error: {
       deleting_comment: 'Failed to delete comment.',
@@ -232,37 +232,37 @@ export const langEn = {
       banning_user: 'Failed to ban.',
       banning_user_invalid_ip: 'Invalid IP address, cannot be banned!',
       banning_user_repeated: 'Banned already.',
-      unknown: 'Unknown error!'
+      unknown: 'Unknown error!',
     },
     success: {
       deleting_comment: 'Comment Deleted.',
       deleting_related_replies: 'Related replies deleted.',
       banning_user: 'Banned.',
-      unbanning_user: 'Unbanned.'
+      unbanning_user: 'Unbanned.',
     },
     tab: {
       ban_list: 'Ban List',
-      reported_comments: 'Reported Comments'
+      reported_comments: 'Reported Comments',
     },
     table: {
       action: 'Action',
       comments: 'Comments',
       users: 'Users',
-      action_time: 'Time'
+      action_time: 'Time',
     },
     text: {
       empty_reported_comment: 'No reported comment',
       empty_banned_user: 'No banned user',
       reported_by_n_users: 'Reported by {{count}} user(s)',
       deleting_with_n_replies: '{{count}} replies to this comment will also be deleted. ',
-      reason: 'Reason: '
+      reason: 'Reason: ',
 
-    }
+    },
   },
   UserSetting: {
     btn: {
       cancel: 'Cancel',
-      update: 'Update'
+      update: 'Update',
     },
     error: {
       empty_confirm_pwd: 'Please enter your new password again.',
@@ -273,29 +273,29 @@ export const langEn = {
       password_min_length: 'Password should be at least 6 digits.',
       passwords_dont_match: 'The two passwords don\'t match.',
       invalid_form: 'Invalid form. Please check and retry.',
-      unknown: 'Oops! Something went wrong!'
+      unknown: 'Oops! Something went wrong!',
     },
     label: {
       confirm_pwd: 'Confirm',
       display_name: 'Nickname',
       new_pwd: 'New Password',
       old_pwd: 'Old Password',
-      photo_url: 'Avatar URL'
+      photo_url: 'Avatar URL',
     },
     placeholder: {
       confirm_pwd: 'confirm your new password',
       display_name: 'choose a nickname',
       new_pwd: 'new Password',
       old_pwd: 'old Password',
-      photo_url: 'enter the URL for your avatar image'
+      photo_url: 'enter the URL for your avatar image',
     },
     success: {
       changing_password: 'Password changed.',
-      updating_profile: 'Updated'
+      updating_profile: 'Updated',
     },
     tab: {
       account: 'Account',
-      profile: 'Profile'
-    }
-  }
-}
+      profile: 'Profile',
+    },
+  },
+};

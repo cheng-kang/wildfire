@@ -1,3 +1,3 @@
-import Poptip from './poptip.vue'
+import Poptip from './poptip.vue';
 
-export default Poptip
+export default Poptip;

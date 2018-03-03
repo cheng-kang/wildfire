@@ -11,11 +11,12 @@
 </template>
 
 <script>
-import Bus from '../common/bus'
+import Bus from '../common/bus';
+
 export default {
   name: 'wf-footer',
   computed: {
-    i18next: () => Bus.i18next
-  }
-}
+    i18next: () => Bus.i18next,
+  },
+};
 </script>

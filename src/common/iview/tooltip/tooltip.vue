@@ -24,11 +24,11 @@
   </div>
 </template>
 <script>
-  import Popper from 'iview/src/components/base/popper'
-  import TransferDom from 'iview/src/directives/transfer-dom'
-  import { oneOf } from 'iview/src/utils/assist'
+  import Popper from 'iview/src/components/base/popper';
+  import TransferDom from 'iview/src/directives/transfer-dom';
+  import { oneOf } from 'iview/src/utils/assist';
 
-  const prefixCls = 'ivu-tooltip'
+  const prefixCls = 'ivu-tooltip';
 
   export default {
     name: 'Tooltip',
@@ -36,70 +36,70 @@
     mixins: [Popper],
     props: {
       placement: {
-        validator (value) {
-          return oneOf(value, ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'])
+        validator(value) {
+          return oneOf(value, ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end']);
         },
-        default: 'bottom'
+        default: 'bottom',
       },
       content: {
         type: [String, Number],
-        default: ''
+        default: '',
       },
       delay: {
         type: Number,
-        default: 100
+        default: 100,
       },
       disabled: {
         type: Boolean,
-        default: false
+        default: false,
       },
-      controlled: {    // under this prop,Tooltip will not close when mouseleave
+      controlled: { // under this prop,Tooltip will not close when mouseleave
         type: Boolean,
-        default: false
+        default: false,
       },
       always: {
         type: Boolean,
-        default: false
+        default: false,
       },
       transfer: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
-    data () {
+    data() {
       return {
-        prefixCls: prefixCls
-      }
+        prefixCls,
+      };
     },
     computed: {
-      transferDomClasses () {
+      transferDomClasses() {
         return [
-          'wf'
-        ]
-      }
+          'wf',
+        ];
+      },
     },
     methods: {
-      handleShowPopper () {
-        if (this.timeout) clearTimeout(this.timeout)
+      handleShowPopper() {
+        if (this.timeout) clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
-          this.visible = true
-        }, this.delay)
+          this.visible = true;
+        }, this.delay);
       },
-      handleClosePopper () {
+      handleClosePopper() {
         if (this.timeout) {
-          clearTimeout(this.timeout)
+          clearTimeout(this.timeout);
           if (!this.controlled) {
             this.timeout = setTimeout(() => {
-              this.visible = false
-            }, 100)
+              this.visible = false;
+            }, 100);
           }
         }
+      },
+    },
+    mounted() {
+      if (this.always) {
+        this.updatePopper();
       }
     },
-    mounted () {
-      if (this.always) {
-        this.updatePopper()
-      }
-    }
-  }
+  };
 </script>

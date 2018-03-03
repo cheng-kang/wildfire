@@ -1,13 +1,11 @@
+/* eslint import/first: 0 */
 /*
  * Copied from iview/src/index.js
- * For load iView components on demand
+ * For loading iView components on demand
  */
 
-import 'core-js/fn/array/find'
-import 'core-js/fn/array/find-index'
-
-import locale from 'iview/src/locale'
-import '../assets/iview.css'
+import locale from 'iview/src/locale';
+import '../assets/iview.css';
 
 /*
  * Select the components blow you want to use globally in Vue
@@ -23,28 +21,28 @@ import '../assets/iview.css'
  *    }
  */
 
-import AutoComplete from 'iview/src/components/auto-complete'
-import Button from 'iview/src/components/button'
-import Card from 'iview/src/components/card'
-import Collapse from './iview/collapse'
-import Dropdown from './iview/dropdown'
-import Form from 'iview/src/components/form'
-import Icon from 'iview/src/components/icon'
-import Input from 'iview/src/components/input'
-import Menu from 'iview/src/components/menu'
-import Message from './iview/message'
-import Modal from './iview/modal'
-import Page from 'iview/src/components/page'
-import Poptip from './iview/poptip'
-import { Row, Col } from 'iview/src/components/grid'
-import Spin from 'iview/src/components/spin'
-import iSwitch from './iview/switch'
+import AutoComplete from 'iview/src/components/auto-complete';
+import Button from 'iview/src/components/button';
+import Card from 'iview/src/components/card';
+import Collapse from './iview/collapse';
+import Dropdown from './iview/dropdown';
+import Form from 'iview/src/components/form';
+import Icon from 'iview/src/components/icon';
+import Input from 'iview/src/components/input';
+import Menu from 'iview/src/components/menu';
+import Message from './iview/message';
+import Modal from './iview/modal';
+import Page from 'iview/src/components/page';
+import Poptip from './iview/poptip';
+import { Row, Col } from 'iview/src/components/grid';
+import Spin from 'iview/src/components/spin';
+import iSwitch from './iview/switch';
 import {
   Select,
-  Option
-} from 'iview/src/components/select'
-import Tooltip from './iview//tooltip'
-import Tabs from './iview/tabs'
+  Option,
+} from 'iview/src/components/select';
+import Tooltip from './iview//tooltip';
+import Tabs from './iview/tabs';
 
 const iview = {
   AutoComplete,
@@ -96,38 +94,38 @@ const iview = {
   TabPane: Tabs.Pane,
   iTabPane: Tabs.Pane,
   Tooltip,
-  iTooltip: Tooltip
-}
+  iTooltip: Tooltip,
+};
 
 const _iview = {
   Modal,
   iModal: Modal,
   Poptip,
   iPoptip: Poptip,
-  Tabs: Tabs,
-  iTabs: Tabs
-}
+  Tabs,
+  iTabs: Tabs,
+};
 
-const install = function (Vue, opts = {}) {
-  locale.use(opts.locale)
-  locale.i18n(opts.i18n)
+const install = (Vue, opts = {}) => {
+  locale.use(opts.locale);
+  locale.i18n(opts.i18n);
 
   Object.keys(iview).forEach((key) => {
-    if (Vue.options.components[key]) { return }
-    Vue.component(key, iview[key])
-  })
+    if (Vue.options.components[key]) { return; }
+    Vue.component(key, iview[key]);
+  });
 
   // Customized iView components
   Object.keys(_iview).forEach((key) => {
-    Vue.component(key, _iview[key])
-  })
+    Vue.component(key, _iview[key]);
+  });
 
-  Vue.prototype.$Message = Message
-  Vue.prototype.$Modal = Modal
-}
+  Vue.prototype.$Message = Message;
+  Vue.prototype.$Modal = Modal;
+};
 
 if (typeof window !== 'undefined' && window.Vue) {
-  install(window.Vue)
+  install(window.Vue);
 }
 
-export default Object.assign(iview, _iview, {install})
+export default Object.assign(iview, _iview, { install });

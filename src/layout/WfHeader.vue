@@ -14,7 +14,7 @@
           {{i18next.t('Header.text.loading')}}
         </span>
         <span v-else>
-          {{discussionCount}} {{i18next.t(discussionCount < 2 ? 'Header.btn.comment' : 'Header.btn.comments')}}
+          {{discussionCount}} {{i18next.t('Header.btn.comment', { count: discussionCount })}}
         </span>
       </i-menu-item>
 
@@ -33,39 +33,24 @@
             <i-menu-item name="user_setting">{{i18next.t('Header.menu.user_setting')}}</i-menu-item>
             <i-menu-item name="notification">{{i18next.t('Header.menu.notification')}}</i-menu-item>
             <i-menu-item name="plugin_center">{{i18next.t('Header.menu.plugin_center')}}</i-menu-item>
-            <template
-              v-if="pluginComponents['menu.personal']">
-              <component
-                v-for="(module, cpntName) in pluginComponents['menu.personal']"
-                :is="cpntName"
-                :key="cpntName"
-                :t="pluginTranslate(module)">
-              </component>
-            </template>
+            <component v-for="(cpntName, idx) in pluginComponents['menu.personal']"
+              :is="cpntName"
+              :key="idx"
+              :bus="bus"/>
           </i-menu-group>
           <i-menu-group :title="i18next.t('Header.menu.admin_center')" v-if="user && user.isAdmin">
             <i-menu-item name="report_management">{{i18next.t('Header.menu.report_management')}}</i-menu-item>
             <i-menu-item name="admin_helpers">{{i18next.t('Header.menu.admin_helpers')}}</i-menu-item>
-            <template
-              v-if="pluginComponents['menu.admin']">
-              <component
-                v-for="(module, cpntName) in pluginComponents['menu.admin']"
-                :is="cpntName"
-                :key="cpntName"
-                :t="pluginTranslate(module)">
-              </component>
-            </template>
+            <component v-for="(cpntName, idx) in pluginComponents['menu.admin']"
+              :is="cpntName"
+              :key="idx"
+              :bus="bus"/>
           </i-menu-group>
           <i-menu-group :title="i18next.t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
-            <template
-              v-if="pluginComponents['menu.plugin']">
-              <component
-                v-for="(module, cpntName) in pluginComponents['menu.plugin']"
-                :is="cpntName"
-                :key="cpntName"
-                :t="pluginTranslate(module)">
-              </component>
-            </template>
+            <component v-for="(cpntName, idx) in pluginComponents['menu.plugin']"
+              :is="cpntName"
+              :key="idx"
+              :bus="bus"/>
           </i-menu-group>
         </template>
         <template v-if="isSmallScreen">
@@ -140,14 +125,15 @@
 </template>
 
 <script>
-import Bus from '../common/bus'
-import { beforeEvent, afterEvent } from '../common/utils'
+import Bus from '../common/bus';
+import { beforeEvent, afterEvent } from '../common/utils';
+
 export default {
   name: 'wf-header',
   props: [
-    'commentsLoadingState'
+    'commentsLoadingState',
   ],
-  data () {
+  data() {
     return {
       authFormInitTab: 'sign_in', // 'sign_in' || 'sign_up'
       authFormModal: false,
@@ -157,8 +143,8 @@ export default {
       adminHelpersModal: false,
       pluginCenterModal: false,
       isAdmin: false,
-      menuActiveName: 'comments_count'
-    }
+      menuActiveName: 'comments_count',
+    };
   },
   computed: {
     bus: () => Bus,
@@ -168,36 +154,36 @@ export default {
     db: () => Bus.db,
     i18next: () => Bus.i18next,
     user: () => Bus.user,
-    username () {
+    username() {
       return this.user
-      ? this.user.displayName
-      : this.i18next.t('common.anonymous_user')
+        ? this.user.displayName
+        : this.i18next.t('common.anonymous_user');
     },
     discussionCount: () => Bus.$data.discussionCount,
     windowWidth: () => Bus.$data.windowWidth,
-    isSmallScreen () {
+    isSmallScreen() {
       // <= screen width of iPhone 6 plus
-      return this.windowWidth <= 414
+      return this.windowWidth <= 414;
     },
-    isSmallerScreen () {
+    isSmallerScreen() {
       // screen width not wide enough for username to display
-      return this.windowWidth <= 355
+      return this.windowWidth <= 355;
     },
-    isLargeScreen () {
-      return !this.isSmallScreen && !this.isSmallerScreen
+    isLargeScreen() {
+      return !this.isSmallScreen && !this.isSmallerScreen;
     },
-    shouldShowPluginMenu () {
-      return this.pluginComponents['menu.plugin'] && this.pluginComponents['menu.plugin'].length
-    }
+    shouldShowPluginMenu() {
+      return this.pluginComponents['menu.plugin'] && this.pluginComponents['menu.plugin'].length;
+    },
   },
   methods: {
-    shortenedUsername (username) {
+    shortenedUsername(username) {
       if (username.length > 10) {
-        return username.slice(0, 10) + '...'
+        return `${username.slice(0, 10)}...`;
       }
-      return username
+      return username;
     },
-    signOut () {
+    signOut() {
       this.$Modal.confirm({
         title: this.i18next.t('Header.text.sign_out_confirm_title'),
         content: `<p> ${this.i18next.t('Header.text.sign_out_confirm_content')} </p>`,
@@ -205,82 +191,83 @@ export default {
         cancelText: this.i18next.t('Header.btn.cancel'),
         onOk: () => {
           // event: beforeSignOut
-          const shouldContinue = beforeEvent('beforeSignOut', {}, this.bus)
-          if (!shouldContinue) return
+          const shouldContinue = beforeEvent('beforeSignOut', {}, this.bus);
+          if (!shouldContinue) return;
           this.auth.signOut().then(() => {
             // event: signedOut
-            afterEvent('signedOut', {}, this.bus)
+            afterEvent('signedOut', {}, this.bus);
           }).catch(error => {
             // event: signedOut
-            afterEvent('signedOut', { error }, this.bus)
-          })
+            afterEvent('signedOut', { error }, this.bus);
+          });
         },
         onCancel: () => {
-          console.log('Canceled Sign Out.')
-        }
-      })
+          this.$Message.error(this.i18next.t('AuthForm.error.signing_out_canceled'));
+        },
+      });
     },
-    showAuthFormModal (which) {
-      this.authFormInitTab = which
-      this.authFormModal = true
+    showAuthFormModal(which) {
+      this.authFormInitTab = which;
+      this.authFormModal = true;
     },
-    showUserSettingModal () {
+    showUserSettingModal() {
       if (this.user) {
-        this.userSettingModal = true
+        this.userSettingModal = true;
       } else {
         this.$Modal.warning({
           title: this.i18next.t('Header.text.sign_in_warning_title'),
           content: this.i18next.t('Header.text.sign_in_warning_content'),
-          okText: this.i18next.t('Header.btn.confirm')
-        })
+          okText: this.i18next.t('Header.btn.confirm'),
+        });
       }
     },
-    menuOnSelect (name) {
+    menuOnSelect(name) {
       switch (name) {
         case 'user_setting': {
-          this.userSettingModal = true
-          break
+          this.userSettingModal = true;
+          break;
         }
         case 'notification': {
-          this.personalCenterModal = true
-          break
+          this.personalCenterModal = true;
+          break;
         }
         case 'report_management': {
-          this.reportMangementModal = true
-          break
+          this.reportMangementModal = true;
+          break;
         }
         case 'admin_helpers': {
-          this.adminHelpersModal = true
-          break
+          this.adminHelpersModal = true;
+          break;
         }
         case 'plugin_center': {
-          this.pluginCenterModal = true
-          break
+          this.pluginCenterModal = true;
+          break;
         }
         case 'sign_out': {
-          this.signOut()
-          break
+          this.signOut();
+          break;
         }
         case 'sign_up': {
-          this.showAuthFormModal(name)
-          break
+          this.showAuthFormModal(name);
+          break;
         }
         case 'sign_in': {
-          this.showAuthFormModal(name)
-          break
+          this.showAuthFormModal(name);
+          break;
         }
-
+        default:
+          break;
       }
       if (name !== 'comments_count') {
-        this.$refs.first_menu_item.handleClick()
+        this.$refs.first_menu_item.handleClick();
       }
-    }
+    },
   },
-  created () {
+  created() {
     this.db.ref(`pageComments/${this.config.pageURL}`).on('value', snapshot => {
-      this.pageComments = snapshot.val() || {}
-      Bus.$data.discussionCount = Object.keys(this.pageComments).length
-    })
-  }
-}
+      this.pageComments = snapshot.val() || {};
+      Bus.$data.discussionCount = Object.keys(this.pageComments).length;
+    });
+  },
+};
 </script>

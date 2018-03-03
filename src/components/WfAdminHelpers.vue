@@ -26,43 +26,48 @@
 </template>
 
 <script>
-import Bus from '../common/bus'
+import Bus from '../common/bus';
+
 export default {
   name: 'wf-admin-helpers',
-  data () {
+  data() {
     return {
       isResettingDiscussionCountForAllPages: false,
-      pagesDiscussionCountToResetCount: 0
-    }
+      pagesDiscussionCountToResetCount: 0,
+    };
   },
   computed: {
     db: () => Bus.db,
-    i18next: () => Bus.i18next
+    i18next: () => Bus.i18next,
   },
   methods: {
-    resetDiscussionCountForAllPages () {
-      this.isResettingDiscussionCountForAllPages = true
-      this.db.ref(`pages`).once('value').then(snap => {
-        const pages = snap.val() || {}
-        this.pagesDiscussionCountToResetCount = Object.keys(pages).length
+    resetDiscussionCountForAllPages() {
+      this.isResettingDiscussionCountForAllPages = true;
+      this.db.ref('pages').once('value').then(snap => {
+        const pages = snap.val() || {};
+        this.pagesDiscussionCountToResetCount = Object.keys(pages).length;
         Object.keys(pages).forEach(pageURL => {
-          const commentIds = Object.keys(pages[pageURL].comments || {})
-          let discussionCount = commentIds.length
-          Promise.all(
-            commentIds.map(commentId => this.db.ref(`commentReplies/${commentId}`).once('value'))
-          ).then(snaps => {
-            discussionCount += snaps.reduce((res, snap) => { return res + Object.keys(snap.val() || {}).length }, 0)
-            this.db.ref(`pages/${pageURL}/discussionCount`).set(discussionCount)
-            if (!--this.pagesDiscussionCountToResetCount) {
-              this.isResettingDiscussionCountForAllPages = false
-              this.$Message.success(this.i18next.t('AdminHelpers.success.resetting_discussion_count_for_all_pages'))
+          const commentIds = Object.keys(pages[pageURL].comments || {});
+          let discussionCount = commentIds.length;
+          Promise.all(commentIds.map(commentId => this.db.ref(`commentReplies/${commentId}`).once('value'))).then(snaps => {
+            discussionCount += (
+              snaps.reduce(
+                (res, snap) => res + Object.keys(snap.val() || {}).length,
+                0,
+              )
+            );
+            this.db.ref(`pages/${pageURL}/discussionCount`).set(discussionCount);
+            this.pagesDiscussionCountToResetCount -= 1;
+            if (!this.pagesDiscussionCountToResetCount) {
+              this.isResettingDiscussionCountForAllPages = false;
+              this.$Message.success(this.i18next.t('AdminHelpers.success.resetting_discussion_count_for_all_pages'));
             }
-          })
-        })
+          });
+        });
       }).catch(() => {
-        this.$Message.error(this.i18next.t('AdminHelpers.error.resetting_discussion_count_for_all_pages'))
-      })
-    }
-  }
-}
+        this.$Message.error(this.i18next.t('AdminHelpers.error.resetting_discussion_count_for_all_pages'));
+      });
+    },
+  },
+};
 </script>

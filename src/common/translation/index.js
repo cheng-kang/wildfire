@@ -1,2 +1,4 @@
-export * from './en'
-export * from './zh-CN'
+import langEn from './en';
+import langZhCN from './zh-CN';
+
+export { langEn, langZhCN };

@@ -1,15 +1,15 @@
-import Vue from 'vue'
-import Modal from './modal.vue'
-import Button from 'iview/src/components/button/button.vue'
-import Locale from 'iview/src/mixins/locale'
+import Vue from 'vue';
+import Button from 'iview/src/components/button/button.vue';
+import Locale from 'iview/src/mixins/locale';
+import Modal from './modal.vue';
 
-const prefixCls = 'ivu-modal-confirm'
+const prefixCls = 'ivu-modal-confirm';
 
 Modal.newInstance = properties => {
-  const _props = properties || {}
+  const _props = properties || {};
 
   const Instance = new Vue({
-    mixins: [ Locale ],
+    mixins: [Locale],
     data: Object.assign({}, _props, {
       visible: false,
       width: 416,
@@ -22,239 +22,241 @@ Modal.newInstance = properties => {
       showCancel: false,
       loading: false,
       buttonLoading: false,
-      scrollable: false
+      scrollable: false,
     }),
-    render (h) {
-      let footerVNodes = []
+    render(h) {
+      const footerVNodes = [];
       if (this.showCancel) {
         footerVNodes.push(h(Button, {
           props: {
             type: 'text',
-            size: 'large'
+            size: 'large',
           },
           on: {
-            click: this.cancel
-          }
-        }, this.localeCancelText))
+            click: this.cancel,
+          },
+        }, this.localeCancelText));
       }
       footerVNodes.push(h(Button, {
         props: {
           type: 'primary',
           size: 'large',
-          loading: this.buttonLoading
+          loading: this.buttonLoading,
         },
         on: {
-          click: this.ok
-        }
-      }, this.localeOkText))
+          click: this.ok,
+        },
+      }, this.localeOkText));
 
       // render content
-      let bodyRender
+      let bodyRender;
       if (this.render) {
         bodyRender = h('div', {
           attrs: {
-            class: `${prefixCls}-body ${prefixCls}-body-render`
-          }
-        }, [this.render(h)])
+            class: `${prefixCls}-body ${prefixCls}-body-render`,
+          },
+        }, [this.render(h)]);
       } else {
         bodyRender = h('div', {
           attrs: {
-            class: `${prefixCls}-body`
-          }
+            class: `${prefixCls}-body`,
+          },
         }, [
           h('div', {
-            class: this.iconTypeCls
+            class: this.iconTypeCls,
           }, [
             h('i', {
-              class: this.iconNameCls
-            })
+              class: this.iconNameCls,
+            }),
           ]),
           h('div', {
             domProps: {
-              innerHTML: this.body
-            }
-          })
-        ])
+              innerHTML: this.body,
+            },
+          }),
+        ]);
       }
 
       return h(Modal, {
         props: Object.assign({}, _props, {
           width: this.width,
-          scrollable: this.scrollable
+          scrollable: this.scrollable,
         }),
         domProps: {
-          value: this.visible
+          value: this.visible,
         },
         on: {
           input: (status) => {
-            this.visible = status
-          }
-        }
+            this.visible = status;
+          },
+        },
       }, [
         h('div', {
           attrs: {
-            class: prefixCls
-          }
+            class: prefixCls,
+          },
         }, [
           h('div', {
             attrs: {
-              class: `${prefixCls}-head`
-            }
+              class: `${prefixCls}-head`,
+            },
           }, [
             h('div', {
               attrs: {
-                class: `${prefixCls}-head-title`
+                class: `${prefixCls}-head-title`,
               },
               domProps: {
-                innerHTML: this.title
-              }
-            })
+                innerHTML: this.title,
+              },
+            }),
           ]),
           bodyRender,
           h('div', {
             attrs: {
-              class: `${prefixCls}-footer`
-            }
-          }, footerVNodes)
-        ])
-      ])
+              class: `${prefixCls}-footer`,
+            },
+          }, footerVNodes),
+        ]),
+      ]);
     },
     computed: {
-      iconTypeCls () {
+      iconTypeCls() {
         return [
           `${prefixCls}-body-icon`,
-          `${prefixCls}-body-icon-${this.iconType}`
-        ]
+          `${prefixCls}-body-icon-${this.iconType}`,
+        ];
       },
-      iconNameCls () {
+      iconNameCls() {
         return [
           'ivu-icon',
-          `ivu-icon-${this.iconName}`
-        ]
+          `ivu-icon-${this.iconName}`,
+        ];
       },
-      localeOkText () {
+      localeOkText() {
         if (this.okText) {
-          return this.okText
-        } else {
-          return this.t('i.modal.okText')
+          return this.okText;
         }
+        return this.t('i.modal.okText');
+
       },
-      localeCancelText () {
+      localeCancelText() {
         if (this.cancelText) {
-          return this.cancelText
-        } else {
-          return this.t('i.modal.cancelText')
+          return this.cancelText;
         }
-      }
+        return this.t('i.modal.cancelText');
+
+      },
     },
     methods: {
-      cancel () {
-        this.$children[0].visible = false
-        this.buttonLoading = false
-        this.onCancel()
-        this.remove()
+      cancel() {
+        this.$children[0].visible = false;
+        this.buttonLoading = false;
+        this.onCancel();
+        this.remove();
       },
-      ok () {
+      ok() {
         if (this.loading) {
-          this.buttonLoading = true
+          this.buttonLoading = true;
         } else {
-          this.$children[0].visible = false
-          this.remove()
+          this.$children[0].visible = false;
+          this.remove();
         }
-        this.onOk()
+        this.onOk();
       },
-      remove () {
+      remove() {
         setTimeout(() => {
-          this.destroy()
-        }, 300)
+          this.destroy();
+        }, 300);
       },
-      destroy () {
-        this.$destroy()
-        document.body.removeChild(this.$el)
-        this.onRemove()
+      destroy() {
+        this.$destroy();
+        document.body.removeChild(this.$el);
+        this.onRemove();
       },
-      onOk () {},
-      onCancel () {},
-      onRemove () {}
-    }
-  })
+      onOk() {},
+      onCancel() {},
+      onRemove() {},
+    },
+  });
 
-  const component = Instance.$mount()
-  document.body.appendChild(component.$el)
-  const modal = Instance.$children[0]
+  const component = Instance.$mount();
+  document.body.appendChild(component.$el);
+  const modal = Instance.$children[0];
 
   return {
-    show (props) {
-      modal.$parent.showCancel = props.showCancel
-      modal.$parent.iconType = props.icon
+    show(props) {
+      modal.$parent.showCancel = props.showCancel;
+      modal.$parent.iconType = props.icon;
 
       switch (props.icon) {
         case 'info':
-          modal.$parent.iconName = 'information-circled'
-          break
+          modal.$parent.iconName = 'information-circled';
+          break;
         case 'success':
-          modal.$parent.iconName = 'checkmark-circled'
-          break
+          modal.$parent.iconName = 'checkmark-circled';
+          break;
         case 'warning':
-          modal.$parent.iconName = 'android-alert'
-          break
+          modal.$parent.iconName = 'android-alert';
+          break;
         case 'error':
-          modal.$parent.iconName = 'close-circled'
-          break
+          modal.$parent.iconName = 'close-circled';
+          break;
         case 'confirm':
-          modal.$parent.iconName = 'help-circled'
-          break
+          modal.$parent.iconName = 'help-circled';
+          break;
+        default:
+          break;
       }
 
       if ('width' in props) {
-        modal.$parent.width = props.width
+        modal.$parent.width = props.width;
       }
 
       if ('title' in props) {
-        modal.$parent.title = props.title
+        modal.$parent.title = props.title;
       }
 
       if ('content' in props) {
-        modal.$parent.body = props.content
+        modal.$parent.body = props.content;
       }
 
       if ('okText' in props) {
-        modal.$parent.okText = props.okText
+        modal.$parent.okText = props.okText;
       }
 
       if ('cancelText' in props) {
-        modal.$parent.cancelText = props.cancelText
+        modal.$parent.cancelText = props.cancelText;
       }
 
       if ('onCancel' in props) {
-        modal.$parent.onCancel = props.onCancel
+        modal.$parent.onCancel = props.onCancel;
       }
 
       if ('onOk' in props) {
-        modal.$parent.onOk = props.onOk
+        modal.$parent.onOk = props.onOk;
       }
 
       // async for ok
       if ('loading' in props) {
-        modal.$parent.loading = props.loading
+        modal.$parent.loading = props.loading;
       }
 
       if ('scrollable' in props) {
-        modal.$parent.scrollable = props.scrollable
+        modal.$parent.scrollable = props.scrollable;
       }
 
       // notice when component destroy
-      modal.$parent.onRemove = props.onRemove
+      modal.$parent.onRemove = props.onRemove;
 
-      modal.visible = true
+      modal.visible = true;
     },
-    remove () {
-      modal.visible = false
-      modal.$parent.buttonLoading = false
-      modal.$parent.remove()
+    remove() {
+      modal.visible = false;
+      modal.$parent.buttonLoading = false;
+      modal.$parent.remove();
     },
-    component: modal
-  }
-}
+    component: modal,
+  };
+};
 
-export default Modal
+export default Modal;
