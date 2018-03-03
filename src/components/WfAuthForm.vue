@@ -128,11 +128,11 @@ export default {
           this.loadingSignIn = true
 
           // event: beforeSignIn
-          const shouldContinue = beforeEvent('beforeSignIn', { email }, this.bus)
-          if (!shouldContinue) {
-            this.loadingSignIn = false
-            return
-          }
+          // const shouldContinue = beforeEvent('beforeSignIn', { email }, this.bus)
+          // if (!shouldContinue) {
+          //   this.loadingSignIn = false
+          //   return
+          // }
 
           this.auth.signInWithEmailAndPassword(email, password)
           .then((user) => {

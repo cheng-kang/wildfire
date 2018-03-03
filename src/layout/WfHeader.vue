@@ -33,24 +33,39 @@
             <i-menu-item name="user_setting">{{i18next.t('Header.menu.user_setting')}}</i-menu-item>
             <i-menu-item name="notification">{{i18next.t('Header.menu.notification')}}</i-menu-item>
             <i-menu-item name="plugin_center">{{i18next.t('Header.menu.plugin_center')}}</i-menu-item>
-            <component v-for="(cpntName, idx) in pluginComponents['menu.personal']"
-              :is="cpntName"
-              :key="idx"
-              :bus="bus"/>
+            <template
+              v-if="pluginComponents['menu.personal']">
+              <component
+                v-for="(module, cpntName) in pluginComponents['menu.personal']"
+                :is="cpntName"
+                :key="cpntName"
+                :t="pluginTranslate(module)">
+              </component>
+            </template>
           </i-menu-group>
           <i-menu-group :title="i18next.t('Header.menu.admin_center')" v-if="user && user.isAdmin">
             <i-menu-item name="report_management">{{i18next.t('Header.menu.report_management')}}</i-menu-item>
             <i-menu-item name="admin_helpers">{{i18next.t('Header.menu.admin_helpers')}}</i-menu-item>
-            <component v-for="(cpntName, idx) in pluginComponents['menu.admin']"
-              :is="cpntName"
-              :key="idx"
-              :bus="bus"/>
+            <template
+              v-if="pluginComponents['menu.admin']">
+              <component
+                v-for="(module, cpntName) in pluginComponents['menu.admin']"
+                :is="cpntName"
+                :key="cpntName"
+                :t="pluginTranslate(module)">
+              </component>
+            </template>
           </i-menu-group>
           <i-menu-group :title="i18next.t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
-            <component v-for="(cpntName, idx) in pluginComponents['menu.plugin']"
-              :is="cpntName"
-              :key="idx"
-              :bus="bus"/>
+            <template
+              v-if="pluginComponents['menu.plugin']">
+              <component
+                v-for="(module, cpntName) in pluginComponents['menu.plugin']"
+                :is="cpntName"
+                :key="cpntName"
+                :t="pluginTranslate(module)">
+              </component>
+            </template>
           </i-menu-group>
         </template>
         <template v-if="isSmallScreen">
