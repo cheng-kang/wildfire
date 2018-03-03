@@ -1,34 +1,35 @@
 // used for Modal & $Spin
-import { getScrollBarSize } from 'iview/src/utils/assist'
+import { getScrollBarSize } from 'iview/src/utils/assist';
+
 export default {
   methods: {
-    checkScrollBar () {
-      let fullWindowWidth = window.innerWidth
+    checkScrollBar() {
+      let fullWindowWidth = window.innerWidth;
       if (!fullWindowWidth) { // workaround for missing window.innerWidth in IE8
-        const documentElementRect = document.documentElement.getBoundingClientRect()
-        fullWindowWidth = documentElementRect.right - Math.abs(documentElementRect.left)
+        const documentElementRect = document.documentElement.getBoundingClientRect();
+        fullWindowWidth = documentElementRect.right - Math.abs(documentElementRect.left);
       }
-      this.bodyIsOverflowing = document.body.clientWidth < fullWindowWidth
+      this.bodyIsOverflowing = document.body.clientWidth < fullWindowWidth;
       if (this.bodyIsOverflowing) {
-        this.scrollBarWidth = getScrollBarSize()
+        this.scrollBarWidth = getScrollBarSize();
       }
     },
-    setScrollBar () {
+    setScrollBar() {
       if (this.bodyIsOverflowing && this.scrollBarWidth !== undefined) {
-        document.body.style.paddingRight = `${this.scrollBarWidth}px`
+        document.body.style.paddingRight = `${this.scrollBarWidth}px`;
       }
     },
-    resetScrollBar () {
-      document.body.style.paddingRight = ''
+    resetScrollBar() {
+      document.body.style.paddingRight = '';
     },
-    addScrollEffect () {
-      this.checkScrollBar()
-      this.setScrollBar()
-      document.body.style.overflow = 'hidden'
+    addScrollEffect() {
+      this.checkScrollBar();
+      this.setScrollBar();
+      document.body.style.overflow = 'hidden';
     },
-    removeScrollEffect () {
-      document.body.style.overflow = ''
-      this.resetScrollBar()
-    }
-  }
-}
+    removeScrollEffect() {
+      document.body.style.overflow = '';
+      this.resetScrollBar();
+    },
+  },
+};

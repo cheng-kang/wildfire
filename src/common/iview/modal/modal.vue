@@ -27,236 +27,236 @@
   </div>
 </template>
 <script>
-  import Icon from 'iview/src/components/icon/icon.vue'
-  import iButton from 'iview/src/components/button/button.vue'
-  import TransferDom from 'iview/src/directives/transfer-dom'
-  import Locale from 'iview/src/mixins/locale'
-  import Emitter from 'iview/src/mixins/emitter'
-  import ScrollbarMixins from './mixins-scrollbar'
+  import Icon from 'iview/src/components/icon/icon.vue';
+  import iButton from 'iview/src/components/button/button.vue';
+  import TransferDom from 'iview/src/directives/transfer-dom';
+  import Locale from 'iview/src/mixins/locale';
+  import Emitter from 'iview/src/mixins/emitter';
+  import ScrollbarMixins from './mixins-scrollbar';
 
-  const prefixCls = 'ivu-modal'
+  const prefixCls = 'ivu-modal';
 
   export default {
     name: 'Modal',
-    mixins: [ Locale, Emitter, ScrollbarMixins ],
+    mixins: [Locale, Emitter, ScrollbarMixins],
     components: { Icon, iButton },
     directives: { TransferDom },
     props: {
       value: {
         type: Boolean,
-        default: false
+        default: false,
       },
       closable: {
         type: Boolean,
-        default: true
+        default: true,
       },
       maskClosable: {
         type: Boolean,
-        default: true
+        default: true,
       },
       title: {
-        type: String
+        type: String,
       },
       width: {
         type: [Number, String],
-        default: 520
+        default: 520,
       },
       okText: {
-        type: String
+        type: String,
       },
       cancelText: {
-        type: String
+        type: String,
       },
       loading: {
         type: Boolean,
-        default: false
+        default: false,
       },
       styles: {
-        type: Object
+        type: Object,
       },
       className: {
-        type: String
+        type: String,
       },
       // for instance
       footerHide: {
         type: Boolean,
-        default: false
+        default: false,
       },
       scrollable: {
         type: Boolean,
-        default: false
+        default: false,
       },
       transitionNames: {
         type: Array,
-        default () {
-          return ['ease', 'fade']
-        }
+        default() {
+          return ['ease', 'fade'];
+        },
       },
       transfer: {
         type: Boolean,
-        default: true
+        default: true,
       },
       theme: {
         type: String,
-        default: 'light'
-      }
+        default: 'light',
+      },
     },
-    data () {
+    data() {
       return {
-        prefixCls: prefixCls,
+        prefixCls,
         wrapShow: false,
         showHead: true,
         buttonLoading: false,
-        visible: this.value
-      }
+        visible: this.value,
+      };
     },
     computed: {
-      transferDomClasses () {
+      transferDomClasses() {
         return [
           'wf',
-          `wf-theme-${this.theme}`
-        ]
+          `wf-theme-${this.theme}`,
+        ];
       },
-      wrapClasses () {
+      wrapClasses() {
         return [
           `${prefixCls}-wrap`,
           {
             [`${prefixCls}-hidden`]: !this.wrapShow,
-            [`${this.className}`]: !!this.className
-          }
-        ]
+            [`${this.className}`]: !!this.className,
+          },
+        ];
       },
-      maskClasses () {
-        return `${prefixCls}-mask`
+      maskClasses() {
+        return `${prefixCls}-mask`;
       },
-      classes () {
-        return `${prefixCls}`
+      classes() {
+        return `${prefixCls}`;
       },
-      mainStyles () {
-        let style = {}
+      mainStyles() {
+        const style = {};
 
-        const width = parseInt(this.width)
+        const width = parseInt(this.width, 10);
         const styleWidth = {
-          width: width <= 100 ? `${width}%` : `${width}px`
-        }
+          width: width <= 100 ? `${width}%` : `${width}px`,
+        };
 
-        const customStyle = this.styles ? this.styles : {}
+        const customStyle = this.styles ? this.styles : {};
 
-        Object.assign(style, styleWidth, customStyle)
+        Object.assign(style, styleWidth, customStyle);
 
-        return style
+        return style;
       },
-      localeOkText () {
+      localeOkText() {
         if (this.okText === undefined) {
-          return this.t('i.modal.okText')
-        } else {
-          return this.okText
+          return this.t('i.modal.okText');
         }
+        return this.okText;
+  
       },
-      localeCancelText () {
+      localeCancelText() {
         if (this.cancelText === undefined) {
-          return this.t('i.modal.cancelText')
-        } else {
-          return this.cancelText
+          return this.t('i.modal.cancelText');
         }
-      }
+        return this.cancelText;
+  
+      },
     },
     methods: {
-      close () {
-        this.visible = false
-        this.$emit('input', false)
-        this.$emit('on-cancel')
+      close() {
+        this.visible = false;
+        this.$emit('input', false);
+        this.$emit('on-cancel');
       },
-      mask () {
+      mask() {
         if (this.maskClosable) {
-          this.close()
+          this.close();
         }
       },
-      handleWrapClick (event) {
+      handleWrapClick(event) {
         // use indexOf,do not use === ,because ivu-modal-wrap can have other custom className
-        const className = event.target.getAttribute('class')
-        if (className && className.indexOf(`${prefixCls}-wrap`) > -1) this.mask()
+        const className = event.target.getAttribute('class');
+        if (className && className.indexOf(`${prefixCls}-wrap`) > -1) this.mask();
       },
-      cancel () {
-        this.close()
+      cancel() {
+        this.close();
       },
-      ok () {
+      ok() {
         if (this.loading) {
-          this.buttonLoading = true
+          this.buttonLoading = true;
         } else {
-          this.visible = false
-          this.$emit('input', false)
+          this.visible = false;
+          this.$emit('input', false);
         }
-        this.$emit('on-ok')
+        this.$emit('on-ok');
       },
-      EscClose (e) {
+      EscClose(e) {
         if (this.visible && this.closable) {
           if (e.keyCode === 27) {
-            this.close()
+            this.close();
           }
         }
       },
-      animationFinish () {
-        this.$emit('on-hidden')
-      }
+      animationFinish() {
+        this.$emit('on-hidden');
+      },
     },
-    mounted () {
+    mounted() {
       if (this.visible) {
-        this.wrapShow = true
+        this.wrapShow = true;
       }
 
-      let showHead = true
+      let showHead = true;
 
       if (this.$slots.header === undefined && !this.title) {
-        showHead = false
+        showHead = false;
       }
 
-      this.showHead = showHead
+      this.showHead = showHead;
 
       // ESC close
-      document.addEventListener('keydown', this.EscClose)
+      document.addEventListener('keydown', this.EscClose);
     },
-    beforeDestroy () {
-      document.removeEventListener('keydown', this.EscClose)
-      this.removeScrollEffect()
+    beforeDestroy() {
+      document.removeEventListener('keydown', this.EscClose);
+      this.removeScrollEffect();
     },
     watch: {
-      value (val) {
-        this.visible = val
+      value(val) {
+        this.visible = val;
       },
-      visible (val) {
+      visible(val) {
         if (val === false) {
-          this.buttonLoading = false
+          this.buttonLoading = false;
           this.timer = setTimeout(() => {
-            this.wrapShow = false
-            this.removeScrollEffect()
-          }, 300)
+            this.wrapShow = false;
+            this.removeScrollEffect();
+          }, 300);
         } else {
-          if (this.timer) clearTimeout(this.timer)
-          this.wrapShow = true
+          if (this.timer) clearTimeout(this.timer);
+          this.wrapShow = true;
           if (!this.scrollable) {
-            this.addScrollEffect()
+            this.addScrollEffect();
           }
         }
-        this.broadcast('Table', 'on-visible-change', val)
+        this.broadcast('Table', 'on-visible-change', val);
       },
-      loading (val) {
+      loading(val) {
         if (!val) {
-          this.buttonLoading = false
+          this.buttonLoading = false;
         }
       },
-      scrollable (val) {
+      scrollable(val) {
         if (!val) {
-          this.addScrollEffect()
+          this.addScrollEffect();
         } else {
-          this.removeScrollEffect()
+          this.removeScrollEffect();
         }
       },
-      title (val) {
+      title(val) {
         if (this.$slots.header === undefined) {
-          this.showHead = !!val
+          this.showHead = !!val;
         }
-      }
-    }
-  }
+      },
+    },
+  };
 </script>

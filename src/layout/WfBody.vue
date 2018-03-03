@@ -17,7 +17,7 @@
           </component>
         </template>
         <wf-comment-card
-          v-for="(comment, idx) in currentPageComments"
+          v-for="comment in currentPageComments"
           :key="comment.commentId"
           :comment="comment"/>
       </ul>
@@ -83,16 +83,17 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Bus from '../common/bus'
+import Vue from 'vue';
+import Bus from '../common/bus';
+
 export default {
   name: 'wf-body',
   props: [
     'comments',
     'commentsLoadingState',
-    'pageCommentsCount'
+    'pageCommentsCount',
   ],
-  data () {
+  data() {
     return {
       numberOfCommentsPerPage: 8,
       currentPage: 1,
@@ -107,11 +108,11 @@ export default {
       /*
         Comment User Modal
        */
-      shouldShowCommentUserModal: false
+      shouldShowCommentUserModal: false,
       /*
         End of: Comment User Modal
        */
-    }
+    };
   },
   computed: {
     bus: () => Bus,
@@ -119,41 +120,54 @@ export default {
     db: () => Bus.db,
     i18next: () => Bus.i18next,
     pluginComponents: () => Bus.pluginComponents,
-    currentPageComments () {
-      const start = (this.currentPage - 1) * this.numberOfCommentsPerPage
-      const end = this.currentPage * this.numberOfCommentsPerPage
-      return this.comments.slice(start, end)
+    currentPageComments() {
+      const start = (this.currentPage - 1) * this.numberOfCommentsPerPage;
+      const end = this.currentPage * this.numberOfCommentsPerPage;
+      return this.comments.slice(start, end);
     },
-    mentioningUserAutoComplete () {
-      if (!this.mentioningUsername) { return [] }
+    mentioningUserAutoComplete() {
+      if (!this.mentioningUsername) { return []; }
       return Bus.$data.users.filter(user => {
-        const usernameLC = user.displayName.toLowerCase()
-        const emailLC = user.email.toLowerCase()
-        const mentioningUsernameLC = this.mentioningUsername.toLowerCase()
-        return usernameLC.indexOf(mentioningUsernameLC) !== -1 || emailLC.indexOf(mentioningUsernameLC) !== -1
-      })
-    }
+        const usernameLC = user.displayName.toLowerCase();
+        const emailLC = user.email.toLowerCase();
+        const mentioningUsernameLC = this.mentioningUsername.toLowerCase();
+        return (
+          usernameLC.indexOf(mentioningUsernameLC) !== -1
+          || emailLC.indexOf(mentioningUsernameLC) !== -1
+        );
+      });
+    },
   },
-  created () {
+  created() {
     /*
       Format users data for Mention auto complete
      */
     this.db.ref('/users').once('value').then(snapshot => {
-      const result = snapshot.val() || {}
+      const result = snapshot.val() || {};
       Bus.$data.users = Object.keys(result).map(id => {
-        const { displayName, photoURL, email, isAdmin } = result[id]
-        if (isAdmin) {
-          Bus.$data.admin = { uid: id, displayName, photoURL, email }
-        }
-        return {
-          uid: id,
+        const {
           displayName,
           photoURL,
-          email
+          email,
+          isAdmin,
+        } = result[id];
+        if (isAdmin) {
+          Bus.$data.admin = {
+            displayName,
+            photoURL,
+            email,
+            uid: id,
+          };
         }
-      })
-      Bus.$data.isLoadingUserData = false
-    })
+        return {
+          displayName,
+          photoURL,
+          email,
+          uid: id,
+        };
+      });
+      Bus.$data.isLoadingUserData = false;
+    });
 
     /*
       `ShowMentionAutoComplete` event observer
@@ -163,12 +177,12 @@ export default {
             `MentionAutoCompleteSelected-${id}` event)
      */
     Bus.listenTo('ShowMentionAutoComplete', id => {
-      Bus.$data.currentReplyAreaId = id
-      this.shouldShowMentionAutoComplete = true
+      Bus.$data.currentReplyAreaId = id;
+      this.shouldShowMentionAutoComplete = true;
       Vue.nextTick(() => {
-        this.$refs.mentionAutoComplete.$refs.input.focus()
-      })
-    })
+        this.$refs.mentionAutoComplete.$refs.input.focus();
+      });
+    });
 
     /*
       `ShowUserInfo` event observer
@@ -179,42 +193,42 @@ export default {
      */
     Bus.listenTo('ShowUserInfo', data => {
       if (typeof data === 'object') {
-        this.$set(Bus.$data, 'selectedCommentUserInfo', data)
+        this.$set(Bus.$data, 'selectedCommentUserInfo', data);
       } else {
         this.db.ref('/users').orderByChild('email').equalTo(data).once('value', snapshot => {
-          const res = snapshot.val()
+          const res = snapshot.val();
           if (res) {
-            const uid = Object.keys(res)[0]
-            const userByEmail = res[uid]
+            const uid = Object.keys(res)[0];
+            const userByEmail = res[uid];
             this.$set(Bus.$data, 'selectedCommentUserInfo', {
-              uid: uid,
+              uid,
               displayName: userByEmail.displayName,
               photoURL: userByEmail.photoURL,
-              email: userByEmail.email
-            })
+              email: userByEmail.email,
+            });
           }
-        })
+        });
       }
-      this.shouldShowCommentUserModal = true
-    })
+      this.shouldShowCommentUserModal = true;
+    });
   },
   methods: {
-    pageChanged (newPage) {
-      this.currentPage = newPage
+    pageChanged(newPage) {
+      this.currentPage = newPage;
     },
-    mentionAutoCompleteOnSelect (value) {
-      this.shouldShowMentionAutoComplete = false
-      this.mentioningUsername = ''
-      let selectedUser = JSON.parse(value)
-      const formattedMentionText = `[@${selectedUser.displayName}](${selectedUser.email}) `
+    mentionAutoCompleteOnSelect(value) {
+      this.shouldShowMentionAutoComplete = false;
+      this.mentioningUsername = '';
+      const selectedUser = JSON.parse(value);
+      const formattedMentionText = `[@${selectedUser.displayName}](${selectedUser.email}) `;
 
       /*
         Broadcast auto complete selection
         Note: a uid suffix is included in the event
               name to specify the reciever.
        */
-      Bus.$emit('MentionAutoCompleteSelected-' + Bus.$data.currentReplyAreaId, formattedMentionText)
-    }
-  }
-}
+      Bus.$emit(`MentionAutoCompleteSelected-${Bus.$data.currentReplyAreaId}`, formattedMentionText);
+    },
+  },
+};
 </script>

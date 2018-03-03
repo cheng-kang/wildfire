@@ -2,58 +2,57 @@
   <li :class="classes" @click="handleClick"><slot></slot></li>
 </template>
 <script>
-  const prefixCls = 'ivu-dropdown-item'
+  const prefixCls = 'ivu-dropdown-item';
 
   export default {
     name: 'DropdownItem',
     props: {
       name: {
-        type: [String, Number]
+        type: [String, Number],
       },
       disabled: {
         type: Boolean,
-        default: false
+        default: false,
       },
       selected: {
         type: Boolean,
-        default: false
+        default: false,
       },
       divided: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
     computed: {
-      classes () {
+      classes() {
         return [
           `${prefixCls}`,
           {
             [`${prefixCls}-disabled`]: this.disabled,
             [`${prefixCls}-selected`]: this.selected,
-            [`${prefixCls}-divided`]: this.divided
-          }
-        ]
-      }
+            [`${prefixCls}-divided`]: this.divided,
+          },
+        ];
+      },
     },
     methods: {
-      handleClick () {
-        const $parent = this.$parent.$parent.$parent
-        const hasChildren = this.$parent && this.$parent.$options.name === 'Dropdown'
+      handleClick() {
+        /* eslint-disable-next-line prefer-destructuring */
+        const $parent = this.$parent.$parent.$parent;
+        const hasChildren = this.$parent && this.$parent.$options.name === 'Dropdown';
 
         if (this.disabled) {
           this.$nextTick(() => {
-            $parent.currentVisible = true
-          })
+            $parent.currentVisible = true;
+          });
         } else if (hasChildren) {
-          this.$parent.$emit('on-haschild-click')
-        } else {
-          if ($parent && $parent.$options.name === 'Dropdown') {
-            $parent.$emit('on-hover-click')
-          }
+          this.$parent.$emit('on-haschild-click');
+        } else if ($parent && $parent.$options.name === 'Dropdown') {
+          $parent.$emit('on-hover-click');
         }
-        this.$emit('on-click')
-        $parent.$emit('on-click', this.name)
-      }
-    }
-  }
+        this.$emit('on-click');
+        $parent.$emit('on-click', this.name);
+      },
+    },
+  };
 </script>

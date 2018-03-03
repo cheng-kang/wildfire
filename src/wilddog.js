@@ -1,44 +1,48 @@
-import VueResource from 'vue-resource'
-import wilddog from 'wilddog'
-import VueWild from 'vuewild'
-import Bus from './common/bus'
-import { initLocalComponents } from './common/loadLocalComponents'
-import iView from './common/loadiView'
-import dateFns from './common/loadDateFns'
-import i18next, { initI18next, resetI18next } from './common/loadI18next'
-import { defaultPageURL, b64EncodeUnicode } from './common/utils'
-import Wildfire from './Wildfire'
-import './assets/style.css'
-import './assets/style.dark.css'
-import './assets/animation.css'
+import VueResource from 'vue-resource';
+import wilddog from 'wilddog';
+import VueWild from 'vuewild';
+import Bus from './common/bus';
+import initLocalComponents from './common/initLocalComponents';
+import iView from './common/loadiView';
+import dateFns from './common/loadDateFns';
+import i18next, { initI18next, resetI18next } from './common/loadI18next';
+import { defaultPageURL, b64EncodeUnicode } from './common/utils';
+import Wildfire from './Wildfire';
+import './assets/style.css';
+import './assets/style.dark.css';
+import './assets/animation.css';
 
 export const install = (_Vue, config) => {
   // Init wildfire components
-  initLocalComponents(_Vue)
+  initLocalComponents(_Vue);
 
-  if (!_Vue.http) { _Vue.use(VueResource) }
+  if (!_Vue.http) { _Vue.use(VueResource); }
 
-  _Vue.use(iView)
+  _Vue.use(iView);
 
-  let {
+  const {
     // databaseProvider = 'wilddog',
     databaseConfig,
     standbyDatabaseConfigs = [],
 
     pageTitle = document.title,
-    pageURL,
     pageURLMode = 'normal',
 
     theme = 'light',
     locale = 'en',
     defaultAvatarURL = 'https://cdn.rawgit.com/cheng-kang/wildfire/088cf3de/resources/wildfire-avatar.svg',
-  } = config
+  } = config;
 
-  if (!pageURL) pageURL = defaultPageURL(pageURLMode)
+  let { pageURL } = config;
 
-  initI18next(locale)
+  /**
+   * ! calk
+   */
+  if (!pageURL) pageURL = defaultPageURL(pageURLMode);
 
-  const { formatDate, distanceInWordsToNow } = dateFns(locale)
+  initI18next(locale);
+
+  const { formatDate, distanceInWordsToNow } = dateFns(locale);
 
   const wf = {
     config: {
@@ -51,70 +55,61 @@ export const install = (_Vue, config) => {
       locale,
       theme,
       defaultAvatarURL,
-      anonymousUserId: 'Anonymous'
+      anonymousUserId: 'Anonymous',
     },
     i18next,
     formatDate,
-    distanceInWordsToNow
-  }
+    distanceInWordsToNow,
+  };
 
-  if (!_Vue.$bindAsObject) { _Vue.use(VueWild) }
+  if (!_Vue.$bindAsObject) { _Vue.use(VueWild); }
   wf.dbApp = wilddog.initializeApp({
     authDomain: `${databaseConfig.siteId}.wilddog.com`,
-    syncURL: `https://${databaseConfig.siteId}.wilddogio.com`
-  }, `wildfire-${databaseConfig.siteId}`)
-  wf.db = wf.dbApp.sync()
-  wf.auth = wf.dbApp.auth()
-  wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
+    syncURL: `https://${databaseConfig.siteId}.wilddogio.com`,
+  }, `wildfire-${databaseConfig.siteId}`);
+  wf.db = wf.dbApp.sync();
+  wf.auth = wf.dbApp.auth();
+  wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential;
 
   // ToFix: 过多使用 assign 导致难以维护 bus
   // 1、只在其他组件中动态添加【需要全局使用的变化状态值】；
   // 2、其他需要全局使用的变量，应当通过utils，或者在bus中内部定义，不应当动态添加
-  Object.assign(Bus, wf)
+  Object.assign(Bus, wf);
 
-  // Install plugins
-  // plugins.forEach(plugin => {
-  //   plugin.install({
-  //     registerComponent: (componentName, component) => _Vue.component(componentName, component),
-  //     i18n: (lang, translation) => addTranslation(lang, translation),
-  //     renderAt: (place, componentName) => Bus.pluginComponents[place] ? Bus.pluginComponents[place].push(componentName) : Object.assign(Bus.pluginComponents, {[place]: [componentName]})
-  //   })
-  //   Object.keys(plugin.on || {}).forEach(eventName => {
-  //     const eventFn = plugin.on[eventName]
-  //     Bus.events[eventName] ? Bus.events[eventName].push(eventFn) : Object.assign(Bus.events, {[eventName]: [eventFn]})
-  //   })
-  //   Object.assign(Bus.pluginOptions, {[plugin.name]: plugin.options})
-  // })
-
-  _Vue.component('wildfire', Wildfire)
-}
+  _Vue.component('wildfire', Wildfire);
+};
 
 export const reset = (_Vue, config = {}, err) => {
   const getDatabaseConfig = () => {
-    const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config
-    if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) return databaseConfig
-    const currentConfigIdx = standbyDatabaseConfigs.findIndex(config => databaseProvider === 'firebase' ? config.projectId === databaseConfig.projectId : config.siteId === databaseConfig.siteId)
-    if (currentConfigIdx === -1 || currentConfigIdx === standbyDatabaseConfigs.length - 1) return standbyDatabaseConfigs[0]
-    return standbyDatabaseConfigs[currentConfigIdx + 1]
-  }
-  let {
+    const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config;
+    if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) {
+      return databaseConfig;
+    }
+    const currentConfigIdx = standbyDatabaseConfigs.findIndex(aConfig => (databaseProvider === 'firebase' ? aConfig.projectId === databaseConfig.projectId : aConfig.siteId === databaseConfig.siteId));
+    if (currentConfigIdx === -1 || currentConfigIdx === standbyDatabaseConfigs.length - 1) {
+      return standbyDatabaseConfigs[0];
+    }
+    return standbyDatabaseConfigs[currentConfigIdx + 1];
+  };
+
+  const {
     databaseProvider = Bus.config.databaseProvider,
-    databaseConfig,
     standbyDatabaseConfigs = Bus.config.standbyDatabaseConfigs,
     pageTitle = document.title,
-    pageURL,
     pageURLMode = Bus.config.pageURLMode,
     theme = Bus.config.theme,
     locale = Bus.config.locale,
-    defaultAvatarURL = Bus.config.defaultAvatarURL
-  } = config
+    defaultAvatarURL = Bus.config.defaultAvatarURL,
+  } = config;
 
-  if (!databaseConfig) databaseConfig = getDatabaseConfig()
-  if (!pageURL) pageURL = defaultPageURL(pageURLMode)
+  let { databaseConfig, pageURL } = config;
 
-  resetI18next(locale)
+  if (!databaseConfig) databaseConfig = getDatabaseConfig();
+  if (!pageURL) pageURL = defaultPageURL(pageURLMode);
 
-  const { formatDate, distanceInWordsToNow } = dateFns(locale)
+  resetI18next(locale);
+
+  const { formatDate, distanceInWordsToNow } = dateFns(locale);
 
   const wf = {
     config: {
@@ -127,21 +122,21 @@ export const reset = (_Vue, config = {}, err) => {
       locale,
       theme,
       defaultAvatarURL,
-      anonymousUserId: 'Anonymous'
+      anonymousUserId: 'Anonymous',
     },
     formatDate,
-    distanceInWordsToNow
-  }
+    distanceInWordsToNow,
+  };
 
   wf.dbApp = wilddog.initializeApp({
     authDomain: `${databaseConfig.siteId}.wilddog.com`,
-    syncURL: `https://${databaseConfig.siteId}.wilddogio.com`
-  }, `wildfire-${databaseConfig.siteId}`)
-  wf.db = wf.dbApp.sync()
-  wf.auth = wf.dbApp.auth()
-  wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential
+    syncURL: `https://${databaseConfig.siteId}.wilddogio.com`,
+  }, `wildfire-${databaseConfig.siteId}`);
+  wf.db = wf.dbApp.sync();
+  wf.auth = wf.dbApp.auth();
+  wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential;
 
-  Object.assign(Bus, wf)
-}
+  Object.assign(Bus, wf);
+};
 
-export default {install, reset}
+export default { install, reset };

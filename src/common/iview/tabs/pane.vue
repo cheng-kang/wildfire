@@ -2,62 +2,62 @@
   <div :class="prefixCls" v-show="show"><slot></slot></div>
 </template>
 <script>
-  const prefixCls = 'ivu-tabs-tabpane'
+  const prefixCls = 'ivu-tabs-tabpane';
 
   export default {
     name: 'TabPane',
     props: {
       name: {
-        type: String
+        type: String,
       },
       label: {
         type: [String, Function],
-        default: ''
+        default: '',
       },
       icon: {
-        type: String
+        type: String,
       },
       disabled: {
         type: Boolean,
-        default: false
+        default: false,
       },
       closable: {
         type: Boolean,
-        default: null
-      }
+        default: null,
+      },
     },
-    data () {
+    data() {
       return {
-        prefixCls: prefixCls,
+        prefixCls,
         show: true,
-        currentName: this.name
-      }
+        currentName: this.name,
+      };
     },
     methods: {
-      updateNav () {
-        this.$parent.updateNav()
-      }
+      updateNav() {
+        this.$parent.updateNav();
+      },
     },
     watch: {
-      name (val) {
-        this.currentName = val
-        this.updateNav()
+      name(val) {
+        this.currentName = val;
+        this.updateNav();
       },
-      label () {
-        this.updateNav()
+      label() {
+        this.updateNav();
       },
-      icon () {
-        this.updateNav()
+      icon() {
+        this.updateNav();
       },
-      disabled () {
-        this.updateNav()
-      }
+      disabled() {
+        this.updateNav();
+      },
     },
-    mounted () {
-      this.updateNav()
+    mounted() {
+      this.updateNav();
     },
-    destroyed () {
-      this.updateNav()
-    }
-  }
+    destroyed() {
+      this.updateNav();
+    },
+  };
 </script>

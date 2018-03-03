@@ -72,65 +72,65 @@
 </template>
 
 <script>
-import Bus from '../common/bus'
-import { handleImageOnError } from '../common/utils'
-import WfTip from './WfTip'
+import Bus from '../common/bus';
+import { handleImageOnError } from '../common/utils';
+import WfTip from './WfTip';
+
 export default {
   name: 'wf-user-setting',
   components: { WfTip },
-  data () {
-    const user = Bus.user
-    const _i18next = Bus.i18next
+  data() {
+    const { user, i18next: _i18next } = Bus;
     const validateOldPassword = (rule, value, callback) => {
-      this.passwordTesting = true
-      const credential = Bus.authService(user.email, value)
+      this.passwordTesting = true;
+      const credential = Bus.authService(user.email, value);
       if (typeof (this.auth.currentUser.reauthenticate) === 'function') {
         this.auth.currentUser.reauthenticate(credential)
-        .then(() => {
-          this.passwordTesting = false
-          callback()
-        })
-        .catch(() => {
-          this.passwordTesting = false
-          callback(new Error(_i18next.t('UserSetting.error.password')))
-        })
+          .then(() => {
+            this.passwordTesting = false;
+            callback();
+          })
+          .catch(() => {
+            this.passwordTesting = false;
+            callback(new Error(_i18next.t('UserSetting.error.password')));
+          });
       } else if (typeof (this.auth.currentUser.reauthenticateWithCredential) === 'function') {
         this.auth.currentUser.reauthenticateWithCredential(credential)
-        .then(() => {
-          this.passwordTesting = false
-          callback()
-        })
-        .catch(() => {
-          this.passwordTesting = false
-          callback(new Error(_i18next.t('UserSetting.error.password')))
-        })
+          .then(() => {
+            this.passwordTesting = false;
+            callback();
+          })
+          .catch(() => {
+            this.passwordTesting = false;
+            callback(new Error(_i18next.t('UserSetting.error.password')));
+          });
       }
-    }
+    };
     const validatePasswordCheck = (rule, value, callback) => {
       if (value !== this.accountForm.newPassword) {
-        callback(new Error(_i18next.t('UserSetting.error.passwords_dont_match')))
+        callback(new Error(_i18next.t('UserSetting.error.passwords_dont_match')));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePhotoURL = (rule, value, callback) => {
-      this.avatarTesting = true
-      var avatar = new Image()
-      avatar.src = value
+      this.avatarTesting = true;
+      const avatar = new Image();
+      avatar.src = value;
       avatar.onload = () => {
-        this.avatarTestURL = value
-        this.avatarTesting = false
-        callback()
-      }
+        this.avatarTestURL = value;
+        this.avatarTesting = false;
+        callback();
+      };
       avatar.onerror = () => {
-        this.avatarTestURL = user.photoURL
-        this.avatarTesting = false
-        callback(new Error(_i18next.t('UserSetting.error.invalid_photo_url')))
-      }
-    }
+        this.avatarTestURL = user.photoURL;
+        this.avatarTesting = false;
+        callback(new Error(_i18next.t('UserSetting.error.invalid_photo_url')));
+      };
+    };
     const validateDisplayName = (rule, value, callback) => {
-      callback()
-    }
+      callback();
+    };
     return {
       avatarTesting: false,
       passwordTesting: false,
@@ -139,38 +139,42 @@ export default {
       avatarTestURL: user.photoURL,
       profileForm: {
         displayName: user.displayName,
-        photoURL: user.photoURL
+        photoURL: user.photoURL,
       },
       accountForm: {
         oldPassword: '',
         newPassword: '',
-        passwordCheck: ''
+        passwordCheck: '',
       },
       rule: {
         displayName: [
           { required: true, message: '', trigger: 'blur' },
-          { validator: validateDisplayName, trigger: 'blur' }
+          { validator: validateDisplayName, trigger: 'blur' },
         ],
         photoURL: [
           { required: true, message: '', trigger: 'blur' },
-          { validator: validatePhotoURL, trigger: 'blur' }
+          { validator: validatePhotoURL, trigger: 'blur' },
         ],
         oldPassword: [
           { required: true, message: _i18next.t('UserSetting.error.empty_old_pwd'), trigger: 'blur' },
-          { type: 'string', min: 6, message: _i18next.t('UserSetting.error.password_min_length'), trigger: 'blur' },
-          { validator: validateOldPassword, trigger: 'blur' }
+          {
+            type: 'string', min: 6, message: _i18next.t('UserSetting.error.password_min_length'), trigger: 'blur',
+          },
+          { validator: validateOldPassword, trigger: 'blur' },
         ],
         newPassword: [
           { required: true, message: _i18next.t('UserSetting.error.empty_new_pwd'), trigger: 'blur' },
-          { type: 'string', min: 6, message: _i18next.t('UserSetting.error.password_min_length'), trigger: 'blur' }
+          {
+            type: 'string', min: 6, message: _i18next.t('UserSetting.error.password_min_length'), trigger: 'blur',
+          },
         ],
         passwordCheck: [
           { required: true, message: _i18next.t('UserSetting.error.empty_confirm_pwd'), trigger: 'blur' },
-          { validator: validatePasswordCheck, trigger: 'blur' }
-        ]
+          { validator: validatePasswordCheck, trigger: 'blur' },
+        ],
       },
-      shouldShowPassword: true
-    }
+      shouldShowPassword: true,
+    };
   },
   computed: {
     auth: () => Bus.auth,
@@ -179,73 +183,73 @@ export default {
     i18next: () => Bus.i18next,
     user: () => Bus.user,
     windowWidth: () => Bus.windowWidth,
-    isSmallScreen () {
+    isSmallScreen() {
       // <= screen width of iPhone 6 plus
-      return this.windowWidth <= 414
-    }
+      return this.windowWidth <= 414;
+    },
   },
   methods: {
-    avatarOnError (event) {
+    avatarOnError(event) {
       handleImageOnError(
         event.target,
         this.config.defaultAvatarURL,
-        this.i18next.t('CommentCard.html_title.image_onerror')
-        )
+        this.i18next.t('CommentCard.html_title.image_onerror'),
+      );
     },
-    handleChangeProfile () {
-      this.$refs['profileForm'].validate((valid) => {
+    handleChangeProfile() {
+      this.$refs.profileForm.validate((valid) => {
         if (valid) {
           // this.updatingProfile = true
-          const { displayName, photoURL } = this.profileForm
+          const { displayName, photoURL } = this.profileForm;
           const updates = {
             '/displayName': displayName,
-            '/photoURL': photoURL
-          }
+            '/photoURL': photoURL,
+          };
           this.db.ref(`/users/${this.user.uid}`).update(updates)
-            .then(snapshot => {
-              Bus.user = Object.assign({}, Bus.user, {displayName, photoURL})
+            .then(() => {
+              Bus.user = Object.assign({}, Bus.user, { displayName, photoURL });
 
-              this.updatingProfile = false
-              this.$Message.info(this.i18next.t('UserSetting.success.updating_profile'))
+              this.updatingProfile = false;
+              this.$Message.info(this.i18next.t('UserSetting.success.updating_profile'));
             }).catch((error) => {
-              this.updatingProfile = false
-              console.log(error.code, error.message)
-              this.$Message.error(this.i18next.t('UserSetting.error.unknown'))
-            })
+              this.updatingProfile = false;
+              console.log(error.code, error.message);
+              this.$Message.error(this.i18next.t('UserSetting.error.unknown'));
+            });
         } else {
-          this.$Message.error(this.i18next.t('UserSetting.error.invalid_form'))
+          this.$Message.error(this.i18next.t('UserSetting.error.invalid_form'));
         }
-      })
+      });
     },
-    handleChangeAccount () {
-      this.$refs['accountForm'].validate((valid) => {
+    handleChangeAccount() {
+      this.$refs.accountForm.validate((valid) => {
         if (valid) {
-          this.updatingAccount = true
-          const password = this.accountForm.newPassword
+          this.updatingAccount = true;
+          const password = this.accountForm.newPassword;
           this.auth.currentUser.updatePassword(password).then(() => {
-            this.updatingAccount = false
-            this.$refs['accountForm'].resetFields()
-            this.$Message.info(this.i18next.t('UserSetting.success.changing_password'))
+            this.updatingAccount = false;
+            this.$refs.accountForm.resetFields();
+            this.$Message.info(this.i18next.t('UserSetting.success.changing_password'));
           }).catch((error) => {
-            this.updatingAccount = false
-            console.log(error.code, error.message)
-            this.$refs['accountForm'].resetFields()
-          })
+            this.updatingAccount = false;
+            console.log(error.code, error.message);
+            this.$refs.accountForm.resetFields();
+          });
         } else {
-          this.$Message.error(this.i18next.t('UserSetting.error.invalid_form'))
+          this.$Message.error(this.i18next.t('UserSetting.error.invalid_form'));
         }
-      })
+      });
     },
-    resetAvatar () {
-      this.profileForm.photoURL = this.user.photoURL
-      this.avatarTestURL = this.user.photoURL
-      this.$refs.profileForm.validateField('photoURL')
+    resetAvatar() {
+      this.profileForm.photoURL = this.user.photoURL;
+      this.avatarTestURL = this.user.photoURL;
+      this.$refs.profileForm.validateField('photoURL');
     },
-    closeModel () {
-      this.$refs['accountForm'].resetFields()
-      this.avatarTestURL = this.user.photoURL
-      this.$parent.close()
-    }
-  }
-}
+    closeModel() {
+      this.$refs.accountForm.resetFields();
+      this.avatarTestURL = this.user.photoURL;
+      this.$parent.close();
+    },
+  },
+};
 </script>

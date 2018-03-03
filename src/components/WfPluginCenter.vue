@@ -133,8 +133,9 @@
   </i-tabs>
 </template>
 <script>
-import Bus from '../common/bus'
-import Vue from 'vue'
+import Vue from 'vue';
+import Bus from '../common/bus';
+
 export default {
   name: 'wf-plugin-center',
   props: [],
@@ -148,14 +149,14 @@ export default {
       // 存放注册激活过的插件dashboard组件名
       pluginDashboards: {},
       pluginMarket: [],
-      marketInfo: {}
-    }
+      marketInfo: {},
+    };
   },
-  mounted () {
+  mounted() {
     this.bus.$on('pluginDashboardAdd', (dashboard) => {
-      this.pluginDashboards[dashboard.module] = dashboard.name
-      this.$forceUpdate()
-    })
+      this.pluginDashboards[dashboard.module] = dashboard.name;
+      this.$forceUpdate();
+    });
   },
   computed: {
     bus: () => Bus,
@@ -169,62 +170,64 @@ export default {
   methods: {
     switchPluginTab(name) {
       if (name === 'market') {
-        this.loadPluginMarket()
+        this.loadPluginMarket();
       }
     },
     loadPluginMarket() {
       if (!this.isLoadingPluginMarket && !this.isLoadedPluginMarket) {
-        this.isLoadingPluginMarket = true
-        Vue.http.get("https://raw.githubusercontent.com/mrliaocn/test-plugin-market/master/plugins.json")
-        .then(response => {
-          const {plugins=[], description=''} = JSON.parse(response.data)
-          // 依据pluginCenter中是否存在，确定market中插件是否安装
-          // this.updatePluginIsAdded(plugins)
-          this.pluginMarket = plugins
-          this.marketInfo = {
-            description
-          }
-          this.isLoadedPluginMarket = Boolean(plugins.length)
-        })
-        .catch(error => {
-          console.error(error)
-        })
-        .then(() => {
-          this.isLoadingPluginMarket = false
-        })
+        this.isLoadingPluginMarket = true;
+        Vue.http.get('https://raw.githubusercontent.com/mrliaocn/test-plugin-market/master/plugins.json')
+          .then(response => {
+            const { plugins = [], description = '' } = JSON.parse(response.data);
+            // 依据pluginCenter中是否存在，确定market中插件是否安装
+            // this.updatePluginIsAdded(plugins)
+            this.pluginMarket = plugins;
+            this.marketInfo = {
+              description,
+            };
+            this.isLoadedPluginMarket = Boolean(plugins.length);
+          })
+          .catch(error => {
+            console.error(error);
+          })
+          .then(() => {
+            this.isLoadingPluginMarket = false;
+          });
       }
     },
     updatePluginAddedState(pluginMarket) {
       return pluginMarket.map((plugin) => {
         if (plugin.module in this.pluginCenter) {
-          plugin.isAdded = true
+          plugin.isAdded = true;
         } else {
-          plugin.isAdded = false
+          plugin.isAdded = false;
         }
-        return plugin
-      })
+        return plugin;
+      });
     },
     addPlugin(plugin, index) {
-      const {name, module, source, description, author, homepage} = plugin
+      const {
+        name, module, source, description, author, homepage,
+      } = plugin;
       this.db.ref(`pluginCenter/${module}`).set({
-        name, module, source, description, author, homepage, enable: false
+        name, module, source, description, author, homepage, enable: false,
       })
-      .then(() => {
-        this.pluginMarket[index].isAdded = true
-        this.$forceUpdate()
-      })
-      .catch((error) => {
-        this.$Message.error("添加失败！")
-      })
+        .then(() => {
+          this.pluginMarket[index].isAdded = true;
+          this.$forceUpdate();
+        })
+        .catch(() => {
+          this.$Message.error('添加失败！');
+        });
     },
     trimString(str, len) {
       if (str.length > len) {
-        return str.substring(0, len - 3) + '...'
-      } else {
-        return str
+        return `${str.substring(0, len - 3)}...`;
       }
-    }
-  }
-}
+      return str;
+
+    },
+  },
+};
 
 </script>
