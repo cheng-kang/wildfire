@@ -17,24 +17,6 @@
   // Controls if the editor should automatically format the line after typing
   "editor.formatOnType": false,
   "workbench.colorTheme": "One Dark Pro",
-  "[javascript]": {
-      "editor.tabSize": 2,
-      "editor.insertSpaces": true
-  },
-  "[vue]": {
-      "editor.tabSize": 2,
-      "editor.insertSpaces": true
-  },
-  "eslint.options": {
-      "extensions": [".html", ".js", ".vue", ".jsx"]
-  },
-  "eslint.validate": [
-      { "language": "javascript", "autoFix": true },
-      "javascriptreact",
-      { "language": "html", "autoFix": true },
-      { "language": "vue", "autoFix": true }
-    ],
-  "eslint.autoFixOnSave": true,
   // The number of spaces a tab is equal to. This setting is overriden
   // based on the file contents when `editor.detectIndentation` is true.
   "editor.tabSize": 2,
@@ -58,36 +40,61 @@
   "sync.pathPrefix": "",
   "sync.quietSync": false,
   "sync.askGistName": false,
-  "better-comments.tags": [
-      {
-        "tag": "!",
-        "color": "#FF2D00",
-        "strikethrough": false
-      },
-      {
-        "tag": "?",
-        "color": "#3498DB",
-        "strikethrough": false
-      },
-      {
-        "tag": "//",
-        "color": "#474747",
-        "strikethrough": true
-      },
-      {
-        "tag": "todo",
-        "color": "#FF8C00",
-        "strikethrough": false
-      },
-      {
-        "tag": "fixme",
-        "color": "#FF8C00",
-        "strikethrough": false
-      },
-      {
-        "tag": "*",
-        "color": "#98C379",
-        "strikethrough": false
-      }
-    ]
+  "better-comments.tags": [{
+      "tag": "!",
+      "color": "#FF2D00",
+      "strikethrough": false
+    },
+    {
+      "tag": "?",
+      "color": "#3498DB",
+      "strikethrough": false
+    },
+    {
+      "tag": "//",
+      "color": "#474747",
+      "strikethrough": true
+    },
+    {
+      "tag": "todo",
+      "color": "#FF8C00",
+      "strikethrough": false
+    },
+    {
+      "tag": "fixme",
+      "color": "#FF8C00",
+      "strikethrough": false
+    },
+    {
+      "tag": "*",
+      "color": "#98C379",
+      "strikethrough": false
+    }
+  ],
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[vue]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "eslint.options": {
+    "extensions": [".html", ".js", ".vue"]
+  },
+  "eslint.validate": [
+    {
+      "language": "javascript",
+      "autoFix": true
+    },
+    {
+      "language": "html",
+      "autoFix": true
+    },
+    {
+      "language": "vue",
+      "autoFix": true
+    }
+  ],
+  "eslint.autoFixOnSave": true,
 }
