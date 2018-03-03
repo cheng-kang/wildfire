@@ -8,7 +8,7 @@ export const initI18next = (locale) => {
   i18next.init({
     lng: locale,
     fallbackLng: 'en',
-    debug: true,
+    debug: false,
     resources: {
       en: {
         translation: langEn

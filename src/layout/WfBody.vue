@@ -7,10 +7,15 @@
 
     <template v-if="comments.length !== 0">
       <ul class="wf-comment-group">
-        <component v-for="(cpntName, idx) in pluginComponents['comments.before']"
-          :is="cpntName"
-          :key="idx"
-          :bus="bus"/>
+        <template
+          v-if="pluginComponents['comments.before']">
+          <component
+            v-for="(module, cpntName) in pluginComponents['comments.before']"
+            :is="cpntName"
+            :key="cpntName"
+            :t="pluginTranslate(module)">
+          </component>
+        </template>
         <wf-comment-card
           v-for="(comment, idx) in currentPageComments"
           :key="comment.commentId"

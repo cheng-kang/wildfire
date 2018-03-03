@@ -24,6 +24,7 @@
       ```
  */
 import Vue from 'vue'
+import {addTranslation} from './loadI18next'
 // import utils from './utils'
 const Bus = new Vue({
   data () {
@@ -47,12 +48,9 @@ const Bus = new Vue({
       selectedCommentUserInfo: {},
       /* End of: Comment User Modal */
       // For plugin data
-      pluginCenter: {
-        // 'name': { source, context: plugin.default }
-      },
-
-      pluginComponents: [],
-      events: {}
+      pluginCenter: {},
+      pluginComponents: {},
+      pluginHooks: {}
     }
   },
   computed: {
@@ -120,14 +118,33 @@ const Bus = new Vue({
     },
     // 加载和注册插件
     // 分为手动添加、从插件中心添加两种
-    registerPlugins (pluginCenter) {
-      for (module in pluginCenter) {
-        // 如果已经存在，则不重复注册
-        if (!this.pluginCenter[module]) {
-          // 生成对象
-          this.pluginCenter[module] = pluginCenter[module]
-          // 注册对象
-          this.registerOnePlugin(pluginCenter[module])
+    registerPlugins (plugins) {
+      // 删除已经失效的插件
+      Object.keys(this.pluginCenter).forEach((module) => {
+        if (!plugins[module]) {
+          this.inactivePlugin(module)
+          delete this.pluginCenter[module]
+        }
+      })
+      for (let module in plugins) {
+        // 判断是否注册过，对未注册的插件进行注册
+        let suppose = this.pluginCenter[module]
+        if (!suppose || suppose.source !== plugins[module].source) {
+          // 对没注册的插件进行注册
+          this.pluginCenter[module] = plugins[module]
+          // 存放该插件注册的非dashboard组件名与钩子位置，用于关闭插件使用
+          this.pluginCenter[module].components = []
+          this.pluginCenter[module].hooks = []
+          this.registerOnePlugin(plugins[module])
+        } else {
+          // 已注册过还未激活的，依据enable激活或者取消激活（开启或关闭）
+          if (plugins[module].enable && !this.pluginCenter[module].enable) {
+            this.activePlugin(module)
+          } else if (!plugins[module].enable && this.pluginCenter[module].enable) {
+            this.inactivePlugin(module)
+          }
+          // 更新激活状态
+          this.pluginCenter[module].enable = plugins[module].enable
         }
       }
     },
@@ -141,11 +158,21 @@ const Bus = new Vue({
         script.onload = () => {
           if (window[module]) {
             const context = window[module].default()
+            delete window[module]
             this.pluginCenter[module].context = context
             // console.log(this.pluginCenter[module])
             // 如果存在插件配置项，则先激活插件配置组件，用于插件中心显示
-            if (context.configComponment) {
-              this.activeComponment(module, context.configComponment)
+            if (context.dashboard) {
+              let name = this.activeComponment(module, context.dashboard)
+              this.$emit('pluginDashboardAdd', {module, name})
+            }
+            // 在注册时直接添加翻译
+            if (typeof context.translation === 'object') {
+              const translation = context.translation
+              Object.keys(translation).forEach((lang) => {
+                // 翻译的层级为：`plugin.${module}.${key}`
+                addTranslation(lang, {plugin: {[module]: translation[lang]}})
+              })
             }
             // 如果插件已经开启，则直接激活
             if (enable) {
@@ -161,13 +188,57 @@ const Bus = new Vue({
         console.warn(`Invalid plugin: you need to set the 'module' and 'source' correctly.`)
       }
     },
-    activeComponment(module, copt) {
-      const coptName = `${module}-${copt.name}`
-      Vue.component(coptName, copt)
-      this.$emit('pluginConfigComponentAdd', {module, coptName})
+    activeComponment (module, component) {
+      const name = `${module}-${component.name}`
+      Vue.component(name, component)
+      return name
     },
     activePlugin (module) {
+      const {components={}, hooks={}} = this.pluginCenter[module].context
+      const componentsPos = ['header.before', 'header.after', 'menu.personal',
+        'menu.admin', 'menu.plugin', 'comments.before', 'footer.before',
+        'comment.menu.top', 'comment.menu.bottom', 'comment.buttons.pre',
+        'comment.buttons.post', ]
+      componentsPos.forEach((position) => {
+        if (components[position] && components[position].length) {
+          // 初始化
+          if (typeof this.pluginComponents[position] !== 'object' ) {
+            this.pluginComponents[position] = {}
+          }
+          components[position].forEach((component) => {
+            const name = this.activeComponment(module, component)
+            this.pluginComponents[position][name] = module
+            this.pluginCenter[module].components.push({position, name})
+            this.$emit('pluginUpdate')
+          })
+        }
+      })
 
+      const hooksPos = ['beforePostComment']
+      hooksPos.forEach((position) => {
+        if (hooks[position] && typeof hooks[position] === 'function') {
+          if (typeof this.pluginHooks[position] !== 'object') {
+            this.pluginHooks[position] = {}
+          }
+          this.pluginHooks[position][module] = hooks[position]
+          this.pluginCenter[module].hooks.push(position)
+        }
+      })
+    },
+    inactivePlugin (module) {
+      const {components, hooks} = this.pluginCenter[module]
+      components.forEach((component) => {
+        delete this.pluginComponents[component.position][component.name]
+        this.$emit('pluginUpdate')
+      })
+      hooks.forEach((position) => {
+        delete this.pluginHooks[position][module]
+      })
+    },
+    pluginTranslate (prefix) {
+      return (key) => {
+        return this.i18next.t(`plugin.${prefix}.${key}`)
+      }
     }
   }
 })

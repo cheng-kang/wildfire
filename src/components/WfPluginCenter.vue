@@ -44,7 +44,7 @@
   <i-tabs value="added" class="wf-plugin-center" @on-click="switchPluginTab">
     <i-tab-pane label="已添加" name="added">
       <div class="pane-warp">
-        <div v-if="isNoPluginAdded" class="unavailable-tips">
+        <div v-if="Object.keys(pluginCenter).length === 0" class="unavailable-tips">
           你还没有添加插件，快去插件市场添加试试吧！
         </div>
         <i-collapse v-else :accordion="true">
@@ -57,9 +57,9 @@
             <div slot="content">
               <p>{{plugin.description}}</p>
               <component
-                v-if="pluginConfigCopt[plugin.module]"
-                :is="pluginConfigCopt[plugin.module]"
-                :bus="bus"></component>
+                v-if="pluginDashboards[plugin.module]"
+                :is="pluginDashboards[plugin.module]"
+                :t="pluginTranslate(module)"></component>
               <p>更多信息，请前往 <a href="plugin.homepage" :title="plugin.homepage" target="_blank">插件主页</a> 。</p>
             </div>
           </i-panel>
@@ -77,7 +77,7 @@
             @click="loadPluginMarket">重新加载</i-button>
         </div>
         <i-row type="flex" justify="center" align="top" :gutter="20">
-          <i-col span="11" v-for="(plugin, index) in plugins" :key="plugin.id" class="plugin-card">
+          <i-col span="11" v-for="(plugin, index) in updatePluginAddedState(pluginMarket)" :key="plugin.id" class="plugin-card">
             <i-card dis-hover>
               <p slot="title">{{plugin.name}}</p>
               <span slot="extra">
@@ -134,7 +134,7 @@
 </template>
 <script>
 import Bus from '../common/bus'
-import Vue from "vue"
+import Vue from 'vue'
 export default {
   name: 'wf-plugin-center',
   props: [],
@@ -145,17 +145,15 @@ export default {
       isLoadingPluginMarket: false,
       isLoadedPluginMarket: false,
 
-      // 存放注册激活过的插件config组件名
-      pluginConfigCopt: {},
-      plugins: [],
-      marketInfo: {},
-      pluginCenter: {}
+      // 存放注册激活过的插件dashboard组件名
+      pluginDashboards: {},
+      pluginMarket: [],
+      marketInfo: {}
     }
   },
   mounted () {
-    this.loadPluginCenter()
-    this.bus.$on('pluginConfigComponentAdd', (copt) => {
-      this.pluginConfigCopt[copt.module] = copt.coptName
+    this.bus.$on('pluginDashboardAdd', (dashboard) => {
+      this.pluginDashboards[dashboard.module] = dashboard.name
       this.$forceUpdate()
     })
   },
@@ -164,30 +162,15 @@ export default {
     auth: () => Bus.auth,
     config: () => Bus.config,
     db: () => Bus.db,
-    i18next: () => Bus.i18next
+    i18next: () => Bus.i18next,
+    pluginTranslate: () => Bus.pluginTranslate,
+    pluginCenter: () => Bus.pluginCenter,
   },
   methods: {
     switchPluginTab(name) {
       if (name === 'market') {
         this.loadPluginMarket()
       }
-    },
-    loadPluginCenter() {
-      this.db.ref('pluginCenter').on('value', (snapshot) => {
-        this.pluginCenter = snapshot.val() || {}
-        this.isNoPluginAdded = !Boolean(snapshot.val())
-
-        // 注册插件（加载、生成对象）
-        // 如果已开启的，则直接激活生效，否则不激活
-        this.bus.registerPlugins(this.pluginCenter)
-
-        if (this.plugins.length) {
-          this.updatePluginIsAdded(this.plugins)
-        }
-      }, (error) => {
-        console.log(error, '插件加载失败!')
-      })
-
     },
     loadPluginMarket() {
       if (!this.isLoadingPluginMarket && !this.isLoadedPluginMarket) {
@@ -196,8 +179,8 @@ export default {
         .then(response => {
           const {plugins=[], description=''} = JSON.parse(response.data)
           // 依据pluginCenter中是否存在，确定market中插件是否安装
-          this.updatePluginIsAdded(plugins)
-          this.plugins = plugins
+          // this.updatePluginIsAdded(plugins)
+          this.pluginMarket = plugins
           this.marketInfo = {
             description
           }
@@ -211,8 +194,8 @@ export default {
         })
       }
     },
-    updatePluginIsAdded(plugins) {
-      plugins.map((plugin) => {
+    updatePluginAddedState(pluginMarket) {
+      return pluginMarket.map((plugin) => {
         if (plugin.module in this.pluginCenter) {
           plugin.isAdded = true
         } else {
@@ -227,7 +210,7 @@ export default {
         name, module, source, description, author, homepage, enable: false
       })
       .then(() => {
-        this.plugins[index].isAdded = true
+        this.pluginMarket[index].isAdded = true
         this.$forceUpdate()
       })
       .catch((error) => {

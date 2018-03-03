@@ -1,22 +1,38 @@
 <template>
   <div :class="classes">
-    <!-- <component v-for="(cpntName, idx) in pluginComponents['header.before']"
-      :is="cpntName"
-      :key="idx"
-      :bus="bus"/> -->
+    <template
+      v-if="pluginComponents['header.before']">
+      <component
+        v-for="(module, cpntName) in pluginComponents['header.before']"
+        :is="cpntName"
+        :key="cpntName"
+        :t="pluginTranslate(module)">
+      </component>
+    </template>
     <wf-header :comments-loading-state="commentsLoadingState"/>
-    <!-- <component v-for="(cpntName, idx) in pluginComponents['header.after']"
-      :is="cpntName"
-      :key="idx"
-      :bus="bus"/> -->
+
+    <template
+      v-if="pluginComponents['header.after']">
+      <component
+        v-for="(module, cpntName) in pluginComponents['header.after']"
+        :is="cpntName"
+        :key="cpntName"
+        :t="pluginTranslate(module)">
+      </component>
+    </template>
     <wf-body
       :page-comments-count="pageCommentsCount"
       :comments="commentsWithId"
       :comments-loading-state="commentsLoadingState"/>
-    <!-- <component v-for="(cpntName, idx) in pluginComponents['footer.before']"
-      :is="cpntName"
-      :key="idx"
-      :bus="bus"/> -->
+    <template
+      v-if="pluginComponents['header.after']">
+      <component
+        v-for="(module, cpntName) in pluginComponents['header.after']"
+        :is="cpntName"
+        :key="cpntName"
+        :t="pluginTranslate(module)">
+      </component>
+    </template>
     <wf-footer/>
   </div>
 </template>
@@ -48,12 +64,13 @@ export default {
   },
   computed: {
     bus: () => Bus,
-    pluginComponents: () => Bus.pluginComponents,
     auth: () => Bus.auth,
     config: () => Bus.config,
     db: () => Bus.db,
     user: () => Bus.user,
     i18next: () => Bus.i18next,
+    pluginTranslate: () => Bus.pluginTranslate,
+    pluginComponents: () => Bus.pluginComponents,
     classes () {
       return [
         'wf',
@@ -72,7 +89,7 @@ export default {
   created () {
     this.listenToAuthStateChange()
     this.listenToCommentsFromDatabase()
-
+    this.listenToPluginCenter()
     /*
       `CurrentUserInfoUpdated` event observer
       Note: this observer watches user profile updates
@@ -115,6 +132,9 @@ export default {
     this.observer = elementResizeDetectorMaker()
     this.observer.listenTo(this.$el, () => {
       Bus.$data.windowWidth = this.$el.offsetWidth
+    })
+    Bus.$on('pluginUpdate', () => {
+      this.$forceUpdate()
     })
   },
   watch: {
@@ -193,6 +213,17 @@ export default {
         }
       }, () => {
         this.commentsLoadingState = 'finished'
+      })
+    },
+    listenToPluginCenter() {
+      this.db.ref('pluginCenter').on('value', (snapshot) => {
+        const pluginCenter = snapshot.val() || {}
+
+        // 注册插件（加载、生成对象）
+        // 如果已开启的，则直接激活生效，否则不激活
+        this.bus.registerPlugins(pluginCenter)
+      }, (error) => {
+        console.log(error, 'loading plugins error!')
       })
     },
     checkBanState () {

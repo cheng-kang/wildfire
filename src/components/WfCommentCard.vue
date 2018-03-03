@@ -57,11 +57,16 @@
               <i-icon type="arrow-down-b"></i-icon>
             </a>
             <i-dropdown-menu slot="list">
-              <component v-for="(cpntName, idx) in pluginComponents['comment.menu.top']"
-                :is="cpntName"
-                :key="idx"
-                :bus="bus"
-                :comment="comment"/>
+              <template
+                v-if="pluginComponents['comment.menu.top']">
+                <component
+                  v-for="(module, cpntName) in pluginComponents['comment.menu.top']"
+                  :is="cpntName"
+                  :key="cpntName"
+                  :t="pluginTranslate(module)"
+                  :comment="comment">
+                </component>
+              </template>
               <i-dropdown-item v-if="!user || !user.isAdmin" style="color: red"
                 name="reportCurrentComment">
                 {{i18next.t('CommentCard.btn.report_comment')}}
@@ -70,11 +75,16 @@
                 name="banCurrentUser">
                 {{i18next.t('CommentCard.btn.ban_user')}}
               </i-dropdown-item>
-              <component v-for="(cpntName, idx) in pluginComponents['comment.menu.bottom']"
-                :is="cpntName"
-                :key="idx"
-                :bus="bus"
-                :comment="comment"/>
+              <template
+                v-if="pluginComponents['comment.menu.bottom']">
+                <component
+                  v-for="(module, cpntName) in pluginComponents['comment.menu.bottom']"
+                  :is="cpntName"
+                  :key="cpntName"
+                  :t="pluginTranslate(module)"
+                  :comment="comment">
+                </component>
+              </template>
             </i-dropdown-menu>
           </i-dropdown>
         </header>
@@ -118,11 +128,16 @@
             <span>{{dislikeUserIdList.length || ''}}</span>
             <i-icon type="heart-broken"></i-icon>
           </a>
-          <component v-for="(cpntName, idx) in pluginComponents['comment.buttons.pre']"
-            :is="cpntName"
-            :key="idx"
-            :bus="bus"
-            :comment="comment"/>
+          <template
+            v-if="pluginComponents['comment.buttons.pre']">
+            <component
+              v-for="(module, cpntName) in pluginComponents['comment.buttons.pre']"
+              :is="cpntName"
+              :key="cpntName"
+              :t="pluginTranslate(module)"
+              :comment="comment">
+            </component>
+          </template>
           <i-button
             type="text"
             class="wf-reply-btn"
@@ -138,11 +153,16 @@
               {{i18next.t('CommentCard.btn.delete')}}
             </i-button>
           </i-poptip>
-          <component v-for="(cpntName, idx) in pluginComponents['comment.buttons.post']"
-            :is="cpntName"
-            :key="idx"
-            :bus="bus"
-            :comment="comment"/>
+          <template
+            v-if="pluginComponents['comment.buttons.post']">
+            <component
+              v-for="(module, cpntName) in pluginComponents['comment.buttons.post']"
+              :is="cpntName"
+              :key="cpntName"
+              :t="pluginTranslate(module)"
+              :comment="comment">
+            </component>
+          </template>
         </footer>
         <!-- If this is a comment -->
         <wf-reply-area v-if="!parentComment"
