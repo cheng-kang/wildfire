@@ -32,13 +32,13 @@
           <i-menu-group :title="i18next.t('Header.menu.personal_center')">
             <i-menu-item name="user_setting">{{i18next.t('Header.menu.user_setting')}}</i-menu-item>
             <i-menu-item name="notification">{{i18next.t('Header.menu.notification')}}</i-menu-item>
-            <i-menu-item name="plugin_center">{{i18next.t('Header.menu.plugin_center')}}</i-menu-item>
             <component v-for="(cpntName, idx) in pluginComponents['menu.personal']"
               :is="cpntName"
               :key="idx"
               :bus="bus"/>
           </i-menu-group>
           <i-menu-group :title="i18next.t('Header.menu.admin_center')" v-if="user && user.isAdmin">
+            <i-menu-item name="plugin_center">{{i18next.t('Header.menu.plugin_center')}}</i-menu-item>
             <i-menu-item name="report_management">{{i18next.t('Header.menu.report_management')}}</i-menu-item>
             <i-menu-item name="admin_helpers">{{i18next.t('Header.menu.admin_helpers')}}</i-menu-item>
             <component v-for="(cpntName, idx) in pluginComponents['menu.admin']"
