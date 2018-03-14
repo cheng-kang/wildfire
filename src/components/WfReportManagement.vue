@@ -138,8 +138,7 @@
 <script>
 import Vue from 'vue';
 import Bus from '../common/bus';
-import markdown from '../common/markdown';
-import { textContent } from '../common/utils';
+import { textContent, markdown } from '../utils';
 import '../assets/highlight.css';
 import '../assets/highlight.dark.css';
 

@@ -73,7 +73,7 @@
 
 <script>
 import Bus from '../common/bus';
-import { handleImageOnError } from '../common/utils';
+import { handleImageOnError } from '../utils';
 import WfTip from './WfTip';
 
 export default {

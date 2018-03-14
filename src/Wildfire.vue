@@ -44,7 +44,7 @@ import Bus from './common/bus';
 import WfHeader from './layout/WfHeader';
 import WfBody from './layout/WfBody';
 import WfFooter from './layout/WfFooter';
-import { afterEvent } from './common/utils';
+import { afterEvent } from './utils';
 
 export default {
   name: 'wildfire',

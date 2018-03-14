@@ -18,7 +18,7 @@
 
 <script>
 import Bus from '../common/bus';
-import { handleImageOnError } from '../common/utils';
+import { handleImageOnError } from '../utils';
 
 export default {
   name: 'wf-user-info-modal',

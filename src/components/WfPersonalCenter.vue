@@ -20,7 +20,7 @@
 <script>
 import Vue from 'vue';
 import Bus from '../common/bus';
-import { textContent } from '../common/utils';
+import { textContent } from '../utils';
 
 export default {
   name: 'wf-personal-center',

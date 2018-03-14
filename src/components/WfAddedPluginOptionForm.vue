@@ -1,8 +1,8 @@
 <template>
   <div class="wf-added-plugin-option-form">
     <i-form v-if="form" :model="form" :rules="rules" label-position="top">
-      <i-form-item v-for="option in options" :key="option.key" :label="option.displayName" :prop="option.key">
-        <i-input v-model="form[option.key]" :placeholder="option.placeholder"></i-input>
+      <i-form-item v-for="option in options" :key="option.key" :label="t(option.displayName)" :prop="option.key">
+        <i-input v-model="form[option.key]" :placeholder="t(option.placeholder)"></i-input>
       </i-form-item>
       <div>
         <i-button type="primary" @click="submit">Submit</i-button>
@@ -13,6 +13,7 @@
 </template>
 <script>
 import Bus from '../common/bus';
+import { PTM } from '../utils';
 
 export default {
   name: 'wf-added-plugin-option-form',
@@ -21,6 +22,7 @@ export default {
     return {
       form: undefined,
       rules: undefined,
+      t: PTM.t(Bus.config.locale)(this.pluginId),
     };
   },
   computed: {
@@ -33,7 +35,11 @@ export default {
         const rules = {};
         this.options.forEach(({ key, validate }) => {
           form[key] = '';
-          rules[key] = validate;
+          rules[key] = validate.map(rule => (
+            rule.message
+              ? Object.assign(rule, { message: this.t(rule.message) })
+              : rule
+          ));
         });
         const options = snapshot.val();
         if (options) {

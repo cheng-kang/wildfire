@@ -6,7 +6,7 @@
 import Vue from 'vue';
 import '../assets/highlight.css';
 import '../assets/highlight.dark.css';
-import markdown from '../common/markdown';
+import { markdown } from '../utils';
 import Bus from '../common/bus';
 
 export default {
