@@ -34,6 +34,8 @@ export const defaultPageURL = (pageURLMode = 'normal') => {
   return origin + pathname + hashNoQM;
 };
 
+export const getKey = snapshot => ((typeof (snapshot.key) === 'function') ? snapshot.key() : snapshot.key);
+
 // TODO: Finish beforeEvent
 export const beforeEvent = (eventName, data, bus) => {
   // const events = bus.events[eventName] || [];

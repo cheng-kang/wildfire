@@ -11,13 +11,15 @@
             :key="plugin.id"
             :name="plugin.title">
             <span>{{plugin.title}}</span>
-            <i-switch size="small" slot="extra" :value="plugin.isActive" @on-change="toggleAddedPluginState(plugin.id)"></i-switch>
+            <i-switch size="small" slot="extra" :value="plugin.isActive" @on-change="toggleAddedPluginState(plugin.id, plugin.isActive)"></i-switch>
             <div slot="content">
-              <p>{{plugin.description}}</p>
-              <p>{{plugin.options}}</p>
+              <wf-separator title="介绍" margin-top="8px"/>
+              <wf-marked-content :content="plugin.description" :style="styles.cardContent"></wf-marked-content>
+              <wf-separator title="设置"/>
+              <wf-added-plugin-option-form :plugin-id="plugin.id" :options="plugin.options" :style="styles.cardContent"/>
             </div>
           </i-panel>
-      </i-collapse>
+        </i-collapse>
       </div>
     </i-tab-pane>
     <i-tab-pane label="插件市场" name="center">
@@ -47,10 +49,7 @@
               </span>
               <div class="scorll-warp">
                 <div class="plugin-info">
-                  <div class="info-item">
-                    <span class="info-title">简介</span>
-                    <p>{{plugin.description}}</p>
-                  </div>
+                  <wf-marked-content :content="plugin.description"></wf-marked-content>
                 </div>
               </div>
             </i-card>
@@ -64,6 +63,7 @@
 <script>
 import Vue from 'vue';
 import Bus from '../common/bus';
+import { getKey } from '../common/utils';
 
 export default {
   name: 'wf-plugin-center',
@@ -104,11 +104,23 @@ export default {
     addedPlugins() {
       return [...this.activePlugins, ...this.inactivePlugins];
     },
+    styles() {
+      return {
+        cardContent: {
+          width: 'calc(100% - 48px)',
+          margin: '0 auto',
+        },
+      };
+    },
   },
   created() {
     this.loadPluginMetaData();
     this.db.ref('addedPluginsFromCenter').on('child_added', snapshot => {
-      const key = (typeof (snapshot.key) === 'function') ? snapshot.key() : snapshot.key;
+      const key = getKey(snapshot);
+      this.$set(this.addedPluginsFromCenter, key, snapshot.val());
+    });
+    this.db.ref('addedPluginsFromCenter').on('child_changed', snapshot => {
+      const key = getKey(snapshot);
       this.$set(this.addedPluginsFromCenter, key, snapshot.val());
     });
   },
@@ -147,11 +159,9 @@ export default {
           this.$Message.error('PluginCenter.error.adding_plugin');
         });
     },
-    toggleAddedPluginState(pluginId) {
-      const newVal = !this.addedPluginsFromCenter[pluginId];
-      this.db.ref(`addedPluginsFromCenter/${pluginId}`).set(newVal)
+    toggleAddedPluginState(id, oldValue) {
+      this.db.ref(`addedPluginsFromCenter/${id}`).set(!oldValue)
         .then(() => {
-          this.$set(this.addedPluginsFromCenter, pluginId, newVal);
           this.$Message.success('PluginCenter.success.toggling_added_plugin_state');
         })
         .catch(error => {
@@ -188,6 +198,7 @@ export default {
 }
 .plugin-info {
   position: static;
+  width: 100%;
   max-height: 100px;
   overflow-y: auto;
   /*隐藏滚动条*/

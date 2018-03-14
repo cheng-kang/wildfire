@@ -1,3 +1,4 @@
+import WfAddedPluginOptionForm from '../components/WfAddedPluginOptionForm';
 import WfAdminHelpers from '../components/WfAdminHelpers';
 import WfAuthForm from '../components/WfAuthForm';
 import WfCommentCard from '../components/WfCommentCard';
@@ -5,12 +6,14 @@ import WfMarkedContent from '../components/WfMarkedContent';
 import WfPersonalCenter from '../components/WfPersonalCenter';
 import WfReplyArea from '../components/WfReplyArea';
 import WfReportManagement from '../components/WfReportManagement';
+import WfSeparator from '../components/WfSeparator';
 import WfTip from '../components/WfTip';
 import WfUserInfoModal from '../components/WfUserInfoModal';
 import WfUserSetting from '../components/WfUserSetting';
 import WfPluginCenter from '../components/WfPluginCenter';
 
 const localComponents = {
+  WfAddedPluginOptionForm,
   WfAdminHelpers,
   WfAuthForm,
   WfCommentCard,
@@ -18,6 +21,7 @@ const localComponents = {
   WfPersonalCenter,
   WfReplyArea,
   WfReportManagement,
+  WfSeparator,
   WfTip,
   WfUserInfoModal,
   WfUserSetting,
