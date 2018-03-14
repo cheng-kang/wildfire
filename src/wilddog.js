@@ -6,7 +6,7 @@ import initLocalComponents from './common/initLocalComponents';
 import iView from './common/loadiView';
 import dateFns from './common/loadDateFns';
 import i18next, { initI18next, resetI18next } from './common/loadI18next';
-import { defaultPageURL, b64EncodeUnicode } from './common/utils';
+import { defaultPageURL, b64EncodeUnicode } from './utils';
 import Wildfire from './Wildfire';
 import './assets/style.css';
 import './assets/style.dark.css';

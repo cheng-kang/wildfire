@@ -126,7 +126,7 @@
 
 <script>
 import Bus from '../common/bus';
-import { beforeEvent, afterEvent } from '../common/utils';
+import { beforeEvent, afterEvent } from '../utils';
 
 export default {
   name: 'wf-header',

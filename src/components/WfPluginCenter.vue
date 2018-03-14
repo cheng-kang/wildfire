@@ -9,12 +9,12 @@
           <i-panel
             v-for="plugin in addedPlugins"
             :key="plugin.id"
-            :name="plugin.title">
-            <span>{{plugin.title}}</span>
+            :name="t(plugin.id)(plugin.title)">
+            <span>{{t(plugin.id)(plugin.title)}}</span>
             <i-switch size="small" slot="extra" :value="plugin.isActive" @on-change="toggleAddedPluginState(plugin.id, plugin.isActive)"></i-switch>
             <div slot="content">
               <wf-separator title="介绍" margin-top="8px"/>
-              <wf-marked-content :content="plugin.description" :style="styles.cardContent"></wf-marked-content>
+              <wf-marked-content :content="t(plugin.id)(plugin.description)" :style="styles.cardContent"></wf-marked-content>
               <wf-separator title="设置"/>
               <wf-added-plugin-option-form :plugin-id="plugin.id" :options="plugin.options" :style="styles.cardContent"/>
             </div>
@@ -34,7 +34,7 @@
         <i-row type="flex" justify="center" align="top" :gutter="20" v-else>
           <i-col span="11" v-for="plugin in plugins" :key="plugin.id" class="plugin-card">
             <i-card dis-hover>
-              <p slot="title">{{plugin.title}}</p>
+              <p slot="title">{{t(plugin.id)(plugin.title)}}</p>
               <span slot="extra">
                 <span v-if="plugin.isAdded" class="icon-warp">
                   <i-tooltip :transfer="true" placement="top"
@@ -49,7 +49,7 @@
               </span>
               <div class="scorll-warp">
                 <div class="plugin-info">
-                  <wf-marked-content :content="plugin.description"></wf-marked-content>
+                  <wf-marked-content :content="t(plugin.id)(plugin.description)"></wf-marked-content>
                 </div>
               </div>
             </i-card>
@@ -63,7 +63,7 @@
 <script>
 import Vue from 'vue';
 import Bus from '../common/bus';
-import { getKey } from '../common/utils';
+import { getKey, PTM } from '../utils';
 
 export default {
   name: 'wf-plugin-center',
@@ -72,6 +72,7 @@ export default {
     return {
       meta: [],
       addedPluginsFromCenter: {},
+      t: PTM.t(Bus.config.locale),
     };
   },
   computed: {
@@ -141,6 +142,7 @@ export default {
                   ...metaData,
                   id,
                 });
+                PTM.add({ pluginId: id, translation: metaData.translation });
               });
           });
         })

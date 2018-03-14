@@ -93,7 +93,7 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-comment-item .wf-comment-content img.wf-error-image:hover { animation: hvr-buzz-out 0.75s linear 1;}
 .wf .wf-comment-item .wf-less { overflow: hidden; max-height: 180px; margin-bottom: 10px; }
 .wf .wf-comment-item .wf-comment-footer { font-size: 13px; display: flex; align-items: center; }
-.wf .wf-comment-item .wf-comment-footer .wf-separator { font-weight: 500; margin: 0 6px; color: #e7e9ee; }
+.wf .wf-comment-item .wf-comment-footer .wf-separator-v { font-weight: 500; margin: 0 6px; color: #e7e9ee; }
 .wf .wf-comment-item .wf-comment-footer a { font-weight: 500; text-decoration: none; color: rgba(237, 63, 20, .8); }
 .wf .wf-comment-item .wf-comment-footer a:hover { color: #ed3f14; }
 .wf .wf-comment-item .wf-comment-footer .wf-inactive { color: #929292; filter: grayscale(100%); }

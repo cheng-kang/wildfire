@@ -72,7 +72,7 @@
 
 <script>
 import Bus from '../common/bus';
-import { handleImageOnError, beforeEvent, afterEvent } from '../common/utils';
+import { handleImageOnError, beforeEvent, afterEvent } from '../utils';
 
 export default {
   name: 'wf-reply-area',

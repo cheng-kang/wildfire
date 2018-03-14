@@ -118,7 +118,7 @@
             <span>{{likeUserIdList.length || ''}}</span>
             <i-icon type="heart"></i-icon>
           </a>
-          <span class="wf-separator">|</span>
+          <span class="wf-separator-v">|</span>
           <a :title="i18next.t('CommentCard.html_title.dislike_comment')"
             :class="{
               'wf-inactive': dislikeUserIdList.indexOf(currentUserId) === -1,
@@ -213,7 +213,7 @@
 
 <script>
 import Bus from '../common/bus';
-import { textContent, handleImageOnError, beforeEvent, afterEvent } from '../common/utils';
+import { textContent, handleImageOnError, beforeEvent, afterEvent } from '../utils';
 import errorImage from '../assets/images/error-image.svg';
 
 const MAX_CONTENT_HEIGHT = 180;
