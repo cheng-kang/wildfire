@@ -33,7 +33,7 @@
     "dist",
     "src"
   ],
-  "main": "./src/aio.js",
+  "main": "src/aio.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/cheng-kang/wildfire.git"
