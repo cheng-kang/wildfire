@@ -8,15 +8,15 @@
         <i-collapse v-else :accordion="true">
           <i-panel
             v-for="plugin in addedPlugins"
-            :key="plugin.id"
-            :name="t(plugin.id)(plugin.title)">
-            <span>{{t(plugin.id)(plugin.title)}}</span>
-            <i-switch size="small" slot="extra" :value="plugin.isActive" @on-change="toggleAddedPluginState(plugin.id, plugin.isActive)"></i-switch>
+            :key="plugin.library"
+            :name="t(plugin.library)(plugin.title)">
+            <span>{{t(plugin.library)(plugin.title)}}</span>
+            <i-switch size="small" slot="extra" :value="plugin.isActive" @on-change="toggleAddedPluginState(plugin.library, plugin.isActive)"></i-switch>
             <div slot="content">
               <wf-separator title="介绍" margin-top="8px"/>
-              <wf-marked-content :content="t(plugin.id)(plugin.description)" :style="styles.cardContent"></wf-marked-content>
+              <wf-marked-content :content="t(plugin.library)(plugin.description)" :style="styles.cardContent"></wf-marked-content>
               <wf-separator title="设置"/>
-              <wf-added-plugin-option-form :plugin-id="plugin.id" :options="plugin.options" :style="styles.cardContent"/>
+              <wf-added-plugin-option-form :plugin-id="plugin.library" :options="plugin.options" :style="styles.cardContent"/>
             </div>
           </i-panel>
         </i-collapse>
@@ -32,9 +32,9 @@
             @click="loadPluginMetaData">重新加载</i-button>
         </div>
         <i-row type="flex" justify="center" align="top" :gutter="20" v-else>
-          <i-col span="11" v-for="plugin in plugins" :key="plugin.id" class="plugin-card">
+          <i-col span="11" v-for="plugin in plugins" :key="plugin.library" class="plugin-card">
             <i-card dis-hover>
-              <p slot="title">{{t(plugin.id)(plugin.title)}}</p>
+              <p slot="title">{{t(plugin.library)(plugin.title)}}</p>
               <span slot="extra">
                 <span v-if="plugin.isAdded" class="icon-warp">
                   <i-tooltip :transfer="true" placement="top"
@@ -45,11 +45,11 @@
                 <i-button v-else
                   size="small"
                   type="text"
-                  @click="addPlugin(plugin.id)">添加</i-button>
+                  @click="addPlugin(plugin.library)">添加</i-button>
               </span>
               <div class="scorll-warp">
                 <div class="plugin-info">
-                  <wf-marked-content :content="t(plugin.id)(plugin.description)"></wf-marked-content>
+                  <wf-marked-content :content="t(plugin.library)(plugin.description)"></wf-marked-content>
                 </div>
               </div>
             </i-card>
@@ -92,8 +92,8 @@ export default {
     plugins() {
       return this.meta.map(plugin => ({
         ...plugin,
-        isAdded: this.addedPluginsFromCenter[plugin.id] !== undefined,
-        isActive: this.addedPluginsFromCenter[plugin.id] === true,
+        isAdded: this.addedPluginsFromCenter[plugin.library] !== undefined,
+        isActive: this.addedPluginsFromCenter[plugin.library] === true,
       }));
     },
     inactivePlugins() {
@@ -128,21 +128,20 @@ export default {
   methods: {
     loadPluginMetaData() {
       this.meta = [];
-      Vue.http.get('https://cdn.rawgit.com/wildfirejs/wf-plugin-center/fd1b156f/plugins.json')
+      Vue.http.get('https://unpkg.com/wf-plugin-center')
         .then(({ data: pluginsData }) => {
           const { plugins = {} } = pluginsData;
-          plugins.forEach(({ id, source }) => {
+          plugins.forEach(source => {
             let baseURL = source;
             if (baseURL[baseURL.length - 1] !== '/') {
               baseURL += '/';
             }
-            Vue.http.get(`${baseURL}meta.json`)
+            Vue.http.get(`${baseURL}/dist/meta.json`)
               .then(({ data: metaData }) => {
                 this.meta.push({
                   ...metaData,
-                  id,
                 });
-                PTM.add({ pluginId: id, translation: metaData.translation });
+                PTM.add({ pluginId: metaData.library, translation: metaData.translation });
               });
           });
         })
@@ -161,8 +160,8 @@ export default {
           this.$Message.error('PluginCenter.error.adding_plugin');
         });
     },
-    toggleAddedPluginState(id, oldValue) {
-      this.db.ref(`addedPluginsFromCenter/${id}`).set(!oldValue)
+    toggleAddedPluginState(library, oldValue) {
+      this.db.ref(`addedPluginsFromCenter/${library}`).set(!oldValue)
         .then(() => {
           this.$Message.success('PluginCenter.success.toggling_added_plugin_state');
         })
