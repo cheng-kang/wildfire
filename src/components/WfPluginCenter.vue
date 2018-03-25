@@ -8,15 +8,15 @@
         <i-collapse v-else :accordion="true">
           <i-panel
             v-for="plugin in addedPlugins"
-            :key="plugin.library"
-            :name="t(plugin.library)(plugin.title)">
-            <span>{{t(plugin.library)(plugin.title)}}</span>
-            <i-switch size="small" slot="extra" :value="plugin.isActive" @on-change="toggleAddedPluginState(plugin.library, plugin.isActive)"></i-switch>
+            :key="plugin.id"
+            :name="PT(plugin.id)(plugin.title)">
+            <span>{{PT(plugin.id)(plugin.title)}}</span>
+            <i-switch size="small" slot="extra" :value="plugin.isActive" @on-change="toggleAddedPluginState(plugin.id, plugin.isActive)"></i-switch>
             <div slot="content">
               <wf-separator title="介绍" margin-top="8px"/>
-              <wf-marked-content :content="t(plugin.library)(plugin.description)" :style="styles.cardContent"></wf-marked-content>
+              <wf-marked-content :content="PT(plugin.id)(plugin.description)" :style="styles.cardContent"></wf-marked-content>
               <wf-separator title="设置"/>
-              <wf-added-plugin-option-form :plugin-id="plugin.library" :options="plugin.options" :style="styles.cardContent"/>
+              <wf-added-plugin-option-form :t="PT" :plugin-id="plugin.id" :options="plugin.options" :style="styles.cardContent"/>
             </div>
           </i-panel>
         </i-collapse>
@@ -32,9 +32,9 @@
             @click="loadPluginMetaData">重新加载</i-button>
         </div>
         <i-row type="flex" justify="center" align="top" :gutter="20" v-else>
-          <i-col span="11" v-for="plugin in plugins" :key="plugin.library" class="plugin-card">
+          <i-col span="11" v-for="plugin in plugins" :key="plugin.id" class="plugin-card">
             <i-card dis-hover>
-              <p slot="title">{{t(plugin.library)(plugin.title)}}</p>
+              <p slot="title">{{PT(plugin.id)(plugin.title)}}</p>
               <span slot="extra">
                 <span v-if="plugin.isAdded" class="icon-warp">
                   <i-tooltip :transfer="true" placement="top"
@@ -45,11 +45,11 @@
                 <i-button v-else
                   size="small"
                   type="text"
-                  @click="addPlugin(plugin.library)">添加</i-button>
+                  @click="addPlugin(plugin.id)">添加</i-button>
               </span>
               <div class="scorll-warp">
                 <div class="plugin-info">
-                  <wf-marked-content :content="t(plugin.library)(plugin.description)"></wf-marked-content>
+                  <wf-marked-content :content="PT(plugin.id)(plugin.description)"></wf-marked-content>
                 </div>
               </div>
             </i-card>
@@ -62,8 +62,9 @@
 
 <script>
 import Vue from 'vue';
-import Bus from '../common/bus';
-import { getKey, PTM } from '../utils';
+import { bus, butler } from '../common';
+import { pluginList, PTM4Meta } from '../plugin';
+import { getKey } from '../utils';
 
 export default {
   name: 'wf-plugin-center',
@@ -72,17 +73,11 @@ export default {
     return {
       meta: [],
       addedPluginsFromCenter: {},
-      t: PTM.t(Bus.config.locale),
+      PT: PTM4Meta.t(butler.config.locale),
     };
   },
   computed: {
-    bus: () => Bus,
-    auth: () => Bus.auth,
-    config: () => Bus.config,
-    db: () => Bus.db,
-    i18next: () => Bus.i18next,
-    pluginTranslate: () => Bus.pluginTranslate,
-    pluginCenter: () => Bus.pluginCenter,
+    t: () => (key) => butler.i18next.t(key),
     isPluginCenterEmpty() {
       return Object.keys(this.meta).length === 0;
     },
@@ -92,8 +87,8 @@ export default {
     plugins() {
       return this.meta.map(plugin => ({
         ...plugin,
-        isAdded: this.addedPluginsFromCenter[plugin.library] !== undefined,
-        isActive: this.addedPluginsFromCenter[plugin.library] === true,
+        isAdded: this.addedPluginsFromCenter[plugin.id] !== undefined,
+        isActive: this.addedPluginsFromCenter[plugin.id] === true,
       }));
     },
     inactivePlugins() {
@@ -116,11 +111,11 @@ export default {
   },
   created() {
     this.loadPluginMetaData();
-    this.db.ref('addedPluginsFromCenter').on('child_added', snapshot => {
+    butler.db.ref('addedPluginsFromCenter').on('child_added', snapshot => {
       const key = getKey(snapshot);
       this.$set(this.addedPluginsFromCenter, key, snapshot.val());
     });
-    this.db.ref('addedPluginsFromCenter').on('child_changed', snapshot => {
+    butler.db.ref('addedPluginsFromCenter').on('child_changed', snapshot => {
       const key = getKey(snapshot);
       this.$set(this.addedPluginsFromCenter, key, snapshot.val());
     });
@@ -128,30 +123,23 @@ export default {
   methods: {
     loadPluginMetaData() {
       this.meta = [];
-      Vue.http.get('https://unpkg.com/wf-plugin-center')
-        .then(({ data: pluginsData }) => {
-          const { plugins = {} } = pluginsData;
-          plugins.forEach(source => {
-            let baseURL = source;
-            if (baseURL[baseURL.length - 1] !== '/') {
-              baseURL += '/';
-            }
-            Vue.http.get(`${baseURL}/dist/meta.json`)
-              .then(({ data: metaData }) => {
-                this.meta.push({
-                  ...metaData,
-                });
-                PTM.add({ pluginId: metaData.library, translation: metaData.translation });
-              });
+      Object.keys(pluginList).forEach(pluginId => {
+        Vue.http.get(`${pluginList[pluginId]}/dist/meta.json`)
+          .then(({ data: metaData }) => {
+            this.meta.push({
+              ...metaData,
+              id: metaData.library,
+            });
+            PTM4Meta.add({ pluginId: metaData.library, translation: metaData.translation });
+          })
+          .catch(error => {
+            console.error(error);
+            this.$Message.error(this.t('PluginCenter.error.loading_plugin_meta'));
           });
-        })
-        .catch(error => {
-          console.error(error);
-          this.$Message.error(this.i18next.t('PluginCenter.error.loading_all_plugins'));
-        });
+      });
     },
     addPlugin(pluginId) {
-      this.db.ref(`addedPluginsFromCenter/${pluginId}`).set(false)
+      butler.db.ref(`addedPluginsFromCenter/${pluginId}`).set(false)
         .then(() => {
           this.$Message.success('PluginCenter.success.adding_plugin');
         })
@@ -160,8 +148,8 @@ export default {
           this.$Message.error('PluginCenter.error.adding_plugin');
         });
     },
-    toggleAddedPluginState(library, oldValue) {
-      this.db.ref(`addedPluginsFromCenter/${library}`).set(!oldValue)
+    toggleAddedPluginState(pluginId, oldValue) {
+      butler.db.ref(`addedPluginsFromCenter/${pluginId}`).set(!oldValue)
         .then(() => {
           this.$Message.success('PluginCenter.success.toggling_added_plugin_state');
         })

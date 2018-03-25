@@ -1,25 +1,3 @@
-// TODO: Finish beforeEvent
-export const beforeEvent = (eventName, data, bus) => {
-  // const events = bus.events[eventName] || [];
-  // const newBus = bus.filteredBus(eventName);
-  // TODO:
-  // eventFn may be a asynchronous function,
-  // then it won't stop while shouldContinue is false.
-  // So make sure eventFn be a synchro function.
-  // return events.map((eventFn) => eventFn(newBus, data)).reduce((a, b) => a && b, true);
-  console.log('todo');
-  return true;
-};
-
-// TODO: Finish afterEvent
-export const afterEvent = (eventName, data, bus) => {
-  // const events = bus.events[eventName] || [];
-  // const newBus = bus.filteredBus(eventName);
-  // events.forEach((eventFn) => {
-  //   eventFn(newBus, data);
-  // });
-};
-
 class WfPluginTranslationManager {
   constructor() {
     this.translations = {};
@@ -29,7 +7,7 @@ class WfPluginTranslationManager {
     Object.assign(this.translations, { [pluginId]: translation });
   }
 
-  remove({ pluginId }) {
+  remove(pluginId) {
     if (this.translations[pluginId]) {
       delete this.translations[pluginId];
     }
@@ -60,4 +38,4 @@ class WfPluginTranslationManager {
   }
 }
 
-export const PTM = new WfPluginTranslationManager();
+export default WfPluginTranslationManager;

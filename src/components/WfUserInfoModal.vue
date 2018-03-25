@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Bus from '../common/bus';
+import { bus, butler } from '../common';
 import { handleImageOnError } from '../utils';
 
 export default {
@@ -28,18 +28,17 @@ export default {
     };
   },
   computed: {
-    config: () => Bus.config,
-    i18next: () => Bus.i18next,
-    selectedCommentUserInfo: () => Bus.$data.selectedCommentUserInfo,
+    t: () => (key) => butler.i18next.t(key),
+    selectedCommentUserInfo: () => bus.selectedCommentUserInfo,
     encodedIP() {
       const { ip } = this.selectedCommentUserInfo;
-      if (!ip || (ip.indexOf('unknown') !== -1)) { return this.i18next.t('common.unknown_ip'); }
+      if (!ip || (ip.indexOf('unknown') !== -1)) { return this.t('common.unknown_ip'); }
       const lastDotIdx = ip.lastIndexOf('.');
       const lastSec = ip.slice(lastDotIdx + 1);
-      return lastSec ? `***.**.**.${lastSec}` : this.i18next.t('common.unknown_ip');
+      return lastSec ? `***.**.**.${lastSec}` : this.t('common.unknown_ip');
     },
     isAnonymousUser() {
-      const { anonymousUserId } = this.config;
+      const { anonymousUserId } = butler.config;
       return (
         !this.selectedCommentUserInfo.uid
         || this.selectedCommentUserInfo.uid === anonymousUserId
@@ -50,8 +49,8 @@ export default {
     avatarOnError(event) {
       handleImageOnError(
         event.target,
-        this.config.defaultAvatarURL,
-        this.i18next.t('CommentCard.html_title.image_onerror'),
+        butler.config.defaultAvatarURL,
+        this.t('CommentCard.html_title.image_onerror'),
       );
     },
   },

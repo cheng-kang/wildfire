@@ -5,7 +5,7 @@
  */
 
 import locale from 'iview/src/locale';
-import '../assets/iview.css';
+import '../../assets/iview.css';
 
 /*
  * Select the components blow you want to use globally in Vue
@@ -24,25 +24,25 @@ import '../assets/iview.css';
 import AutoComplete from 'iview/src/components/auto-complete';
 import Button from 'iview/src/components/button';
 import Card from 'iview/src/components/card';
-import Collapse from './iview/collapse';
-import Dropdown from './iview/dropdown';
+import Collapse from './components/collapse';
+import Dropdown from './components/dropdown';
 import Form from 'iview/src/components/form';
 import Icon from 'iview/src/components/icon';
 import Input from 'iview/src/components/input';
 import Menu from 'iview/src/components/menu';
-import Message from './iview/message';
-import Modal from './iview/modal';
+import Message from './components/message';
+import Modal from './components/modal';
 import Page from 'iview/src/components/page';
-import Poptip from './iview/poptip';
+import Poptip from './components/poptip';
 import { Row, Col } from 'iview/src/components/grid';
 import Spin from 'iview/src/components/spin';
-import iSwitch from './iview/switch';
+import iSwitch from './components/switch';
 import {
   Select,
   Option,
 } from 'iview/src/components/select';
-import Tooltip from './iview//tooltip';
-import Tabs from './iview/tabs';
+import Tooltip from './components/tooltip';
+import Tabs from './components/tabs';
 
 const iview = {
   AutoComplete,

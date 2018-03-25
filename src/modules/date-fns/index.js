@@ -1,4 +1,3 @@
-/* eslint max-len: 0 */
 import { distanceInWordsToNow, format } from 'date-fns';
 import zhCNLocale from 'date-fns/locale/zh_cn';
 import enLocale from 'date-fns/locale/en';

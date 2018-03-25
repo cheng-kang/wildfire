@@ -1,11 +1,11 @@
 import VueResource from 'vue-resource';
 import wilddog from 'wilddog';
 import VueWild from 'vuewild';
-import Bus from './common/bus';
-import initLocalComponents from './common/initLocalComponents';
-import iView from './common/loadiView';
-import dateFns from './common/loadDateFns';
-import i18next, { initI18next, resetI18next } from './common/loadI18next';
+import bus from './common/bus';
+import initLocalComponents from './common/init-local-components';
+import iView from './common/load-iview';
+import dateFns from './common/load-date-fns';
+import i18next, { initI18next, resetI18next } from './common/load-i18next';
 import { defaultPageURL, b64EncodeUnicode } from './utils';
 import Wildfire from './Wildfire';
 import './assets/style.css';
@@ -74,14 +74,14 @@ export const install = (_Vue, config) => {
   // ToFix: 过多使用 assign 导致难以维护 bus
   // 1、只在其他组件中动态添加【需要全局使用的变化状态值】；
   // 2、其他需要全局使用的变量，应当通过utils，或者在bus中内部定义，不应当动态添加
-  Object.assign(Bus, wf);
+  Object.assign(bus, wf);
 
   _Vue.component('wildfire', Wildfire);
 };
 
 export const reset = (_Vue, config = {}, err) => {
   const getDatabaseConfig = () => {
-    const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config;
+    const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = bus.config;
     if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) {
       return databaseConfig;
     }
@@ -93,13 +93,13 @@ export const reset = (_Vue, config = {}, err) => {
   };
 
   const {
-    databaseProvider = Bus.config.databaseProvider,
-    standbyDatabaseConfigs = Bus.config.standbyDatabaseConfigs,
+    databaseProvider = bus.config.databaseProvider,
+    standbyDatabaseConfigs = bus.config.standbyDatabaseConfigs,
     pageTitle = document.title,
-    pageURLMode = Bus.config.pageURLMode,
-    theme = Bus.config.theme,
-    locale = Bus.config.locale,
-    defaultAvatarURL = Bus.config.defaultAvatarURL,
+    pageURLMode = bus.config.pageURLMode,
+    theme = bus.config.theme,
+    locale = bus.config.locale,
+    defaultAvatarURL = bus.config.defaultAvatarURL,
   } = config;
 
   let { databaseConfig, pageURL } = config;
@@ -136,7 +136,7 @@ export const reset = (_Vue, config = {}, err) => {
   wf.auth = wf.dbApp.auth();
   wf.authService = wilddog.auth.WilddogAuthProvider.emailCredential;
 
-  Object.assign(Bus, wf);
+  Object.assign(bus, wf);
 };
 
 export default { install, reset };
