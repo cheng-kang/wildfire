@@ -37,7 +37,7 @@
                 </div>
               </div>
               <div slot="content" v-else>
-                {{i18next.t('CommentCard.text.loading_comments_content')}}
+                {{t('CommentCard.text.loading_comments_content')}}
               </div>
             </i-poptip>
             <span class="wf-meta">
@@ -57,34 +57,26 @@
               <i-icon type="arrow-down-b"></i-icon>
             </a>
             <i-dropdown-menu slot="list">
-              <template
-                v-if="pluginComponents['comment.menu.top']">
-                <component
-                  v-for="(module, cpntName) in pluginComponents['comment.menu.top']"
-                  :is="cpntName"
-                  :key="cpntName"
-                  :t="pluginTranslate(module)"
-                  :comment="comment">
-                </component>
-              </template>
+              <component
+                v-for="(cpntName, idx) in pluginComponents.comment.menu.top"
+                :is="cpntName"
+                :key="cpntName+idx"
+                :comment="comment"
+                v-bind="pluginProps(cpntName)"/>
               <i-dropdown-item v-if="!user || !user.isAdmin" style="color: red"
                 name="reportCurrentComment">
-                {{i18next.t('CommentCard.btn.report_comment')}}
+                {{t('CommentCard.btn.report_comment')}}
               </i-dropdown-item>
               <i-dropdown-item v-if="user && user.isAdmin" style="color: red"
                 name="banCurrentUser">
-                {{i18next.t('CommentCard.btn.ban_user')}}
+                {{t('CommentCard.btn.ban_user')}}
               </i-dropdown-item>
-              <template
-                v-if="pluginComponents['comment.menu.bottom']">
-                <component
-                  v-for="(module, cpntName) in pluginComponents['comment.menu.bottom']"
-                  :is="cpntName"
-                  :key="cpntName"
-                  :t="pluginTranslate(module)"
-                  :comment="comment">
-                </component>
-              </template>
+              <component
+                v-for="(cpntName, idx) in pluginComponents.comment.menu.bottom"
+                :is="cpntName"
+                :key="cpntName+idx"
+                :comment="comment"
+                v-bind="pluginProps(cpntName)"/>
             </i-dropdown-menu>
           </i-dropdown>
         </header>
@@ -100,16 +92,16 @@
             type="text" long>
             <template v-if="isShowingFullText">
               <i-icon type="chevron-up"></i-icon>
-              {{i18next.t('CommentCard.btn.show_less_content')}}
+              {{t('CommentCard.btn.show_less_content')}}
             </template>
             <template v-else>
               <i-icon type="chevron-down"></i-icon>
-              {{i18next.t('CommentCard.btn.show_full_content')}}
+              {{t('CommentCard.btn.show_full_content')}}
             </template>
           </i-button>
         </div>
         <footer class="wf-comment-footer">
-          <a :title="i18next.t('CommentCard.html_title.like_comment')"
+          <a :title="t('CommentCard.html_title.like_comment')"
             :class="{
               'wf-inactive': likeUserIdList.indexOf(currentUserId) === -1,
               'wf-disabled': !user
@@ -119,7 +111,7 @@
             <i-icon type="heart"></i-icon>
           </a>
           <span class="wf-separator-v">|</span>
-          <a :title="i18next.t('CommentCard.html_title.dislike_comment')"
+          <a :title="t('CommentCard.html_title.dislike_comment')"
             :class="{
               'wf-inactive': dislikeUserIdList.indexOf(currentUserId) === -1,
               'wf-disabled': !user
@@ -128,41 +120,33 @@
             <span>{{dislikeUserIdList.length || ''}}</span>
             <i-icon type="heart-broken"></i-icon>
           </a>
-          <template
-            v-if="pluginComponents['comment.buttons.pre']">
-            <component
-              v-for="(module, cpntName) in pluginComponents['comment.buttons.pre']"
-              :is="cpntName"
-              :key="cpntName"
-              :t="pluginTranslate(module)"
-              :comment="comment">
-            </component>
-          </template>
+          <component
+            v-for="(cpntName, idx) in pluginComponents.comment.buttons.pre"
+            :is="cpntName"
+            :key="cpntName+idx"
+            :comment="comment"
+            v-bind="pluginProps(cpntName)"/>
           <i-button
             type="text"
             class="wf-reply-btn"
             @click="toggleReplyArea">
-            {{isShowingReplyArea ? i18next.t('CommentCard.btn.hide') : i18next.t('CommentCard.btn.reply')}}
+            {{isShowingReplyArea ? t('CommentCard.btn.hide') : t('CommentCard.btn.reply')}}
           </i-button>
           <i-poptip
             confirm
-            :title="i18next.t('CommentCard.confirm.deleting_comment')"
+            :title="t('CommentCard.confirm.deleting_comment')"
             @on-ok="confirmDelete">
             <i-button type="text" class="wf-delete-btn"
               v-if="canDelete">
-              {{i18next.t('CommentCard.btn.delete')}}
+              {{t('CommentCard.btn.delete')}}
             </i-button>
           </i-poptip>
-          <template
-            v-if="pluginComponents['comment.buttons.post']">
-            <component
-              v-for="(module, cpntName) in pluginComponents['comment.buttons.post']"
-              :is="cpntName"
-              :key="cpntName"
-              :t="pluginTranslate(module)"
-              :comment="comment">
-            </component>
-          </template>
+          <component
+            v-for="(cpntName, idx) in pluginComponents.comment.buttons.post"
+            :is="cpntName"
+            :key="cpntName+idx"
+            :comment="comment"
+            v-bind="pluginProps(cpntName)"/>
         </footer>
         <!-- If this is a comment -->
         <wf-reply-area v-if="!parentComment"
@@ -199,11 +183,11 @@
           long>
           <template v-if="isShowingLessReplies">
             <i-icon type="chevron-down"></i-icon>
-            {{i18next.t('CommentCard.btn.show_more_discussion', { count: foldedDiscussionCount })}}
+            {{t('CommentCard.btn.show_more_discussion', { count: foldedDiscussionCount })}}
           </template>
           <template v-else>
             <i-icon type="chevron-up"></i-icon>
-            {{i18next.t('CommentCard.btn.show_less_discussion', { count: foldedDiscussionCount })}}
+            {{t('CommentCard.btn.show_less_discussion', { count: foldedDiscussionCount })}}
           </template>
         </i-button>
       </ul>
@@ -212,8 +196,9 @@
 </template>
 
 <script>
-import Bus from '../common/bus';
-import { textContent, handleImageOnError, beforeEvent, afterEvent } from '../utils';
+import { bus, butler } from '../common';
+import { PCM, PHM, handlePluginHookError, EVENTS, pluginProps } from '../plugin';
+import { textContent, handleImageOnError } from '../utils';
 import errorImage from '../assets/images/error-image.svg';
 
 const MAX_CONTENT_HEIGHT = 180;
@@ -264,16 +249,25 @@ export default {
     };
   },
   computed: {
-    bus: () => Bus,
-    config: () => Bus.config,
-    db: () => Bus.db,
-    i18next: () => Bus.i18next,
-    pluginComponents: () => Bus.pluginComponents,
-    user: () => Bus.user,
-    isCurrentUserBanned: () => Bus.isCurrentUserBanned,
+    pluginComponents: () => ({
+      comment: {
+        menu: {
+          top: PCM.get('comment.menu.top'),
+          bottom: PCM.get('comment.menu.bottom'),
+        },
+        buttons: {
+          pre: PCM.get('comment.buttons.pre'),
+          post: PCM.get('comment.buttons.post'),
+        },
+      },
+    }),
+    pluginProps: () => pluginProps,
+    t: () => (key) => butler.i18next.t(key),
+    distanceInWordsToNow: () => butler.distanceInWordsToNow,
+    formatDate: () => console.log(butler.formatDate) || butler.formatDate,
+    user: () => bus.user,
+    isCurrentUserBanned: () => bus.isCurrentUserBanned,
     textContent: () => textContent,
-    distanceInWordsToNow: () => Bus.distanceInWordsToNow,
-    formatDate: () => Bus.formatDate,
     isTopLevelComment() {
       return !this.comment.parentCommentId;
     },
@@ -290,7 +284,7 @@ export default {
       return this.isAnonymousUser(this.comment.uid);
     },
     encodedPageURL() {
-      return btoa(this.config.pageURL);
+      return btoa(butler.config.pageURL);
     },
     canDelete() {
       return this.user && (this.user.uid === this.comment.uid || this.user.isAdmin);
@@ -309,11 +303,11 @@ export default {
   },
   created() {
     // Init user info as anonymous user
-    this.author.displayName = this.i18next.t('common.anonymous_user');
-    this.author.photoURL = this.config.defaultAvatarURL;
+    this.author.displayName = this.t('common.anonymous_user');
+    this.author.photoURL = butler.config.defaultAvatarURL;
     this.replyToComment.author.isAnonymous = true;
-    this.replyToComment.author.displayName = this.i18next.t('common.anonymous_user');
-    this.replyToComment.author.photoURL = this.config.defaultAvatarURL;
+    this.replyToComment.author.displayName = this.t('common.anonymous_user');
+    this.replyToComment.author.photoURL = butler.config.defaultAvatarURL;
 
     if (!this.isPostedByAnonymousUser) {
       const authorUid = this.comment.uid;
@@ -325,7 +319,7 @@ export default {
       } else {
         // Else (not anomymous user and not current user),
         // get username & avatar from DB
-        this.db.ref(`users/${authorUid}`).once('value').then((snapshot) => {
+        butler.db.ref(`users/${authorUid}`).once('value').then((snapshot) => {
           const author = snapshot.val();
 
           /*
@@ -342,21 +336,21 @@ export default {
     }
 
     // Get Voting data
-    this.$bindAsObject('votes', this.db.ref(`votes/${this.comment.commentId}`));
+    this.$bindAsObject('votes', butler.db.ref(`votes/${this.comment.commentId}`));
 
     // If this comment is (1) a reply to comment, or
     // (2) a reply to a reply, get corresponding detail data.
     if (!this.isTopLevelComment) {
-      this.db.ref(`comments/${this.comment.parentCommentId}`).once('value').then((snapshot) => {
+      butler.db.ref(`comments/${this.comment.parentCommentId}`).once('value').then((snapshot) => {
         const comment = snapshot.val();
         if (!comment) {
-          this.replyToComment.content = this.i18next.t('CommentCard.text.deleted_comment');
+          this.replyToComment.content = this.t('CommentCard.text.deleted_comment');
           return;
         }
         this.replyToComment.content = comment.content;
         const replyToCommentAuthorUid = comment.uid;
         if (!this.isAnonymousUser(replyToCommentAuthorUid)) {
-          this.db.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
+          butler.db.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
             const author = snapshot.val();
             /*
               Assign value only when the value exists,
@@ -375,12 +369,12 @@ export default {
     // If the comment is top-level comment,
     // get its replies.
       const { commentId } = this.comment;
-      this.db.ref('comments').orderByChild('rootCommentId').equalTo(commentId).on('child_added', (snap) => {
+      butler.db.ref('comments').orderByChild('rootCommentId').equalTo(commentId).on('child_added', (snap) => {
         const reply = snap.val();
-        this.replies.push(Object.assign(reply, { commentId: this.config.databaseProvider === 'firebase' ? snap.key : snap.key() }));
+        this.replies.push(Object.assign(reply, { commentId: butler.config.databaseProvider === 'firebase' ? snap.key : snap.key() }));
       });
-      this.db.ref('comments').orderByChild('rootCommentId').equalTo(commentId).on('child_removed', (snap) => {
-        const key = this.config.databaseProvider === 'firebase' ? snap.key : snap.key();
+      butler.db.ref('comments').orderByChild('rootCommentId').equalTo(commentId).on('child_removed', (snap) => {
+        const key = butler.config.databaseProvider === 'firebase' ? snap.key : snap.key();
         const idx = this.replies.findIndex(reply => reply.commentId === key);
         this.replies.splice(idx, 1);
       });
@@ -397,7 +391,7 @@ export default {
       };
       imgEles[i].onerror = (event) => {
         const imageEle = event.target;
-        const title = this.i18next.t('CommentCard.html_title.image_onerror');
+        const title = this.t('CommentCard.html_title.image_onerror');
 
         imageEle.className = 'wf-error-image';
         handleImageOnError(imageEle, errorImage, title);
@@ -405,18 +399,18 @@ export default {
       };
     }
 
-    Bus.listenTo('OnlyOneReplyAreaShouldBeActive', activeReplyAreaId => {
+    bus.listenTo('OnlyOneReplyAreaShouldBeActive', activeReplyAreaId => {
       if (this.$refs.replyArea._uid !== activeReplyAreaId) {
         this.isShowingReplyArea = false;
       }
     }, this.$refs.replyArea._uid);
   },
   beforeDestroy() {
-    Bus.enough('CurrentUserInfoUpdated', null, this._uid);
+    bus.enough('CurrentUserInfoUpdated', null, this._uid);
   },
   methods: {
     isAnonymousUser(uid) {
-      const { anonymousUserId } = this.config;
+      const { anonymousUserId } = butler.config;
       return !uid || uid === anonymousUserId;
     },
     shortenedUsername(username) {
@@ -440,139 +434,126 @@ export default {
     avatarOnError(event) {
       handleImageOnError(
         event.target,
-        this.config.defaultAvatarURL,
-        this.i18next.t('CommentCard.html_title.image_onerror'),
+        butler.config.defaultAvatarURL,
+        this.t('CommentCard.html_title.image_onerror'),
       );
     },
     toggleReplyArea() {
       this.isShowingReplyArea = !this.isShowingReplyArea;
-      Bus.$emit('OnlyOneReplyAreaShouldBeActive', this.$refs.replyArea._uid);
+      bus.$emit('OnlyOneReplyAreaShouldBeActive', this.$refs.replyArea._uid);
     },
     /**
      * @param  {string='like', 'dislike'} type
      */
+    // TODO: refactor
     toggleVote(type) {
-      // if (type !=='like' && type !== 'dislikes') {
-      //   return
-      // }
       if (!this.user) { return; }
       if (this.isCurrentUserBanned) {
         this.$Modal.error({
-          title: this.i18next.t('CommentCard.error.banned_title'),
-          content: this.i18next.t('CommentCard.error.banned_content'),
-          okText: this.i18next.t('CommentCard.btn.confirm'),
+          title: this.t('CommentCard.error.banned_title'),
+          content: this.t('CommentCard.error.banned_content'),
+          okText: this.t('CommentCard.btn.confirm'),
         });
         return;
       }
 
       const { uid } = this.user;
-      const now = new Date();
+      const now = (new Date()).toISOString();
       const { commentId } = this.comment;
 
       const isLiked = uid in (this.votes.likes || {});
       const isDisliked = uid in (this.votes.dislikes || {});
       const isLikeAction = (type === 'like');
 
-      // event: beforeVoteComment
-      const shouldContinue = beforeEvent('beforeVoteComment', {
-        comment: this.comment,
-        current: {
-          isLike: isLiked,
-          isDislik: isDisliked,
-        },
-        next: {
-          isLike: !isLiked && isLikeAction,
-          isDislik: !isDisliked && !isLikeAction,
-        },
-      }, this.bus);
-      if (!shouldContinue) return;
-
-      // event: votedComment
-      const votedEventCallback = (error = null) => {
-        if (error) {
-          afterEvent('votedComment', { error }, this.bus);
-
-        } else {
-          afterEvent('votedComment', {
-            comment: this.comment,
-            last: {
-              isLike: isLiked,
-              isDislik: isDisliked,
-            },
-            current: {
-              isLike: !isLiked && isLikeAction,
-              isDislik: !isDisliked && !isLikeAction,
-            },
-          }, this.bus);
-        }
-      };
-
-      if (isLikeAction) {
-
-        if (isLiked) {
-          this.db.ref(`votes/${commentId}/likes/${uid}`).remove()
-            .then(() => votedEventCallback())
-            .catch(error => votedEventCallback(error));
-        } else {
-          Promise.all([
-            this.db.ref(`votes/${commentId}/likes/${uid}`).set(now.toISOString()),
-            this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove(),
-          ]).then(() => votedEventCallback())
-            .catch(error => votedEventCallback(error));
-        }
-      } else if (isDisliked) {
-        this.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
-          .then(() => votedEventCallback())
-          .catch(error => votedEventCallback(error));
-      } else {
-        Promise.all([
-          this.db.ref(`votes/${commentId}/dislikes/${uid}`).set(now.toISOString()),
-          this.db.ref(`votes/${commentId}/likes/${uid}`).remove(),
-        ]).then(() => votedEventCallback())
-          .catch(error => votedEventCallback(error));
+      const current = {
+        isLike: isLiked,
+        isDislike: isDisliked,
       }
+      const next = {
+        isLike: !isLiked && isLikeAction,
+        isDislike: !isDisliked && !isLikeAction,
+      }
+
+      PHM.beforeEvent(EVENTS.VOTE_COMMENT, {
+        comment: this.comment,
+        current,
+        next,
+      })
+        .then(() => {
+          const votedEventCallback = (error) => {
+            if (error) {
+              PHM.afterEvent(EVENTS.VOTE_COMMENT, { error, current, next });
+            } else {
+              PHM.afterEvent(EVENTS.VOTE_COMMENT, {
+                comment: this.comment,
+                last: current,
+                current: next,
+              });
+            }
+          };
+
+          if (isLikeAction) {
+            if (isLiked) {
+              butler.db.ref(`votes/${commentId}/likes/${uid}`).remove()
+                .then(() => votedEventCallback())
+                .catch(error => votedEventCallback(error));
+            } else {
+              Promise.all([
+                butler.db.ref(`votes/${commentId}/likes/${uid}`).set(now),
+                butler.db.ref(`votes/${commentId}/dislikes/${uid}`).remove(),
+              ]).then(() => votedEventCallback())
+                .catch(error => votedEventCallback(error));
+            }
+          } else if (isDisliked) {
+            butler.db.ref(`votes/${commentId}/dislikes/${uid}`).remove()
+              .then(() => votedEventCallback())
+              .catch(error => votedEventCallback(error));
+          } else {
+            Promise.all([
+              butler.db.ref(`votes/${commentId}/dislikes/${uid}`).set(now),
+              butler.db.ref(`votes/${commentId}/likes/${uid}`).remove(),
+            ]).then(() => votedEventCallback())
+              .catch(error => votedEventCallback(error));
+          }
+        })
+        .catch((error) => {
+          handlePluginHookError(error);
+        })
     },
     confirmDelete() {
-      // event: beforeDeleteComment
-      const shouldContinue = beforeEvent('beforeDeleteComment', {
-        comment: this.comment,
-      }, this.bus);
-      if (!shouldContinue) return;
+      PHM.beforeEvent(EVENTS.DELETE_COMMENT, { comment: this.comment })
+        .then(() => {
+          const { commentId } = this.comment;
+          const { pageURL } = butler.config;
 
-      const { commentId } = this.comment;
-      const { pageURL } = this.config;
-
-      Promise.all([
-        this.db.ref(`comments/${commentId}`).remove(),
-        this.db.ref(`votes/${commentId}`).remove(),
-        // Note: [todo] should move "deleting votes" outside of
-        //        this batch. "votes" data shouldn't be writable
-        //        by all users, because site owner cannot recover
-        //        "votes" data with other unmutalbe data.
-        ...(this.isTopLevelComment
-          ? [
-            this.db.ref(`pageComments/${pageURL}/${commentId}`).remove(),
-            ...this.replies.map(reply => [
-              this.db.ref(`comments/${reply.commentId}`).remove(),
-              this.db.ref(`votes/${reply.commentId}`).remove(),
-              this.db.ref(`pageComments/${pageURL}/${reply.commentId}`).remove(),
-            ]),
-          ]
-          : [this.db.ref(`pageComments/${pageURL}/${commentId}`).remove()]),
-      ]).then(() => {
-        this.$Message.success(this.i18next.t('CommentCard.success.deleting_comment'));
-
-        // event: deletedComment
-        afterEvent('deletedComment', {
-          comment: this.comment,
-        }, this.bus);
-
-      }).catch(error => {
-        this.$Message.error(this.i18next.t('CommentCard.error.deleting_comment'));
-
-        // event: deletedComment
-        afterEvent('deletedComment', { error }, this.bus);
-      });
+          Promise.all([
+            butler.db.ref(`comments/${commentId}`).remove(),
+            butler.db.ref(`votes/${commentId}`).remove(),
+            // Note: [todo] should move "deleting votes" outside of
+            //        this batch. "votes" data shouldn't be writable
+            //        by all users, because site owner cannot recover
+            //        "votes" data with other unmutalbe data.
+            ...(this.isTopLevelComment
+              ? [
+                butler.db.ref(`pageComments/${pageURL}/${commentId}`).remove(),
+                ...this.replies.map(reply => [
+                  butler.db.ref(`comments/${reply.commentId}`).remove(),
+                  butler.db.ref(`votes/${reply.commentId}`).remove(),
+                  butler.db.ref(`pageComments/${pageURL}/${reply.commentId}`).remove(),
+                ]),
+              ]
+              : [butler.db.ref(`pageComments/${pageURL}/${commentId}`).remove()]),
+          ]).then(() => {
+            this.$Message.success(this.t('CommentCard.success.deleting_comment'));
+            PHM.afterEvent(EVENTS.DELETE_COMMENT, { comment: this.comment });
+          }).catch(error => {
+            this.$Message.error(this.t('CommentCard.error.deleting_comment'));
+            PHM.afterEvent(EVENTS.DELETE_COMMENT, { error, comment: this.comment });
+          });
+        })
+        .catch((error) => {
+          handlePluginHookError(error);
+        })
     },
     handleDropdownClick(name) {
       if (this[name]) {
@@ -583,89 +564,79 @@ export default {
       if (!this.user) { return; }
       if (this.isCurrentUserBanned) {
         this.$Modal.error({
-          title: this.i18next.t('CommentCard.error.banned_title'),
-          content: this.i18next.t('CommentCard.error.banned_content'),
-          okText: this.i18next.t('CommentCard.btn.confirm'),
+          title: this.t('CommentCard.error.banned_title'),
+          content: this.t('CommentCard.error.banned_content'),
+          okText: this.t('CommentCard.btn.confirm'),
         });
         return;
       }
 
-      // event: beforeReportComment
-      const shouldContinue = beforeEvent('beforeReportComment', {
-        comment: this.comment,
-      }, this.bus);
-      if (!shouldContinue) return;
+      PHM.beforeEvent(EVENTS.REPORT_COMMENT, { comment: this.comment })
+        .then(() => {
+          butler.db.ref(`reported/${this.comment.commentId}/${this.user.uid}`)
+            .once('value').then((snapshot) => {
+              if (snapshot.val()) {
+                this.$Message.error(this.t('CommentCard.error.repeated_reporting'));
+                return;
+              }
 
-      const now = new Date();
-      this.db.ref(`reported/${this.comment.commentId}/${this.user.uid}`)
-        .once('value').then((snapshot) => {
-          if (snapshot.val()) {
-            this.$Message.error(this.i18next.t('CommentCard.error.repeated_reporting'));
-            return;
-          }
+              butler.db.ref(`reported/${this.comment.commentId}/${this.user.uid}`).set((new Date()).toISOString())
+                .then(() => {
+                  this.$Message.success(this.t('CommentCard.success.reporting_comment'));
 
-          this.db.ref(`reported/${this.comment.commentId}/${this.user.uid}`).set(now.toISOString())
-            .then(() => {
-              this.$Message.success(this.i18next.t('CommentCard.success.reporting_comment'));
+                  PHM.afterEvent(EVENTS.REPORT_COMMENT, { comment: this.comment });
+                }).catch(error => {
+                  this.$Message.error(this.t('CommentCard.error.reporting_comment'));
 
-              // event: reportedComment
-              afterEvent('reportedComment', { comment: this.comment }, this.bus);
-
-            }).catch(error => {
-              this.$Message.error(this.i18next.t('CommentCard.error.reporting_comment'));
-
-              // event: reportedComment
-              afterEvent('reportedComment', { error }, this.bus);
+                  PHM.afterEvent(EVENTS.REPORT_COMMENT, { error, comment: this.comment });
+                });
             });
-        });
+        })
+        .catch((error) => {
+          handlePluginHookError(error);
+        })
+
     },
     banCurrentUser() {
       let key;
       let type;
-      const now = new Date().toISOString();
-      if (this.comment.uid !== this.config.anonymousUserId) {
+      if (this.comment.uid !== butler.config.anonymousUserId) {
         key = this.comment.uid;
         type = 'uid';
       } else if (/unknow/.test(this.comment.ip)) {
-        this.$Message.error(this.i18next.t('CommentCard.error.banning_user'));
+        this.$Message.error(this.t('CommentCard.error.banning_user'));
         return;
       } else {
         key = this.comment.ip.replace(/\./g, '-');
         type = 'ip';
       }
-      // event: beforeBanUser
-      const shouldContinue = beforeEvent('beforeBanUser', {
-        userKey: key,
-        type,
-      }, this.bus);
-      if (!shouldContinue) { return; }
-      this.db.ref(`ban/${key}`).once('value').then((snapshot) => {
-        if (snapshot.val()) {
-          this.$Message.error(this.i18next.t('CommentCard.error.repeated_banning'));
-          return;
-        }
-        this.db.ref(`ban/${key}`).set({
-          date: now,
-          reason: 'comment',
-        }).then(() => {
-          // event: bannedUser
-          afterEvent('bannedUser', {
-            userKey: key,
-            type,
-          }, this.bus);
+      PHM.beforeEvent(EVENTS.BAN_USER, { type, userKey: key })
+        .then(() => {
+          butler.db.ref(`ban/${key}`).once('value').then((snapshot) => {
+            if (snapshot.val()) {
+              this.$Message.error(this.t('CommentCard.error.repeated_banning'));
+              return;
+            }
+            butler.db.ref(`ban/${key}`).set({
+              date: (new Date()).toISOString(),
+              reason: 'comment',
+            }).then(() => {
+              this.$Message.success(this.t('CommentCard.success.banning_user'));
 
-          this.$Message.success(this.i18next.t('CommentCard.success.banning_user'));
-        }).catch((error) => {
-          this.$Message.error(this.i18next.t('CommentCard.error.banning_user'));
+              PHM.afterEvent(EVENTS.BAN_USER, { type, userKey: key });
+            }).catch((error) => {
+              this.$Message.error(this.t('CommentCard.error.banning_user'));
 
-          // event: bannedUser
-          afterEvent('bannedUser', { error }, this.bus);
-
-        });
-      });
+              PHM.afterEvent(EVENTS.BAN_USER, { error, type, userKey: key });
+            });
+          });
+        })
+        .catch((error) => {
+          handlePluginHookError(error);
+        })
     },
     showUserInfo() {
-      Bus.$emit('ShowUserInfo', {
+      bus.$emit('ShowUserInfo', {
         uid: this.comment.uid,
         displayName: this.author.displayName,
         photoURL: this.author.photoURL,

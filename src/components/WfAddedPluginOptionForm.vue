@@ -1,8 +1,8 @@
 <template>
   <div class="wf-added-plugin-option-form">
     <i-form v-if="form" ref="form" :model="form" :rules="rules" label-position="top">
-      <i-form-item v-for="option in options" :key="option.key" :label="t(option.displayName)" :prop="option.key">
-        <i-input v-model="form[option.key]" :placeholder="t(option.placeholder)"></i-input>
+      <i-form-item v-for="option in options" :key="option.key" :label="_t(option.displayName)" :prop="option.key">
+        <i-input v-model="form[option.key]" :placeholder="_t(option.placeholder)"></i-input>
       </i-form-item>
       <div>
         <i-button type="primary" @click="submit" :loading="isUpdating">Submit</i-button>
@@ -12,22 +12,21 @@
   </div>
 </template>
 <script>
-import Bus from '../common/bus';
-import { PTM } from '../utils';
+import { butler } from '../common';
 
 export default {
   name: 'wf-added-plugin-option-form',
-  props: ['options', 'pluginId'],
+  props: ['options', 'pluginId', 't'],
   data() {
     return {
       form: undefined,
       rules: undefined,
       isUpdating: false,
-      t: PTM.t(Bus.config.locale)(this.pluginId),
+      _t: this.t(this.pluginId),
     };
   },
   computed: {
-    optionRef: () => Bus.db.ref(`plugins/${this.pluginId}/a/x/x/x/u/options`),
+    optionRef: () => butler.db.ref(`plugins/${this.pluginId}/a/x/x/x/u/options`),
   },
   created() {
     this.optionRef.once('value')
@@ -38,7 +37,7 @@ export default {
           form[key] = '';
           rules[key] = validate.map(rule => (
             rule.message
-              ? Object.assign(rule, { message: this.t(rule.message) })
+              ? Object.assign(rule, { message: this._t(rule.message) })
               : rule
           ));
         });

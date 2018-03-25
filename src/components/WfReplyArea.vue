@@ -19,26 +19,23 @@
         <i-tooltip placement="right" :content="mentionLabel">
           <i-icon type="at" size="14" :class="{ 'wf-inactive': !isMentionAvailable }"></i-icon>
         </i-tooltip>
-        <template
-          v-if="pluginComponents['comments.before']">
-          <component
-            v-for="(module, cpntName) in pluginComponents['comments.before']"
-            :is="cpntName"
-            :key="cpntName"
-            :t="pluginTranslate(module)">
-          </component>
-        </template>
-        <component v-for="(cpntName, idx) in pluginComponents['toolbar']"
+        <component
+          v-for="(cpntName, idx) in pluginComponents.comments.before"
           :is="cpntName"
-          :key="idx"
-          :bus="bus"/>
+          :key="cpntName+idx"
+          v-bind="pluginProps(cpntName)"/>
+        <component
+          v-for="(cpntName, idx) in pluginComponents.toolbar"
+          :is="cpntName"
+          :key="cpntName+idx"
+          v-bind="pluginProps(cpntName)"/>
       </div>
       <div>
         <i-button type="text"
           class="wf-clear-btn"
           :disabled="shouldDisableButton"
           @click="form.content = ''">
-          {{i18next.t('ReplyArea.btn.clear')}}
+          {{t('ReplyArea.btn.clear')}}
         </i-button>
 
         <i-button :type="isPosting ? 'ghost' : 'primary'"
@@ -47,7 +44,7 @@
           @click="postComment"
           :disabled="shouldDisableButton"
           :loading="isPosting">
-          {{i18next.t(isPosting ? 'ReplyArea.btn.posting' : 'ReplyArea.btn.post')}}
+          {{t(isPosting ? 'ReplyArea.btn.posting' : 'ReplyArea.btn.post')}}
         </i-button>
       </div>
     </section>
@@ -56,7 +53,7 @@
       <i-button type="text"
         :disabled="shouldDisableButton"
         @click="form.content = ''">
-        {{i18next.t('ReplyArea.btn.clear')}}
+        {{t('ReplyArea.btn.clear')}}
       </i-button>
 
       <i-button :type="isPosting ? 'ghost' : 'primary'"
@@ -64,15 +61,16 @@
         @click="postComment"
         :disabled="shouldDisableButton"
         :loading="isPosting">
-        {{i18next.t(isPosting ? 'ReplyArea.btn.posting' : 'ReplyArea.btn.post')}}
+        {{t(isPosting ? 'ReplyArea.btn.posting' : 'ReplyArea.btn.post')}}
       </i-button>
     </i-form-item>
   </i-form>
 </template>
 
 <script>
-import Bus from '../common/bus';
-import { handleImageOnError, beforeEvent, afterEvent } from '../utils';
+import { bus, butler } from '../common';
+import { PHM, PCM, handlePluginHookError, EVENTS, pluginProps } from '../plugin';
+import { handleImageOnError, getKey } from '../utils';
 
 export default {
   name: 'wf-reply-area',
@@ -92,57 +90,54 @@ export default {
         content: '',
       },
       users: [],
-      /*
-        Mention
-       */
       mentioningUsername: '',
       atPosition: null,
       shouldShowAutoComplete: false,
-      /*
-        End of: Mention
-       */
     };
   },
   computed: {
-    bus: () => Bus,
-    pluginComponents: () => Bus.pluginComponents,
-    config: () => Bus.config,
-    db: () => Bus.db,
-    i18next: () => Bus.i18next,
+    pluginComponents: () => ({
+      comments: {
+        before: PCM.get('comments.before'),
+      },
+      toolbar: PCM.get('toolbar'),
+    }),
+    pluginProps: () => pluginProps,
+    t: () => (key) => butler.i18next.t(key),
+    user: () => bus.user,
     avatarURL() {
       return this.user
         ? this.user.photoURL
-        : this.config.defaultAvatarURL;
+        : butler.config.defaultAvatarURL;
     },
-    user: () => Bus.user,
     username() {
       return this.user
-        ? this.i18next.t('common.anonymous_user')
+        ? this.t('common.anonymous_user')
         : this.user.displayName;
     },
     placeholder() {
       if (this.isCurrentUserBanned) {
-        return this.i18next.t('ReplyArea.placeholder.user_is_banned');
+        return this.t('ReplyArea.placeholder.user_is_banned');
       }
       if (this.isReply) {
-        return this.i18next.t('ReplyArea.placeholder.reply_to_user_comment', { username: this.replyToCommentAuthorUsername });
+        return this.t('ReplyArea.placeholder.reply_to_user_comment', { username: this.replyToCommentAuthorUsername });
       }
       if (this.user) {
-        return this.i18next.t('ReplyArea.placeholder.join_conversation');
+        return this.t('ReplyArea.placeholder.join_conversation');
       }
-      return this.i18next.t('ReplyArea.placeholder.join_conversation_anonymously');
+      return this.t('ReplyArea.placeholder.join_conversation_anonymously');
     },
     isReply() {
       return !!this.replyToComment;
     },
-    isCurrentUserBanned: () => Bus.isCurrentUserBanned,
+    isCurrentUserBanned: () => bus.isCurrentUserBanned,
     shouldDisableInput() {
       return this.isPosting || this.commentsLoadingState === 'loading' || this.isCurrentUserBanned;
     },
     shouldDisableButton() {
       return this.form.content.trim() === '' || this.isPosting || this.isCurrentUserBanned;
     },
-    isLoadingUserData: () => Bus.$data.isLoadingUserData,
+    isLoadingUserData: () => bus.isLoadingUserData,
     isMentionEnabled() {
       return !this.isLoadingUserData;
     },
@@ -151,42 +146,42 @@ export default {
     },
     mentionLabel() {
       if (this.isLoadingUserData) {
-        return this.i18next.t('ReplyArea.text.initializing_mention_autocomplete');
+        return this.t('ReplyArea.text.initializing_mention_autocomplete');
       }
       if (this.isCurrentUserBanned) {
-        return this.i18next.t('ReplyArea.text.mention_func_not_authorized_banned_user');
+        return this.t('ReplyArea.text.mention_func_not_authorized_banned_user');
       }
       if (this.user) {
-        return this.i18next.t('ReplyArea.text.initialized_mention_autocomplete');
+        return this.t('ReplyArea.text.initialized_mention_autocomplete');
       }
-      return this.i18next.t('ReplyArea.text.mention_func_not_authorized');
+      return this.t('ReplyArea.text.mention_func_not_authorized');
     },
   },
   mounted() {
-    /*
-      `MentionAutoCompleteSelected` event observer
-      Note: update current reply area when recieves the event.
+    /**
+     * ↓Observe `MentionAutoCompleteSelected` event
+     *  Update current reply area when recieves the event.
      */
-    Bus.$on(`MentionAutoCompleteSelected-${this._uid}`, formattedMentionText => {
+    bus.$on(`MentionAutoCompleteSelected-${this._uid}`, formattedMentionText => {
       const { content } = this.form;
       // replace the '@' symbol with formatted text
       this.form.content = [content.slice(0, this.atPosition - 1), formattedMentionText, content.slice(this.atPosition)].join('');
     });
   },
   beforeDestroy() {
-    Bus.enough('OnlyOneReplyAreaShouldBeActive', null, this._uid);
-    Bus.enough(`MentionAutoCompleteSelected-${this._uid}`);
+    bus.enough('OnlyOneReplyAreaShouldBeActive', null, this._uid);
+    bus.enough(`MentionAutoCompleteSelected-${this._uid}`);
   },
   methods: {
     isAnonymousUser(uid) {
-      const { anonymousUserId } = this.config;
+      const { anonymousUserId } = butler.config;
       return !uid || uid === anonymousUserId;
     },
     avatarOnError(event) {
       handleImageOnError(
         event.target,
-        this.config.defaultAvatarURL,
-        this.i18next.t('CommentCard.html_title.image_onerror'),
+        butler.config.defaultAvatarURL,
+        this.t('CommentCard.html_title.image_onerror'),
       );
     },
     postComment() {
@@ -196,9 +191,9 @@ export default {
       // and try to post new comment :-D
       if (this.isCurrentUserBanned) {
         this.$Modal.error({
-          title: this.i18next.t('ReplyArea.error.banned_title'),
-          content: this.i18next.t('ReplyArea.error.banned_content'),
-          okText: this.i18next.t('ReplyArea.btn.confirm'),
+          title: this.t('ReplyArea.error.banned_title'),
+          content: this.t('ReplyArea.error.banned_content'),
+          okText: this.t('ReplyArea.btn.confirm'),
         });
         return;
       }
@@ -211,8 +206,8 @@ export default {
 
       if (content.trim() !== '') {
         const aDate = new Date();
-        const { ip } = Bus.$data.info;
-        const uid = user ? user.uid : this.config.anonymousUserId;
+        const { ip } = bus.info;
+        const uid = user ? user.uid : butler.config.anonymousUserId;
         const date = aDate.toISOString();
 
         let pageURL = null;
@@ -229,7 +224,7 @@ export default {
           // for retrieving comments of a page.
           // If the comment is top-level comment, then it has `pageURL`;
           // else, it has `rootCommentPageURL`.
-          rootCommentPageURL = this.config.pageURL;
+          rootCommentPageURL = butler.config.pageURL;
           parentCommentId = replyToComment.commentId;
           parentCommentUid = replyToComment.uid;
           if (replyToComment.rootCommentId) {
@@ -239,7 +234,7 @@ export default {
             rootCommentUid = replyToComment.uid;
           }
         } else {
-          ({ pageURL } = this.config);
+          ({ pageURL } = butler.config);
         }
 
         const postData = {
@@ -255,143 +250,133 @@ export default {
           rootCommentUid,
         };
 
-        // event: beforePostComment
-        const shouldContinue = beforeEvent('beforePostComment', {
-          comment: postData,
-        }, this.bus);
-        if (!shouldContinue) {
-          this.isPosting = false;
-          return;
-        }
-
-        const newNode = this.db.ref().push();
-        /*
-          There is a difference between `firebase` and `wilddog`
-          Note:
-            - firebase: ref.key
-            - wilddog: ref.key()
+        /**
+         * Plugin Hook Event: postComment
          */
-        const newCommentId = this.config.databaseProvider === 'firebase' ? newNode.key : newNode.key();
-        const pageCommentsData = {
-          authorUid: uid,
-          relatedUid: rootCommentUid,
-          rootCommentId,
-        };
+        PHM.beforeEvent(EVENTS.POST_COMMENT, { comment: postData })
+          .then(() => {
+            const newNode = butler.db.ref().push();
+            const newCommentId = getKey(newNode);
+            const pageCommentsData = {
+              authorUid: uid,
+              relatedUid: rootCommentUid,
+              rootCommentId,
+            };
 
-        Promise.all([
-          this.db.ref(`comments/${newCommentId}`).update(postData),
-          this.db.ref(`pageComments/${this.config.pageURL}/${newCommentId}`).set(pageCommentsData),
-        ]).then(() => {
-          this.isPosting = false;
-          this.$emit('finished-replying'); // When successfully posted reply, hide current reply area
-          this.form.content = '';
-          this.$Message.success(this.i18next.t('ReplyArea.success.posting_comment'));
+            Promise.all([
+              butler.db.ref(`comments/${newCommentId}`).update(postData),
+              butler.db.ref(`pageComments/${butler.config.pageURL}/${newCommentId}`).set(pageCommentsData),
+            ])
+              .then(() => {
+                this.isPosting = false;
+                this.$emit('finished-replying'); // When successfully posted reply, hide current reply area
+                this.form.content = '';
+                this.$Message.success(this.t('ReplyArea.success.posting_comment'));
 
-          // event: postedComment
-          afterEvent('postedComment', {
-            comment: Object.assign({}, postData, { commentId: newCommentId }),
-          }, this.bus);
+                PHM.afterEvent(EVENTS.POST_COMMENT, {
+                  comment: Object.assign({}, postData, { commentId: newCommentId }),
+                });
 
-          /*
-            Handle Mention
-           */
+                /**
+                * Handle mention
+                */
+                const { admin } = bus;
 
-          const { admin } = Bus.$data;
+                let shouldNotifyAdmin = true;
+                let shouldNotifyParentCommentAuthor = true;
+                let shouldNotifyRootCommentAuthor = true;
+                const isAdminMentioned = false;
+                const isParentCommentAuthorMentioned = false;
+                const isRootCommentAuthorMentioned = false;
+                // If no admin exists,
+                // then no notification to `admin`.
+                if (!admin) {
+                  shouldNotifyAdmin = false;
+                // If current user is admin,
+                // then no notification to `admin`.
+                } else if (user && user.uid === admin.uid) {
+                  shouldNotifyAdmin = false;
+                }
+                // If replying to comment posted by
+                //  (1) anonymous user,
+                //  (2) self, or
+                //  (3) admin,
+                // or new comment is top-level comment,
+                // then no notification to `parentCommentAuthor`.
+                if (!replyToComment || this.isAnonymousUser(replyToComment.uid)) {
+                  shouldNotifyParentCommentAuthor = false;
+                } else if (user && user.uid === replyToComment.uid) {
+                  shouldNotifyParentCommentAuthor = false;
+                } else if (admin && admin.uid === replyToComment.uid) {
+                  shouldNotifyParentCommentAuthor = false;
+                }
+                // If `rootComment` posted by
+                //  (1) anonymous user,
+                //  (2) self, or
+                //  (3) admin,
+                // or new comment is top-level comment,
+                // or `rootCommentAuthor` is `parentCommentAuthor`,
+                // then no notification to `rootCommentAuthor`.
+                if (!replyToComment || this.isAnonymousUser(replyToComment.rootCommentUid)) {
+                  shouldNotifyRootCommentAuthor = false;
+                } else if (user && user.uid === replyToComment.rootCommentUid) {
+                  shouldNotifyRootCommentAuthor = false;
+                } else if (admin && admin.uid === replyToComment.rootCommentUid) {
+                  shouldNotifyRootCommentAuthor = false;
+                } else if (replyToComment.uid === replyToComment.rootCommentUid) {
+                  shouldNotifyRootCommentAuthor = false;
+                }
 
-          let shouldNotifyAdmin = true;
-          let shouldNotifyParentCommentAuthor = true;
-          let shouldNotifyRootCommentAuthor = true;
-          const isAdminMentioned = false;
-          const isParentCommentAuthorMentioned = false;
-          const isRootCommentAuthorMentioned = false;
-          // If no admin exists,
-          // then no notification to `admin`.
-          if (!admin) {
-            shouldNotifyAdmin = false;
-          // If current user is admin,
-          // then no notification to `admin`.
-          } else if (user && user.uid === admin.uid) {
-            shouldNotifyAdmin = false;
-          }
-          // If replying to comment posted by
-          //  (1) anonymous user,
-          //  (2) self, or
-          //  (3) admin,
-          // or new comment is top-level comment,
-          // then no notification to `parentCommentAuthor`.
-          if (!replyToComment || this.isAnonymousUser(replyToComment.uid)) {
-            shouldNotifyParentCommentAuthor = false;
-          } else if (user && user.uid === replyToComment.uid) {
-            shouldNotifyParentCommentAuthor = false;
-          } else if (admin && admin.uid === replyToComment.uid) {
-            shouldNotifyParentCommentAuthor = false;
-          }
-          // If `rootComment` posted by
-          //  (1) anonymous user,
-          //  (2) self, or
-          //  (3) admin,
-          // or new comment is top-level comment,
-          // or `rootCommentAuthor` is `parentCommentAuthor`,
-          // then no notification to `rootCommentAuthor`.
-          if (!replyToComment || this.isAnonymousUser(replyToComment.rootCommentUid)) {
-            shouldNotifyRootCommentAuthor = false;
-          } else if (user && user.uid === replyToComment.rootCommentUid) {
-            shouldNotifyRootCommentAuthor = false;
-          } else if (admin && admin.uid === replyToComment.rootCommentUid) {
-            shouldNotifyRootCommentAuthor = false;
-          } else if (replyToComment.uid === replyToComment.rootCommentUid) {
-            shouldNotifyRootCommentAuthor = false;
-          }
+                const notifyFlags = {
+                  shouldNotifyAdmin,
+                  shouldNotifyParentCommentAuthor,
+                  shouldNotifyRootCommentAuthor,
+                };
+                const mentionFlags = {
+                  isAdminMentioned,
+                  isParentCommentAuthorMentioned,
+                  isRootCommentAuthorMentioned,
+                };
+                // Forbid anonymous user to use Mention
+                if (!this.user) {
+                  this.handleNotifications([], newCommentId, notifyFlags, mentionFlags);
+                  return;
+                }
+                const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || [];
+                if (users.length !== 0) {
+                  const mentionedUids = mentions.map(mention => this.users.find(user => user.email === mention.slice(mention.indexOf('(') + 1, -1)).id);
+                  this.handleNotifications(mentionedUids, newCommentId, notifyFlags, mentionFlags);
+                } else {
+                  Promise.all(mentions.map(mention => {
+                    const email = mention.slice(mention.indexOf('(') + 1, -1);
+                    return butler.db.ref('users').orderByChild('email').equalTo(email).once('value');
+                  })).then(snaps => {
+                    const mentionedUids = (
+                      snaps.map(snap => (snap.val()
+                        ? Object.keys(snap.val())[0]
+                        : undefined))
+                    );
+                    this.handleNotifications(mentionedUids, newCommentId, notifyFlags, mentionFlags);
+                  });
+                }
+              })
+              .catch(error => {
+                this.isPosting = false;
+                this.form.content = '';
+                this.$Message.error(this.t('ReplyArea.error.posting_comment'));
 
-          const notifyFlags = {
-            shouldNotifyAdmin,
-            shouldNotifyParentCommentAuthor,
-            shouldNotifyRootCommentAuthor,
-          };
-          const mentionFlags = {
-            isAdminMentioned,
-            isParentCommentAuthorMentioned,
-            isRootCommentAuthorMentioned,
-          };
-          // Forbid anonymous user to use Mention
-          if (!this.user) {
-            this.handleNotifications([], newCommentId, notifyFlags, mentionFlags);
-            return;
-          }
-          const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || [];
-          if (users.length !== 0) {
-            const mentionedUids = mentions.map(mention => this.users.find(user => user.email === mention.slice(mention.indexOf('(') + 1, -1)).id);
-            this.handleNotifications(mentionedUids, newCommentId, notifyFlags, mentionFlags);
-          } else {
-            Promise.all(mentions.map(mention => {
-              const email = mention.slice(mention.indexOf('(') + 1, -1);
-              return this.db.ref('users').orderByChild('email').equalTo(email).once('value');
-            })).then(snaps => {
-              const mentionedUids = (
-                snaps.map(snap => (snap.val()
-                  ? Object.keys(snap.val())[0]
-                  : undefined))
-              );
-              this.handleNotifications(mentionedUids, newCommentId, notifyFlags, mentionFlags);
-            });
-          }
-          /*
-            End of: Handle Mention
-           */
-        })
-          .catch(error => {
+                PHM.afterEvent(EVENTS.POST_COMMENT, { error, comment: postData });
+              });
+          })
+          .catch((error) => {
             this.isPosting = false;
-            this.form.content = '';
-            this.$Message.error(this.i18next.t('ReplyArea.error.posting_comment'));
-
-            // event: postedComment
-            afterEvent('postedComment', { error }, this.bus);
-          });
+            handlePluginHookError(error);
+          })
       }
     },
     handleNotifications(mentionedUids, commentId, notifyFlags, mentionFlags) {
       const { user } = this;
-      const { admin } = Bus.$data;
+      const { admin } = bus;
       const {
         shouldNotifyAdmin,
         shouldNotifyParentCommentAuthor,
@@ -402,7 +387,7 @@ export default {
         isParentCommentAuthorMentioned,
         isRootCommentAuthorMentioned,
       } = mentionFlags;
-      const { pageURL } = this.config;
+      const { pageURL } = butler.config;
       mentionedUids.forEach(mentionedUid => {
         // Incase uid is undefined/null
         if (!mentionedUid) { return; }
@@ -429,7 +414,7 @@ export default {
           uid: mentionedUid,
           type: 'm',
           pageURL,
-          pageTitle: this.config.pageTitle,
+          pageTitle: butler.config.pageTitle,
           commentId,
         });
       });
@@ -451,7 +436,7 @@ export default {
           uid: admin.uid,
           type,
           pageURL,
-          pageTitle: this.config.pageTitle,
+          pageTitle: butler.config.pageTitle,
           commentId,
         });
       }
@@ -460,7 +445,7 @@ export default {
           uid: this.replyToComment.uid,
           type: isParentCommentAuthorMentioned ? 'm' : 'r',
           pageURL,
-          pageTitle: this.config.pageTitle,
+          pageTitle: butler.config.pageTitle,
           commentId,
         });
       }
@@ -469,7 +454,7 @@ export default {
           uid: this.replyToComment.rootCommentUid,
           type: isRootCommentAuthorMentioned ? 'm' : 'd',
           pageURL,
-          pageTitle: this.config.pageTitle,
+          pageTitle: butler.config.pageTitle,
           commentId,
         });
       }
@@ -480,7 +465,7 @@ export default {
       const {
         uid, type, pageURL = null, pageTitle = null, commentId = null, content = null,
       } = data;
-      this.db.ref(`notifications/${uid}`).push({
+      butler.db.ref(`notifications/${uid}`).push({
         type,
         pageURL,
         pageTitle,
@@ -492,7 +477,7 @@ export default {
     },
     contentOnFocus() {
       if (this.isMain) {
-        Bus.$emit('OnlyOneReplyAreaShouldBeActive', 'MainReplyArea');
+        bus.$emit('OnlyOneReplyAreaShouldBeActive', 'MainReplyArea');
       }
     },
     contentOnChange(e) {
@@ -502,7 +487,7 @@ export default {
       this.shouldShowAutoComplete = true;
       if (e.data === '@' && this.isMentionEnabled) {
         this.atPosition = e.target.selectionStart;
-        Bus.$emit('ShowMentionAutoComplete', this._uid);
+        bus.$emit('ShowMentionAutoComplete', this._uid);
       }
     },
   },

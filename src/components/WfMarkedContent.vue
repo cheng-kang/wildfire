@@ -7,7 +7,7 @@ import Vue from 'vue';
 import '../assets/highlight.css';
 import '../assets/highlight.dark.css';
 import { markdown } from '../utils';
-import Bus from '../common/bus';
+import { bus } from '../common';
 
 export default {
   name: 'wf-marked-content',
@@ -22,7 +22,7 @@ export default {
         template: `<div> ${html} </div>`,
         methods: {
           showUserInfo(email) {
-            Bus.$emit('ShowUserInfo', email);
+            bus.$emit('ShowUserInfo', email);
           },
         },
       });

@@ -2,7 +2,7 @@ module.exports = {
   root: true,
   parser: 'babel-eslint',
   parserOptions: {
-    sourceType: 'module'
+    sourceType: 'module',
   },
   env: {
     browser: true,
@@ -12,7 +12,7 @@ module.exports = {
   ],
   // required to lint *.vue files
   plugins: [
-    'html'
+    'html',
   ],
   'rules': {
     'import/extensions': 'off',
@@ -21,12 +21,18 @@ module.exports = {
     'no-use-before-define': ['error', { 'functions': false, 'classes': true }],
     'no-shadow': 'off',
     'no-underscore-dangle': 'off',
+    'function-paren-newline': ['error', 'multiline'],
+    'object-curly-newline': ['error', {
+      ObjectExpression: 'always',
+      ObjectPattern: { multiline: true },
+      minProperties: 2,
+    }],
     'padded-blocks': 0,
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
-  }
-}
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+  },
+};

@@ -1,6 +1,6 @@
 import marked from 'marked';
 import sanitizeHtml from 'sanitize-html';
-import hljs from '../common/loadHighlightjs';
+import hljs from '../modules/highlightjs';
 
 const validateEmail = (str) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test((str || '').toLowerCase());
 

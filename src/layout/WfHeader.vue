@@ -11,10 +11,10 @@
             size="14"
             class="spin-icon"
             :style="{marginRight: '5px'}"></i-icon>
-          {{i18next.t('Header.text.loading')}}
+          {{t('Header.text.loading')}}
         </span>
         <span v-else>
-          {{discussionCount}} {{i18next.t('Header.btn.comment', { count: discussionCount })}}
+          {{discussionCount}} {{t('Header.btn.comment', { count: discussionCount })}}
         </span>
       </i-menu-item>
 
@@ -29,36 +29,39 @@
       <i-submenu name="more" v-if="user" :class="{ 'wf-float-right': !isLargeScreen}" class="wf-no-border-bottom">
         <template slot="title"></template>
         <template v-if="user">
-          <i-menu-group :title="i18next.t('Header.menu.personal_center')">
-            <i-menu-item name="user_setting">{{i18next.t('Header.menu.user_setting')}}</i-menu-item>
-            <i-menu-item name="notification">{{i18next.t('Header.menu.notification')}}</i-menu-item>
-            <component v-for="(cpntName, idx) in pluginComponents['menu.personal']"
+          <i-menu-group :title="t('Header.menu.personal_center')">
+            <i-menu-item name="user_setting">{{t('Header.menu.user_setting')}}</i-menu-item>
+            <i-menu-item name="notification">{{t('Header.menu.notification')}}</i-menu-item>
+            <component
+              v-for="(cpntName, idx) in pluginComponents.menu.personal"
               :is="cpntName"
-              :key="idx"
-              :bus="bus"/>
+              :key="cpntName+idx"
+              v-bind="pluginProps(cpntName)"/>
           </i-menu-group>
-          <i-menu-group :title="i18next.t('Header.menu.admin_center')" v-if="user && user.isAdmin">
-            <i-menu-item name="plugin_center">{{i18next.t('Header.menu.plugin_center')}}</i-menu-item>
-            <i-menu-item name="report_management">{{i18next.t('Header.menu.report_management')}}</i-menu-item>
-            <i-menu-item name="admin_helpers">{{i18next.t('Header.menu.admin_helpers')}}</i-menu-item>
-            <component v-for="(cpntName, idx) in pluginComponents['menu.admin']"
+          <i-menu-group :title="t('Header.menu.admin_center')" v-if="user && user.isAdmin">
+            <i-menu-item name="plugin_center">{{t('Header.menu.plugin_center')}}</i-menu-item>
+            <i-menu-item name="report_management">{{t('Header.menu.report_management')}}</i-menu-item>
+            <i-menu-item name="admin_helpers">{{t('Header.menu.admin_helpers')}}</i-menu-item>
+            <component
+              v-for="(cpntName, idx) in pluginComponents.menu.admin"
               :is="cpntName"
-              :key="idx"
-              :bus="bus"/>
+              :key="cpntName+idx"
+              v-bind="pluginProps(cpntName)"/>
           </i-menu-group>
-          <i-menu-group :title="i18next.t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
-            <component v-for="(cpntName, idx) in pluginComponents['menu.plugin']"
+          <i-menu-group :title="t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
+            <component
+              v-for="(cpntName, idx) in pluginComponents.menu.plugin"
               :is="cpntName"
-              :key="idx"
-              :bus="bus"/>
+              :key="cpntName+idx"
+              v-bind="pluginProps(cpntName)"/>
           </i-menu-group>
         </template>
         <template v-if="isSmallScreen">
-          <i-menu-group :title="i18next.t('Header.menu.actions')">
-            <i-menu-item v-if="user" name="sign_out">{{i18next.t('Header.menu.sign_out')}}</i-menu-item>
+          <i-menu-group :title="t('Header.menu.actions')">
+            <i-menu-item v-if="user" name="sign_out">{{t('Header.menu.sign_out')}}</i-menu-item>
             <template v-else>
-              <i-menu-item name="sign_up">{{i18next.t('Header.menu.sign_up')}}</i-menu-item>
-              <i-menu-item name="sign_in">{{i18next.t('Header.menu.sign_in')}}</i-menu-item>
+              <i-menu-item name="sign_up">{{t('Header.menu.sign_up')}}</i-menu-item>
+              <i-menu-item name="sign_in">{{t('Header.menu.sign_in')}}</i-menu-item>
             </template>
           </i-menu-group>
         </template>
@@ -66,67 +69,44 @@
       <li class="wf-float-right" v-if="!isSmallScreen || !user">
         <template v-if="!user" >
           <a @click="showAuthFormModal('sign_up')">
-            {{i18next.t('Header.btn.sign_up')}}
+            {{t('Header.btn.sign_up')}}
           </a>
           /
           <a @click="showAuthFormModal('sign_in')">
-            {{i18next.t('Header.btn.sign_in')}}
+            {{t('Header.btn.sign_in')}}
           </a>
         </template>
         <a v-else @click="signOut">
-          {{i18next.t('Header.btn.sign_out')}}
+          {{t('Header.btn.sign_out')}}
         </a>
       </li>
     </i-menu>
 
-    <i-modal
-      v-model="authFormModal"
-      :closable="false"
-      :footer-hide="true"
-      :theme="config.theme"
-      class-name="wf-form">
-      <div style="text-align:center">
-        <wf-auth-form :init-tab="authFormInitTab"></wf-auth-form>
-      </div>
+    <i-modal v-model="authFormModal" :closable="false" :footer-hide="true" :theme="theme" class-name="wf-form">
+      <wf-auth-form :init-tab="authFormInitTab"/>
     </i-modal>
 
-    <i-modal
-      v-model="userSettingModal"
-      :closable="false"
-      :footer-hide="true"
-      :theme="config.theme"
-      class-name="wf-form">
-      <div style="text-align:center">
-        <wf-user-setting :user="user" v-if='!!user'></wf-user-setting>
-      </div>
+    <i-modal v-if='user' v-model="userSettingModal" :closable="false" :footer-hide="true" :theme="theme" class-name="wf-form">
+      <wf-user-setting :user="user"/>
     </i-modal>
-    <i-modal v-model="personalCenterModal" :closable="false" :footer-hide="true" :theme="config.theme">
-      <div style="text-align:center">
-        <wf-personal-center :user="user" v-if="user"></wf-personal-center>
-      </div>
+    <i-modal v-if="user" v-model="personalCenterModal" :closable="false" :footer-hide="true" :theme="theme">
+      <wf-personal-center :user="user"/>
     </i-modal>
-    <i-modal v-model="reportMangementModal" :closable="false" :footer-hide="true" :theme="config.theme">
-      <div style="text-align:center">
-        <wf-report-management :user="user" v-if='user && user.isAdmin'></wf-report-management>
-      </div>
+    <i-modal  v-if="user && user.isAdmin" v-model="reportMangementModal" :closable="false" :footer-hide="true" :theme="theme">
+      <wf-report-management :user="user"/>
     </i-modal>
-    <i-modal v-model="adminHelpersModal" :closable="false" :footer-hide="true" :theme="config.theme">
-      <div style="text-align:center">
-        <wf-admin-helpers :user="user" v-if='user && user.isAdmin'></wf-admin-helpers>
-      </div>
+    <i-modal v-if="user && user.isAdmin" v-model="adminHelpersModal" :closable="false" :footer-hide="true" :theme="theme">
+      <wf-admin-helpers :user="user"/>
     </i-modal>
-    <i-modal v-model="pluginCenterModal" :closable="false" :footer-hide="true" :theme="config.theme">
-      <div>
-        <!-- <wf-plugin-center  v-if='user && user.isAdmin'></wf-plugin-center> -->
-        <wf-plugin-center></wf-plugin-center>
-      </div>
+    <i-modal v-if="user && user.isAdmin" v-model="pluginCenterModal" :closable="false" :footer-hide="true" :theme="theme">
+      <wf-plugin-center/>
     </i-modal>
   </header>
 </template>
 
 <script>
-import Bus from '../common/bus';
-import { beforeEvent, afterEvent } from '../utils';
+import { bus, butler } from '../common';
+import { PCM, PHM, EVENTS, pluginProps } from '../plugin';
 
 export default {
   name: 'wf-header',
@@ -147,33 +127,36 @@ export default {
     };
   },
   computed: {
-    bus: () => Bus,
-    pluginComponents: () => Bus.pluginComponents,
-    auth: () => Bus.auth,
-    config: () => Bus.config,
-    db: () => Bus.db,
-    i18next: () => Bus.i18next,
-    user: () => Bus.user,
+    pluginComponents: () => ({
+      menu: {
+        personal: PCM.get('menu.personal'),
+        admin: PCM.get('menu.admin'),
+        plugin: PCM.get('menu.plugin'),
+      },
+    }),
+    pluginProps: () => pluginProps,
+    t: () => (key) => butler.i18next.t(key),
+    theme: () => butler.config.theme,
+    user: () => bus.user,
     username() {
       return this.user
         ? this.user.displayName
-        : this.i18next.t('common.anonymous_user');
+        : this.t('common.anonymous_user');
     },
-    discussionCount: () => Bus.$data.discussionCount,
-    windowWidth: () => Bus.$data.windowWidth,
+    discussionCount: () => bus.discussionCount,
     isSmallScreen() {
       // <= screen width of iPhone 6 plus
-      return this.windowWidth <= 414;
+      return bus.windowWidth <= 414;
     },
     isSmallerScreen() {
       // screen width not wide enough for username to display
-      return this.windowWidth <= 355;
+      return bus.windowWidth <= 355;
     },
     isLargeScreen() {
       return !this.isSmallScreen && !this.isSmallerScreen;
     },
     shouldShowPluginMenu() {
-      return this.pluginComponents['menu.plugin'] && this.pluginComponents['menu.plugin'].length;
+      return this.pluginComponents.menu.plugin.length > 0;
     },
   },
   methods: {
@@ -185,24 +168,28 @@ export default {
     },
     signOut() {
       this.$Modal.confirm({
-        title: this.i18next.t('Header.text.sign_out_confirm_title'),
-        content: `<p> ${this.i18next.t('Header.text.sign_out_confirm_content')} </p>`,
-        okText: this.i18next.t('Header.btn.confirm'),
-        cancelText: this.i18next.t('Header.btn.cancel'),
+        title: this.t('Header.text.sign_out_confirm_title'),
+        content: `<p> ${this.t('Header.text.sign_out_confirm_content')} </p>`,
+        okText: this.t('Header.btn.confirm'),
+        cancelText: this.t('Header.btn.cancel'),
         onOk: () => {
-          // event: beforeSignOut
-          const shouldContinue = beforeEvent('beforeSignOut', {}, this.bus);
-          if (!shouldContinue) return;
-          this.auth.signOut().then(() => {
-            // event: signedOut
-            afterEvent('signedOut', {}, this.bus);
-          }).catch(error => {
-            // event: signedOut
-            afterEvent('signedOut', { error }, this.bus);
-          });
+          /**
+           * Plugin Hook Event: signOut
+           */
+          PHM.beforeEvent(EVENTS.SIGN_OUT)
+            .then(() => {
+              butler.auth.signOut().then(() => {
+                PHM.afterEvent(EVENTS.SIGN_OUT);
+              }).catch(error => {
+                PHM.afterEvent(EVENTS.SIGN_OUT, { error });
+              });
+            })
+            .catch((error) => {
+              handlePluginHookError(error);
+            })
         },
         onCancel: () => {
-          this.$Message.error(this.i18next.t('AuthForm.error.signing_out_canceled'));
+          this.$Message.error(this.t('AuthForm.error.signing_out_canceled'));
         },
       });
     },
@@ -215,9 +202,9 @@ export default {
         this.userSettingModal = true;
       } else {
         this.$Modal.warning({
-          title: this.i18next.t('Header.text.sign_in_warning_title'),
-          content: this.i18next.t('Header.text.sign_in_warning_content'),
-          okText: this.i18next.t('Header.btn.confirm'),
+          title: this.t('Header.text.sign_in_warning_title'),
+          content: this.t('Header.text.sign_in_warning_content'),
+          okText: this.t('Header.btn.confirm'),
         });
       }
     },
@@ -264,9 +251,9 @@ export default {
     },
   },
   created() {
-    this.db.ref(`pageComments/${this.config.pageURL}`).on('value', snapshot => {
+    butler.db.ref(`pageComments/${butler.config.pageURL}`).on('value', snapshot => {
       this.pageComments = snapshot.val() || {};
-      Bus.$data.discussionCount = Object.keys(this.pageComments).length;
+      bus.discussionCount = Object.keys(this.pageComments).length;
     });
   },
 };

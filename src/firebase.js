@@ -1,11 +1,11 @@
 import VueResource from 'vue-resource';
 import firebase from 'firebase';
 import VueFire from 'vuefire';
-import Bus from './common/bus';
-import initLocalComponents from './common/initLocalComponents';
-import iView from './common/loadiView';
-import dateFns from './common/loadDateFns';
-import i18next, { initI18next, resetI18next, addTranslation } from './common/loadI18next';
+import bus from './common/bus';
+import initLocalComponents from './common/init-local-components';
+import iView from './common/load-iview';
+import dateFns from './common/load-date-fns';
+import i18next, { initI18next, resetI18next } from './common/load-i18next';
 import { b64EncodeUnicode, b64DecodeUnicode, defaultPageURL } from './utils';
 import Wildfire from './Wildfire';
 import './assets/style.css';
@@ -73,27 +73,27 @@ export const install = (_Vue, config) => {
   wf.b64EncodeUnicode = b64EncodeUnicode;
   wf.b64DecodeUnicode = b64DecodeUnicode;
 
-  Object.assign(Bus, wf);
+  Object.assign(bus, wf);
 
   plugins.forEach(plugin => {
     plugin.install({
       registerComponent: (componentName, component) => _Vue.component(componentName, component),
       i18n: (lang, translation) => addTranslation(lang, translation),
       renderAt: (place, componentName) => (
-        Bus.pluginComponents[place]
-          ? Bus.pluginComponents[place].push(componentName)
-          : Object.assign(Bus.pluginComponents, { [place]: [componentName] })
+        bus.pluginComponents[place]
+          ? bus.pluginComponents[place].push(componentName)
+          : Object.assign(bus.pluginComponents, { [place]: [componentName] })
       ),
     });
     Object.keys(plugin.on || {}).forEach(eventName => {
       const eventFn = plugin.on[eventName];
-      if (Bus.events[eventName]) {
-        Bus.events[eventName].push(eventFn);
+      if (bus.events[eventName]) {
+        bus.events[eventName].push(eventFn);
       } else {
-        Object.assign(Bus.events, { [eventName]: [eventFn] });
+        Object.assign(bus.events, { [eventName]: [eventFn] });
       }
     });
-    Object.assign(Bus.pluginOptions, { [plugin.name]: plugin.options });
+    Object.assign(bus.pluginOptions, { [plugin.name]: plugin.options });
   });
 
   _Vue.component('wildfire', Wildfire);
@@ -101,7 +101,7 @@ export const install = (_Vue, config) => {
 
 export const reset = (_Vue, config = {}, err) => {
   const getDatabaseConfig = () => {
-    const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = Bus.config;
+    const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = bus.config;
     if (
       standbyDatabaseConfigs.length === 0
       || !err
@@ -116,14 +116,14 @@ export const reset = (_Vue, config = {}, err) => {
   };
 
   const {
-    databaseProvider = Bus.config.databaseProvider,
-    standbyDatabaseConfigs = Bus.config.standbyDatabaseConfigs,
+    databaseProvider = bus.config.databaseProvider,
+    standbyDatabaseConfigs = bus.config.standbyDatabaseConfigs,
     pageTitle = document.title,
-    pageURLMode = Bus.config.pageURLMode,
-    theme = Bus.config.theme,
-    locale = Bus.config.locale,
-    defaultAvatarURL = Bus.config.defaultAvatarURL,
-    plugins = Bus.plugins,
+    pageURLMode = bus.config.pageURLMode,
+    theme = bus.config.theme,
+    locale = bus.config.locale,
+    defaultAvatarURL = bus.config.defaultAvatarURL,
+    plugins = bus.plugins,
   } = config;
 
   let { databaseConfig, pageURL } = config;
@@ -165,7 +165,7 @@ export const reset = (_Vue, config = {}, err) => {
   wf.auth = wf.dbApp.auth();
   wf.authService = firebase.auth.EmailAuthProvider.credential;
 
-  Object.assign(Bus, wf);
+  Object.assign(bus, wf);
 
   plugins.forEach(plugin => {
     plugin.install({
@@ -175,20 +175,20 @@ export const reset = (_Vue, config = {}, err) => {
       ),
       i18n: (lang, translation) => addTranslation(lang, translation),
       renderAt: (place, componentName) => (
-        Bus.pluginComponents[place]
-          ? Bus.pluginComponents[place].push(componentName)
-          : Object.assign(Bus.pluginComponents, { [place]: [componentName] })
+        bus.pluginComponents[place]
+          ? bus.pluginComponents[place].push(componentName)
+          : Object.assign(bus.pluginComponents, { [place]: [componentName] })
       ),
     });
     Object.keys(plugin.on || {}).forEach(eventName => {
       const eventFn = plugin.on[eventName];
-      if (Bus.events[eventName]) {
-        Bus.events[eventName].push(eventFn);
+      if (bus.events[eventName]) {
+        bus.events[eventName].push(eventFn);
       } else {
-        Object.assign(Bus.events, { [eventName]: [eventFn] });
+        Object.assign(bus.events, { [eventName]: [eventFn] });
       }
     });
-    Object.assign(Bus.pluginOptions, { [plugin.name]: plugin.options });
+    Object.assign(bus.pluginOptions, { [plugin.name]: plugin.options });
   });
 };
 
