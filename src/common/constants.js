@@ -24,3 +24,5 @@ export const DEFAULT = {
   THEME: THEME.LIGHT,
   PAGE_URL_MODE: PAGE_URL_MODE.NORMAL,
 };
+
+export const PLUGIN_LIST_CDN = 'https://unpkg.com/wf-plugin-center';

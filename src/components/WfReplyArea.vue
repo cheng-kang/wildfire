@@ -20,11 +20,6 @@
           <i-icon type="at" size="14" :class="{ 'wf-inactive': !isMentionAvailable }"></i-icon>
         </i-tooltip>
         <component
-          v-for="(cpntName, idx) in pluginComponents.comments.before"
-          :is="cpntName"
-          :key="cpntName+idx"
-          v-bind="pluginProps(cpntName)"/>
-        <component
           v-for="(cpntName, idx) in pluginComponents.toolbar"
           :is="cpntName"
           :key="cpntName+idx"
@@ -97,9 +92,6 @@ export default {
   },
   computed: {
     pluginComponents: () => ({
-      comments: {
-        before: PCM.get('comments.before'),
-      },
       toolbar: PCM.get('toolbar'),
     }),
     pluginProps: () => pluginProps,

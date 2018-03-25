@@ -264,7 +264,7 @@ export default {
     pluginProps: () => pluginProps,
     t: () => (key) => butler.i18next.t(key),
     distanceInWordsToNow: () => butler.distanceInWordsToNow,
-    formatDate: () => console.log(butler.formatDate) || butler.formatDate,
+    formatDate: () => butler.formatDate,
     user: () => bus.user,
     isCurrentUserBanned: () => bus.isCurrentUserBanned,
     textContent: () => textContent,

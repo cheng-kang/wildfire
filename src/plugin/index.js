@@ -1,23 +1,23 @@
 import Vue from 'vue';
 import { bus, butler } from '../common';
-import WfPluginComponentManager from './WfPluginComponentManager';
-import WfPluginHookManager from './WfPluginHookManager';
+import PCM from './WfPluginComponentManager';
+import PHM from './WfPluginHookManager';
 import WfPluginWidgetManager from './WfPluginWidgetManager';
 import WfPluginTranslationManager from './WfPluginTranslationManager';
 import _pluginProps from './plugin-props';
+import { getPluginIdFromUniqueComponentName } from './helpers';
 
-export { default as pluginList } from './plugin-list';
 export * from './helpers';
 export * from './constants';
 
-export const PCM = new WfPluginComponentManager();
-export const PHM = new WfPluginHookManager();
+export { PCM, PHM };
 export const PWM = new WfPluginWidgetManager();
 export const PTM = new WfPluginTranslationManager();
 export const PTM4Meta = new WfPluginTranslationManager();
 
-export const t = (componentName) => (
-  PTM.t(bus.config.locale)(
+
+const t = (componentName) => (
+  PTM.t(butler.config.locale)(
     componentName
       .split('-')
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
@@ -25,7 +25,7 @@ export const t = (componentName) => (
   )
 )
 
-export const pluginProps = (componentName) => Object.assign(_pluginProps(componentName), { t: t(componentName) })
+export const pluginProps = (componentName) => Object.assign(_pluginProps(componentName), { t: t(getPluginIdFromUniqueComponentName(componentName)) })
 
 export const injectPlugin = (pluginId) => {
   const plugin = window[pluginId];
@@ -39,7 +39,7 @@ export const injectPlugin = (pluginId) => {
   const { components, hooks, widgets, translation } = (plugin.default || plugin);
 
   Vue.set(bus.pluginsData, pluginId, {});
-  PCM.add(components);
+  PCM.add({ pluginId, components });
   PHM.add({ pluginId, hooks });
   PWM.add(widgets);
   PTM.add({ pluginId, translation });

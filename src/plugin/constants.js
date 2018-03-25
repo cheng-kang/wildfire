@@ -23,3 +23,5 @@ export const EVENTS = {
   REPORT_COMMENT: 'reportComment',
   VOTE_COMMENT: 'voteComment',
 };
+
+export const CONNECTOR = '-c-wf-c-';
