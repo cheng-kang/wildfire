@@ -62,8 +62,8 @@
 
 <script>
 import Vue from 'vue';
-import { bus, butler } from '../common';
-import { pluginList, PTM4Meta } from '../plugin';
+import { bus, butler, PLUGIN_LIST_CDN } from '../common';
+import { PTM4Meta } from '../plugin';
 import { getKey } from '../utils';
 
 export default {
@@ -123,20 +123,27 @@ export default {
   methods: {
     loadPluginMetaData() {
       this.meta = [];
-      Object.keys(pluginList).forEach(pluginId => {
-        Vue.http.get(`${pluginList[pluginId]}/dist/meta.json`)
-          .then(({ data: metaData }) => {
-            this.meta.push({
-              ...metaData,
-              id: metaData.library,
-            });
-            PTM4Meta.add({ pluginId: metaData.library, translation: metaData.translation });
-          })
-          .catch(error => {
-            console.error(error);
-            this.$Message.error(this.t('PluginCenter.error.loading_plugin_meta'));
+      Vue.http.get(PLUGIN_LIST_CDN)
+        .then(({ data: pluginList }) => {
+          Object.keys(pluginList).forEach(pluginId => {
+            Vue.http.get(`${pluginList[pluginId]}/dist/meta.json`)
+              .then(({ data: metaData }) => {
+                this.meta.push({
+                  ...metaData,
+                  id: metaData.library,
+                });
+                PTM4Meta.add({ pluginId: metaData.library, translation: metaData.translation });
+              })
+              .catch(error => {
+                console.error(error);
+                this.$Message.error(this.t('PluginCenter.error.loading_plugin_meta'));
+              });
           });
-      });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.$Message.error(this.t('PluginCenter.error.loading_plugin_list'));
+        })
     },
     addPlugin(pluginId) {
       butler.db.ref(`addedPluginsFromCenter/${pluginId}`).set(false)

@@ -30,11 +30,9 @@ import elementResizeDetectorMaker from 'element-resize-detector';
 import WfHeader from './layout/WfHeader';
 import WfBody from './layout/WfBody';
 import WfFooter from './layout/WfFooter';
-import { bus, butler } from './common';
-import { pluginList, injectPlugin, ejectPlugin, PCM, PHM, pluginProps } from './plugin';
+import { bus, butler, PLUGIN_LIST_CDN } from './common';
+import { injectPlugin, ejectPlugin, PCM, PHM, pluginProps } from './plugin';
 import { getKey } from './utils';
-
-console.log(butler)
 
 export default {
   name: 'wildfire',
@@ -202,22 +200,29 @@ export default {
       });
     },
     listenToPluginCenter() {
-      butler.db.ref('addedPluginsFromCenter').orderByValue().equalTo(true).on('child_added', snapshot => {
-        const pluginId = getKey(snapshot);
-        const script = document.createElement('script');
-        script.src = pluginList[pluginId];
-        script.onload = () => {
-          injectPlugin(pluginId);
-        };
-        script.onerror = (error) => {
+      Vue.http.get(PLUGIN_LIST_CDN)
+        .then(({ data: pluginList }) => {
+          butler.db.ref('addedPluginsFromCenter').orderByValue().equalTo(true).on('child_added', snapshot => {
+            const pluginId = getKey(snapshot);
+            const script = document.createElement('script');
+            script.src = pluginList[pluginId];
+            script.onload = () => {
+              injectPlugin(pluginId);
+            };
+            script.onerror = (error) => {
+              console.error(error);
+              this.$Message.error(butler.i18next.t('Wildfire.error.loading_plugin'));
+            }
+            document.head.appendChild(script);
+          });
+        })
+        .catch((error) => {
           console.error(error);
-          this.$Message.error(butler.i18next.t('Wildfire.error.loading_plugin'));
-        }
-        document.head.appendChild(script);
-      });
+          this.$Message.error(this.t('Wildfire.error.loading_plugin_list'));
+        })
       butler.db.ref('addedPluginsFromCenter').on('child_changed', snapshot => {
         const pluginId = getKey(snapshot);
-        if (snapshot.val()) ejectPlugin(pluginId);
+        if (!snapshot.val()) ejectPlugin(pluginId);
       });
       butler.db.ref('addedPluginsFromCenter').on('child_removed', snapshot => {
         const pluginId = getKey(snapshot);

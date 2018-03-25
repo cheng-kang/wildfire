@@ -22,11 +22,15 @@ export default {
       form: undefined,
       rules: undefined,
       isUpdating: false,
-      _t: this.t(this.pluginId),
     };
   },
   computed: {
-    optionRef: () => butler.db.ref(`plugins/${this.pluginId}/a/x/x/x/u/options`),
+    optionRef() {
+      return butler.db.ref(`plugins/${this.pluginId}/a/x/x/x/u/options`);
+    },
+    _t() {
+      return this.t(this.pluginId);
+    },
   },
   created() {
     this.optionRef.once('value')
