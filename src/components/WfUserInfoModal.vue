@@ -9,7 +9,7 @@
       <p v-if="encodedIP">
         <span>IP:</span> {{encodedIP}}
       </p>
-      <p v-if="!isAnonymousUser">
+      <p v-if="selectedCommentUserInfo.email">
         <span>Email:</span> {{selectedCommentUserInfo.email}}
       </p>
     </div>

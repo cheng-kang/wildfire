@@ -3,7 +3,8 @@ import forIn from 'lodash/forIn';
 import values from 'lodash/values';
 import flattenDeep from 'lodash/flattendeep';
 import { EVENTS } from './constants';
-import bus from '../common/bus';
+import { bus, butler } from '../common';
+import { PTM } from './WfPluginTranslationManager';
 
 const WfPluginHookManager = new Vue({
   data() {
@@ -13,6 +14,23 @@ const WfPluginHookManager = new Vue({
       afters: {},
       events,
     };
+  },
+  computed: {
+    toolbox() {
+      return {
+        t: PTM.t(butler.config.locale),
+        pluginData: bus.pluginsData,
+        commonData: bus.commonData,
+        broadcast: bus.$emit,
+        listenTo: bus.listenTo,
+        enough: bus.enough,
+        db: butler.db,
+        auth: butler.auth,
+        config: butler.config,
+        Message: this.$Message,
+        http: this.$http
+      };
+    },
   },
   created() {
     this.reset();
@@ -45,18 +63,16 @@ const WfPluginHookManager = new Vue({
       return new Promise(
         (resolve, reject) =>
           Promise.all(
-            flattenDeep(values(this.befores[event])).map((cb) =>
-              cb(Object.assign({}, params, { bus })),
-            ),
+            flattenDeep(values(this.befores[event])).map((cb) => cb(Object.assign({}, params, this.toolbox)))
           )
-            .then((results) => results.reduce((a, b) => a && b, true) ? resolve() : reject())
-            .catch((error) => reject())
+            .then((results) => console.log('results:', results) || (results.reduce((a, b) => a && b, true) ? resolve() : reject()))
+            .catch((error) => console.log(error) || reject())
       );
     },
 
     afterEvent(event, params) {
       return flattenDeep(values(this.afters[event])).forEach((cb) =>
-        cb(Object.assign({}, params, { bus })),
+        cb(Object.assign({}, params, this.toolbox)),
       );
     },
 

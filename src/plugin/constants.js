@@ -6,6 +6,7 @@ export const PLACES = {
   'MENU.PLUGIN': 'menu.plugin',
   'TOOLBAR': 'toolbar',
   'COMMENTS.BEFORE': 'comments.before',
+  'COMMENT.BEFORE': 'comment.before',
   'COMMENT.MENU.TOP': 'comment.menu.top',
   'COMMENT.MENU.BOTTOM': 'comment.menu.bottom',
   'COMMENT.BUTTONS.PRE': 'comment.buttons.pre',
