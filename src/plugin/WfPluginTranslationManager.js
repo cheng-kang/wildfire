@@ -42,4 +42,7 @@ class WfPluginTranslationManager {
   }
 }
 
+export const PTM = new WfPluginTranslationManager();
+export const PTM4Meta = new WfPluginTranslationManager();
+
 export default WfPluginTranslationManager;

@@ -3,29 +3,15 @@ import { bus, butler } from '../common';
 import PCM from './WfPluginComponentManager';
 import PHM from './WfPluginHookManager';
 import WfPluginWidgetManager from './WfPluginWidgetManager';
-import WfPluginTranslationManager from './WfPluginTranslationManager';
-import _pluginProps from './plugin-props';
+import { PTM, PTM4Meta } from './WfPluginTranslationManager';
+import pluginProps from './plugin-props';
 import { getPluginIdFromUniqueComponentName } from './helpers';
 
 export * from './helpers';
 export * from './constants';
 
-export { PCM, PHM };
+export { PCM, PHM, PTM, PTM4Meta, pluginProps };
 export const PWM = new WfPluginWidgetManager();
-export const PTM = new WfPluginTranslationManager();
-export const PTM4Meta = new WfPluginTranslationManager();
-
-
-const t = (componentName) => (
-  PTM.t(butler.config.locale)(
-    componentName
-      .split('-')
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .reduce((acc, cur) => acc + cur, ''),
-  )
-)
-
-export const pluginProps = (componentName) => Object.assign(_pluginProps(componentName), { t: t(getPluginIdFromUniqueComponentName(componentName)) })
 
 export const injectPlugin = (pluginId) => {
   const plugin = window[pluginId];

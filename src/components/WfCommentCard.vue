@@ -1,5 +1,11 @@
 <template>
   <li class="wf-comment-item" :class="{'wf-reply-item': !isTopLevelComment}">
+    <component
+      v-for="(cpntName, idx) in pluginComponents.comment.before"
+      :is="cpntName"
+      :key="cpntName+idx"
+      :comment="comment"
+      v-bind="pluginProps(cpntName)"/>
     <section class="wf-section-comment">
       <div class="wf-avatar">
         <img
@@ -251,6 +257,7 @@ export default {
   computed: {
     pluginComponents: () => ({
       comment: {
+        before: PCM.get('comment.before'),
         menu: {
           top: PCM.get('comment.menu.top'),
           bottom: PCM.get('comment.menu.bottom'),
