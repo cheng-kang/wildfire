@@ -181,6 +181,32 @@ export default {
       tips: 'view more information by hovering your mouse on the highlighted text; open related webpage by clicking Details button.',
     },
   },
+  Plugin: {
+    error: {
+      no_plugin: 'Plugin not found.',
+    },
+  },
+  PluginCenter: {
+    btn: {
+      add: 'Add',
+      reload: 'Reload',
+    },
+    error: {
+      adding_plugin: 'Failed to add plugin.',
+      loading_plugin_list: 'Failed to load plugin list.',
+      loading_plugin_meta: 'Failed to load plugin meta data.',
+      toggling_added_plugin_state: 'Failed to toggle plugin state.',
+    },
+    success: {
+      adding_plugin: 'Plugin added.',
+      toggling_added_plugin_state: 'Plugin state toggled.',
+    },
+    text: {
+      no_added_plugin: 'No added plugin, explore the plugin center now!',
+      no_plugin: 'Sorry, no plugin available.',
+      plugin_added: 'Plugin Added',
+    },
+  },
   ReplyArea: {
     btn: {
       cancel: 'Cancel',
@@ -296,6 +322,12 @@ export default {
     tab: {
       account: 'Account',
       profile: 'Profile',
+    },
+  },
+  Wildfire: {
+    error: {
+      loading_plugin: 'Failed to load plugin.',
+      loading_plugin_list: 'Failed to load plugin list.',
     },
   },
 };
