@@ -11,11 +11,9 @@ class WfPluginWidgetManager {
   }
 
   add() {
-    console.log(this.widgets);
   }
 
   remove() {
-    console.log(this.widgets);
   }
 }
 

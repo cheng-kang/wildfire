@@ -6,6 +6,8 @@ export const install = (Vue, config) => {
   init(Vue);
 };
 
-export const reset = butler.resetApp;
+export const reset = (Vue, config, err) => {
+  butler.resetApp(Vue, config, err)
+};
 
 export default { install, reset };
