@@ -36,6 +36,10 @@ class WfPluginTranslationManager {
       return translation[key] || key;
     };
   }
+
+  reset() {
+    this.translations = {};
+  }
 }
 
 export default WfPluginTranslationManager;

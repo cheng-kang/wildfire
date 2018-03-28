@@ -6,13 +6,14 @@ import { PLACES } from './constants';
 
 const WfPluginComponentManager = new Vue({
   data() {
-    const components = {};
     const places = values(PLACES);
-    places.forEach(place => { components[place] = []; });
     return {
-      components,
+      components: {},
       places,
     }
+  },
+  created() {
+    this.reset();
   },
   methods: {
     /**
@@ -54,6 +55,12 @@ const WfPluginComponentManager = new Vue({
     isEmpty(place) {
       return this.components[place].length === 0;
     },
+
+    reset() {
+      const components = {};
+      this.places.forEach(place => { components[place] = []; });
+      this.components = components;
+    }
   },
 });
 

@@ -6,6 +6,7 @@ import { DEFAULT } from "./constants";
 import dateFns from '../modules/date-fns';
 import i18next, { initI18next, resetI18next } from '../modules/i18next';
 import { b64EncodeUnicode, b64DecodeUnicode, defaultPageURL } from '../utils';
+import { PCM, PHM, PTM, PTM4Meta } from '../plugin';
 
 class WfButler {
   constructor() {
@@ -49,6 +50,7 @@ class WfButler {
     }
   }
 
+  // TODO: Props Check
   initApp(Vue, {
     databaseProvider,
     databaseConfig,
@@ -97,6 +99,10 @@ class WfButler {
     };
   
     // TODO: empty Plugin related thing!!!
+    PCM.reset()
+    PHM.reset()
+    PTM.reset()
+    PTM4Meta.reset()
 
     const {
       databaseProvider = this.config.databaseProvider,
