@@ -3,7 +3,7 @@
     <i-tab-pane label="已添加" name="added">
       <div class="pane-warp">
         <div v-if="!hasAddedPlugin" class="empty-msg">
-          你还没有添加插件，快去插件市场添加试试吧！
+          {{t('PluginCenter.text.no_added_plugin')}}
         </div>
         <i-collapse v-else :accordion="true">
           <i-panel
@@ -25,11 +25,11 @@
     <i-tab-pane label="插件市场" name="center">
       <div class="pane-warp">
         <div v-if="isPluginCenterEmpty" class="empty-msg">
-          抱歉，暂时没有找到可用的插件。<br>
+          {{t('PluginCenter.text.no_plugin')}}<br>
           <i-button
             type="text"
             icon="ios-loop-strong"
-            @click="loadPluginMetaData">重新加载</i-button>
+            @click="loadPluginMetaData">{{t('PluginCenter.btn.reload')}}</i-button>
         </div>
         <i-row type="flex" justify="center" align="top" :gutter="20" v-else>
           <i-col span="11" v-for="plugin in plugins" :key="plugin.id" class="plugin-card">
@@ -38,14 +38,14 @@
               <span slot="extra">
                 <span v-if="plugin.isAdded" class="icon-warp">
                   <i-tooltip :transfer="true" placement="top"
-                    content="插件已添加">
+                    content="t('PluginCenter.text.plugin_added')">
                     <i-icon type="checkmark-circled"></i-icon>
                   </i-tooltip>
                 </span>
                 <i-button v-else
                   size="small"
                   type="text"
-                  @click="addPlugin(plugin.id)">添加</i-button>
+                  @click="addPlugin(plugin.id)">{{t('PluginCenter.btn.add')}}</i-button>
               </span>
               <div class="scorll-warp">
                 <div class="plugin-info">

@@ -180,6 +180,32 @@ export default {
       tips: '鼠标悬停在高亮文字上可查看更多内容；点击查看详情可跳转到相应网页。',
     },
   },
+  Plugin: {
+    error: {
+      no_plugin: '插件不存在。',
+    },
+  },
+  PluginCenter: {
+    btn: {
+      add: '添加',
+      reload: '重新加载',
+    },
+    error: {
+      adding_plugin: '添加插件失败。',
+      loading_plugin_list: '加载插件列表失败。',
+      loading_plugin_meta: '加载插件基本信息失败。',
+      toggling_added_plugin_state: '切换插件激活状态失败。',
+    },
+    success: {
+      adding_plugin: '插件添加成功。',
+      toggling_added_plugin_state: '插件激活状态切换成功。',
+    },
+    text: {
+      no_added_plugin: '你还没有添加插件，快去插件市场看看吧！',
+      no_plugin: '抱歉，暂时没有找到可用的插件。',
+      plugin_added: '插件已添加',
+    },
+  },
   ReplyArea: {
     btn: {
       cancel: '取消',
@@ -294,6 +320,12 @@ export default {
     tab: {
       account: '账号设置',
       profile: '个人资料',
+    },
+  },
+  Wildfire: {
+    error: {
+      loading_plugin: '加载插件失败。',
+      loading_plugin_list: '加载插件列表失败。',
     },
   },
 };
