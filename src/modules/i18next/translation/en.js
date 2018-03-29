@@ -206,6 +206,12 @@ export default {
       no_plugin: 'Sorry, no plugin available.',
       plugin_added: 'Plugin Added',
     },
+    title: {
+      added_plugins: 'Added Plugins',
+      desc: 'Description',
+      options: 'Options',
+      plugin_center: 'Plugin Center',
+    },
   },
   ReplyArea: {
     btn: {
