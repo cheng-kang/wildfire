@@ -1,6 +1,6 @@
 <template>
   <i-tabs value="added" class="wf-plugin-center">
-    <i-tab-pane label="已添加" name="added">
+    <i-tab-pane :label="t('PluginCenter.title.added_plugins')" name="added">
       <div class="pane-warp">
         <div v-if="!hasAddedPlugin" class="empty-msg">
           {{t('PluginCenter.text.no_added_plugin')}}
@@ -13,16 +13,18 @@
             <span>{{PT(plugin.id)(plugin.title)}}</span>
             <i-switch size="small" slot="extra" :value="plugin.isActive" @on-change="toggleAddedPluginState(plugin.id, plugin.isActive)"></i-switch>
             <div slot="content">
-              <wf-separator title="介绍" margin-top="8px"/>
+              <wf-separator :title="t('PluginCenter.title.desc')" margin-top="8px"/>
               <wf-marked-content :content="PT(plugin.id)(plugin.description)" :style="styles.cardContent"></wf-marked-content>
-              <wf-separator title="设置"/>
-              <wf-added-plugin-option-form :t="PT" :plugin-id="plugin.id" :options="plugin.options" :style="styles.cardContent"/>
+              <template v-if="plugin.options">
+                <wf-separator :title="t('PluginCenter.title.options')"/>
+                <wf-added-plugin-option-form :t="PT" :plugin-id="plugin.id" :options="plugin.options" :style="styles.cardContent"/>
+              </template>
             </div>
           </i-panel>
         </i-collapse>
       </div>
     </i-tab-pane>
-    <i-tab-pane label="插件市场" name="center">
+    <i-tab-pane :label="t('PluginCenter.title.plugin_center')" name="center">
       <div class="pane-warp">
         <div v-if="isPluginCenterEmpty" class="empty-msg">
           {{t('PluginCenter.text.no_plugin')}}<br>
@@ -148,21 +150,21 @@ export default {
     addPlugin(pluginId) {
       butler.db.ref(`addedPluginsFromCenter/${pluginId}`).set(false)
         .then(() => {
-          this.$Message.success('PluginCenter.success.adding_plugin');
+          this.$Message.success(this.t('PluginCenter.success.adding_plugin'));
         })
         .catch(error => {
           console.error(error);
-          this.$Message.error('PluginCenter.error.adding_plugin');
+          this.$Message.error(this.t('PluginCenter.error.adding_plugin'));
         });
     },
     toggleAddedPluginState(pluginId, oldValue) {
       butler.db.ref(`addedPluginsFromCenter/${pluginId}`).set(!oldValue)
         .then(() => {
-          this.$Message.success('PluginCenter.success.toggling_added_plugin_state');
+          this.$Message.success(this.t('PluginCenter.success.toggling_added_plugin_state'));
         })
         .catch(error => {
           console.error(error);
-          this.$Message.error('PluginCenter.error.toggling_added_plugin_state');
+          this.$Message.error(this.t('PluginCenter.error.toggling_added_plugin_state'));
         });
     },
   },

@@ -205,6 +205,12 @@ export default {
       no_plugin: '抱歉，暂时没有找到可用的插件。',
       plugin_added: '插件已添加',
     },
+    title: {
+      added_plugins: '已添加插件',
+      desc: '描述',
+      options: '配置',
+      plugin_center: '插件中心',
+    },
   },
   ReplyArea: {
     btn: {
