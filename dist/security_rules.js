@@ -55,8 +55,10 @@
             "$u": {
               "$d": {
                 "u": {
-                  ".write": "data.val() == null && ($c.contains('a') ? true : $c.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() != null && ($u.contains('a') ? true : $u.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() == null && ($d.contains('a') ? true : $d.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true)",
-                  ".read": "$r.contains('a') ? true : $r.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true"
+                  "$key": {
+                    ".write": "data.val() == null && ($c.contains('a') ? true : $c.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() != null && ($u.contains('a') ? true : $u.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true) || data.val() != null && newData.val() == null && ($d.contains('a') ? true : $d.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true)",
+                    ".read": "$r.contains('a') ? true : $r.contains('s') ? auth != null : root.child('users').child(auth.uid).child('isAdmin').val() == true"
+                  }
                 },
                 "o1": {
                   "$key": {
