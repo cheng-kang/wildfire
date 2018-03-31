@@ -21,6 +21,7 @@ import '../../assets/iview.css';
  *    }
  */
 
+import Alert from 'iview/src/components/alert';
 import AutoComplete from 'iview/src/components/auto-complete';
 import Button from 'iview/src/components/button';
 import Card from 'iview/src/components/card';
@@ -45,6 +46,8 @@ import Tooltip from './components/tooltip';
 import Tabs from './components/tabs';
 
 const iview = {
+  Alert,
+  iAlert: Alert,
   AutoComplete,
   iAutoComplete: AutoComplete,
   Button,
