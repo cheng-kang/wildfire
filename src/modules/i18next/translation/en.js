@@ -7,7 +7,6 @@ export default {
       confirm: 'Confirm',
     },
     reset_when_wilddog_too_many_connections: 'Switching to a standby database, too many connections to the current database. Note: omments data are not shared between main & standby databases.',
-    tip_prefix: '*Tips: ',
     unknown_ip: 'Unknown IP address',
     unknown_user: 'Unknown User',
     wilddog_too_many_connections: 'The current database had too many connections, please contact the site admin.',
@@ -121,6 +120,12 @@ export default {
     text: {
       deleted_comment: 'This Comment has been deleted.',
       loading_comments_content: 'Loading comment content...',
+    },
+  },
+  Footnote: {
+    prefix: {
+      tips: '*Tips: ',
+      note: '*Note: ',
     },
   },
   Header: {
