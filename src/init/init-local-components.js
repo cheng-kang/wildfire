@@ -7,7 +7,7 @@ import WfPersonalCenter from '../components/WfPersonalCenter';
 import WfReplyArea from '../components/WfReplyArea';
 import WfReportManagement from '../components/WfReportManagement';
 import WfSeparator from '../components/WfSeparator';
-import WfTip from '../components/WfTip';
+import WfFootnote from '../components/WfFootnote';
 import WfUserInfoModal from '../components/WfUserInfoModal';
 import WfUserSetting from '../components/WfUserSetting';
 import WfPluginCenter from '../components/WfPluginCenter';
@@ -22,7 +22,7 @@ const localComponents = {
   WfReplyArea,
   WfReportManagement,
   WfSeparator,
-  WfTip,
+  WfFootnote,
   WfUserInfoModal,
   WfUserSetting,
   WfPluginCenter,

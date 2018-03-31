@@ -256,7 +256,7 @@ export default {
             };
 
             Promise.all([
-              butler.db.ref(`comments/${newCommentId}`).update(postData),
+              butler.db.ref(`comments/${newCommentId}`).set(postData),
               butler.db.ref(`pageComments/${butler.config.pageURL}/${newCommentId}`).set(pageCommentsData),
             ])
               .then(() => {

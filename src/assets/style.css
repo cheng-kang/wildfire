@@ -144,8 +144,8 @@ and (-webkit-min-device-pixel-ratio:2) {
 .wf .wf-poptip-content { max-width: 30vw; max-height: 30vh;}
 .wf .wf-poptip-content p { word-break: break-word; white-space: normal;}
 
-/* WfTip.vue */
-.wf .wf-tip { padding: 0 16px 8px 16px; font-size: 0.7em; color: #656c7a; text-align: left; }
+/* WfFootnote.vue */
+.wf .wf-footnote { padding: 0 16px 8px 16px; font-size: 0.7em; color: #656c7a; text-align: left; }
 
 /* WfUserinfoModal.vue */
 .wf .wf-user-info-modal { display: flex; flex-direction: row; align-items: center; }
