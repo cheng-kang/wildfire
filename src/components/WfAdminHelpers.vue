@@ -6,7 +6,7 @@
               {{t('AdminHelpers.text.resetting_discussion_count_for_all_pages')}}
               <div slot="content">
                 <p align="left">{{t('AdminHelpers.text.desc_resetting_discussion_count_for_all_pages')}}</p>
-                <br>
+                <br/>
                 <i-poptip
                   confirm
                   :title="t('AdminHelpers.confirm.resetting_discussion_count_for_all_pages')"

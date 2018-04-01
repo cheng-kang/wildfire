@@ -20,53 +20,51 @@
 
       <li class="wf-nav-user" :title="username" @click="showUserSettingModal">
         <div v-if="isSmallerScreen && user">
-          <img :src="user.photoURL">
+          <img :src="user.photoURL"/>
         </div>
         <a v-if="!isSmallerScreen">
           {{shortenedUsername(username)}}
         </a>
       </li>
-      <i-submenu name="more" v-if="user" :class="{ 'wf-float-right': !isLargeScreen}" class="wf-no-border-bottom">
-        <template slot="title"></template>
-        <template v-if="user">
-          <i-menu-group :title="t('Header.menu.personal_center')">
-            <i-menu-item name="user_setting">{{t('Header.menu.user_setting')}}</i-menu-item>
-            <i-menu-item name="notification">{{t('Header.menu.notification')}}</i-menu-item>
-            <component
-              v-for="(cpntName, idx) in pluginComponents.menu.personal"
-              :is="cpntName"
-              :key="cpntName+idx"
-              v-bind="pluginProps(cpntName)"/>
-          </i-menu-group>
-          <i-menu-group :title="t('Header.menu.admin_center')" v-if="user && user.isAdmin">
-            <i-menu-item name="plugin_center">{{t('Header.menu.plugin_center')}}</i-menu-item>
-            <i-menu-item name="report_management">{{t('Header.menu.report_management')}}</i-menu-item>
-            <i-menu-item name="admin_helpers">{{t('Header.menu.admin_helpers')}}</i-menu-item>
-            <component
-              v-for="(cpntName, idx) in pluginComponents.menu.admin"
-              :is="cpntName"
-              :key="cpntName+idx"
-              v-bind="pluginProps(cpntName)"/>
-          </i-menu-group>
-          <i-menu-group :title="t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
-            <component
-              v-for="(cpntName, idx) in pluginComponents.menu.plugin"
-              :is="cpntName"
-              :key="cpntName+idx"
-              v-bind="pluginProps(cpntName)"/>
-          </i-menu-group>
-        </template>
-        <template v-if="isSmallScreen">
-          <i-menu-group :title="t('Header.menu.actions')">
-            <i-menu-item v-if="user" name="sign_out">{{t('Header.menu.sign_out')}}</i-menu-item>
-            <template v-else>
-              <i-menu-item name="sign_up">{{t('Header.menu.sign_up')}}</i-menu-item>
-              <i-menu-item name="sign_in">{{t('Header.menu.sign_in')}}</i-menu-item>
-            </template>
-          </i-menu-group>
-        </template>
+      <i-submenu v-if="isLargeScreen && user" name="more" class="wf-no-border-bottom">
+        <!-- <span slot="title"></span> -->
+        <i-menu-group :title="t('Header.menu.personal_center')">
+          <i-menu-item name="user_setting">{{t('Header.menu.user_setting')}}</i-menu-item>
+          <i-menu-item name="notification">{{t('Header.menu.notification')}}</i-menu-item>
+          <!-- <component
+            v-for="(cpntName, idx) in pluginComponents.menu.personal"
+            :is="cpntName"
+            :key="cpntName+idx"
+            v-bind="pluginProps(cpntName)"/> -->
+        </i-menu-group>
+        <i-menu-group :title="t('Header.menu.admin_center')" v-if="user.isAdmin">
+          <i-menu-item name="plugin_center">{{t('Header.menu.plugin_center')}}</i-menu-item>
+          <i-menu-item name="report_management">{{t('Header.menu.report_management')}}</i-menu-item>
+          <i-menu-item name="admin_helpers">{{t('Header.menu.admin_helpers')}}</i-menu-item>
+          <!-- <component
+            v-for="(cpntName, idx) in pluginComponents.menu.admin"
+            :is="cpntName"
+            :key="cpntName+idx"
+            v-bind="pluginProps(cpntName)"/> -->
+        </i-menu-group>
+        <!-- <i-menu-group :title="t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
+          <component
+            v-for="(cpntName, idx) in pluginComponents.menu.plugin"
+            :is="cpntName"
+            :key="cpntName+idx"
+            v-bind="pluginProps(cpntName)"/>
+        </i-menu-group> -->
       </i-submenu>
-      <li class="wf-float-right" v-if="!isSmallScreen || !user">
+      <i-submenu v-if="isSmallScreen" name="more" class="wf-no-border-bottom wf-float-right">
+        <i-menu-group :title="t('Header.menu.actions')">
+          <i-menu-item v-if="user" name="sign_out">{{t('Header.menu.sign_out')}}</i-menu-item>
+          <template v-else>
+            <i-menu-item name="sign_up">{{t('Header.menu.sign_up')}}</i-menu-item>
+            <i-menu-item name="sign_in">{{t('Header.menu.sign_in')}}</i-menu-item>
+          </template>
+        </i-menu-group>
+      </i-submenu>
+      <li class="wf-float-right" v-if="!isSmallScreen">
         <template v-if="!user" >
           <a @click="showAuthFormModal('sign_up')">
             {{t('Header.btn.sign_up')}}
@@ -86,7 +84,7 @@
       <wf-auth-form :init-tab="authFormInitTab"/>
     </i-modal>
 
-    <i-modal v-if='user' v-model="userSettingModal" :closable="false" :footer-hide="true" :theme="theme" class-name="wf-form">
+    <i-modal v-if="user" v-model="userSettingModal" :closable="false" :footer-hide="true" :theme="theme" class-name="wf-form">
       <wf-user-setting :user="user"/>
     </i-modal>
     <i-modal v-if="user" v-model="personalCenterModal" :closable="false" :footer-hide="true" :theme="theme">
@@ -122,7 +120,6 @@ export default {
       reportMangementModal: false,
       adminHelpersModal: false,
       pluginCenterModal: false,
-      isAdmin: false,
       menuActiveName: 'comments_count',
     };
   },
@@ -187,9 +184,6 @@ export default {
             .catch((error) => {
               handlePluginHookError(error);
             })
-        },
-        onCancel: () => {
-          this.$Message.error(this.t('AuthForm.error.signing_out_canceled'));
         },
       });
     },
