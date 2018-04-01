@@ -41,7 +41,7 @@ export const ejectPlugin = (pluginId) => {
 
   const { components, hooks, widgets } = (plugin.default || plugin);
 
-  PCM.remove(components);
+  PCM.remove({ pluginId, components });
   PHM.remove({ pluginId, hooks });
   PWM.remove(widgets);
   PTM.remove(pluginId);

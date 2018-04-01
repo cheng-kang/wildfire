@@ -27,7 +27,7 @@
     <i-tab-pane :label="t('PluginCenter.title.plugin_center')" name="center">
       <div class="pane-warp">
         <div v-if="isPluginCenterEmpty" class="empty-msg">
-          {{t('PluginCenter.text.no_plugin')}}<br>
+          {{t('PluginCenter.text.no_plugin')}}<br/>
           <i-button
             type="text"
             icon="ios-loop-strong"

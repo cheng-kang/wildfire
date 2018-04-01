@@ -1,5 +1,6 @@
 <template>
-  <div v-transfer-dom :data-transfer="transfer" :class="transferDomClasses">
+  <div :data-transfer="transfer" :class="transferDomClasses">
+  <!-- <div v-transfer-dom :data-transfer="transfer" :class="transferDomClasses"> -->
     <transition :name="transitionNames[1]">
       <div :class="maskClasses" v-show="visible" @click="mask"></div>
     </transition>
@@ -29,7 +30,7 @@
 <script>
   import Icon from 'iview/src/components/icon/icon.vue';
   import iButton from 'iview/src/components/button/button.vue';
-  import TransferDom from 'iview/src/directives/transfer-dom';
+  // import TransferDom from 'iview/src/directives/transfer-dom';
   import Locale from 'iview/src/mixins/locale';
   import Emitter from 'iview/src/mixins/emitter';
   import ScrollbarMixins from './mixins-scrollbar';
@@ -40,7 +41,7 @@
     name: 'Modal',
     mixins: [Locale, Emitter, ScrollbarMixins],
     components: { Icon, iButton },
-    directives: { TransferDom },
+    // directives: { TransferDom },
     props: {
       value: {
         type: Boolean,
