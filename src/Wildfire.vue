@@ -151,7 +151,7 @@ export default {
             { uid: user.uid, isAdmin: userData.isAdmin || false },
           );
 
-          PHM.afterEvent('signIn', { user: this.user });
+          PHM.afterEvent('signIn', { user: bus.user });
 
           this.checkBanState();
         });
