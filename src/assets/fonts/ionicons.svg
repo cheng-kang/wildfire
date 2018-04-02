@@ -1,11 +1,11 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <!--
-2018-3-31: Created with FontForge (http://fontforge.org)
+2018-4-2: Created with FontForge (http://fontforge.org)
 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
 <metadata>
-Created by FontForge 20180321 at Sat Mar 31 16:03:56 2018
+Created by FontForge 20180321 at Mon Apr  2 21:44:43 2018
  By Ant
 Copyright (c) 2018, Ant
 </metadata>
@@ -73,6 +73,8 @@ d="M355 158c8 -4 11 -13 7 -21c-24 -46 -78 -73 -138 -73c-62 0 -118 29 -139 74c-4 
 s-7 10 -17 10s-14 -6 -17 -10s-9 -6 -14 -6c-4 0 -7 1 -10 3c-8 6 -9 15 -3 22c11 14 23 23 44 23s35 -9 45 -23zM157 217c5 -7 4 -17 -4 -22c-3 -2 -6 -3 -10 -3c-5 0 -11 2 -14 6s-7 10 -17 10s-14 -6 -17 -10s-9 -6 -14 -6c-4 0 -7 1 -10 3c-8 6 -9 15 -3 22
 c11 14 23 23 44 23s35 -9 45 -23zM224 416c124 0 224 -100 224 -224s-100 -224 -224 -224s-224 100 -224 224s100 224 224 224zM360 56c36 36 56 85 56 136s-20 100 -56 136s-85 56 -136 56s-100 -20 -136 -56s-56 -85 -56 -136s20 -100 56 -136s85 -56 136 -56
 s100 20 136 56z" />
+    <glyph glyph-name="ion-ios-arrow-up" unicode="&#xf3d8;" horiz-adv-x="320" 
+d="M301 96l-141 150l-141 -150l-19 21l160 171l160 -171z" />
     <glyph glyph-name="ion-arrow-right-b" unicode="&#xf10a;" horiz-adv-x="192" 
 d="M25 35c-2 -2 -6 -3 -9 -3c-9 0 -16 8 -16 17v0v286v0c0 9 7 17 16 17c3 0 6 -1 8 -3l3 -2l156 -136c5 -5 9 -11 9 -19s-4 -14 -9 -19l-156 -136z" />
     <glyph glyph-name="ion-ios-arrow-right" unicode="&#xf3d3;" horiz-adv-x="192" 
