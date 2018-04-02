@@ -195,16 +195,19 @@ export default {
     btn: {
       add: 'Add',
       reload: 'Reload',
+      update: 'Update',
     },
     error: {
       adding_plugin: 'Failed to add plugin.',
       loading_plugin_list: 'Failed to load plugin list.',
       loading_plugin_meta: 'Failed to load plugin meta data.',
       toggling_added_plugin_state: 'Failed to toggle plugin state.',
+      updating_order: 'Failed to update order.',
     },
     success: {
       adding_plugin: 'Plugin added.',
       toggling_added_plugin_state: 'Plugin state toggled.',
+      updating_order: 'Order updated.',
     },
     text: {
       no_added_plugin: 'No added plugin, explore the plugin center now!',
@@ -216,6 +219,7 @@ export default {
       desc: 'Description',
       options: 'Options',
       plugin_center: 'Plugin Center',
+      plugin_ordering: 'Plugin Order',
     },
   },
   ReplyArea: {

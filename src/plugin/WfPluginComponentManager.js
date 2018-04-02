@@ -1,16 +1,36 @@
 import Vue from 'vue';
 import values from 'lodash/values';
 import forIn from 'lodash/forIn';
-import { uniquePluginComponentName } from './helpers';
+import union from 'lodash/union';
+import { concatenated } from './helpers';
 import { PLACES } from './constants';
 
 const WfPluginComponentManager = new Vue({
   data() {
     const places = values(PLACES);
+
+    const order = {};
+    Object.keys(PLACES).forEach((place) => {
+      order[PLACES[place]] = [];
+    });
+
     return {
       components: {},
+      order,
       places,
     }
+  },
+  computed: {
+    orderedComponents() {
+      const ordered = {};
+      Object.keys(this.components).forEach((place) => {
+        ordered[place] = union(
+          this.order[place].filter((item) => this.components[place].indexOf(item) !== -1),
+          this.components[place]
+        );
+      });
+      return ordered;
+    },
   },
   created() {
     this.reset();
@@ -25,7 +45,7 @@ const WfPluginComponentManager = new Vue({
   
         componentList.forEach(component => {
           const { name } = component;
-          const uniqueName = uniquePluginComponentName({ pluginId, name })
+          const uniqueName = concatenated({ pluginId, name })
           Vue.component(uniqueName, component);
           this.components[place].push(uniqueName);
         });
@@ -41,7 +61,7 @@ const WfPluginComponentManager = new Vue({
   
         componentList.forEach(({ name }) => {
           // TODO: unregister Vue component
-          const uniqueName = uniquePluginComponentName({ pluginId, name })
+          const uniqueName = concatenated({ pluginId, name })
           const idx = this.components[place].indexOf(uniqueName);
           if (idx !== -1) this.components[place].splice(idx, 1);
         });
@@ -49,11 +69,11 @@ const WfPluginComponentManager = new Vue({
     },
   
     get(place) {
-      return this.components[place];
+      return this.orderedComponents[place];
     },
   
     isEmpty(place) {
-      return this.components[place].length === 0;
+      return this.orderedComponents[place].length === 0;
     },
 
     reset() {

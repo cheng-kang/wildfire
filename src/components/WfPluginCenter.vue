@@ -24,6 +24,30 @@
         </i-collapse>
       </div>
     </i-tab-pane>
+    <i-tab-pane v-if="hasAddedPlugin" :label="t('PluginCenter.title.plugin_ordering')" name="ordering">
+      <div class="pane-warp">
+        <i-collapse accordion>
+          <i-panel v-for="(cpnts, place) in order" :key="place" :name="place">
+            {{place}}
+            <p slot="content">
+              <ul>
+                <li v-for="(name, idx) in cpnts" :key="name">
+                  <div><strong>{{idx+1}}.</strong></div>
+                  <div>{{format(name)}}</div>
+                  <div>
+                    <i-button type="text" icon="ios-arrow-up" :disabled="idx === 0" @click="move('up', place, idx)"/>
+                    <i-button type="text" icon="ios-arrow-down" :disabled="idx === (cpnts.length - 1)" @click="move('down', place, idx)"/>
+                  </div>
+                </li>
+                <li>
+                  <i-button type="primary" size="small" :disabled="!orderTouched[place]" @click="updateOrder(place)">{{t('PluginCenter.btn.update')}}</i-button>
+                </li>
+              </ul>
+            </p>
+          </i-panel>
+        </i-collapse>
+      </div>
+    </i-tab-pane>
     <i-tab-pane :label="t('PluginCenter.title.plugin_center')" name="center">
       <div class="pane-warp">
         <div v-if="isPluginCenterEmpty" class="empty-msg">
@@ -33,7 +57,7 @@
             icon="ios-loop-strong"
             @click="loadPluginMetaData">{{t('PluginCenter.btn.reload')}}</i-button>
         </div>
-        <i-row type="flex" justify="center" align="top" :gutter="20" v-else>
+        <i-row type="flex" justify="space-between" align="top" v-else>
           <i-col span="11" v-for="plugin in plugins" :key="plugin.id" class="plugin-card">
             <i-card dis-hover>
               <p slot="title">{{PT(plugin.id)(plugin.title)}}</p>
@@ -64,18 +88,32 @@
 
 <script>
 import Vue from 'vue';
+import union from 'lodash/union';
 import { bus, butler, PLUGIN_LIST_CDN } from '../common';
-import { PTM4Meta } from '../plugin';
+import { PCM, PTM4Meta, PLACES, splited } from '../plugin';
 import { getKey } from '../utils';
 
 export default {
   name: 'wf-plugin-center',
   props: [],
   data() {
+    const savedOrder = {};
+    const order = {};
+    const orderTouched = {};
+    Object.keys(PLACES).forEach((place) => {
+      savedOrder[PLACES[place]] = [];
+      order[PLACES[place]] = [];
+      orderTouched[PLACES[place]] = false;
+    });
+
     return {
       meta: [],
       addedPluginsFromCenter: {},
       PT: PTM4Meta.t(butler.config.locale),
+      savedOrder,
+      order,
+      orderTouched,
+      places: PLACES,
     };
   },
   computed: {
@@ -111,6 +149,14 @@ export default {
       };
     },
   },
+  watch: {
+    savedOrder() {
+      this.resetOrder();
+    },
+    plugins() {
+      this.resetOrder();
+    },
+  },
   created() {
     this.loadPluginMetaData();
     butler.db.ref('addedPluginsFromCenter').on('child_added', snapshot => {
@@ -121,6 +167,17 @@ export default {
       const key = getKey(snapshot);
       this.$set(this.addedPluginsFromCenter, key, snapshot.val());
     });
+    butler.db.ref('addedPluginOrder').once('value')
+      .then((snapshot) => {
+        const savedOrder = snapshot.val() || {};
+        Object.keys(savedOrder).forEach((place) => {
+          this.$set(this.savedOrder, place.replace('-', '.'), savedOrder[place]);
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        this.$Message.error('PluginCenter.error.loading_added_plugin_order');
+      })
   },
   methods: {
     loadPluginMetaData() {
@@ -167,12 +224,37 @@ export default {
           this.$Message.error(this.t('PluginCenter.error.toggling_added_plugin_state'));
         });
     },
+    resetOrder() {
+      Object.keys(this.savedOrder).forEach((place) => {
+        this.$set(this.order, place, union(this.savedOrder[place], PCM.get(place)));
+      });
+    },
+    format(name) {
+      const { pluginId, componentName } = splited(name);
+      return `${componentName} - ${pluginId}`;
+    },
+    move(direction, place, fromIndex) {
+      const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1;
+      this.order[place].splice(toIndex, 0, this.order[place].splice(fromIndex, 1)[0]);
+      this.$set(this.orderTouched, place, true);
+    },
+    updateOrder(place) {
+      butler.db.ref(`/addedPluginOrder/${place.replace('.', '-')}`).set(this.order[place])
+        .then(() => {
+          this.$Message.success(this.t('PluginCenter.success.updating_order'));
+          this.$set(this.orderTouched, place, false);
+        })
+        .catch(() => {
+          this.$Message.error(this.t('PluginCenter.error.updating_order'));
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
 .pane-warp {
+  padding-top: 8px;
   min-height: 100px;
   max-height: 300px;
   overflow-x: hidden;
@@ -188,7 +270,7 @@ export default {
   overflow: hidden;
 }
 .plugin-card {
-  margin-bottom: 15px
+  margin-bottom: 15px;
 }
 .icon-warp {
   display: inline-block;
@@ -212,5 +294,29 @@ export default {
 .plugin-info .info-title {
   font-size: 12px;
   color: #aaa
+}
+.ivu-card {
+  height: 184px;
+}
+ul {
+  padding: 0 16px;
+}
+li {
+  display: flex;
+  align-items: center;
+}
+li > div:first-child {
+  margin-right: 8px;
+}
+li > div:nth-child(2) {
+  flex: 1;
+  max-width: 308px;
+  overflow-x: auto;
+}
+li > div:last-child {
+  display: flex;
+}
+li:last-child {
+  margin-top: 8px;
 }
 </style>

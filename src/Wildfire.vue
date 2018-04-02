@@ -202,7 +202,7 @@ export default {
     listenToPluginCenter() {
       Vue.http.get(PLUGIN_LIST_CDN)
         .then(({ data: pluginList }) => {
-          butler.db.ref('addedPluginsFromCenter').orderByValue().equalTo(true).on('child_added', snapshot => {
+          butler.db.ref('addedPluginsFromCenter').orderByValue().equalTo(true).on('child_added', (snapshot) => {
             const pluginId = getKey(snapshot);
             const script = document.createElement('script');
             script.src = pluginList[pluginId];
@@ -220,14 +220,20 @@ export default {
           console.error(error);
           this.$Message.error(this.t('Wildfire.error.loading_plugin_list'));
         })
-      butler.db.ref('addedPluginsFromCenter').on('child_changed', snapshot => {
+      butler.db.ref('addedPluginsFromCenter').on('child_changed', (snapshot) => {
         const pluginId = getKey(snapshot);
         if (!snapshot.val()) ejectPlugin(pluginId);
       });
-      butler.db.ref('addedPluginsFromCenter').on('child_removed', snapshot => {
+      butler.db.ref('addedPluginsFromCenter').on('child_removed', (snapshot) => {
         const pluginId = getKey(snapshot);
         ejectPlugin(pluginId);
       });
+      butler.db.ref('addedPluginOrder').on('value', (snapshot) => {
+        const order = snapshot.val() || {};
+        Object.keys(order).forEach((place) => {
+          this.$set(PCM.order, place.replace('-', '.'), order[place]);
+        });
+      })
     },
     checkBanState() {
       const isBanned = (bus.user && this.banList.indexOf(bus.user.uid) > -1) ||

@@ -1,9 +1,9 @@
 import { bus, butler } from '../common';
 import { PTM } from './WfPluginTranslationManager';
-import { getPluginIdFromUniqueComponentName } from './helpers'
+import { splited } from './helpers'
 
 const pluginProps = (componentName) => {
-  const pluginId = getPluginIdFromUniqueComponentName(componentName);
+  const { pluginId } = splited(componentName);
   return {
     t: PTM.t(butler.config.locale)(pluginId),
     pluginData: bus.pluginsData[pluginId],

@@ -82,6 +82,11 @@ path /addedPluginsFromCenter {
     write() { isAdmin() }
 }
 
+path /addedPluginOrder {
+    read() { true }
+    write() { isAdmin() }
+}
+
 // r: read access, c: create access, u: update access, d: delete access
 // t: node type [s(single), c(collection)]
 path /plugins/{pluginName}/{r}/{c}/{u}/{d} {
