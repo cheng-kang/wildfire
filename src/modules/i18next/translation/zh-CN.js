@@ -194,16 +194,19 @@ export default {
     btn: {
       add: '添加',
       reload: '重新加载',
+      update: '更新',
     },
     error: {
       adding_plugin: '添加插件失败。',
       loading_plugin_list: '加载插件列表失败。',
       loading_plugin_meta: '加载插件基本信息失败。',
       toggling_added_plugin_state: '切换插件激活状态失败。',
+      updating_order: '更新插件排序失败。',
     },
     success: {
       adding_plugin: '插件添加成功。',
       toggling_added_plugin_state: '插件激活状态切换成功。',
+      updating_order: '更新插件排序成功。',
     },
     text: {
       no_added_plugin: '你还没有添加插件，快去插件市场看看吧！',
@@ -215,6 +218,7 @@ export default {
       desc: '描述',
       options: '配置',
       plugin_center: '插件中心',
+      plugin_ordering: '插件排序',
     },
   },
   ReplyArea: {

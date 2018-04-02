@@ -5,7 +5,6 @@ import PHM from './WfPluginHookManager';
 import WfPluginWidgetManager from './WfPluginWidgetManager';
 import { PTM, PTM4Meta } from './WfPluginTranslationManager';
 import pluginProps from './plugin-props';
-import { getPluginIdFromUniqueComponentName } from './helpers';
 
 export * from './helpers';
 export * from './constants';

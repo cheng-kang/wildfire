@@ -52,6 +52,10 @@
       ".read": "true",
       ".write": "root.child('users').child(auth.uid).child('isAdmin').val() == true"
     },
+    "addedPluginOrder": {
+      ".read": "true",
+      ".write": "root.child('users').child(auth.uid).child('isAdmin').val() == true"
+    },
     "plugins": {
       "$pluginName": {
         "$r": {
