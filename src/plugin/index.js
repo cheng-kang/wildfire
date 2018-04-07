@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { bus, butler } from '../common';
+import { bus } from '../common';
 import PCM from './WfPluginComponentManager';
 import PHM from './WfPluginHookManager';
 import WfPluginWidgetManager from './WfPluginWidgetManager';
@@ -48,5 +48,6 @@ export const ejectPlugin = (pluginId) => {
 }
 
 export const handlePluginHookError = (error) => {
+  console.error(error);
   // not sure what to put here :)
 };

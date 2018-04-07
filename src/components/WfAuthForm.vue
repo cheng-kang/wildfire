@@ -70,6 +70,7 @@
 import { butler } from '../common';
 import { PHM, handlePluginHookError, EVENTS } from '../plugin';
 import { handleImageOnError } from '../utils';
+
 export default {
   name: 'wf-auth-form',
   props: ['initTab'],
@@ -87,8 +88,8 @@ export default {
       loadingSignUp: false,
       loadingSignIn: false,
       signInForm: {
-        email: '',
-        password: '',
+        email: 'admin@wildfire.js.org',
+        password: '123456',
       },
       signUpForm: {
         email: '',

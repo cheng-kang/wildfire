@@ -1,14 +1,14 @@
-var path = require('path')
-var merge = require('webpack-merge')
+const path = require('path')
+const merge = require('webpack-merge')
 const config = require('./config').build
-var baseWebpackConfig = require('./wpcfg.base')
+const baseWebpackConfig = require('./wpcfg.base')
 
-var webpackConfig = merge(baseWebpackConfig, {
+const webpackConfig = merge(baseWebpackConfig, {
   entry: {
-    app: './src/firebase.js'
+    app: './src/main.js'
   },
   output: {
-    path: path.resolve(config.assetsRoot, 'firebase'),
+    path: config.assetsRoot,
     filename: 'wildfire.min.js',
     library: 'wildfire',
     libraryTarget: 'umd',
@@ -21,7 +21,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       commonjs2: 'vue',
       amd: 'vue'
     },
-    firebase: true
+    firebase: true,
+    wilddog: true
   }
 })
 

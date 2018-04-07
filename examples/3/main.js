@@ -2,8 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import App from './App';
-import wildfire from '../../src/aio';
-// import WfPinnedComment from '../../src/plugins/WfPinnedComment'
+import wildfire from '../../src/main';
 
 Vue.config.productionTip = true;
 Vue.use(wildfire, {

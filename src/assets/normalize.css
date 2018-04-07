@@ -1,28 +1,28 @@
-.wf article,
-.wf aside,
-.wf footer,
-.wf header,
-.wf nav,
-.wf section {
+article,
+aside,
+footer,
+header,
+nav,
+section {
   display: block;
 }
 
-.wf h1 {
+h1 {
   font-size: 2em;
   margin: 0.67em 0;
 }
 
-.wf figcaption,
-.wf figure,
-.wf main {
+figcaption,
+figure,
+main {
   display: block;
 }
 
-.wf figure {
+figure {
   margin: 1em 40px;
 }
 
-.wf hr {
+hr {
   box-sizing: content-box;
   height: 0;
   overflow: visible;
@@ -31,125 +31,125 @@
   background: auto;
 }
 
-.wf pre {
+pre {
   font-family: monospace, monospace;
   font-size: 1em;
   margin: 0;
 }
 
-.wf a {
+a {
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
   border: none;
 }
 
-.wf a:active,
-.wf a:hover {
+a:active,
+a:hover {
   outline-width: 0;
   border: none;
 }
 
-.wf abbr[title] {
+abbr[title] {
   border-bottom: none;
   text-decoration: underline;
   text-decoration: underline dotted;
 }
 
-.wf b,
-.wf strong {
+b,
+strong {
   font-weight: inherit;
 }
-.wf blockquote {
+blockquote {
   padding: 0;
   border: none;
 }
-.wf blockquote cite::before {
+blockquote cite::before {
   content: none;
   padding: 0;
 }
-.wf b,
-.wf strong {
+b,
+strong {
   font-weight: bolder;
 }
 
-.wf code,
-.wf kbd,
-.wf samp {
+code,
+kbd,
+samp {
   font-family: monospace, monospace;
   font-size: 1em;
 }
 
-.wf dfn {
+dfn {
   font-style: italic;
 }
 
-.wf mark {
+mark {
   background: transparent;
   color: #000;
 }
 
-.wf small {
+small {
   font-size: 80%;
 }
 
-.wf sub,
-.wf sup {
+sub,
+sup {
   font-size: 75%;
   line-height: 0;
   position: relative;
   vertical-align: baseline;
 }
 
-.wf sub {
+sub {
   bottom: -0.25em;
 }
 
-.wf sup {
+sup {
   top: -0.5em;
 }
 
-.wf audio,
-.wf video {
+audio,
+video {
   display: inline-block;
 }
 
-.wf audio:not([controls]) {
+audio:not([controls]) {
   display: none;
   height: 0;
 }
 
-.wf img {
+img {
   border-style: none;
   display: inline;
   margin: 0;
   height: auto;
 }
 
-.wf svg:not(:root) {
+svg:not(:root) {
   overflow: hidden;
 }
 
-.wf button,
-.wf input,
-.wf optgroup,
-.wf select,
-.wf textarea {
+button,
+input,
+optgroup,
+select,
+textarea {
   font-family: sans-serif;
   font-size: 100%;
   line-height: 1.15;
   margin: 0;
 }
 
-.wf button,
-.wf input {
+button,
+input {
   overflow: visible;
 }
 
-.wf button,
-.wf select {
+button,
+select {
   text-transform: none;
 }
-.wf table {
+table {
   margin: 0;
   width: auto;
   border-collapse: collapse;

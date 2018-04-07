@@ -336,7 +336,7 @@ export default {
                 }
                 const mentions = content.match(new RegExp('\\[@([^\\[\\]]+)\\]\\([^\\(\\)]+\\)', 'g')) || [];
                 if (users.length !== 0) {
-                  const mentionedUids = mentions.map(mention => this.users.find(user => user.email === mention.slice(mention.indexOf('(') + 1, -1)).id);
+                  const mentionedUids = mentions.map(mention => this.users.find(aUser => aUser.email === mention.slice(mention.indexOf('(') + 1, -1)).id);
                   this.handleNotifications(mentionedUids, newCommentId, notifyFlags, mentionFlags);
                 } else {
                   Promise.all(mentions.map(mention => {

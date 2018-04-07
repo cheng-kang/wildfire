@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-shadow */
 (() => {
   const getTemplate = () => `
     <!DOCTYPE html>

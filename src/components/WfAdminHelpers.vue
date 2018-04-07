@@ -42,16 +42,16 @@ export default {
   methods: {
     resetDiscussionCountForAllPages() {
       this.isResettingDiscussionCountForAllPages = true;
-      butler.db.ref('pages').once('value').then(snap => {
-        const pages = snap.val() || {};
+      butler.db.ref('pages').once('value').then((snapshot) => {
+        const pages = snapshot.val() || {};
         this.pagesDiscussionCountToResetCount = Object.keys(pages).length;
         Object.keys(pages).forEach(pageURL => {
           const commentIds = Object.keys(pages[pageURL].comments || {});
           let discussionCount = commentIds.length;
-          Promise.all(commentIds.map(commentId => butler.db.ref(`commentReplies/${commentId}`).once('value'))).then(snaps => {
+          Promise.all(commentIds.map(commentId => butler.db.ref(`commentReplies/${commentId}`).once('value'))).then((snapshots) => {
             discussionCount += (
-              snaps.reduce(
-                (res, snap) => res + Object.keys(snap.val() || {}).length,
+              snapshots.reduce(
+                (res, aSnapshot) => res + Object.keys(aSnapshot.val() || {}).length,
                 0,
               )
             );
