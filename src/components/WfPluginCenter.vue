@@ -89,7 +89,7 @@
 <script>
 import Vue from 'vue';
 import union from 'lodash/union';
-import { bus, butler, PLUGIN_LIST_CDN } from '../common';
+import { butler, PLUGIN_LIST_CDN } from '../common';
 import { PCM, PTM4Meta, PLACES, splited } from '../plugin';
 import { getKey } from '../utils';
 

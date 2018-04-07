@@ -38,10 +38,7 @@
             const name = child.name || index.toString();
             let isActive = false;
 
-            /**
-             * TOFIX: unknown self
-             */
-            if (self.accordion) {
+            if (this.accordion) {
               isActive = activeKey === name;
             } else {
               isActive = activeKey.indexOf(name) > -1;

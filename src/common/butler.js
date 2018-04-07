@@ -1,5 +1,5 @@
-import i18next, { initI18next, resetI18next } from '../modules/i18next';
-import { b64EncodeUnicode, b64DecodeUnicode, defaultPageURL } from '../utils';
+import i18next from '../modules/i18next';
+import { b64EncodeUnicode, b64DecodeUnicode } from '../utils';
 
 class WfButler {
   constructor() {

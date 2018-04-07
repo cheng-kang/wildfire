@@ -66,7 +66,7 @@ const WfPluginHookManager = new Vue({
             flattenDeep(values(this.befores[event])).map((cb) => cb(Object.assign({}, params, this.toolbox)))
           )
             .then((results) => (results.reduce((a, b) => a && b, true) ? resolve() : reject()))
-            .catch((error) => reject())
+            .catch((error) => reject(error))
       );
     },
 

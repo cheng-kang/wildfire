@@ -357,8 +357,8 @@ export default {
         this.replyToComment.content = comment.content;
         const replyToCommentAuthorUid = comment.uid;
         if (!this.isAnonymousUser(replyToCommentAuthorUid)) {
-          butler.db.ref(`users/${replyToCommentAuthorUid}`).once('value').then((snapshot) => {
-            const author = snapshot.val();
+          butler.db.ref(`users/${replyToCommentAuthorUid}`).once('value').then((anotherSnapshot) => {
+            const author = anotherSnapshot.val();
             /*
               Assign value only when the value exists,
               otherwise use default anonymous user info value.

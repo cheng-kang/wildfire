@@ -104,7 +104,7 @@
 
 <script>
 import { bus, butler } from '../common';
-import { PCM, PHM, EVENTS, pluginProps } from '../plugin';
+import { PCM, PHM, EVENTS, pluginProps, handlePluginHookError } from '../plugin';
 
 export default {
   name: 'wf-header',

@@ -78,7 +78,7 @@ export const reset = (Vue, config = {}, err) => {
   const getDatabaseConfig = () => {
     const { standbyDatabaseConfigs, databaseConfig, databaseProvider } = butler.config;
     if (standbyDatabaseConfigs.length === 0 || !err || err.code !== 26107) return databaseConfig;
-    const currentConfigIdx = standbyDatabaseConfigs.findIndex(config => (databaseProvider === 'firebase' ? config.projectId === databaseConfig.projectId : config.siteId === databaseConfig.siteId));
+    const currentConfigIdx = standbyDatabaseConfigs.findIndex(aConfig => (databaseProvider === 'firebase' ? aConfig.projectId === databaseConfig.projectId : aConfig.siteId === databaseConfig.siteId));
     if (
       currentConfigIdx === -1
       || currentConfigIdx === standbyDatabaseConfigs.length - 1
@@ -86,7 +86,6 @@ export const reset = (Vue, config = {}, err) => {
     return standbyDatabaseConfigs[currentConfigIdx + 1];
   };
 
-  // TODO: empty Plugin related thing!!!
   PCM.reset()
   PHM.reset()
   PTM.reset()
