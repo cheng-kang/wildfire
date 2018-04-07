@@ -1,11 +1,11 @@
 {
   "name": "wildfire",
   "version": "0.3.8",
-  "description": "A drop-in replacement for other comment systems.",
+  "description": "A drop-in replacement for other comment plug-ins.",
   "keywords": [
     "wildfire",
     "comment",
-    "comment system",
+    "comment plug-in",
     "firebase",
     "wilddog",
     "vue"
@@ -33,7 +33,7 @@
     "dist",
     "src"
   ],
-  "main": "./src/main.js",
+  "main": "./dist/wildfire.auto.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/cheng-kang/wildfire.git"

@@ -239,7 +239,7 @@
     defaultAvatarURL,
   } = window.wildfireConfig()
 
-  let wildfireThreadDom = document.getElementsByClassName('wildfire_thread')[0]
+  const wildfireThreadDom = document.getElementsByClassName('wildfire_thread')[0]
   wildfireThreadDom.innerHTML = `
     <iframe id="wildfire_iframe" srcdoc="${getTemplate().replace(/"/g, '&quot;')}" width="100%" height="300" scrolling="no" frameBorder="0"></iframe>
   `

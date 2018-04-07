@@ -3,7 +3,7 @@
  * 
  *   wildfire@0.3.8
  *   Copyright (C) 2017-2018 LahK
- *   A drop-in replacement for other comment systems.
+ *   A drop-in replacement for other comment plug-ins.
  * 
  *   You can get more infomation from https://wildfire.js.org
  * 
