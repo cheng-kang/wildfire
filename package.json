@@ -1,6 +1,6 @@
 {
-  "name": "wildfire",
-  "version": "0.5.0",
+  "name": "wildfire-dev",
+  "version": "0.5.4",
   "description": "A drop-in replacement for other comment plug-ins.",
   "keywords": [
     "wildfire",
@@ -33,7 +33,7 @@
     "dist",
     "src"
   ],
-  "main": "./dist/wildfire.auto.js",
+  "main": "./dist/wildfire.min.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/cheng-kang/wildfire.git"
@@ -43,7 +43,6 @@
     "start": "npm run dev",
     "build": "node build/build.js && npm run build:security-rules",
     "build:main": "webpack --config build/wpcfg.main.js",
-    "build:auto": "webpack --config build/wpcfg.auto.js",
     "build:count": "webpack --config build/wpcfg.count.js",
     "build:security-rules": "./node_modules/firebase-bolt/bin/firebase-bolt ./src/security_rules.bolt --output ./dist/security_rules.bolt",
     "lint": "eslint --ext .js,.vue src"

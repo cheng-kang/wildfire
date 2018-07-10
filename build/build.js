@@ -6,7 +6,6 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('./config').build
 const mainCfg = require('./wpcfg.main')
-const autoCfg = require('./wpcfg.auto')
 const countCfg = require('./wpcfg.count')
 
 const build = (list) => {
@@ -43,10 +42,6 @@ rm(config.assetsRoot, err => {
     {
       name: 'wildfire.main',
       config: mainCfg
-    },
-    {
-      name: 'wildfire.auto',
-      config: autoCfg
     },
     {
       name: 'wildfire.count',

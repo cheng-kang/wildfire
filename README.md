@@ -2,88 +2,41 @@
 
 > A drop-in replacement for other comment plug-ins.
 
-![](https://cdn.rawgit.com/cheng-kang/wildfire/1b8a7387/resources/screenshots/home-page.png)
-
 **Please visit the brand new [Wildfire Home Page](https://wildfire.js.org) ([https://wildfire.js.org](https://wildfire.js.org)). Detailed documentation is available.**
-
-**Started using `wildfire`? Share your website with others: [We are using Wildfire! ](https://github.com/cheng-kang/wildfire/issues/9)!**
 
 **全新的 [Wildfire 主页](https://wildfire.js.org/#/zh-cn/) ([https://wildfire.js.org/#/zh-cn/](https://wildfire.js.org/#/zh-cn/)) 已经启用了，快去那儿看看详细的文档吧。**
 
-*点此查看 [中文版 README.md](https://github.com/cheng-kang/wildfire/blob/master/README-ZH.md)。*
-
 ## Intro
 
-`wildfire` aims to be an **it-just-works** comment plug-in for personal websites, like your `Hexo` blogs. It takes advantage of free real-time databases ([Firebase](https://firebase.google.com) and [Wilddog](https://wilddog.com)) to store your comments data, and provide you real-time communicating experience.
+This is a *dev* version of `wildfire`. It contains the following new features:
 
+- iFrame mode: `wildfire` now is rendered inside a `<iframe>` tag to avoid potential CSS collision.
+- Plugins: 
+  + for site owners, you can now add plugins from the Plugin Center in the header menu; 
+  + for developers, you can create your own plugin and publish it in [wf-plugin-center](https://github.com/wildfirejs/wf-plugin-center) for all `wildfire` users.
 
-Continue reading [Get Started](https://wildfire.js.org/#/preface), and start your journey with `wildfire`!
+Try this version by adding to your website: 
 
-> If you are using `Wildfire`, please share your website here: [We are using Wildfire!](https://github.com/cheng-kang/wildfire/issues/9) :-D.
-
-## Features
-
-**For site owners:**
-
-- Database Support: 
-  - [Firebase](https://firebase.google.com/)
-  - [Wilddog](https://www.wilddog.com/).
-- Admin Function: 
-  - Delete comment
-  - Ban users by their IP/email
-  - [Reset discussion count of all pages](https://wildfire.js.org/#/admin-helpers?id=_1-reset-discussion-count-for-all-pages)
-  - [Get discussion count](https://wildfire.js.org/#/get-discussion-count)
-  - [Admin Helper Functions](https://wildfire.js.org/#/admin-helpers)
-
-**For all visitors (anonymous & authorized):**
-
-- Comment (with `Markdown` support)
-- Mention (@username)
-    
-**For authorized visitors:**
-
-- Like/dislike a comment
-- Delete own comments
-- Report inappropriate comments
-- Update user profile
-  - Display name
-  - Avatar
-- Personal Center:
-  - Notification
-
-## Showcase
-
-<p align="center">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/1.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/2.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/3.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/4.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/5.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/6.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/0a063275/resources/screenshots/7.png" height="320">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/d9862632/resources/screenshots/wldfire-dark-theme.png" height="320">
-</p>
-
-For more showcases, check this Wiki page: [Who is using Wildfire?](https://github.com/cheng-kang/wildfire/wiki/1.-%E8%BF%99%E4%BA%9B%E7%BD%91%E7%AB%99%E6%AD%A3%E5%9C%A8%E4%BD%BF%E7%94%A8-Wildfire-%E9%87%8E%E7%81%AB%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%EF%BC%81).
-
-## Donation
-
-Buy us a cup of tea if you think `wildfire` does work! 
-
-#### - Paypal Me
-
-<p align="center">
-  <a href="https://www.paypal.me/chengkang" target="_blank"><img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/paypal-me.png" width="320"></a>
-</p>
-
-#### - Alipay & Wechat
-
-<p align="center">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/alipay.jpg" width="160">
-  <img src="https://cdn.rawgit.com/cheng-kang/wildfire/5f5ee7b5/resources/donate/wechat.jpg" width="160">
- </p>
-
-We appreciate your kindness!
+```html
+<div class="wildfire_thread"></div>
+<script>
+  var wildfireConfig = () => ({
+    useDev: true,
+    version: '0.5.4',
+    databaseProvider: 'firebase',
+    databaseConfig: {
+        apiKey: "...",
+        authDomain: "...",
+        databaseURL: "...",
+        projectId: "...",
+        storageBucket: "...",
+        messagingSenderId: "..."
+    },
+    theme: 'dark',
+  })
+</script>
+<script src="https://unpkg.com/wildfire-comment"></script>
+```
 
 ## License
 
