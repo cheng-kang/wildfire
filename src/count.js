@@ -23,30 +23,31 @@
 
   let baseURL;
   if (databaseProvider === 'firebase') {
-    baseURL = databaseProvider.databaseURL;
+    baseURL = databaseConfig.databaseURL;
   } else {
     baseURL = `https://${databaseConfig.siteId}.wilddogio.com`;
   }
 
   const discussionCountEles = document.getElementsByClassName('wf-discussion-count-unit');
 
-  discussionCountEles.forEach(ele => {
+  for (let i = 0; i < discussionCountEles.length; i += 1) {
+    const ele = discussionCountEles[i]
     const pageURL = ele.getAttribute('wf-page-url');
     if (!pageURL) {
       console.error('Missing attribute: `wf-page-url`.');
       return;
     }
 
-    const url = `${baseURL}/pages/${b64EncodeUnicode(pageURL)}/discussionCount.json`;
+    const url = `${baseURL}/pageComments/${b64EncodeUnicode(pageURL)}.json`;
     fetch(url).then((response) => {
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         return response.json();
       }
       throw new TypeError("Oops, we haven't got JSON!");
-    }).then((json) => {
-      const discussionCount = json || 0;
+    }).then((json = {}) => {
+      const discussionCount = Object.keys(json).length;
       ele.innerHTML = discussionCount;
     }).catch((error) => { console.error(error); });
-  });
+  }
 })();

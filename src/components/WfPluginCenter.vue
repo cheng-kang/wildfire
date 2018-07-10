@@ -24,7 +24,7 @@
         </i-collapse>
       </div>
     </i-tab-pane>
-    <i-tab-pane v-if="hasAddedPlugin" :label="t('PluginCenter.title.plugin_ordering')" name="ordering">
+    <i-tab-pane :label="t('PluginCenter.title.plugin_ordering')" name="ordering">
       <div class="pane-warp">
         <i-collapse accordion>
           <i-panel v-for="(cpnts, place) in order" :key="place" :name="place">
@@ -63,10 +63,10 @@
               <p slot="title">{{PT(plugin.id)(plugin.title)}}</p>
               <span slot="extra">
                 <span v-if="plugin.isAdded" class="icon-warp">
-                  <i-tooltip :transfer="true" placement="top"
-                    content="t('PluginCenter.text.plugin_added')">
+                  <i-tooltip-in-modal :transfer="true" placement="top"
+                    :content="t('PluginCenter.text.plugin_added')">
                     <i-icon type="checkmark-circled"></i-icon>
-                  </i-tooltip>
+                  </i-tooltip-in-modal>
                 </span>
                 <i-button v-else
                   size="small"
@@ -89,7 +89,7 @@
 <script>
 import Vue from 'vue';
 import union from 'lodash/union';
-import { butler, PLUGIN_LIST_CDN } from '../common';
+import { bus, butler, PLUGIN_LIST_CDN } from '../common';
 import { PCM, PTM4Meta, PLACES, splited } from '../plugin';
 import { getKey } from '../utils';
 
@@ -117,7 +117,7 @@ export default {
     };
   },
   computed: {
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
     isPluginCenterEmpty() {
       return Object.keys(this.meta).length === 0;
     },
@@ -131,14 +131,8 @@ export default {
         isActive: this.addedPluginsFromCenter[plugin.id] === true,
       }));
     },
-    inactivePlugins() {
-      return this.plugins.filter(({ isAdded, isActive }) => isAdded && !isActive);
-    },
-    activePlugins() {
-      return this.plugins.filter(({ isAdded, isActive }) => isAdded && isActive);
-    },
     addedPlugins() {
-      return [...this.activePlugins, ...this.inactivePlugins];
+      return this.plugins.filter(({ isAdded }) => isAdded);
     },
     styles() {
       return {
@@ -176,8 +170,12 @@ export default {
       })
       .catch((error) => {
         console.error(error);
-        this.$Message.error('PluginCenter.error.loading_added_plugin_order');
+        this.$Message.error(this.t('PluginCenter.error.loading_added_plugin_order'));
       })
+    
+    bus.listenTo('PluginComponentsChanged', () => {
+      this.resetOrder()
+    });
   },
   methods: {
     loadPluginMetaData() {

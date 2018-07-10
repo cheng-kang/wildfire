@@ -16,7 +16,7 @@ export default {
     };
   },
   computed: {
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
   },
 };
 </script>

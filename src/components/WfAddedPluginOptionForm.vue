@@ -31,6 +31,7 @@ export default {
     _t() {
       return this.t(this.pluginId);
     },
+    __t: () => (keys, options) => butler.i18next.t(keys, options),
   },
   created() {
     this.optionRef.once('value')
@@ -52,9 +53,8 @@ export default {
         this.form = form;
         this.rules = rules;
       })
-      .catch(error => {
-        console.error(error);
-        this.$Message.error('AddedPluginOptionForm.error.loading_option');
+      .catch(() => {
+        this.$Message.error(this.__t('AddedPluginOptionForm.error.loading_option'));
       });
   },
   methods: {
@@ -64,18 +64,17 @@ export default {
         if (valid) {
           this.optionRef.update(this.form)
             .then(() => {
-              this.$Message.success('AddedPluginOptionForm.success.update');
+              this.$Message.success(this.__t('AddedPluginOptionForm.success.update'));
             })
-            .catch(error => {
-              console.error(error);
-              this.$Message.error('AddedPluginOptionForm.error.update');
+            .catch(() => {
+              this.$Message.error(this.__t('AddedPluginOptionForm.error.update'));
             })
             .finally(() => {
               this.isUpdating = false;
             });
         } else {
           this.isUpdating = false;
-          this.$Message.error('AddedPluginOptionForm.error.invalid_form');
+          this.$Message.error(this.__t('AddedPluginOptionForm.error.invalid_form'));
         }
       });
     },

@@ -1,4 +1,6 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app'
+import 'firebase/auth';
+import 'firebase/database';
 import VueFire from 'vuefire';
 import wilddog from 'wilddog';
 import VueWild from 'vuewild';
@@ -122,7 +124,7 @@ export const reset = (Vue, config = {}, err) => {
   butler.formatDate = formatDate;
   butler.distanceInWordsToNow = distanceInWordsToNow;
 
-  butler.initService(Vue, { databaseProvider, databaseConfig }, true)
+  initService(Vue, { databaseProvider, databaseConfig }, true)
 };
 
 export default { install, reset };

@@ -41,13 +41,21 @@
             } else if (typeof item === 'string') {
               url = item
             }
-            let newCSS = document.createElement('link')
+            const newCSS = document.createElement('link')
             newCSS.rel = 'stylesheet'
             newCSS.type = 'text/css'
             newCSS.href = url
             newCSS.media = 'all'
             newCSS.onload = () => { if (loaded) { loaded() } }
             document.head.appendChild(newCSS)
+            if (document !== parent.document) {
+              const newCSS = parent.document.createElement('link')
+              newCSS.rel = 'stylesheet'
+              newCSS.type = 'text/css'
+              newCSS.href = url
+              newCSS.media = 'all'
+              parent.document.head.appendChild(newCSS)
+            }
           }
 
           function loadJSSequentially (aList, finished) {
@@ -138,25 +146,24 @@
 
           function startWildfire () {
             loadCSS({
-              url: &#96;https://unpkg.com/wildfire-dev/dist/&#36;{databaseProvider}/static/wildfire.css&#96;,
+              url: &#96;https://unpkg.com/wildfire-dev@&#36;{version}/dist/&#36;{databaseProvider}/static/wildfire.css&#96;,
               loaded: () => {
                 let jsList = []
                 if (!window.Vue) { jsList.push('https://cdn.jsdelivr.net/npm/vue@2.5.13') }
                 jsList.push(databaseProvider === 'firebase' ? 'https://www.gstatic.com/firebasejs/4.6.2/firebase.js' : 'https://cdn.wilddog.com/sdk/js/2.5.17/wilddog.js')
-                jsList.push(&#96;https://unpkg.com/wildfire@&#36;{version}/dist/&#36;{databaseProvider}/wildfire.min.js&#96;)
+                jsList.push(&#96;https://unpkg.com/wildfire-dev@&#36;{version}/dist/&#36;{databaseProvider}/wildfire.min.js&#96;)
 
                 loadJSSequentially(jsList, () => {
-                  window.Vue.use(window.wildfire, {
+                  window.Vue.use(window.wildfire.default, {
                     databaseProvider,
                     databaseConfig,
                     standbyDatabaseConfigs,
-                    pageURL,
-                    pageURLMode,
+                    pageURL: pageURL || undefined,
+                    pageURLMode: pageTitle,
                     pageTitle,
                     theme,
                     locale,
-                    defaultAvatarURL,
-                    plugins,
+                    defaultAvatarURL: defaultAvatarURL || undefined,
                   })
                   new window.Vue({
                     el: '#wildfire',
@@ -190,7 +197,6 @@
           const locale = '${locale}'
           const theme = '${theme}'
           const defaultAvatarURL = '${defaultAvatarURL}'
-          const plugins = []
 
           window._i18n = new WfI18n({
             en: {
@@ -236,7 +242,7 @@
     pageURLMode = 'normal',
     locale = 'en',
     theme = 'light',
-    defaultAvatarURL,
+    defaultAvatarURL = '',
   } = window.wildfireConfig()
 
   const wildfireThreadDom = document.getElementsByClassName('wildfire_thread')[0]

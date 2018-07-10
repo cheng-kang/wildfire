@@ -80,36 +80,11 @@ export default {
     this.listenToAuthStateChange();
     this.listenToCommentsFromDatabase();
     this.listenToPluginCenter();
-    /**
-     * ↓This observer watches user profile updates
-     *  and change accordingly. The change here will
-     *  affect all child components.
-     */
-    bus.$on('CurrentUserInfoUpdated', updates => {
-      bus.user = Object.assign({}, bus.user, {
-        displayName: updates['/displayName'],
-        photoURL: updates['/photoURL'],
-      });
-    });
+    this.listenToCurrentUserInfoChange();
 
     this.$bindAsArray('banData', butler.db.ref('ban'));
 
-    Vue.http.get('https://api.userinfo.io/userinfos')
-      .then(response => {
-        bus.info = Object.assign({}, bus.info, { ip: response.data.ip_address });
-        this.checkBanState();
-        return response.data;
-      })
-      .catch(error => {
-        console.error(error);
-        bus.info = Object.assign({}, bus.info, { ip: 'unknown' });
-      })
-      .then(data => {
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') { return; }
-        const { pageURL, pageTitle, databaseProvider } = butler.config;
-        const wfAnalyticsURL = `${databaseProvider === 'firebase' ? 'https://wildfire-bada3.firebaseio.com/' : 'https://autolayout.wilddogio.com/'}sites/${pageURL}.json`;
-        Vue.http.post(wfAnalyticsURL, Object.assign({}, data, { pageTitle }));
-      });
+    this.getUserIp();
   },
   mounted() {
     // hide lodaing modal
@@ -209,15 +184,13 @@ export default {
             script.onload = () => {
               injectPlugin(pluginId);
             };
-            script.onerror = (error) => {
-              console.error(error);
+            script.onerror = () => {
               this.$Message.error(butler.i18next.t('Wildfire.error.loading_plugin'));
             }
             document.head.appendChild(script);
           });
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(() => {
           this.$Message.error(this.t('Wildfire.error.loading_plugin_list'));
         })
       butler.db.ref('addedPluginsFromCenter').on('child_changed', (snapshot) => {
@@ -234,6 +207,36 @@ export default {
           this.$set(PCM.order, place.replace('-', '.'), order[place]);
         });
       })
+    },
+    /**
+     * ↓This observer watches user profile updates
+     *  and change accordingly. The change here will
+     *  affect all child components.
+     */
+    listenToCurrentUserInfoChange() {
+      bus.$on('CurrentUserInfoUpdated', updates => {
+        bus.user = Object.assign({}, bus.user, {
+          displayName: updates['/displayName'],
+          photoURL: updates['/photoURL'],
+        });
+      });
+    },
+    getUserIp() {
+      Vue.http.get('https://api.userinfo.io/userinfos')
+        .then(response => {
+          bus.info = Object.assign({}, bus.info, { ip: response.data.ip_address });
+          this.checkBanState();
+          return response.data;
+        })
+        .catch(() => {
+          bus.info = Object.assign({}, bus.info, { ip: 'unknown' });
+        })
+        .then(data => {
+          if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') { return; }
+          const { pageURL, pageTitle, databaseProvider } = butler.config;
+          const wfAnalyticsURL = `${databaseProvider === 'firebase' ? 'https://wildfire-bada3.firebaseio.com/' : 'https://autolayout.wilddogio.com/'}sites/${pageURL}.json`;
+          Vue.http.post(wfAnalyticsURL, Object.assign({}, data, { pageTitle }));
+        });
     },
     checkBanState() {
       const isBanned = (bus.user && this.banList.indexOf(bus.user.uid) > -1) ||

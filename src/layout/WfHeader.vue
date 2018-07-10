@@ -31,29 +31,28 @@
         <i-menu-group :title="t('Header.menu.personal_center')">
           <i-menu-item name="user_setting">{{t('Header.menu.user_setting')}}</i-menu-item>
           <i-menu-item name="notification">{{t('Header.menu.notification')}}</i-menu-item>
-          <!-- <component
+          <component
             v-for="(cpntName, idx) in pluginComponents.menu.personal"
             :is="cpntName"
             :key="cpntName+idx"
-            v-bind="pluginProps(cpntName)"/> -->
+            v-bind="pluginProps(cpntName)"/>
         </i-menu-group>
         <i-menu-group :title="t('Header.menu.admin_center')" v-if="user.isAdmin">
           <i-menu-item name="plugin_center">{{t('Header.menu.plugin_center')}}</i-menu-item>
           <i-menu-item name="report_management">{{t('Header.menu.report_management')}}</i-menu-item>
-          <i-menu-item name="admin_helpers">{{t('Header.menu.admin_helpers')}}</i-menu-item>
-          <!-- <component
+          <component
             v-for="(cpntName, idx) in pluginComponents.menu.admin"
             :is="cpntName"
             :key="cpntName+idx"
-            v-bind="pluginProps(cpntName)"/> -->
+            v-bind="pluginProps(cpntName)"/>
         </i-menu-group>
-        <!-- <i-menu-group :title="t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
+        <i-menu-group :title="t('Header.menu.plugin')" v-if="shouldShowPluginMenu">
           <component
             v-for="(cpntName, idx) in pluginComponents.menu.plugin"
             :is="cpntName"
             :key="cpntName+idx"
             v-bind="pluginProps(cpntName)"/>
-        </i-menu-group> -->
+        </i-menu-group>
       </i-submenu>
       <i-submenu v-if="isSmallScreen" name="more" class="wf-no-border-bottom wf-float-right">
         <i-menu-group :title="t('Header.menu.actions')">
@@ -93,9 +92,6 @@
     <i-modal  v-if="user && user.isAdmin" v-model="reportMangementModal" :closable="false" :footer-hide="true" :theme="theme">
       <wf-report-management :user="user"/>
     </i-modal>
-    <i-modal v-if="user && user.isAdmin" v-model="adminHelpersModal" :closable="false" :footer-hide="true" :theme="theme">
-      <wf-admin-helpers :user="user"/>
-    </i-modal>
     <i-modal v-if="user && user.isAdmin" v-model="pluginCenterModal" :closable="false" :footer-hide="true" :theme="theme">
       <wf-plugin-center/>
     </i-modal>
@@ -118,7 +114,6 @@ export default {
       userSettingModal: false,
       personalCenterModal: false,
       reportMangementModal: false,
-      adminHelpersModal: false,
       pluginCenterModal: false,
       menuActiveName: 'comments_count',
     };
@@ -132,7 +127,7 @@ export default {
       },
     }),
     pluginProps: () => pluginProps,
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
     theme: () => butler.config.theme,
     user: () => bus.user,
     username() {
@@ -214,10 +209,6 @@ export default {
         }
         case 'report_management': {
           this.reportMangementModal = true;
-          break;
-        }
-        case 'admin_helpers': {
-          this.adminHelpersModal = true;
           break;
         }
         case 'plugin_center': {

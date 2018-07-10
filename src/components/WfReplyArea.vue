@@ -95,7 +95,7 @@ export default {
       toolbar: PCM.get('toolbar'),
     }),
     pluginProps: () => pluginProps,
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
     user: () => bus.user,
     avatarURL() {
       return this.user
@@ -161,7 +161,6 @@ export default {
     });
   },
   beforeDestroy() {
-    bus.enough('OnlyOneReplyAreaShouldBeActive', null, this._uid);
     bus.enough(`MentionAutoCompleteSelected-${this._uid}`);
   },
   methods: {

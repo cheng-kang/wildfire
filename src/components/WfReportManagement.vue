@@ -9,7 +9,7 @@
       <ul class="wf-ul">
         <li class="wf-li" v-for="item in reportedTableData" :key="item.commentId">
           <div class="wf-meta">
-            <i-tooltip
+            <i-tooltip-in-modal
               placement='top'
               :transfer="true">
               <p class="wf-display-name">{{ item.author.displayName }}</p>
@@ -17,15 +17,15 @@
                 <p v-if="item.author.email">{{ item.author.email }}</p>
                 <p >{{ item.comment.ip }}</p>
               </div>
-            </i-tooltip>
+            </i-tooltip-in-modal>
           </div>
           <div class="wf-detail">
-            <i-tooltip
+            <i-tooltip-in-modal
               placement='top'
               :transfer="true">
               <p>
                 <span>{{ getAbstract(item.comment.content) }}</span>
-                <i-poptip
+                <i-poptip-in-modal
                   v-if="item.comment.content.length >= 20"
                   :transfer="true"
                   :showTitle="false"
@@ -39,15 +39,15 @@
                   <div class="wf-poptip-content" slot="content">
                     <div v-html="markdown(item.comment.content)"></div>
                   </div>
-                </i-poptip>
+                </i-poptip-in-modal>
               </p>
               <div slot="content">
                 {{ t('ReportManagement.text.reported_by_n_users', { count: item.userList.length })}}
               </div>
-            </i-tooltip>
+            </i-tooltip-in-modal>
           </div>
           <div class="wf-buttons">
-            <i-poptip
+            <i-poptip-in-modal
               :confirm="true"
               :title="getBanActionTip(item.comment.uid, item.comment.ip)"
               :transfer="true"
@@ -60,8 +60,8 @@
                 style="color: #f90;">
                 {{ t('ReportManagement.btn.ban') }}
               </i-button>
-            </i-poptip>
-            <i-poptip
+            </i-poptip-in-modal>
+            <i-poptip-in-modal
               :confirm="true"
               :title="getDelActionTip(item.repliesCount)"
               :transfer="true"
@@ -74,8 +74,8 @@
                 style="color: #ed3f14;">
                 {{ t('ReportManagement.btn.delete') }}
               </i-button>
-            </i-poptip>
-            <i-poptip
+            </i-poptip-in-modal>
+            <i-poptip-in-modal
               :confirm="true"
               :title="t('ReportManagement.confirm.ignoring_report')"
               :transfer="true"
@@ -87,7 +87,7 @@
                 type="text">
                 {{ t('ReportManagement.btn.ignore') }}
               </i-button>
-            </i-poptip>
+            </i-poptip-in-modal>
           </div>
         </li>
       </ul>
@@ -104,17 +104,17 @@
             {{distanceInWordsToNow(item.date)}}
           </div>
           <div class="wf-detail">
-            <i-tooltip
+            <i-tooltip-in-modal
               placement='top'
               :transfer="true">
               <p class="">{{ item.info }}</p>
               <div slot="content">
                 <p >{{ item.displayName }}</p>
               </div>
-            </i-tooltip>
+            </i-tooltip-in-modal>
           </div>
           <div class="wf-buttons">
-            <i-poptip
+            <i-poptip-in-modal
               :confirm="true"
               :title="t('ReportManagement.confirm.unbanning_user')"
               :transfer="true"
@@ -126,7 +126,7 @@
                 type="text">
                 {{ t('ReportManagement.btn.unban') }}
               </i-button>
-            </i-poptip>
+            </i-poptip-in-modal>
           </div>
         </li>
       </ul>
@@ -155,7 +155,7 @@ export default {
     this.listenToBan();
   },
   computed: {
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
     distanceInWordsToNow: () => butler.distanceInWordsToNow,
     reportedTableData() {
       return (
@@ -191,7 +191,7 @@ export default {
           if (comment) {
             Promise.all([
               butler.db.ref(`users/${comment.uid}`).once('value'),
-              butler.db.ref(`commentReplies/${commentId}`).once('value'),
+              butler.db.ref('comments').orderByChild('rootCommentId').equalTo(commentId).once('value'),
             ]).then(snaps => {
               const user = snaps[0].val() || {
                 displayName: this.t('common.unknown_user'),
@@ -267,26 +267,29 @@ export default {
     },
     deleteComment(item) {
       const { comment, commentId, replies } = item;
+
       Promise.all([
         butler.db.ref(`comments/${commentId}`).remove(),
-        comment.rootCommentId
-          ? butler.db.ref(`commentReplies/${comment.rootCommentId}/${commentId}`).remove()
-          : butler.db.ref(`pages/${comment.pageURL}/comments/${commentId}`).remove(),
+        butler.db.ref(`votes/${commentId}`).remove(),
+        // Note: [todo] should move "deleting votes" outside of
+        //        this batch. "votes" data shouldn't be writable
+        //        by all users, because site owner cannot recover
+        //        "votes" data with other unmutalbe data.
+        ...(this.isTopLevelComment
+          ? [
+            butler.db.ref(`pageComments/${comment.pageURL}/${commentId}`).remove(),
+            ...replies.map(reply => [
+              butler.db.ref(`comments/${reply.commentId}`).remove(),
+              butler.db.ref(`votes/${reply.commentId}`).remove(),
+              butler.db.ref(`pageComments/${comment.pageURL}/${reply.commentId}`).remove(),
+            ]),
+          ]
+          : [butler.db.ref(`pageComments/${comment.pageURL}/${commentId}`).remove()]),
       ]).then(() => {
         this.$Message.success(this.t('ReportManagement.success.deleting_comment'));
       }).catch(() => {
         this.$Message.error(this.t('ReportManagement.error.deleting_comment'));
       });
-      if (replies.length > 0) {
-        Promise.all([
-          ...replies.map(replyId => butler.db.ref(`comments/${replyId}`).remove()),
-          butler.db.ref(`commentReplies/${commentId}`).remove(),
-        ]).then(() => {
-          this.$Message.success(this.t('ReportManagement.success.deleting_related_replies'));
-        }).catch(() => {
-          this.$Message.error(this.t('ReportManagement.error.deleting_related_replies'));
-        });
-      }
       butler.db.ref(`reported/${commentId}`).remove();
       Vue.delete(this.reportedList, commentId);
     },

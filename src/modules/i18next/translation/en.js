@@ -12,26 +12,14 @@ export default {
     wilddog_too_many_connections: 'The current database had too many connections, please contact the site admin.',
     wildfire_reset_not_found: 'Global wildfire reset method not found.',
   },
-  AdminHelpers: {
-    btn: {
-      reset: 'Reset',
-      resetting: 'Resetting...',
-    },
-    confirm: {
-      resetting_discussion_count_for_all_pages: 'Are you sure to reset discussion count for all pages?',
-    },
+  AddedPluginOptionForm: {
     error: {
-      resetting_discussion_count_for_all_pages: 'Something went wrong. Please try again later.',
+      loading_option: 'Failed to load plugin options.',
+      update: 'Failed to update plugin options.',
+      invalid_form: 'Invalid plugin options form content.'
     },
     success: {
-      resetting_discussion_count_for_all_pages: 'Successfully reset discussion count for all pages!',
-    },
-    tab: {
-      helpers: 'Helpers',
-    },
-    text: {
-      desc_resetting_discussion_count_for_all_pages: 'If the discusstion count for your webpage went wrong, you can reset discussion count for all pages with this helper function.',
-      resetting_discussion_count_for_all_pages: 'Reset Discussion Count for All Pages',
+      update: 'Successfully updated plugin options.'
     },
   },
   AuthForm: {
@@ -269,7 +257,6 @@ export default {
     },
     error: {
       deleting_comment: 'Failed to delete comment.',
-      deleting_related_replies: 'Failed to delete related replies',
       banning_user: 'Failed to ban.',
       banning_user_invalid_ip: 'Invalid IP address, cannot be banned!',
       banning_user_repeated: 'Banned already.',
@@ -277,7 +264,6 @@ export default {
     },
     success: {
       deleting_comment: 'Comment Deleted.',
-      deleting_related_replies: 'Related replies deleted.',
       banning_user: 'Banned.',
       unbanning_user: 'Unbanned.',
     },

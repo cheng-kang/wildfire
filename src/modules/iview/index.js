@@ -35,6 +35,7 @@ import Message from './components/message';
 import Modal from './components/modal';
 import Page from 'iview/src/components/page';
 import Poptip from './components/poptip';
+import PoptipInModal from './components/poptip-in-modal';
 import { Row, Col } from 'iview/src/components/grid';
 import Spin from 'iview/src/components/spin';
 import iSwitch from './components/switch';
@@ -43,6 +44,7 @@ import {
   Option,
 } from 'iview/src/components/select';
 import Tooltip from './components/tooltip';
+import TooltipInModal from './components/tooltip-in-modal';
 import Tabs from './components/tabs';
 
 const iview = {
@@ -56,16 +58,8 @@ const iview = {
   iCard: Card,
   Col,
   iCol: Col,
-  Collapse,
-  iCollapse: Collapse,
   Panel: Collapse.Panel,
   iPanel: Collapse.Panel,
-  Dropdown,
-  DropdownItem: Dropdown.Item,
-  DropdownMenu: Dropdown.Menu,
-  iDropdown: Dropdown,
-  iDropdownItem: Dropdown.Item,
-  iDropdownMenu: Dropdown.Menu,
   Form,
   iForm: Form,
   FormItem: Form.Item,
@@ -96,17 +90,29 @@ const iview = {
   iSwitch,
   TabPane: Tabs.Pane,
   iTabPane: Tabs.Pane,
-  Tooltip,
-  iTooltip: Tooltip,
 };
 
 const _iview = {
+  Collapse,
+  iCollapse: Collapse,
+  Dropdown,
+  DropdownItem: Dropdown.Item,
+  DropdownMenu: Dropdown.Menu,
+  iDropdown: Dropdown,
+  iDropdownItem: Dropdown.Item,
+  iDropdownMenu: Dropdown.Menu,
   Modal,
   iModal: Modal,
   Poptip,
   iPoptip: Poptip,
+  PoptipInModal,
+  iPoptipInModal: PoptipInModal,
   Tabs,
   iTabs: Tabs,
+  Tooltip,
+  iTooltip: Tooltip,
+  TooltipInModal,
+  iTooltipInModal: TooltipInModal,
 };
 
 const install = (Vue, opts = {}) => {

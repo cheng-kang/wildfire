@@ -5,7 +5,8 @@
 </template>
 <script>
 import Vue from 'vue'
-import wildfire from '../../src/aio'
+import wildfire from '../../src/main'
+
 export default {
   name: 'app',
   data () {

@@ -28,7 +28,7 @@ export default {
     };
   },
   computed: {
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
     selectedCommentUserInfo: () => bus.selectedCommentUserInfo,
     encodedIP() {
       const { ip } = this.selectedCommentUserInfo;

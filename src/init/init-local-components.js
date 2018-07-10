@@ -1,5 +1,4 @@
 import WfAddedPluginOptionForm from '../components/WfAddedPluginOptionForm';
-import WfAdminHelpers from '../components/WfAdminHelpers';
 import WfAuthForm from '../components/WfAuthForm';
 import WfCommentCard from '../components/WfCommentCard';
 import WfMarkedContent from '../components/WfMarkedContent';
@@ -14,7 +13,6 @@ import WfPluginCenter from '../components/WfPluginCenter';
 
 const localComponents = {
   WfAddedPluginOptionForm,
-  WfAdminHelpers,
   WfAuthForm,
   WfCommentCard,
   WfMarkedContent,

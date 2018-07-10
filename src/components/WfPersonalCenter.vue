@@ -2,7 +2,7 @@
   <Tabs value="notification-box" class="wf-personal-center">
     <TabPane :label="t('PersonalCenter.tab.notification')" name="notification-box">
       <span v-if="Object.keys(notifications).length === 0">{{t('PersonalCenter.text.empty_notif_list')}}</span>
-      <wf-footnote v-else>{{t('PersonalCenter.text.tips')}}</wf-footnote>
+      <wf-footnote type="tips" v-else>{{t('PersonalCenter.text.tips')}}</wf-footnote>
       <ul class="wf-ul">
         <li class="wf-li" v-for="notifId in notifIdsDESC" :key="notifId" :class="{ 'wf-is-read': notifications[notifId].isRead }">
           <span class="wf-meta">{{distanceInWordsToNow(notifications[notifId].date)}}</span>
@@ -31,7 +31,7 @@ export default {
     };
   },
   computed: {
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
     b64DecodeUnicode: () => butler.b64DecodeUnicode,
     distanceInWordsToNow: () => butler.distanceInWordsToNow,
     user: () => bus.user,

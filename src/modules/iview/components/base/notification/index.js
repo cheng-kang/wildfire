@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Notification from './notification.vue';
 
+/* eslint-disable no-restricted-globals */
+
 Notification.newInstance = properties => {
   const _props = properties || {};
 
@@ -14,7 +16,7 @@ Notification.newInstance = properties => {
   });
 
   const component = Instance.$mount();
-  document.body.appendChild(component.$el);
+  parent.document.body.appendChild(component.$el);
   const notification = Instance.$children[0];
 
   return {
@@ -28,7 +30,7 @@ Notification.newInstance = properties => {
     destroy(element) {
       notification.closeAll();
       setTimeout(() => {
-        document.body.removeChild(document.getElementsByClassName(element)[0]);
+        parent.document.body.removeChild(parent.document.getElementsByClassName(element)[0]);
       }, 500);
     },
   };

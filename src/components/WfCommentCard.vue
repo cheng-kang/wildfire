@@ -269,7 +269,7 @@ export default {
       },
     }),
     pluginProps: () => pluginProps,
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
     distanceInWordsToNow: () => butler.distanceInWordsToNow,
     formatDate: () => butler.formatDate,
     user: () => bus.user,
@@ -411,9 +411,6 @@ export default {
         this.isShowingReplyArea = false;
       }
     }, this.$refs.replyArea._uid);
-  },
-  beforeDestroy() {
-    bus.enough('CurrentUserInfoUpdated', null, this._uid);
   },
   methods: {
     isAnonymousUser(uid) {

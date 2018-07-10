@@ -16,7 +16,7 @@ import { butler } from '../common';
 export default {
   name: 'wf-footer',
   computed: {
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
   },
 };
 </script>

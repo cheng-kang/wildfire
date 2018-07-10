@@ -39,7 +39,7 @@
             let isActive = false;
 
             if (this.accordion) {
-              isActive = activeKey === name;
+              isActive = activeKey[0] === name;
             } else {
               isActive = activeKey.indexOf(name) > -1;
             }

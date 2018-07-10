@@ -12,26 +12,14 @@ export default {
     wilddog_too_many_connections: '当前数据库超载，请管理员及时处理。',
     wildfire_reset_not_found: '未找到全局 wildfire 重置方法。',
   },
-  AdminHelpers: {
-    btn: {
-      reset: '重置',
-      resetting: '重置中...',
-    },
-    confirm: {
-      resetting_discussion_count_for_all_pages: '确定要重置所有页面的评论数量吗？',
-    },
+  AddedPluginOptionForm: {
     error: {
-      resetting_discussion_count_for_all_pages: '出错了，请稍后再试。',
+      loading_option: '加载插件配置项失败。',
+      update: '更新插件配置项失败。',
+      invalid_form: '插件配置项表单验证失败。'
     },
     success: {
-      resetting_discussion_count_for_all_pages: '成功重置了所有页面的评论数量！',
-    },
-    tab: {
-      helpers: '辅助功能',
-    },
-    text: {
-      desc_resetting_discussion_count_for_all_pages: '如果页面的评论数量出现错误的话，你可以通过这个辅助功能重置所有页面的评论数量。',
-      resetting_discussion_count_for_all_pages: '重置所有页面的评论数量',
+      update: '更新插件配置项成功。'
     },
   },
   AuthForm: {
@@ -268,7 +256,6 @@ export default {
     },
     error: {
       deleting_comment: '删除失败。',
-      deleting_related_replies: '删除相关回复失败',
       banning_user: '屏蔽失败。',
       banning_user_invalid_ip: '该匿名用户无有效 IP，无法屏蔽！',
       banning_user_repeated: '请勿重复屏蔽。',
@@ -276,7 +263,6 @@ export default {
     },
     success: {
       deleting_comment: '删除成功。',
-      deleting_related_replies: '相关回复已被删除。',
       banning_user: '屏蔽成功！',
       unbanning_user: '已解除屏蔽！',
     },

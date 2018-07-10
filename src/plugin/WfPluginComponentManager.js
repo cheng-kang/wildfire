@@ -2,6 +2,7 @@ import Vue from 'vue';
 import values from 'lodash/values';
 import forIn from 'lodash/forIn';
 import union from 'lodash/union';
+import { bus } from '../common'
 import { concatenated } from './helpers';
 import { PLACES } from './constants';
 
@@ -50,6 +51,7 @@ const WfPluginComponentManager = new Vue({
           this.components[place].push(uniqueName);
         });
       });
+      bus.$emit('PluginComponentsChanged');
     },
   
     /**
@@ -66,6 +68,7 @@ const WfPluginComponentManager = new Vue({
           if (idx !== -1) this.components[place].splice(idx, 1);
         });
       });
+      bus.$emit('PluginComponentsChanged');
     },
   
     get(place) {
@@ -80,6 +83,7 @@ const WfPluginComponentManager = new Vue({
       const components = {};
       this.places.forEach(place => { components[place] = []; });
       this.components = components;
+      bus.$emit('PluginComponentsChanged');
     }
   },
 });

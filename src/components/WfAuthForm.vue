@@ -75,7 +75,7 @@ export default {
   name: 'wf-auth-form',
   props: ['initTab'],
   data() {
-    const t = (key) => butler.i18next.t(key);
+    const t =() => (keys, options) => butler.i18next.t(keys, options);
     const validatePasswordCheck = (rule, value, callback) => {
       if (value !== this.signUpForm.password) {
         callback(new Error(t('AuthForm.error.passwords_dont_match')));
@@ -116,7 +116,7 @@ export default {
     };
   },
   computed: {
-    t: () => (key) => butler.i18next.t(key),
+    t: () => (keys, options) => butler.i18next.t(keys, options),
   },
   methods: {
     handleSignIn(name) {
