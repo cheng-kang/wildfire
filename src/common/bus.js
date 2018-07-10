@@ -1,58 +1,54 @@
-/*
-  This is a shared state manager & event handler.
+import Vue from 'vue';
+import cloneDeep from 'lodash/clonedeep';
 
-  Usage:
-    ```
-    import Bus from 'pathTo/bus.js'
-    ```
-
-    1. To reference shared state
-      ```
-      Bus.$data.dataName
-      ```
-
-    2. To broadcast a event
-      ```
-      Bus.$emit('eventName'[, params])
-      ```
-
-    3. To observe a event
-      ```
-      Bus.$on('eventName`[, params => {
-        your callback
-      }])
-      ```
+/**
+ * A shared state manager & event handler
+ *
+ * Usage:
+ *  0. `import bus from 'pathTo/bus';`
+ *  1. to reference a shared state: `bus.dataName`
+ *  2. to broadcast a event: `bus.$emit('eventName'[, params])`
+ *  3. to subscribe to a event: `bus.$on('eventName`[, callback])`
  */
-import Vue from 'vue'
-const Bus = new Vue({
-  data () {
+const bus = new Vue({
+  data() {
     return {
       windowWidth: 0,
       discussionCount: 0,
-      /* Mention */
       isLoadingUserData: true,
-      info: {ip: 'unknown', isBanned: false},
+      info: { ip: 'unknown', isBanned: false },
       user: null,
       users: [],
       admin: null,
       currentReplyAreaId: null,
-      /* End of: Mention */
-
-      /*
-        Comment User Modal
-          Note: This is the modal that shows when you click
-                on username or @username in comment card
+      /**
+       * ↓This is for the modal that shows when you
+       *  click on username or @username in comment card
        */
       selectedCommentUserInfo: {},
-      /* End of: Comment User Modal */
-      // For plugin data
-      plugins: {}
-    }
+      pluginsData: {},
+    };
   },
   computed: {
-    isCurrentUserBanned () {
-      return this.info.isBanned
-    }
+    isCurrentUserBanned() {
+      return this.info.isBanned;
+    },
+    /**
+     * A deep copy of common data for plugins.
+     */
+    commonData() {
+      return {
+        windowWidth: this.windowWidth,
+        discussionCount: this.discussionCount,
+        isLoadingUserData: this.isLoadingUserData,
+        info: cloneDeep(this.info),
+        user: cloneDeep(this.user),
+        users: cloneDeep(this.users),
+        admin: cloneDeep(this.admin),
+        currentReplyAreaId: this.currentReplyAreaId,
+        selectedCommentUserInfo: cloneDeep(this.selectedCommentUserInfo),
+      };
+    },
   },
   methods: {
     /**
@@ -66,16 +62,16 @@ const Bus = new Vue({
      *         custom identifier for cb
      * @return {Object}
      */
-    listenTo (event, callback, identifier) {
+    listenTo(event, callback, identifier) {
       if (identifier) {
         Object.defineProperty(callback, '_uid', {
           value: identifier,
           writable: false,
           enumerable: true,
-          configurable: true
-        })
+          configurable: true,
+        });
       }
-      return this.$on(event, callback)
+      return this.$on(event, callback);
     },
     /**
      * enough:
@@ -88,20 +84,21 @@ const Bus = new Vue({
      *         custom identifier for cb
      * @return {Object}
      */
-    enough (event, callback, identifier) {
+    enough(event, callback, identifier) {
       if (identifier) {
-        if (!this._events[event]) return this
-        const cbIdx = this._events[event].findIndex(cb => cb._uid === identifier)
-        this._events[event].splice(cbIdx, 1)
-        return this
+        if (!this._events[event]) return this;
+        const cbIdx = this._events[event].findIndex(cb => cb._uid === identifier);
+        this._events[event].splice(cbIdx, 1);
+        return this;
       }
 
       if (callback) {
-        return this.$off(event, callback)
+        return this.$off(event, callback);
       }
 
-      return this.$off(event)
-    }
-  }
-})
-export default Bus
+      return this.$off(event);
+    },
+  },
+});
+
+export default bus;

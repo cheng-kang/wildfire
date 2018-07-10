@@ -1,0 +1,92 @@
+// 将设置放入此文件中以覆盖默认设置
+{
+  "window.zoomLevel": 0,
+  "workbench.iconTheme": "material-icon-theme",
+  // Controls if quick suggestions should show up or not while typing
+  "editor.quickSuggestions": true,
+
+  // Controls the delay in ms after which quick suggestions will show up
+  "editor.quickSuggestionsDelay": 10,
+
+  // Controls after how many characters the editor will wrap to the next line. Setting this to 0 turns on viewport width wrapping
+  "editor.wordWrap": "on",
+
+  // Controls the indentation of wrapped lines. Can be one of 'none', 'same' or 'indent'.
+  "editor.wrappingIndent": "same",
+
+  // Controls if the editor should automatically format the line after typing
+  "editor.formatOnType": false,
+  "workbench.colorTheme": "One Dark Pro",
+  // The number of spaces a tab is equal to. This setting is overriden
+  // based on the file contents when `editor.detectIndentation` is true.
+  "editor.tabSize": 2,
+
+  // Insert spaces when pressing Tab. This setting is overriden
+  // based on the file contents when `editor.detectIndentation` is true.
+  "editor.insertSpaces": true,
+
+  // When opening a file, `editor.tabSize` and `editor.insertSpaces`
+  // will be detected based on the file contents.
+  "editor.detectIndentation": true,
+  "material-icon-theme.showUpdateMessage": false,
+  "sync.gist": "e92a7b15eeceab266f185558e57563a8",
+  "sync.lastUpload": "2018-03-01T21:08:01.248Z",
+  "sync.autoDownload": false,
+  "sync.autoUpload": false,
+  "sync.lastDownload": "",
+  "sync.forceDownload": false,
+  "sync.anonymousGist": false,
+  "sync.host": "",
+  "sync.pathPrefix": "",
+  "sync.quietSync": false,
+  "sync.askGistName": false,
+  "better-comments.tags": [{
+      "tag": "!",
+      "color": "#FF2D00",
+      "strikethrough": false
+    },
+    {
+      "tag": "?",
+      "color": "#3498DB",
+      "strikethrough": false
+    },
+    {
+      "tag": "//",
+      "color": "#474747",
+      "strikethrough": true
+    },
+    {
+      "tag": "todo",
+      "color": "#FF8C00",
+      "strikethrough": false
+    },
+    {
+      "tag": "fixme",
+      "color": "#FF8C00",
+      "strikethrough": false
+    },
+    {
+      "tag": "*",
+      "color": "#98C379",
+      "strikethrough": false
+    }
+  ],
+  "eslint.options": {
+    "extensions": [".html", ".js", ".vue"]
+  },
+  "eslint.validate": [
+    {
+      "language": "javascript",
+      "autoFix": true
+    },
+    {
+      "language": "html",
+      "autoFix": true
+    },
+    {
+      "language": "vue",
+      "autoFix": true
+    }
+  ],
+  "eslint.autoFixOnSave": true,
+}

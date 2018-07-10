@@ -65,6 +65,7 @@ path /reported {
     read() { isAdmin() }
 
     /{commentId}/{uid} {
+        read() { isCurrentUser(uid) || isAdmin() }
         create() { isCurrentUser(uid) }
         update() { isAdmin() }
         delete() { isAdmin() }
@@ -76,10 +77,20 @@ path /ban {
     write() { isAdmin() }
 }
 
+path /addedPluginsFromCenter {
+    read() { true }
+    write() { isAdmin() }
+}
+
+path /addedPluginOrder {
+    read() { true }
+    write() { isAdmin() }
+}
+
 // r: read access, c: create access, u: update access, d: delete access
 // t: node type [s(single), c(collection)]
 path /plugins/{pluginName}/{r}/{c}/{u}/{d} {
-  /u {
+  /u/{key} {
     read() { hasAccessUnowned(this, r) }
     create() { hasAccessUnowned(this, c) }
     update() { hasAccessUnowned(this, u) }
@@ -103,29 +114,31 @@ path /plugins/{pluginName}/{r}/{c}/{u}/{d} {
 function hasAccessUnowned (this, code) {
     code.includes('a') ?
         true :              
-    code.includes('s') ?
+    (code.includes('s') ?
         isSignedInUser() :
     // code.includes('x') ?
         isAdmin()
+    )
 }
 function hasAccessOwned (this, code, key) {
     code.includes('a') ?
-        true :              
-    code.includes('s') ?
+        true :  
+    (code.includes('s') ?
         isSignedInUser() :  
-    code.includes('r') ?
+    (code.includes('r') ?
         isRelatedUser(this, key) :
-    code.includes('o') ?
+    (code.includes('o') ?
         isOwner(this, key) :
     // code.includes('x') ?
         isAdmin()
+    )))
 }
 
 function isCreate (this) { prior(this) == null }
 
 function isSignedInUser () { auth != null }
 function isRelatedUser (this, key) { 
-    prior(this).relatedUser == auth.uid
+    prior(this).relatedUser == auth.uid || isOwner(this, key)
 }
 function isOwner (this, key) { 
   key == auth.uid ||

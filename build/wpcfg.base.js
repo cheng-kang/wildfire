@@ -118,6 +118,12 @@ let webpackConfig = {
     }),
     // keep module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),
+
+    // Add copyright into built files
+    new webpack.BannerPlugin({
+      banner: utils.copyright(),
+    }),
+
     // copy custom static assets
     new CopyWebpackPlugin([
       {

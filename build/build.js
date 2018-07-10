@@ -5,9 +5,7 @@ const rm = require('rimraf')
 const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('./config').build
-const aioCfg = require('./wpcfg.aio')
-const firebaseCfg = require('./wpcfg.firebase')
-const wilddogCfg = require('./wpcfg.wilddog')
+const mainCfg = require('./wpcfg.main')
 const autoCfg = require('./wpcfg.auto')
 const countCfg = require('./wpcfg.count')
 
@@ -43,16 +41,8 @@ rm(config.assetsRoot, err => {
   if (err) throw err
   build([
     {
-      name: 'wildfire.aio',
-      config: aioCfg
-    },
-    {
-      name: 'wildfire.firebase',
-      config: firebaseCfg
-    },
-    {
-      name: 'wildfire.wilddog',
-      config: wilddogCfg
+      name: 'wildfire.main',
+      config: mainCfg
     },
     {
       name: 'wildfire.auto',

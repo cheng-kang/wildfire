@@ -3,31 +3,32 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import '../assets/highlight.css'
-import '../assets/highlight.dark.css'
-import markdown from '../common/markdown'
-import Bus from '../common/bus'
+import Vue from 'vue';
+import '../assets/highlight.css';
+import '../assets/highlight.dark.css';
+import { markdown } from '../utils';
+import { bus } from '../common';
+
 export default {
   name: 'wf-marked-content',
   props: ['content'],
-  mounted () {
-    this.compile()
+  mounted() {
+    this.compile();
   },
   methods: {
-    compile () {
-      const html = markdown(this.content)
+    compile() {
+      const html = markdown(this.content);
       const Component = Vue.extend({
         template: `<div> ${html} </div>`,
         methods: {
-          showUserInfo (email) {
-            Bus.$emit('ShowUserInfo', email)
-          }
-        }
-      })
-      const markedComponent = new Component().$mount()
-      this.$refs['markedContent'].appendChild(markedComponent.$el)
-    }
-  }
-}
+          showUserInfo(email) {
+            bus.$emit('ShowUserInfo', email);
+          },
+        },
+      });
+      const markedComponent = new Component().$mount();
+      this.$refs.markedContent.appendChild(markedComponent.$el);
+    },
+  },
+};
 </script>
