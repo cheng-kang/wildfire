@@ -26,8 +26,9 @@ export const handleImageOnError = (imageEle, defaultImageURL, imageTitle) => {
 };
 
 export const defaultPageURL = (pageURLMode = 'normal') => {
-  if (pageURLMode === 'full') return window.location.href;
-  const { origin, pathname, hash } = window.location;
+  const { location } = window.parent
+  if (pageURLMode === 'full') return location.href;
+  const { origin, pathname, hash } = location;
   if (pageURLMode === 'normal') return origin + pathname;
   // if (pageURLMode === 'hash')
   const hashNoQM = hash.split('?')[0]; // Hash without question mark (the search part of URL)

@@ -1,7 +1,7 @@
 /*!
  *   wildfire.count.js
  * 
- *   wildfire-dev@0.5.4
+ *   wildfire-dev@0.5.6
  *   Copyright (C) 2017-2018 LahK
  *   A drop-in replacement for other comment plug-ins.
  * 

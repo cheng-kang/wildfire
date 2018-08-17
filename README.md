@@ -22,7 +22,7 @@ Try this version by adding to your website:
 <script>
   var wildfireConfig = () => ({
     useDev: true,
-    version: '0.5.4',
+    version: '0.5.6',
     databaseProvider: 'firebase',
     databaseConfig: {
         apiKey: "...",

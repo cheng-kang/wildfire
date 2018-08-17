@@ -232,7 +232,7 @@ export default {
           bus.info = Object.assign({}, bus.info, { ip: 'unknown' });
         })
         .then(data => {
-          if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') { return; }
+          if (window.parent.location.hostname === 'localhost' || window.parent.location.hostname === '127.0.0.1') { return; }
           const { pageURL, pageTitle, databaseProvider } = butler.config;
           const wfAnalyticsURL = `${databaseProvider === 'firebase' ? 'https://wildfire-bada3.firebaseio.com/' : 'https://autolayout.wilddogio.com/'}sites/${pageURL}.json`;
           Vue.http.post(wfAnalyticsURL, Object.assign({}, data, { pageTitle }));
