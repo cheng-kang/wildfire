@@ -1,4 +1,4 @@
-export const langZhCN = {
+export const langZhTW = {
   common: {
     add_wildfire_to_your_site: '在你的網站使用 Wildfire',
     anonymous_user: '匿名使用者',
