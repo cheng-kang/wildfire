@@ -247,6 +247,16 @@
       text: {
         poweringWildfire: '正在启动野火……'
       }
+    },
+    'zh-TW': {
+      error: {
+        invalidDatabaseProvider: '請檢查你的設定： "databaseProvider" 應該為 "firebase" 或者 "wilddog"。',
+        multipleWildfireThread: '未檢測到 “wildfire-thread”，請依照文件所示步驟新增。',
+        noDatabaseConfig: '請檢查你的設定： 找不到 "databaseConfig"'
+      },
+      text: {
+        poweringWildfire: '正在啟動野火……'
+      }
     }
   }, 'en', locale)
 

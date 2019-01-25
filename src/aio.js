@@ -6,7 +6,8 @@ import VueFire from 'vuefire'
 import i18next from 'i18next'
 import {
   langEn,
-  langZhCN
+  langZhCN,
+  langZhTW
 } from './common/translation'
 import iView from './common/loadiView'
 import Wildfire from './Wildfire'
@@ -97,6 +98,9 @@ const install = (_Vue, config) => {
       },
       'zh-CN': {
         translation: langZhCN
+      },
+      'zh-TW': {
+        translation: langZhTW
       }
     }
   }, (err, t) => {
