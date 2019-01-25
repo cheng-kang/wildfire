@@ -1,6 +1,6 @@
 {
   "name": "wildfire",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "A drop-in replacement for other comment systems.",
   "keywords": [
     "wildfire",
@@ -27,6 +27,11 @@
       "email": "hi@mrliao.cn",
       "url": "http://mrliao.cn",
       "role": "Original Author"
+    },
+    {
+      "name": "MomoCow",
+      "url": "https://github.com/momocow",
+      "role": "Contributor"
     }
   ],
   "files": [
