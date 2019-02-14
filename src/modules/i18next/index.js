@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import {
   langEn,
   langZhCN,
+  langZhTW,
 } from './translation';
 
 export const initI18next = (locale) => {
@@ -16,6 +17,9 @@ export const initI18next = (locale) => {
       'zh-CN': {
         translation: langZhCN,
       },
+      'zh-TW': {
+        translation: langZhTW,
+      }
     },
   }, (err) => {
     if (err) {
